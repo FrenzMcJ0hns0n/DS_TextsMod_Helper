@@ -136,20 +136,22 @@ namespace DS_TextsMod_Helper
 
         private void btn_execute_Click(object sender, RoutedEventArgs e)
         {
+            string output_filename = tbx_outputfilename.Text + ".csv";
+
             if (compare_clicked)
             {
                 SortedDictionary<int, string> sdict = ReturnCompareDictionary(tbx_file1.Text, tbx_file2.Text, false);
-                DoCompare(sdict, tbx_header1.Text, tbx_header2.Text, tbx_outputfilename.Text);
+                DoCompare(sdict, tbx_header1.Text, tbx_header2.Text, output_filename);
 
-                MessageBox.Show(string.Format("Compare mode: File \"{0}\" created.", tbx_outputfilename.Text));
+                MessageBox.Show(string.Format("Compare mode: File \"{0}\" created.", output_filename));
             }
 
             if (prepare_clicked)
             {
                 Dictionary<int, string> dict = ReturnPrepareDictionary(tbx_file1.Text, tbx_file2.Text, tbx_file3.Text, false);
-                DoPrepare(dict, tbx_outputfilename.Text);
+                DoPrepare(dict, output_filename);
 
-                MessageBox.Show(string.Format("Prepare mode: File \"{0}\" created.", tbx_outputfilename.Text));
+                MessageBox.Show(string.Format("Prepare mode: File \"{0}\" created.", output_filename));
             }
         }
 
@@ -186,7 +188,7 @@ namespace DS_TextsMod_Helper
             string input_filepath2 = tbx_file2.Text;
             string output_header_1 = tbx_header1.Text;
             string output_header_2 = tbx_header2.Text;
-            string output_filename = tbx_outputfilename.Text + ".csv";
+            string output_filename = tbx_outputfilename.Text;
 
             if (!File.Exists(input_filepath1) || !File.Exists(input_filepath2))
             {
@@ -200,7 +202,7 @@ namespace DS_TextsMod_Helper
                 return false;
             }
 
-            if (output_filename == ".csv")
+            if (output_filename == "")
             {
                 MessageBox.Show("Error : output filename not specified");
                 return false;
@@ -220,7 +222,7 @@ namespace DS_TextsMod_Helper
             string input_filepath1 = tbx_file1.Text;
             string input_filepath2 = tbx_file2.Text;
             string input_filepath3 = tbx_file3.Text;
-            string output_filename = tbx_outputfilename.Text + ".csv";
+            string output_filename = tbx_outputfilename.Text;
 
             if (!File.Exists(input_filepath1) || !File.Exists(input_filepath2) || !File.Exists(input_filepath3))
             {
@@ -234,7 +236,7 @@ namespace DS_TextsMod_Helper
                 return false;
             }
 
-            if (output_filename == ".csv")
+            if (output_filename == "")
             {
                 MessageBox.Show("Error : output filename not specified");
                 return false;
