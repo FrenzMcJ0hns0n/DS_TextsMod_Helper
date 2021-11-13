@@ -276,8 +276,10 @@ namespace DS_TextsMod_Helper
 
 
 
-        private void DoCompare(SortedDictionary<int, string> sdict, string oheader1, string oheader2, string output_filepath)
+        private void DoCompare(SortedDictionary<int, string> sdict, string oheader1, string oheader2, string output_filename)
         {
+            string output_filepath = Path.Combine(ReturnOutputDirectoryPath(), output_filename);
+
             using (StreamWriter writer = new StreamWriter(output_filepath, false))
             {
                 writer.WriteLine($"Text ID|{oheader1}|{oheader2}|Same?");
@@ -288,8 +290,10 @@ namespace DS_TextsMod_Helper
             }
         }
 
-        private void DoPrepare(Dictionary<int, string> dict, string output_filepath)
+        private void DoPrepare(Dictionary<int, string> dict, string output_filename)
         {
+            string output_filepath = Path.Combine(ReturnOutputDirectoryPath(), output_filename);
+
             using (StreamWriter writer = new StreamWriter(output_filepath, false))
             {
                 writer.WriteLine("Text ID|Value");
