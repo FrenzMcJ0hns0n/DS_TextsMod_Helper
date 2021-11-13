@@ -266,10 +266,10 @@ namespace DS_TextsMod_Helper
         private void PreviewPrepare(Dictionary<int, string> dictionary_prepare)
         {
             // Display output_data in Preview
-            string output_preview = string.Format("Text ID|Value");
+            string output_preview = "";
             foreach (KeyValuePair<int, string> od in dictionary_prepare)
             {
-                output_preview += string.Format("\n{0}|{1}", od.Key, od.Value);
+                output_preview += (output_preview == "") ? $"{od.Key}|{od.Value}" : $"\n{od.Key}|{od.Value}";
             }
 
             tbk_preview.Text = output_preview;
@@ -298,7 +298,6 @@ namespace DS_TextsMod_Helper
 
             using (StreamWriter writer = new StreamWriter(output_filepath, false))
             {
-                writer.WriteLine("Text ID|Value");
                 foreach (KeyValuePair<int, string> od in dict)
                 {
                     writer.WriteLine($"{od.Key}|{od.Value}");
@@ -412,7 +411,7 @@ namespace DS_TextsMod_Helper
                     output_dictionary.Add(id, value1); // Contains File1 value so far
                 }
 
-                if (preview && line_counter >= 6)
+                if (preview && line_counter == 7)
                     break;
             }
 
