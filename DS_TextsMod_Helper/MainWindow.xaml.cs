@@ -90,10 +90,10 @@ namespace DS_TextsMod_Helper
             prepare_clicked = false;
 
             tbk_summary.Text = "[Compare/Compile] To generate a new file with data comparison\n"
-                             + "Expected: File #1 is the modded text file in {{Mod author's language}}. File #2 is the same file in Vanilla version, in same language.\n"
-                             + "The program will scan contents of both files, from their Text IDs and values:\n"
+                             + "Expected: File #1 is the modded file in {mod author's language}. File #2 is the same file in vanilla, in same language.\n"
+                             + "The program will loop through contents of both files, scanning their Text IDs and values:\n"
                              + "    For a given Text ID: do the files have a value and is it the same for both?\n"
-                             + "        None of them has a value: skip the TextID/the line\n"
+                             + "        None of them has a value: skip the TextID (= line removed in output file)\n"
                              + "        At least one of them has a value: compare the values and give the information \"Are both values the same?\"\n";
 
             if (CompareModeReady())
@@ -115,12 +115,12 @@ namespace DS_TextsMod_Helper
             prepare_clicked = true;
 
             tbk_summary.Text = "[Prepare/Comply] To prepare a new file for mod translation\n"
-                             + "Expected: File #1 is the modded text file in {{Mod author's language}}. File #2 is the same file in Vanilla version, in same language. "
-                             + "File #3 is the same file in {{target new language}}.\n"
-                             + "The program will replicate structure of file #1 regarding to Text IDs, and compare data from #1 and #2 regarding to values:\n"
+                             + "Expected: File #1 is the modded file in {mod author's language}. File #2 is the same file in vanilla, in same language. "
+                             + "File #3 is the same file in vanilla, in {target new language}.\n"
+                             + "The program will replicate structure of file #1 regarding to its Text IDs, and compare data from #1 and #2 regarding to their values:\n"
                              + "    For a given Text ID, are their values the same?\n"
                              + "        Yes, files #1 and #2 has the same value: use value from file #3, as this is the vanilla content and translation already exists\n"
-                             + "        No, files #1 and #2 has different values: for the translator to complete manually";
+                             + "        No, files #1 and #2 has different values: use value from file #1, and let the translator update it manually";
 
             if (PrepareModeReady())
             {
