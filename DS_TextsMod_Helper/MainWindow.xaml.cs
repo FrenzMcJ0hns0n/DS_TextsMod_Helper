@@ -27,7 +27,6 @@ namespace DS_TextsMod_Helper
         public MainWindow()
         {
             InitializeComponent();
-
             Directory.CreateDirectory(ReturnOutputDirectoryPath());
         }
 
@@ -99,7 +98,7 @@ namespace DS_TextsMod_Helper
             if (CompareModeReady())
             {
                 SortedDictionary<int, string> sdict = ReturnCompareDictionary(tbx_file1.Text, tbx_file2.Text, true);
-                PreviewCompare(sdict, tbx_header1.Text, tbx_header2.Text);
+                DisplayPreviewCompare(sdict, tbx_header1.Text, tbx_header2.Text);
 
                 btn_execute.IsEnabled = true;
             }
@@ -125,7 +124,7 @@ namespace DS_TextsMod_Helper
             if (PrepareModeReady())
             {
                 Dictionary<int, string> dict = ReturnPrepareDictionary(tbx_file1.Text, tbx_file2.Text, tbx_file3.Text, true);
-                PreviewPrepare(dict);
+                DisplayPreviewPrepare(dict);
 
                 btn_execute.IsEnabled = true;
             }
@@ -142,16 +141,14 @@ namespace DS_TextsMod_Helper
             {
                 SortedDictionary<int, string> sdict = ReturnCompareDictionary(tbx_file1.Text, tbx_file2.Text, false);
                 DoCompare(sdict, tbx_header1.Text, tbx_header2.Text, output_filename);
-
-                MessageBox.Show(string.Format("Compare mode: File \"{0}\" created.", output_filename));
+                MessageBox.Show($"Compare mode: File \"{output_filename}\" created.");
             }
 
             if (prepare_clicked)
             {
                 Dictionary<int, string> dict = ReturnPrepareDictionary(tbx_file1.Text, tbx_file2.Text, tbx_file3.Text, false);
                 DoPrepare(dict, output_filename);
-
-                MessageBox.Show(string.Format("Prepare mode: File \"{0}\" created.", output_filename));
+                MessageBox.Show($"Prepare mode: File \"{output_filename}\" created.");
             }
         }
 
@@ -198,19 +195,19 @@ namespace DS_TextsMod_Helper
 
             if (input_filepath1 == input_filepath2)
             {
-                MessageBox.Show("Error : same file submitted several times");
-                return false;
-            }
-
-            if (output_filename == "")
-            {
-                MessageBox.Show("Error : output filename not specified");
+                MessageBox.Show("Error : same file submitted twice");
                 return false;
             }
 
             if (output_header_1 == "" || output_header_2 == "")
             {
                 MessageBox.Show("Error : empty output headers");
+                return false;
+            }
+
+            if (output_filename == "")
+            {
+                MessageBox.Show("Error : output filename not specified");
                 return false;
             }
 
@@ -251,21 +248,19 @@ namespace DS_TextsMod_Helper
         // ----------------------
         // Calling core functions
         // ----------------------
-        private void PreviewCompare(SortedDictionary<int, string> dictionary_compare, string oheader1, string oheader2)
+        private void DisplayPreviewCompare(SortedDictionary<int, string> dictionary_compare, string oheader1, string oheader2)
         {
-            // Display output_data in Preview
             string output_preview = string.Format("Text ID|{0}|{1}|Same?", oheader1, oheader2);
             foreach (KeyValuePair<int, string> od in dictionary_compare)
             {
-                output_preview += string.Format("\n{0}", od.Value);
+                output_preview += $"\n{od.Value}";
             }
 
             tbk_preview.Text = output_preview;
         }
 
-        private void PreviewPrepare(Dictionary<int, string> dictionary_prepare)
+        private void DisplayPreviewPrepare(Dictionary<int, string> dictionary_prepare)
         {
-            // Display output_data in Preview
             string output_preview = "";
             foreach (KeyValuePair<int, string> od in dictionary_prepare)
             {
@@ -278,10 +273,9 @@ namespace DS_TextsMod_Helper
 
 
 
-        private void DoCompare(SortedDictionary<int, string> sdict, string oheader1, string oheader2, string output_filename)
+        private void DoCompare(SortedDictionary<int, string> sdict, string oheader1, string oheader2, string ofilename)
         {
-            string output_filepath = Path.Combine(ReturnOutputDirectoryPath(), output_filename);
-
+            string output_filepath = Path.Combine(ReturnOutputDirectoryPath(), ofilename);
             using (StreamWriter writer = new StreamWriter(output_filepath, false))
             {
                 writer.WriteLine($"Text ID|{oheader1}|{oheader2}|Same?");
@@ -292,10 +286,9 @@ namespace DS_TextsMod_Helper
             }
         }
 
-        private void DoPrepare(Dictionary<int, string> dict, string output_filename)
+        private void DoPrepare(Dictionary<int, string> dict, string ofilename)
         {
-            string output_filepath = Path.Combine(ReturnOutputDirectoryPath(), output_filename);
-
+            string output_filepath = Path.Combine(ReturnOutputDirectoryPath(), ofilename);
             using (StreamWriter writer = new StreamWriter(output_filepath, false))
             {
                 foreach (KeyValuePair<int, string> od in dict)
@@ -313,15 +306,15 @@ namespace DS_TextsMod_Helper
         // --------------
         private SortedDictionary<int,string> ReturnCompareDictionary(string ifile1, string ifile2, bool preview)
         {
-            // Get input data from both files
+            // Get input data from both File1 & File2
             string[] file_1_lines = File.ReadAllLines(ifile1);
             string[] file_2_lines = File.ReadAllLines(ifile2);
 
             int line_counter = 0;
 
-            SortedDictionary<int, string> output_dictionary = new SortedDictionary<int, string>();
+            SortedDictionary<int, string> cmp_dictionary = new SortedDictionary<int, string>();
 
-            // First, fill the dictionary with values from File1
+            // First, fill the dictionary with data from File1
             foreach (string line in file_1_lines)
             {
                 string str_id = line.Split('|')[0].Trim();
@@ -332,7 +325,7 @@ namespace DS_TextsMod_Helper
 
                 if (int.TryParse(str_id, out int id))
                 {
-                    output_dictionary.Add(id, value1);
+                    cmp_dictionary.Add(id, value1);
                     line_counter += 1;
                 }
 
@@ -341,7 +334,7 @@ namespace DS_TextsMod_Helper
             }
 
 
-            // Then, compare File1 values against File2 ones
+            // Then, compare against data of File1 & File2
             line_counter = 0;
             foreach (string line in file_2_lines)
             {
@@ -353,13 +346,13 @@ namespace DS_TextsMod_Helper
 
                 if (int.TryParse(str_id, out int id))
                 {
-                    if (output_dictionary.ContainsKey(id)) // [File2 ID] in [File1 IDs] : we have the values from both File1 and File2
+                    if (cmp_dictionary.ContainsKey(id)) // The key (id) has a value in both File1 & File2
                     {
-                        if (output_dictionary.TryGetValue(id, out string value1))
-                            output_dictionary[id] = string.Format("{0}|{1}|{2}|{3}", id, value1, value2, (value1 == value2) ? "true" : "false");
+                        if (cmp_dictionary.TryGetValue(id, out string value1))
+                            cmp_dictionary[id] = string.Format("{0}|{1}|{2}|{3}", id, value1, value2, (value1 == value2) ? "true" : "false");
                     }
-                    else // [File2 ID] not in [File1 IDs] : we only have the value from File2
-                        output_dictionary.Add(id, string.Format("{0}||{1}|false", id, value2));
+                    else // The key (id) has a value only in File2
+                        cmp_dictionary.Add(id, string.Format("{0}||{1}|false", id, value2));
 
                     line_counter += 1;
                 }
@@ -369,20 +362,20 @@ namespace DS_TextsMod_Helper
             }
 
 
-            // Finally, get back on formatting dictionary entries for File1
-            SortedDictionary<int, string> replica_dictionary = new SortedDictionary<int, string>(output_dictionary);
+            // Finally, get back on formatting dictionary for values from File1
+            SortedDictionary<int, string> replica_dictionary = new SortedDictionary<int, string>(cmp_dictionary);
             foreach (KeyValuePair<int, string> rd in replica_dictionary)
             {
-                if (!rd.Value.Contains("|true") && !rd.Value.Contains("|false")) // [File1 ID] not in [File2 IDs] : we only have the value from File1
+                if (!rd.Value.Contains("|true") && !rd.Value.Contains("|false")) 
                 {
-                    if (replica_dictionary.TryGetValue(rd.Key, out string value1))
+                    if (replica_dictionary.TryGetValue(rd.Key, out string value1)) // The key (rd.Key) has a value only in File1
                     {
-                        output_dictionary[rd.Key] = string.Format("{0}|{1}||false", rd.Key, value1);
+                        cmp_dictionary[rd.Key] = string.Format("{0}|{1}||false", rd.Key, value1);
                     }
                 }
             }
 
-            return output_dictionary;
+            return cmp_dictionary;
         }
 
 
@@ -390,16 +383,16 @@ namespace DS_TextsMod_Helper
 
         private Dictionary<int, string> ReturnPrepareDictionary(string ifile1, string ifile2, string ifile3, bool preview)
         {
-            // Get input data from both files
+            // Get input data from all files
             string[] file_1_lines = File.ReadAllLines(ifile1);
             string[] file_2_lines = File.ReadAllLines(ifile2);
             string[] file_3_lines = File.ReadAllLines(ifile3);
 
             int line_counter = 0;
 
-            Dictionary<int, string> output_dictionary = new Dictionary<int, string>();
+            Dictionary<int, string> prp_dictionary = new Dictionary<int, string>();
 
-
+            // First, fill the dictionary with ALL data from File1
             foreach (string line in file_1_lines)
             {
                 string str_id = line.Split('|')[0].Trim();
@@ -408,14 +401,14 @@ namespace DS_TextsMod_Helper
                 if (int.TryParse(str_id, out int id))
                 {
                     line_counter += 1;
-                    output_dictionary.Add(id, value1); // Contains File1 value so far
+                    prp_dictionary.Add(id, value1); // Contains File1 value so far
                 }
 
                 if (preview && line_counter == 7)
                     break;
             }
 
-
+            // Then, update values of dictionary when File1 & File2 values are identical
             foreach (string line in file_2_lines)
             {
                 string str_id = line.Split('|')[0].Trim();
@@ -423,19 +416,19 @@ namespace DS_TextsMod_Helper
 
                 if (int.TryParse(str_id, out int id))
                 {
-                    if (output_dictionary.ContainsKey(id))
+                    if (prp_dictionary.ContainsKey(id))
                     {
-                        if (output_dictionary.TryGetValue(id, out string value1))
+                        if (prp_dictionary.TryGetValue(id, out string value1))
                         {
                             if (value1 == value2)
-                                output_dictionary[id] = ""; // Erase, to be replaced with File3 value
+                                prp_dictionary[id] = ""; // Erase, to be replaced with File3 value
                         }
                     }
-                    // else : File2 value ignored as not also in File #1
+                    // else : File2 value ignored as not in File1 structure
                 }
             }
 
-
+            // Finally, replace empty values with File3 ones
             foreach (string line in file_3_lines)
             {
                 string str_id = line.Split('|')[0].Trim();
@@ -443,19 +436,19 @@ namespace DS_TextsMod_Helper
 
                 if (int.TryParse(str_id, out int id))
                 {
-                    if (output_dictionary.ContainsKey(id))
+                    if (prp_dictionary.ContainsKey(id))
                     {
-                        if (output_dictionary.TryGetValue(id, out string value1))
+                        if (prp_dictionary.TryGetValue(id, out string value1))
                         {
                             if (value1 == "")
-                                output_dictionary[id] = value3; // Insert File #3 value
+                                prp_dictionary[id] = value3; // Insert File3 value
                         }
                     }
-                    // else : File3 value ignored as not also in File #1
+                    // else : File3 value ignored as not in File1 structure
                 }
             }
 
-            return output_dictionary;
+            return prp_dictionary;
         }
 
     }
