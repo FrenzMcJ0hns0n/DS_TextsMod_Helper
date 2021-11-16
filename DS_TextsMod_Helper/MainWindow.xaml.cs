@@ -318,10 +318,13 @@ namespace DS_TextsMod_Helper
             foreach (string line in file_1_lines)
             {
                 string str_id = line.Split('|')[0].Trim();
-                string value1 = line.Split('|')[1].Trim();
+                string value1 = line.Split('|')[1]; // Do not trim yet
 
                 if (value1 == "")
                     continue; // Exclude lines without value
+
+                if (value1 != " ")
+                    value1 = value1.Trim(); // Do not exclude value1 " "
 
                 if (int.TryParse(str_id, out int id))
                 {
@@ -339,10 +342,13 @@ namespace DS_TextsMod_Helper
             foreach (string line in file_2_lines)
             {
                 string str_id = line.Split('|')[0].Trim();
-                string value2 = line.Split('|')[1].Trim();
+                string value2 = line.Split('|')[1]; // Do not trim yet
 
                 if (value2 == "")
                     continue; // Exclude lines without value
+
+                if (value2 != " ")
+                    value2 = value2.Trim(); // Do not exclude value2 " "
 
                 if (int.TryParse(str_id, out int id))
                 {
@@ -396,7 +402,10 @@ namespace DS_TextsMod_Helper
             foreach (string line in file_1_lines)
             {
                 string str_id = line.Split('|')[0].Trim();
-                string value1 = line.Split('|')[1].Trim();
+                string value1 = line.Split('|')[1]; // Do not trim yet
+
+                if (value1 != " ")
+                    value1 = value1.Trim(); // Do not exclude value1 " "
 
                 if (int.TryParse(str_id, out int id))
                 {
@@ -412,7 +421,10 @@ namespace DS_TextsMod_Helper
             foreach (string line in file_2_lines)
             {
                 string str_id = line.Split('|')[0].Trim();
-                string value2 = line.Split('|')[1].Trim();
+                string value2 = line.Split('|')[1]; // Do not trim yet
+
+                if (value2 != " ")
+                    value2 = value2.Trim(); // Preserve value2 " "
 
                 if (int.TryParse(str_id, out int id))
                 {
@@ -432,7 +444,10 @@ namespace DS_TextsMod_Helper
             foreach (string line in file_3_lines)
             {
                 string str_id = line.Split('|')[0].Trim();
-                string value3 = line.Split('|')[1].Trim();
+                string value3 = line.Split('|')[1]; // Do not trim yet
+
+                if (value3 != " ")
+                    value3 = value3.Trim(); // Preserve value3 " "
 
                 if (int.TryParse(str_id, out int id))
                 {
