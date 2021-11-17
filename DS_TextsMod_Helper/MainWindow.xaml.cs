@@ -101,8 +101,8 @@ namespace DS_TextsMod_Helper
 
             if (CompareModeReady())
             {
-                SortedDictionary<int, string> sdict = ReturnCompareDictionary(tbx_file1.Text, tbx_file2.Text, true);
-                DisplayPreviewCompare(sdict, tbx_header1.Text, tbx_header2.Text);
+                SortedDictionary<int, string> sdict = ReturnCompareDictionary(tbx_file1.Text, tbx_file2.Text, tbx_csvsepi.Text[0], tbx_csvsepo.Text[0], true);
+                DisplayPreviewCompare(sdict, tbx_csvsepo.Text[0], tbx_header1.Text, tbx_header2.Text);
 
                 btn_execute.IsEnabled = true;
             }
@@ -127,8 +127,8 @@ namespace DS_TextsMod_Helper
 
             if (PrepareModeReady())
             {
-                Dictionary<int, string> dict = ReturnPrepareDictionary(tbx_file1.Text, tbx_file2.Text, tbx_file3.Text, true);
-                DisplayPreviewPrepare(dict);
+                Dictionary<int, string> dict = ReturnPrepareDictionary(tbx_file1.Text, tbx_file2.Text, tbx_file3.Text, tbx_csvsepi.Text[0], tbx_csvsepo.Text[0], true);
+                DisplayPreviewPrepare(dict, tbx_csvsepo.Text[0]);
 
                 btn_execute.IsEnabled = true;
             }
@@ -143,15 +143,15 @@ namespace DS_TextsMod_Helper
 
             if (compare_clicked)
             {
-                SortedDictionary<int, string> sdict = ReturnCompareDictionary(tbx_file1.Text, tbx_file2.Text, false);
-                DoCompare(sdict, tbx_header1.Text, tbx_header2.Text, output_filename);
+                SortedDictionary<int, string> sdict = ReturnCompareDictionary(tbx_file1.Text, tbx_file2.Text, tbx_csvsepi.Text[0], tbx_csvsepo.Text[0], false);
+                DoCompare(sdict, tbx_csvsepo.Text[0], tbx_header1.Text, tbx_header2.Text, output_filename);
                 MessageBox.Show($"Compare mode: File \"{output_filename}\" created.");
             }
 
             if (prepare_clicked)
             {
-                Dictionary<int, string> dict = ReturnPrepareDictionary(tbx_file1.Text, tbx_file2.Text, tbx_file3.Text, false);
-                DoPrepare(dict, output_filename);
+                Dictionary<int, string> dict = ReturnPrepareDictionary(tbx_file1.Text, tbx_file2.Text, tbx_file3.Text, tbx_csvsepi.Text[0], tbx_csvsepo.Text[0], false);
+                DoPrepare(dict, tbx_csvsepo.Text[0], output_filename);
                 MessageBox.Show($"Prepare mode: File \"{output_filename}\" created.");
             }
         }
@@ -252,9 +252,9 @@ namespace DS_TextsMod_Helper
         // ----------------------
         // Calling core functions
         // ----------------------
-        private void DisplayPreviewCompare(SortedDictionary<int, string> dictionary_compare, string oheader1, string oheader2)
+        private void DisplayPreviewCompare(SortedDictionary<int, string> dictionary_compare, char osep, string oheader1, string oheader2)
         {
-            string output_preview = string.Format("Text ID|{0}|{1}|Same?", oheader1, oheader2);
+            string output_preview = $"Text ID{osep}{oheader1}{osep}{oheader2}{osep}Same?"; // => "Text ID|Header 1|Header 2|Same?"
             foreach (KeyValuePair<int, string> od in dictionary_compare)
             {
                 output_preview += $"\n{od.Value}";
@@ -263,12 +263,12 @@ namespace DS_TextsMod_Helper
             tbk_preview.Text = output_preview;
         }
 
-        private void DisplayPreviewPrepare(Dictionary<int, string> dictionary_prepare)
+        private void DisplayPreviewPrepare(Dictionary<int, string> dictionary_prepare, char osep)
         {
             string output_preview = "";
             foreach (KeyValuePair<int, string> od in dictionary_prepare)
             {
-                output_preview += (output_preview == "") ? $"{od.Key}|{od.Value}" : $"\n{od.Key}|{od.Value}";
+                output_preview += (output_preview == "") ? $"{od.Key}{osep}{od.Value}" : $"\n{od.Key}{osep}{od.Value}"; // => "Text ID|Value"
             }
 
             tbk_preview.Text = output_preview;
@@ -277,27 +277,27 @@ namespace DS_TextsMod_Helper
 
 
 
-        private void DoCompare(SortedDictionary<int, string> sdict, string oheader1, string oheader2, string ofilename)
+        private void DoCompare(SortedDictionary<int, string> dictionary_compare, char osep, string oheader1, string oheader2, string ofilename)
         {
             string output_filepath = Path.Combine(ReturnOutputDirectoryPath(), ofilename);
             using (StreamWriter writer = new StreamWriter(output_filepath, false))
             {
-                writer.WriteLine($"Text ID|{oheader1}|{oheader2}|Same?");
-                foreach (KeyValuePair<int, string> od in sdict)
+                writer.WriteLine($"Text ID{osep}{oheader1}{osep}{oheader2}{osep}Same?"); // => "Text ID|Header 1|Header 2|Same?"
+                foreach (KeyValuePair<int, string> od in dictionary_compare)
                 {
                     writer.WriteLine(od.Value);
                 }
             }
         }
 
-        private void DoPrepare(Dictionary<int, string> dict, string ofilename)
+        private void DoPrepare(Dictionary<int, string> dictionary_prepare, char osep, string ofilename)
         {
             string output_filepath = Path.Combine(ReturnOutputDirectoryPath(), ofilename);
             using (StreamWriter writer = new StreamWriter(output_filepath, false))
             {
-                foreach (KeyValuePair<int, string> od in dict)
+                foreach (KeyValuePair<int, string> od in dictionary_prepare)
                 {
-                    writer.WriteLine($"{od.Key}|{od.Value}");
+                    writer.WriteLine($"{od.Key}{osep}{od.Value}"); // => "Text ID|Value"
                 }
             }
         }
@@ -328,7 +328,7 @@ namespace DS_TextsMod_Helper
         // --------------
         // Core functions
         // --------------
-        private SortedDictionary<int,string> ReturnCompareDictionary(string ifile1, string ifile2, bool preview)
+        private SortedDictionary<int,string> ReturnCompareDictionary(string ifile1, string ifile2, char isep, char osep, bool preview)
         {
             // Get input data from both File1 & File2
             string[] file_1_lines = File.ReadAllLines(ifile1);
@@ -341,8 +341,8 @@ namespace DS_TextsMod_Helper
             // First, fill the dictionary with data from File1
             foreach (string line in file_1_lines)
             {
-                string str_id = line.Split('|')[0].Trim();
-                string value1 = line.Split('|')[1]; // Do not trim yet
+                string str_id = line.Split(isep)[0].Trim();
+                string value1 = line.Split(isep)[1]; // Do not trim yet
 
                 // Exclude lines without value
                 if (value1 == "")
@@ -367,8 +367,8 @@ namespace DS_TextsMod_Helper
             line_counter = 0;
             foreach (string line in file_2_lines)
             {
-                string str_id = line.Split('|')[0].Trim();
-                string value2 = line.Split('|')[1]; // Do not trim yet
+                string str_id = line.Split(isep)[0].Trim();
+                string value2 = line.Split(isep)[1]; // Do not trim yet
 
                 // Exclude lines without value
                 if (value2 == "")
@@ -383,10 +383,10 @@ namespace DS_TextsMod_Helper
                     if (cmp_dictionary.ContainsKey(id)) // The key (id) has a value in both File1 & File2
                     {
                         if (cmp_dictionary.TryGetValue(id, out string value1))
-                            cmp_dictionary[id] = string.Format("{0}|{1}|{2}|{3}", id, value1, value2, (value1 == value2) ? "true" : "false");
+                            cmp_dictionary[id] = $"{id}{osep}{value1}{osep}{value2}{osep}{value1 == value2}"; // => "id|value1|value2|true/false"
                     }
                     else // The key (id) has a value only in File2
-                        cmp_dictionary.Add(id, string.Format("{0}||{1}|false", id, value2));
+                        cmp_dictionary.Add(id, $"{id}{osep}{osep}{value2}{osep}false"); // => "id||value2|false"
 
                     line_counter += 1;
                 }
@@ -400,11 +400,11 @@ namespace DS_TextsMod_Helper
             SortedDictionary<int, string> replica_dictionary = new SortedDictionary<int, string>(cmp_dictionary);
             foreach (KeyValuePair<int, string> rd in replica_dictionary)
             {
-                if (!rd.Value.Contains("|true") && !rd.Value.Contains("|false")) 
+                if (!rd.Value.Contains($"{osep}true") && !rd.Value.Contains($"{osep}false"))
                 {
                     if (replica_dictionary.TryGetValue(rd.Key, out string value1)) // The key (rd.Key) has a value only in File1
                     {
-                        cmp_dictionary[rd.Key] = string.Format("{0}|{1}||false", rd.Key, value1);
+                        cmp_dictionary[rd.Key] = $"{rd.Key}{osep}{value1}{osep}{osep}false"; // => "id|value1||false"
                     }
                 }
             }
@@ -415,7 +415,7 @@ namespace DS_TextsMod_Helper
 
 
 
-        private Dictionary<int, string> ReturnPrepareDictionary(string ifile1, string ifile2, string ifile3, bool preview)
+        private Dictionary<int, string> ReturnPrepareDictionary(string ifile1, string ifile2, string ifile3, char isep, char osep, bool preview)
         {
             // Get input data from all files
             string[] file_1_lines = File.ReadAllLines(ifile1);
@@ -429,8 +429,8 @@ namespace DS_TextsMod_Helper
             // First, fill the dictionary with ALL data from File1
             foreach (string line in file_1_lines)
             {
-                string str_id = line.Split('|')[0].Trim();
-                string value1 = line.Split('|')[1]; // Do not trim yet
+                string str_id = line.Split(isep)[0].Trim();
+                string value1 = line.Split(isep)[1]; // Do not trim yet
 
                 // Do not exclude value1 " "
                 if (value1 != " ")
@@ -449,8 +449,8 @@ namespace DS_TextsMod_Helper
             // Then, update values of dictionary when File1 & File2 values are identical
             foreach (string line in file_2_lines)
             {
-                string str_id = line.Split('|')[0].Trim();
-                string value2 = line.Split('|')[1]; // Do not trim yet
+                string str_id = line.Split(isep)[0].Trim();
+                string value2 = line.Split(isep)[1]; // Do not trim yet
 
                 // Preserve value2 " "
                 if (value2 != " ")
@@ -473,8 +473,8 @@ namespace DS_TextsMod_Helper
             // Finally, replace empty values with File3 ones
             foreach (string line in file_3_lines)
             {
-                string str_id = line.Split('|')[0].Trim();
-                string value3 = line.Split('|')[1]; // Do not trim yet
+                string str_id = line.Split(isep)[0].Trim();
+                string value3 = line.Split(isep)[1]; // Do not trim yet
 
                 // Preserve value3 " "
                 if (value3 != " ")
