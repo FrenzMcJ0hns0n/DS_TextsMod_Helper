@@ -141,39 +141,63 @@
                              />
 
                     <!-- Output headers -->
-                    <Label Grid.Column="2" Grid.Row="0" VerticalAlignment="Center" Content="Header #1 :" Margin="28,0,0,0" />
+                    <Label Grid.Column="2" Grid.Row="0" 
+                           VerticalAlignment="Center" 
+                           Content="Header #1 :" 
+                           Margin="28,0,0,0" 
+                           ToolTip="Enter header name to be used in output for File #1.&#x0a;(This is only for Compare/Compile mode)"
+                           />
                     <TextBox x:Name="tbx_header1" 
                              Grid.Column="2" Grid.Row="0"
                              HorizontalAlignment="Right" Width="128"
                              VerticalAlignment="Center"
                              TextAlignment="Right"
                              Text="Value1"
+                             ToolTip="Enter header name to be used in output for File #1.&#x0a;(This is only for Compare/Compile mode)"
                              />
-                    <Label Grid.Column="2" Grid.Row="1" VerticalAlignment="Center" Content="Header #2 :" Margin="28,0,0,0" />
+                    <Label Grid.Column="2" Grid.Row="1" 
+                           VerticalAlignment="Center" 
+                           Content="Header #2 :" 
+                           Margin="28,0,0,0"
+                           ToolTip="Enter header name to be used in output for File #2.&#x0a;(This is only for Compare/Compile mode)"
+                           />
                     <TextBox x:Name="tbx_header2"
                              Grid.Column="2" Grid.Row="1"
                              HorizontalAlignment="Right" Width="128"
                              VerticalAlignment="Center"
                              TextAlignment="Right"
                              Text="Value2"
+                             ToolTip="Enter header name to be used in output for File #2.&#x0a;(This is only for Compare/Compile mode)"
                              />
 
                     <!-- Trimming of values -->
-                    <Label Grid.Column="3" Grid.Row="0" VerticalAlignment="Center" Content="Trim beginning chars :" Margin="29,0,0,0"/>
+                    <Label Grid.Column="3" Grid.Row="0" 
+                           VerticalAlignment="Center" 
+                           Content="Trim beginning chars :" 
+                           Margin="29,0,0,0"
+                           ToolTip="The specified text will be removed from the beggining of values.&#x0a;For instance, use '/n/' to remove useless line breaks"
+                           />
                     <TextBox x:Name="tbx_trimbegin"
                              Grid.Column="3" Grid.Row="0"
                              HorizontalAlignment="Right" Width="72"
                              VerticalAlignment="Center"
                              TextAlignment="Center"
                              MaxLength="10"
+                             ToolTip="The specified text will be removed from the beggining of values.&#x0a;For instance, use '/n/' to remove useless line breaks"
                              />
-                    <Label Grid.Column="3" Grid.Row="1" VerticalAlignment="Center" Content="Trim ending chars :" Margin="46,0,0,0"/>
+                    <Label Grid.Column="3" Grid.Row="1" 
+                           VerticalAlignment="Center" 
+                           Content="Trim ending chars :" 
+                           Margin="46,0,0,0"
+                           ToolTip="The specified text will be removed from the end of values.&#x0a;For instance, you can use '/n/' to remove useless line breaks"
+                           />
                     <TextBox x:Name="tbx_trimend"
                              Grid.Column="3" Grid.Row="1"
                              HorizontalAlignment="Right" Width="72"
                              VerticalAlignment="Center"
                              TextAlignment="Center"
                              MaxLength="10"
+                             ToolTip="The specified text will be removed from the end of values.&#x0a;For instance, you can use '/n/' to remove useless line breaks"
                              />
                 </Grid>
             </GroupBox>
