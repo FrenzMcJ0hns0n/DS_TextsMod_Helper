@@ -111,9 +111,9 @@
                     <!-- TODO: Use panels to organize items together -->
                     <Label Grid.Column="0" Grid.Row="0" VerticalAlignment="Center" Content="CSV separator char (input) :" Foreground="Gray" />
                     <Label Grid.Column="1" Grid.Row="0" VerticalAlignment="Center" Content="CSV separator char (output) :" Margin="0,0,0,0" Foreground="Gray" />
-                    <Label Grid.Column="2" Grid.Row="0" VerticalAlignment="Center" Content="Trim start string :" Margin="10,0,0,0" Foreground="Gray"/>
+                    <Label Grid.Column="2" Grid.Row="0" VerticalAlignment="Center" Content="Trim start string :" Margin="10,0,0,0"/>
                     <!-- TODO -->
-                    <Label Grid.Column="3" Grid.Row="0" VerticalAlignment="Center" Content="Trim end string :" Margin="48,0,0,0" Foreground="Gray"/>
+                    <Label Grid.Column="3" Grid.Row="0" VerticalAlignment="Center" Content="Trim end string :" Margin="48,0,0,0"/>
                     <!-- TODO -->
                     <Label Grid.Column="0" Grid.Row="1" VerticalAlignment="Center" Content="Output filename :" />
                     <Label Grid.Column="2" Grid.Row="1" VerticalAlignment="Center" Content="Header #1 :" Margin="10,0,0,0" />
@@ -141,7 +141,6 @@
                          VerticalAlignment="Center"
                          TextAlignment="Center"
                          MaxLength="10"
-                         IsEnabled="False"
                          />
                     <!-- TODO -->
                     <TextBox x:Name="tbx_trimend"
@@ -150,7 +149,6 @@
                          VerticalAlignment="Center"
                          TextAlignment="Center"
                          MaxLength="10"
-                         IsEnabled="False"
                          />
                     <TextBox x:Name="tbx_outputfilename" 
                      Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="2"

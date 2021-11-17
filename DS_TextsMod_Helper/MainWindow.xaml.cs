@@ -28,6 +28,10 @@ namespace DS_TextsMod_Helper
         {
             InitializeComponent();
             Directory.CreateDirectory(ReturnOutputDirectoryPath());
+
+
+            tbx_file1.Text = @"C:\Program Files (x86)\Steam\steamapps\common\DARK SOULS REMASTERED\pre-doa-backup\msg\ENGLISH\item.msgbnd.extract\FRPG\data\Msg\Data_ENGLISH\Accessory_long_desc_.fmg.csv";
+            tbx_file2.Text = @"C:\Program Files (x86)\Steam\steamapps\common\DARK SOULS REMASTERED\msg\ENGLISH\item.msgbnd.extract\FRPG\data\Msg\Data_ENGLISH\RingDescriptions.fmg.csv";
         }
 
 
@@ -300,6 +304,26 @@ namespace DS_TextsMod_Helper
 
 
 
+        private string FormatValue(string input)
+        {
+            string output = input.Trim();
+            
+            string trim_start = tbx_trimstart.Text;
+            int s = trim_start.Length;
+
+            string trim_end = tbx_trimend.Text;
+            int e = trim_end.Length;
+
+            // Trim value as requested
+            if (output.Substring(0, s) == trim_start)
+                output = output.Substring(s);
+
+            if (output.Substring(output.Length - e) == trim_end)
+                output = output.Substring(0, output.Length - e);
+
+            return output;
+        }
+
 
         // --------------
         // Core functions
@@ -320,11 +344,13 @@ namespace DS_TextsMod_Helper
                 string str_id = line.Split('|')[0].Trim();
                 string value1 = line.Split('|')[1]; // Do not trim yet
 
+                // Exclude lines without value
                 if (value1 == "")
-                    continue; // Exclude lines without value
+                    continue;
 
+                // Do not exclude value1 " "
                 if (value1 != " ")
-                    value1 = value1.Trim(); // Do not exclude value1 " "
+                    value1 = FormatValue(value1);
 
                 if (int.TryParse(str_id, out int id))
                 {
@@ -344,11 +370,13 @@ namespace DS_TextsMod_Helper
                 string str_id = line.Split('|')[0].Trim();
                 string value2 = line.Split('|')[1]; // Do not trim yet
 
+                // Exclude lines without value
                 if (value2 == "")
-                    continue; // Exclude lines without value
+                    continue;
 
+                // Do not exclude value1 " "
                 if (value2 != " ")
-                    value2 = value2.Trim(); // Do not exclude value2 " "
+                    value2 = FormatValue(value2);
 
                 if (int.TryParse(str_id, out int id))
                 {
@@ -404,8 +432,9 @@ namespace DS_TextsMod_Helper
                 string str_id = line.Split('|')[0].Trim();
                 string value1 = line.Split('|')[1]; // Do not trim yet
 
+                // Do not exclude value1 " "
                 if (value1 != " ")
-                    value1 = value1.Trim(); // Do not exclude value1 " "
+                    value1 = FormatValue(value1);
 
                 if (int.TryParse(str_id, out int id))
                 {
@@ -423,8 +452,9 @@ namespace DS_TextsMod_Helper
                 string str_id = line.Split('|')[0].Trim();
                 string value2 = line.Split('|')[1]; // Do not trim yet
 
+                // Preserve value2 " "
                 if (value2 != " ")
-                    value2 = value2.Trim(); // Preserve value2 " "
+                    value2 = FormatValue(value2);
 
                 if (int.TryParse(str_id, out int id))
                 {
@@ -446,8 +476,9 @@ namespace DS_TextsMod_Helper
                 string str_id = line.Split('|')[0].Trim();
                 string value3 = line.Split('|')[1]; // Do not trim yet
 
+                // Preserve value3 " "
                 if (value3 != " ")
-                    value3 = value3.Trim(); // Preserve value3 " "
+                    value3 = FormatValue(value3);
 
                 if (int.TryParse(str_id, out int id))
                 {
