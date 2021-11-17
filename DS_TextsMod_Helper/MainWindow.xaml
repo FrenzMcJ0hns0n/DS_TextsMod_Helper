@@ -37,38 +37,38 @@
                         <RowDefinition Height="1*" />
                     </Grid.RowDefinitions>
                     <Label Grid.Column="0" Grid.Row="0" VerticalAlignment="Center" Content="File #1 :" />
-                    <Label Grid.Column="0" Grid.Row="1" VerticalAlignment="Center" Content="File #2 :" />
-                    <Label Grid.Column="0" Grid.Row="2" VerticalAlignment="Center" Content="File #3 :" />
                     <TextBox x:Name="tbx_file1" 
-                     Grid.Column="1" Grid.Row="0" 
-                     VerticalAlignment="Center" 
-                     FontStyle="Italic" Foreground="Gray" Text="Drop CSV file..."
-                     TextWrapping="NoWrap" IsReadOnly="True"
-                     Cursor="Arrow"
-                     AllowDrop="True"
-                     PreviewDragOver="tbx_file1_PreviewDragOver"
-                     Drop="tbx_file1_Drop"
-                     />
+                             Grid.Column="1" Grid.Row="0" 
+                             VerticalAlignment="Center" 
+                             FontStyle="Italic" Foreground="Gray" Text="Drop CSV file..."
+                             TextWrapping="NoWrap" IsReadOnly="True"
+                             Cursor="Arrow"
+                             AllowDrop="True"
+                             PreviewDragOver="tbx_file1_PreviewDragOver"
+                             Drop="tbx_file1_Drop"
+                             />
+                    <Label Grid.Column="0" Grid.Row="1" VerticalAlignment="Center" Content="File #2 :" />
                     <TextBox x:Name="tbx_file2" 
-                     Grid.Column="1" Grid.Row="1" 
-                     VerticalAlignment="Center" 
-                     FontStyle="Italic" Foreground="Gray" Text="Drop CSV file..."
-                     TextWrapping="NoWrap" IsReadOnly="True"
-                     Cursor="Arrow"
-                     AllowDrop="True"
-                     PreviewDragOver="tbx_file2_PreviewDragOver"
-                     Drop="tbx_file2_Drop"
-                     />
+                             Grid.Column="1" Grid.Row="1" 
+                             VerticalAlignment="Center" 
+                             FontStyle="Italic" Foreground="Gray" Text="Drop CSV file..."
+                             TextWrapping="NoWrap" IsReadOnly="True"
+                             Cursor="Arrow"
+                             AllowDrop="True"
+                             PreviewDragOver="tbx_file2_PreviewDragOver"
+                             Drop="tbx_file2_Drop"
+                             />
+                    <Label Grid.Column="0" Grid.Row="2" VerticalAlignment="Center" Content="File #3 :" />
                     <TextBox x:Name="tbx_file3" 
-                     Grid.Column="1" Grid.Row="2" 
-                     VerticalAlignment="Center" 
-                     FontStyle="Italic" Foreground="Gray" Text="Drop CSV file..."
-                     TextWrapping="NoWrap" IsReadOnly="True"
-                     Cursor="Arrow"
-                     AllowDrop="True"
-                     PreviewDragOver="tbx_file3_PreviewDragOver"
-                     Drop="tbx_file3_Drop"
-                     />
+                             Grid.Column="1" Grid.Row="2" 
+                             VerticalAlignment="Center" 
+                             FontStyle="Italic" Foreground="Gray" Text="Drop CSV file..."
+                             TextWrapping="NoWrap" IsReadOnly="True"
+                             Cursor="Arrow"
+                             AllowDrop="True"
+                             PreviewDragOver="tbx_file3_PreviewDragOver"
+                             Drop="tbx_file3_Drop"
+                             />
                 </Grid>
             </GroupBox>
             
@@ -108,81 +108,84 @@
                         <RowDefinition Height="1*" />
                         <RowDefinition Height="1*" />
                     </Grid.RowDefinitions>
+                    
                     <!-- TODO: Use panels to organize items together -->
-                    <Label Grid.Column="0" Grid.Row="0" VerticalAlignment="Center" Content="CSV separator char (input) :" Foreground="Gray" />
-                    <Label Grid.Column="1" Grid.Row="0" VerticalAlignment="Center" Content="CSV separator char (output) :" Margin="0,0,0,0" Foreground="Gray" />
-                    <Label Grid.Column="2" Grid.Row="0" VerticalAlignment="Center" Content="Trim start string :" Margin="10,0,0,0"/>
-                    <!-- TODO -->
-                    <Label Grid.Column="3" Grid.Row="0" VerticalAlignment="Center" Content="Trim end string :" Margin="48,0,0,0"/>
-                    <!-- TODO -->
-                    <Label Grid.Column="0" Grid.Row="1" VerticalAlignment="Center" Content="Output filename :" />
-                    <Label Grid.Column="2" Grid.Row="1" VerticalAlignment="Center" Content="Header #1 :" Margin="10,0,0,0" />
-                    <Label Grid.Column="3" Grid.Row="1" VerticalAlignment="Center" Content="Header #2 :" Margin="20,0,0,0" />
-                    <TextBox x:Name="tbx_csvsepi" 
-                     Grid.Column="0" Grid.Row="0"
-                     HorizontalAlignment="Right" Width="22" Margin="0,0,46,0"
-                     VerticalAlignment="Center" Height="22"
-                     TextAlignment="Center" Text="|"
-                     MaxLength="1"
-                         IsEnabled="False"
-                     />
-                    <TextBox x:Name="tbx_csvsepo" 
-                     Grid.Column="1" Grid.Row="0"
-                     HorizontalAlignment="Right" Width="22" Margin="0,0,38,0"
-                     VerticalAlignment="Center" Height="22"
-                     TextAlignment="Center" Text="|"
-                     MaxLength="1"
-                         IsEnabled="False"
-                     />
-                    <!-- TODO: Handle this to cut extra "/n/" in text contents -->
-                    <TextBox x:Name="tbx_trimstart"
-                         Grid.Column="2" Grid.Row="0"
-                         HorizontalAlignment="Right" Width="72" Margin="0,0,36,0"
-                         VerticalAlignment="Center"
-                         TextAlignment="Center"
-                         MaxLength="10"
-                         />
-                    <!-- TODO -->
-                    <TextBox x:Name="tbx_trimend"
-                         Grid.Column="3" Grid.Row="0"
-                         HorizontalAlignment="Right" Width="72"
-                         VerticalAlignment="Center"
-                         TextAlignment="Center"
-                         MaxLength="10"
-                         />
+                    
+                    <!-- Output filename -->
+                    <Label Grid.Column="0" Grid.Row="0" VerticalAlignment="Center" Content="Output filename :" />
                     <TextBox x:Name="tbx_outputfilename" 
-                     Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="2"
-                     HorizontalAlignment="Right" Width="300" Margin="0,0,38,0"
-                     VerticalAlignment="Center"
-                     TextAlignment="Right"
+                             Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="2"
+                             HorizontalAlignment="Right" Width="318" Margin="0,0,38,0"
+                             VerticalAlignment="Center"
+                             TextAlignment="Right"
                              Text="result"
-                     />
-                    <Label Grid.Column="1" Grid.Row="1" HorizontalAlignment="Right" VerticalAlignment="Center" Content=".csv" Margin="0,0,12,0"/>
+                             />
+                    <Label Grid.Column="1" Grid.Row="0" HorizontalAlignment="Right" VerticalAlignment="Center" Content=".csv" Margin="0,0,13,0"/>
+                    
+                    <!-- I/O CSV separators -->
+                    <Label Grid.Column="0" Grid.Row="1" VerticalAlignment="Center" Content="CSV separator char (input) :" />
+                    <TextBox x:Name="tbx_csvsepi" 
+                             Grid.Column="0" Grid.Row="1"
+                             HorizontalAlignment="Right" Width="22" Margin="0,0,51,0"
+                             VerticalAlignment="Center" Height="22"
+                             TextAlignment="Center" Text="|"
+                             MaxLength="1"
+                             />
+                    <Label Grid.Column="1" Grid.Row="1" VerticalAlignment="Center" Content="CSV separator char (output) :" Margin="5,0,0,0" />
+                    <TextBox x:Name="tbx_csvsepo" 
+                             Grid.Column="1" Grid.Row="1"
+                             HorizontalAlignment="Right" Width="22" Margin="0,0,38,0"
+                             VerticalAlignment="Center" Height="22"
+                             TextAlignment="Center" Text="|"
+                             MaxLength="1"
+                             />
+
+                    <!-- Output headers -->
+                    <Label Grid.Column="2" Grid.Row="0" VerticalAlignment="Center" Content="Header #1 :" Margin="28,0,0,0" />
                     <TextBox x:Name="tbx_header1" 
-                         Grid.Column="2" Grid.Row="1"
-                         HorizontalAlignment="Right" Width="128" Margin="0,0,8,0"
-                         VerticalAlignment="Center"
-                         TextAlignment="Right"
-                         Text="Value1"
-                         />
+                             Grid.Column="2" Grid.Row="0"
+                             HorizontalAlignment="Right" Width="128"
+                             VerticalAlignment="Center"
+                             TextAlignment="Right"
+                             Text="Value1"
+                             />
+                    <Label Grid.Column="2" Grid.Row="1" VerticalAlignment="Center" Content="Header #2 :" Margin="28,0,0,0" />
                     <TextBox x:Name="tbx_header2"
-                         Grid.Column="3" Grid.Row="1"
-                         HorizontalAlignment="Right" Width="128" Margin="0,0,0,0"
-                         VerticalAlignment="Center"
-                         TextAlignment="Right"
-                         Text="Value2"
-                         />
+                             Grid.Column="2" Grid.Row="1"
+                             HorizontalAlignment="Right" Width="128"
+                             VerticalAlignment="Center"
+                             TextAlignment="Right"
+                             Text="Value2"
+                             />
+
+                    <!-- Trimming of values -->
+                    <Label Grid.Column="3" Grid.Row="0" VerticalAlignment="Center" Content="Trim beginning chars :" Margin="29,0,0,0"/>
+                    <TextBox x:Name="tbx_trimbegin"
+                             Grid.Column="3" Grid.Row="0"
+                             HorizontalAlignment="Right" Width="72"
+                             VerticalAlignment="Center"
+                             TextAlignment="Center"
+                             MaxLength="10"
+                             />
+                    <Label Grid.Column="3" Grid.Row="1" VerticalAlignment="Center" Content="Trim ending chars :" Margin="46,0,0,0"/>
+                    <TextBox x:Name="tbx_trimend"
+                             Grid.Column="3" Grid.Row="1"
+                             HorizontalAlignment="Right" Width="72"
+                             VerticalAlignment="Center"
+                             TextAlignment="Center"
+                             MaxLength="10"
+                             />
                 </Grid>
             </GroupBox>
             
-            <!-- Summary -->
+            <!-- Explanations -->
             <GroupBox Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" Margin="0,8,0,8" BorderBrush="DarkGray" Header="Explanation">
                 <Grid Margin="8">
                     <TextBlock x:Name="tbk_summary" Margin="8,6,6,6" FontSize="11" />
                 </Grid>
             </GroupBox>
 
-            <!-- Preview -->
+            <!-- Output preview -->
             <GroupBox Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2" Margin="0,8,0,8" BorderBrush="DarkGray" Header="Output preview">
                 <Grid Margin="8">
                     <Grid Background="White">

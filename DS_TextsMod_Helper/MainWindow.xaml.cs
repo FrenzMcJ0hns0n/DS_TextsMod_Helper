@@ -308,7 +308,7 @@ namespace DS_TextsMod_Helper
         {
             string output = input.Trim();
             
-            string trim_start = tbx_trimstart.Text;
+            string trim_start = tbx_trimbegin.Text;
             int s = trim_start.Length;
 
             string trim_end = tbx_trimend.Text;
