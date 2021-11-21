@@ -383,7 +383,7 @@ namespace DS_TextsMod_Helper
                     if (cmp_dictionary.ContainsKey(id)) // The key (id) has a value in both File1 & File2
                     {
                         if (cmp_dictionary.TryGetValue(id, out string value1))
-                            cmp_dictionary[id] = $"{id}{osep}{value1}{osep}{value2}{osep}{value1 == value2}"; // => "id|value1|value2|true/false"
+                            cmp_dictionary[id] = $"{id}{osep}{value1}{osep}{value2}{osep}{(value1 == value2 ? "true" : "false")}"; // => "id|value1|value2|true/false"
                     }
                     else // The key (id) has a value only in File2
                         cmp_dictionary.Add(id, $"{id}{osep}{osep}{value2}{osep}false"); // => "id||value2|false"
