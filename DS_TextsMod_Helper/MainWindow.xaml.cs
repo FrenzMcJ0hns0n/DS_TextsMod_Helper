@@ -30,8 +30,8 @@ namespace DS_TextsMod_Helper
             Directory.CreateDirectory(ReturnOutputDirectoryPath());
 
 
-            tbx_file1.Text = @"C:\Program Files (x86)\Steam\steamapps\common\DARK SOULS REMASTERED\pre-doa-backup\msg\ENGLISH\item.msgbnd.extract\FRPG\data\Msg\Data_ENGLISH\Accessory_long_desc_.fmg.csv";
-            tbx_file2.Text = @"C:\Program Files (x86)\Steam\steamapps\common\DARK SOULS REMASTERED\msg\ENGLISH\item.msgbnd.extract\FRPG\data\Msg\Data_ENGLISH\RingDescriptions.fmg.csv";
+            tbx_file1.Text = @"C:\Program Files (x86)\Steam\steamapps\common\DARK SOULS REMASTERED\pre-doa-backup\msg\ENGLISH\item.msgbnd.extract\FRPG\data\Msg\Data_ENGLISH\Item_long_desc_.fmg - test.csv";
+            tbx_file2.Text = @"C:\Program Files (x86)\Steam\steamapps\common\DARK SOULS REMASTERED\msg\ENGLISH\item.msgbnd.extract\FRPG\data\Msg\Data_ENGLISH\ItemDescriptions.fmg - test.csv";
         }
 
 
@@ -304,22 +304,40 @@ namespace DS_TextsMod_Helper
 
 
 
+
+        // -----------------
+        // String operations
+        // -----------------
         private string FormatValue(string input)
         {
             string output = input.Trim();
-            
+
+            output = TrimStart(output);
+            output = TrimEnd(output);
+
+            return output;
+        }
+        private string TrimStart(string input)
+        {
+            string output = input;
+            if (tbx_trimbegin.Text == "")
+                return output;
+
             string trim_start = tbx_trimbegin.Text;
-            int s = trim_start.Length;
+            while (output.Substring(0, trim_start.Length) == trim_start)
+                output = output.Substring(trim_start.Length);
+
+            return output;
+        }
+        private string TrimEnd(string input)
+        {
+            string output = input;
+            if (tbx_trimend.Text == "")
+                return input;
 
             string trim_end = tbx_trimend.Text;
-            int e = trim_end.Length;
-
-            // Trim value as requested
-            if (output.Substring(0, s) == trim_start)
-                output = output.Substring(s);
-
-            if (output.Substring(output.Length - e) == trim_end)
-                output = output.Substring(0, output.Length - e);
+            while (output.Substring(output.Length - trim_end.Length) == trim_end)
+                output = output.Substring(0, output.Length - trim_end.Length);
 
             return output;
         }
