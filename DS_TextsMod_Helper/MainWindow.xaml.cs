@@ -363,7 +363,7 @@ namespace DS_TextsMod_Helper
             }
 
 
-            // Then, compare against data of File1 & File2
+            // Then, compare data of File1 & File2
             line_counter = 0;
             foreach (string line in file_2_lines)
             {
@@ -374,7 +374,7 @@ namespace DS_TextsMod_Helper
                 if (value2 == "")
                     continue;
 
-                // Do not exclude value1 " "
+                // Do not exclude value2 " "
                 if (value2 != " ")
                     value2 = FormatValue(value2);
 
@@ -396,7 +396,7 @@ namespace DS_TextsMod_Helper
             }
 
 
-            // Finally, get back on formatting dictionary for values from File1
+            // Finally, get back on formatting values from File1
             SortedDictionary<int, string> replica_dictionary = new SortedDictionary<int, string>(cmp_dictionary);
             foreach (KeyValuePair<int, string> rd in replica_dictionary)
             {
