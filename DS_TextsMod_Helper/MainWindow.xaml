@@ -71,7 +71,6 @@
                              />
                 </Grid>
             </GroupBox>
-            
 
             <!-- Actions -->
             <GroupBox Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Header="Actions" BorderBrush="DarkGray" Margin="0,8,0,8">
@@ -222,14 +221,12 @@
 
             <!-- Execute -->
             <Grid Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="2" Margin="0,8,0,8">
-                <Grid>
-                    <Button x:Name="btn_execute"
-                            HorizontalAlignment="Stretch" Margin="66,0,66,0"
-                            Content="Execute"
-                            Click="btn_execute_Click"
-                            IsEnabled="False"
-                            />
-                </Grid>
+                <Button x:Name="btn_execute"
+                        HorizontalAlignment="Stretch" Margin="66,0,66,0"
+                        Content="Execute"
+                        Click="btn_execute_Click"
+                        IsEnabled="False"
+                        />
             </Grid>
         </Grid>
     </Grid>
