@@ -190,6 +190,8 @@ namespace DS_TextsMod_Helper
             string output_header_1 = tbx_header1.Text;
             string output_header_2 = tbx_header2.Text;
             string output_filename = tbx_outputfilename.Text;
+            string sepa_csv_char_i = tbx_csvsepi.Text;
+            string sepa_csv_char_o = tbx_csvsepo.Text;
 
             if (!File.Exists(input_filepath1) || !File.Exists(input_filepath2))
             {
@@ -205,13 +207,19 @@ namespace DS_TextsMod_Helper
 
             if (output_header_1 == "" || output_header_2 == "")
             {
-                MessageBox.Show("Error : empty output headers");
+                MessageBox.Show("Error : missing output header(s)");
                 return false;
             }
 
             if (output_filename == "")
             {
                 MessageBox.Show("Error : output filename not specified");
+                return false;
+            }
+
+            if (sepa_csv_char_i == "" || sepa_csv_char_o == "")
+            {
+                MessageBox.Show("Error : missing CSV separator character(s)");
                 return false;
             }
 
@@ -224,6 +232,8 @@ namespace DS_TextsMod_Helper
             string input_filepath2 = tbx_file2.Text;
             string input_filepath3 = tbx_file3.Text;
             string output_filename = tbx_outputfilename.Text;
+            string sepa_csv_char_i = tbx_csvsepi.Text;
+            string sepa_csv_char_o = tbx_csvsepo.Text;
 
             if (!File.Exists(input_filepath1) || !File.Exists(input_filepath2) || !File.Exists(input_filepath3))
             {
@@ -240,6 +250,12 @@ namespace DS_TextsMod_Helper
             if (output_filename == "")
             {
                 MessageBox.Show("Error : output filename not specified");
+                return false;
+            }
+
+            if (sepa_csv_char_i == "" || sepa_csv_char_o == "")
+            {
+                MessageBox.Show("Error : missing CSV separator(s)");
                 return false;
             }
 
