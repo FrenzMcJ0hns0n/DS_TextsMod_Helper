@@ -270,10 +270,10 @@ namespace DS_TextsMod_Helper
         // ----------------------
         private void DisplayPreviewCompare(SortedDictionary<int, string> dictionary_compare, char osep, string oheader1, string oheader2)
         {
-            string output_preview = $"Text ID{osep}{oheader1}{osep}{oheader2}{osep}Same?"; // => "Text ID|Header 1|Header 2|Same?"
+            string output_preview = $"Text ID{osep}{oheader1}{osep}{oheader2}{osep}Same?"; // Headers = "Text ID|Header 1|Header 2|Same?"
             foreach (KeyValuePair<int, string> od in dictionary_compare)
             {
-                output_preview += $"\n{od.Value}";
+                output_preview += $"\n{od.Value}"; // Data = "Text ID|Value 1|Value 2|[True/False]"
             }
 
             tbk_preview.Text = output_preview;
@@ -281,10 +281,10 @@ namespace DS_TextsMod_Helper
 
         private void DisplayPreviewPrepare(Dictionary<int, string> dictionary_prepare, char osep)
         {
-            string output_preview = "";
+            string output_preview = ""; // Headers = none
             foreach (KeyValuePair<int, string> od in dictionary_prepare)
             {
-                output_preview += (output_preview == "") ? $"{od.Key}{osep}{od.Value}" : $"\n{od.Key}{osep}{od.Value}"; // => "Text ID|Value"
+                output_preview += (output_preview == "") ? $"{od.Key}{osep}{od.Value}" : $"\n{od.Key}{osep}{od.Value}"; // Data = "Text ID|Value"
             }
 
             tbk_preview.Text = output_preview;
@@ -298,10 +298,10 @@ namespace DS_TextsMod_Helper
             string output_filepath = Path.Combine(ReturnOutputDirectoryPath(), ofilename);
             using (StreamWriter writer = new StreamWriter(output_filepath, false))
             {
-                writer.WriteLine($"Text ID{osep}{oheader1}{osep}{oheader2}{osep}Same?"); // => "Text ID|Header 1|Header 2|Same?"
+                writer.WriteLine($"Text ID{osep}{oheader1}{osep}{oheader2}{osep}Same?"); // Headers = "Text ID|Header 1|Header 2|Same?"
                 foreach (KeyValuePair<int, string> od in dictionary_compare)
                 {
-                    writer.WriteLine(od.Value);
+                    writer.WriteLine(od.Value); // Data = "Text ID|Value 1|Value 2|[True/False]"
                 }
             }
         }
@@ -313,7 +313,7 @@ namespace DS_TextsMod_Helper
             {
                 foreach (KeyValuePair<int, string> od in dictionary_prepare)
                 {
-                    writer.WriteLine($"{od.Key}{osep}{od.Value}"); // => "Text ID|Value"
+                    writer.WriteLine($"{od.Key}{osep}{od.Value}"); // Data = "Text ID|Value"
                 }
             }
         }
