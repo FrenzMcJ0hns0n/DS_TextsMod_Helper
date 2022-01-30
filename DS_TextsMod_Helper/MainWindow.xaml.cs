@@ -324,38 +324,36 @@ namespace DS_TextsMod_Helper
         // -----------------
         // String operations
         // -----------------
-        private string FormatValue(string input)
+        private string FormatValue(string value)
         {
-            string output = input.Trim();
+            value = TrimStart(value.Trim());
+            value = TrimEnd(value.Trim());
 
-            output = TrimStart(output);
-            output = TrimEnd(output);
-
-            return output;
+            return value;
         }
-        private string TrimStart(string input)
+        private string TrimStart(string txt)
         {
-            string output = input;
-            if (tbx_trimbegin.Text == "")
-                return output;
-
             string trim_start = tbx_trimbegin.Text;
-            while (output.Substring(0, trim_start.Length) == trim_start)
-                output = output.Substring(trim_start.Length);
 
-            return output;
+            if (trim_start != "" && txt.Length > trim_start.Length)
+            {
+                while (txt.Substring(0, trim_start.Length) == trim_start)
+                    txt = txt.Substring(trim_start.Length);
+            }
+
+            return txt;
         }
-        private string TrimEnd(string input)
+        private string TrimEnd(string txt)
         {
-            string output = input;
-            if (tbx_trimend.Text == "")
-                return input;
-
             string trim_end = tbx_trimend.Text;
-            while (output.Substring(output.Length - trim_end.Length) == trim_end)
-                output = output.Substring(0, output.Length - trim_end.Length);
 
-            return output;
+            if (trim_end != "" && txt.Length > trim_end.Length)
+            {
+                while (txt.Substring(txt.Length - trim_end.Length) == trim_end)
+                    txt = txt.Substring(0, txt.Length - trim_end.Length);
+            }
+
+            return txt;
         }
 
 
