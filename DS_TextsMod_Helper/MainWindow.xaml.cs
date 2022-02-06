@@ -101,7 +101,7 @@ namespace DS_TextsMod_Helper
 
             if (CompareModeReady())
             {
-                SortedDictionary<int, string> sdict = ReturnCompareDictionary(tbx_file1.Text, tbx_file2.Text, tbx_csvsepi.Text[0], tbx_csvsepo.Text[0], true);
+                SortedDictionary<int, string> sdict = ReturnCompareDictionary(tbx_file1.Text, tbx_file2.Text, tbx_csvsepo.Text[0], true);
                 DisplayPreviewCompare(sdict, tbx_csvsepo.Text[0], tbx_header1.Text, tbx_header2.Text);
 
                 btn_execute.IsEnabled = true;
@@ -143,7 +143,7 @@ namespace DS_TextsMod_Helper
 
             if (compare_clicked)
             {
-                SortedDictionary<int, string> sdict = ReturnCompareDictionary(tbx_file1.Text, tbx_file2.Text, tbx_csvsepi.Text[0], tbx_csvsepo.Text[0], false);
+                SortedDictionary<int, string> sdict = ReturnCompareDictionary(tbx_file1.Text, tbx_file2.Text, tbx_csvsepo.Text[0], false);
                 DoCompare(sdict, tbx_csvsepo.Text[0], tbx_header1.Text, tbx_header2.Text, output_filename);
                 MessageBox.Show($"Compare mode: File \"{output_filename}\" created.");
             }
@@ -360,88 +360,71 @@ namespace DS_TextsMod_Helper
         // --------------
         // Core functions
         // --------------
-        private SortedDictionary<int,string> ReturnCompareDictionary(string ifile1, string ifile2, char isep, char osep, bool preview)
+        private SortedDictionary<int,string> ReturnCompareDictionary(string ifile1, string ifile2, char osep, bool preview)
         {
-            // Get input data from both File1 & File2
-            string[] file_1_lines = File.ReadAllLines(ifile1);
-            string[] file_2_lines = File.ReadAllLines(ifile2);
+            // Get input data
+            SoulsFormats.FMG file_1 = new SoulsFormats.FMG { Entries = SoulsFormats.FMG.Read(ifile1).Entries };
+            SoulsFormats.FMG file_2 = new SoulsFormats.FMG { Entries = SoulsFormats.FMG.Read(ifile2).Entries };
 
-            int line_counter = 0;
+            SortedDictionary<int, string> cmp_dictionary2 = new SortedDictionary<int, string>();
 
-            SortedDictionary<int, string> cmp_dictionary = new SortedDictionary<int, string>();
-
-            // First, fill the dictionary with data from File1
-            foreach (string line in file_1_lines)
+            // 1. Fill the dictionary with data from File1
+            int line_counter2 = 0;
+            foreach (SoulsFormats.FMG.Entry entry in file_1.Entries)
             {
-                string str_id = line.Split(isep)[0].Trim();
-                string value1 = line.Split(isep)[1]; // Do not trim yet
-
                 // Exclude lines without value
-                if (value1 == "")
+                if (entry.Text == "")
                     continue;
 
-                // Do not exclude value1 " "
-                if (value1 != " ")
-                    value1 = FormatValue(value1);
+                // Do not exclude Text = " "
+                if (entry.Text != " ")
+                    entry.Text = FormatValue(entry.Text);
 
-                if (int.TryParse(str_id, out int id))
-                {
-                    cmp_dictionary.Add(id, value1);
-                    line_counter += 1;
-                }
+                cmp_dictionary2.Add(entry.ID, entry.Text);
+                line_counter2 += 1;
 
-                if (preview && line_counter == 6)
+                if (preview && line_counter2 == 6)
                     break;
             }
 
-
-            // Then, compare data of File1 & File2
-            line_counter = 0;
-            foreach (string line in file_2_lines)
+            // 2. Compare data of File1 & File2
+            line_counter2 = 0;
+            foreach(SoulsFormats.FMG.Entry entry in file_2.Entries)
             {
-                string str_id = line.Split(isep)[0].Trim();
-                string value2 = line.Split(isep)[1]; // Do not trim yet
-
                 // Exclude lines without value
-                if (value2 == "")
+                if (entry.Text == "")
                     continue;
 
-                // Do not exclude value2 " "
-                if (value2 != " ")
-                    value2 = FormatValue(value2);
+                // Do not exclude Text = " "
+                if (entry.Text != " ")
+                    entry.Text = FormatValue(entry.Text);
 
-                if (int.TryParse(str_id, out int id))
+                if (cmp_dictionary2.ContainsKey(entry.ID)) // The key (id) has a value in both File1 & File2
                 {
-                    if (cmp_dictionary.ContainsKey(id)) // The key (id) has a value in both File1 & File2
-                    {
-                        if (cmp_dictionary.TryGetValue(id, out string value1))
-                            cmp_dictionary[id] = $"{id}{osep}{value1}{osep}{value2}{osep}{(value1 == value2 ? "true" : "false")}"; // => "id|value1|value2|true/false"
-                    }
-                    else // The key (id) has a value only in File2
-                        cmp_dictionary.Add(id, $"{id}{osep}{osep}{value2}{osep}false"); // => "id||value2|false"
-
-                    line_counter += 1;
+                    if (cmp_dictionary2.TryGetValue(entry.ID, out string file1_value))
+                        cmp_dictionary2[entry.ID] = $"{entry.ID}{osep}{file1_value}{osep}{entry.Text}{osep}{(file1_value == entry.Text ? "true" : "false")}"; // => "id|value1|value2|true/false"
                 }
+                else // The key (id) has a value only in File2
+                    cmp_dictionary2.Add(entry.ID, $"{entry.ID}{osep}{osep}{entry.Text}{osep}false"); // => "id||value2|false"
 
-                if (preview && line_counter == 6)
+                line_counter2 += 1;
+
+                if (preview && line_counter2 == 6)
                     break;
             }
 
-
-            // Finally, get back on formatting values from File1
-            SortedDictionary<int, string> replica_dictionary = new SortedDictionary<int, string>(cmp_dictionary);
-            foreach (KeyValuePair<int, string> rd in replica_dictionary)
+            // 3. Get back on formatting values from File1
+            SortedDictionary<int, string> replica_dictionary2 = new SortedDictionary<int, string>(cmp_dictionary2);
+            foreach (KeyValuePair<int, string> rd in replica_dictionary2)
             {
                 if (!rd.Value.Contains($"{osep}true") && !rd.Value.Contains($"{osep}false"))
                 {
-                    if (replica_dictionary.TryGetValue(rd.Key, out string value1)) // The key (rd.Key) has a value only in File1
-                    {
-                        cmp_dictionary[rd.Key] = $"{rd.Key}{osep}{value1}{osep}{osep}false"; // => "id|value1||false"
-                    }
+                    if (replica_dictionary2.TryGetValue(rd.Key, out string value1)) // The key (rd.Key) has a value only in File1
+                        cmp_dictionary2[rd.Key] = $"{rd.Key}{osep}{value1}{osep}{osep}false"; // => "id|value1||false"
                 }
             }
 
-            return cmp_dictionary;
+            return cmp_dictionary2;
         }
 
 
