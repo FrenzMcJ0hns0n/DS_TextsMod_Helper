@@ -432,81 +432,58 @@ namespace DS_TextsMod_Helper
 
         private Dictionary<int, string> ReturnPrepareDictionary(string ifile1, string ifile2, string ifile3, char isep, char osep, bool preview)
         {
-            // Get input data from all files
-            string[] file_1_lines = File.ReadAllLines(ifile1);
-            string[] file_2_lines = File.ReadAllLines(ifile2);
-            string[] file_3_lines = File.ReadAllLines(ifile3);
-
-            int line_counter = 0;
+            // Get input data
+            SoulsFormats.FMG file_1 = new SoulsFormats.FMG { Entries = SoulsFormats.FMG.Read(ifile1).Entries };
+            SoulsFormats.FMG file_2 = new SoulsFormats.FMG { Entries = SoulsFormats.FMG.Read(ifile2).Entries };
+            SoulsFormats.FMG file_3 = new SoulsFormats.FMG { Entries = SoulsFormats.FMG.Read(ifile3).Entries };
 
             Dictionary<int, string> prp_dictionary = new Dictionary<int, string>();
 
-            // First, fill the dictionary with ALL data from File1
-            foreach (string line in file_1_lines)
+            // 1. Fill the dictionary with ALL data from File1
+            int counter = 0;
+            foreach (SoulsFormats.FMG.Entry entry in file_1.Entries)
             {
-                string str_id = line.Split(isep)[0].Trim();
-                string value1 = line.Split(isep)[1]; // Do not trim yet
+                if (entry.Text != " ") // Preserve Text = " "
+                    entry.Text = FormatValue(entry.Text);
 
-                // Do not exclude value1 " "
-                if (value1 != " ")
-                    value1 = FormatValue(value1);
+                counter += 1;
+                prp_dictionary.Add(entry.ID, entry.Text); // At this point, the dictionary contains File1 values 
 
-                if (int.TryParse(str_id, out int id))
-                {
-                    line_counter += 1;
-                    prp_dictionary.Add(id, value1); // Contains File1 value so far
-                }
-
-                if (preview && line_counter == 7)
+                if (preview && counter == 7)
                     break;
             }
 
-            // Then, update values of dictionary when File1 & File2 values are identical
-            foreach (string line in file_2_lines)
+            // 2. Update values of dictionary when File1 & File2 values are identical
+            foreach (SoulsFormats.FMG.Entry entry in file_2.Entries)
             {
-                string str_id = line.Split(isep)[0].Trim();
-                string value2 = line.Split(isep)[1]; // Do not trim yet
+                if (entry.Text != " ") // Preserve Text = " "
+                    entry.Text = FormatValue(entry.Text);
 
-                // Preserve value2 " "
-                if (value2 != " ")
-                    value2 = FormatValue(value2);
-
-                if (int.TryParse(str_id, out int id))
+                if (prp_dictionary.ContainsKey(entry.ID))
                 {
-                    if (prp_dictionary.ContainsKey(id))
+                    if (prp_dictionary.TryGetValue(entry.ID, out string file1_value))
                     {
-                        if (prp_dictionary.TryGetValue(id, out string value1))
-                        {
-                            if (value1 == value2)
-                                prp_dictionary[id] = ""; // Erase, to be replaced with File3 value
-                        }
+                        if (entry.Text == file1_value)
+                            prp_dictionary[entry.ID] = ""; // Erase, to be replaced with File3 value
                     }
-                    // else : File2 value ignored as not in File1 structure
-                }
+                } // else : File2 value ignored as not in File1 structure
             }
 
-            // Finally, replace empty values with File3 ones
-            foreach (string line in file_3_lines)
+            // 3. Replace empty values with File3 ones
+            foreach (SoulsFormats.FMG.Entry entry in file_3.Entries)
             {
-                string str_id = line.Split(isep)[0].Trim();
-                string value3 = line.Split(isep)[1]; // Do not trim yet
+                // Preserve Text = " "
+                if (entry.Text != " ")
+                    entry.Text = FormatValue(entry.Text);
 
-                // Preserve value3 " "
-                if (value3 != " ")
-                    value3 = FormatValue(value3);
-
-                if (int.TryParse(str_id, out int id))
+                if (prp_dictionary.ContainsKey(entry.ID))
                 {
-                    if (prp_dictionary.ContainsKey(id))
+                    if (prp_dictionary.TryGetValue(entry.ID, out string file1_value))
                     {
-                        if (prp_dictionary.TryGetValue(id, out string value1))
-                        {
-                            if (value1 == "")
-                                prp_dictionary[id] = value3; // Insert File3 value
-                        }
+                        if (file1_value == "")
+                            prp_dictionary[entry.ID] = entry.Text; // Insert File3 value
                     }
-                    // else : File3 value ignored as not in File1 structure
-                }
+                } // else : File3 value ignored as not in File1 structure
             }
 
             return prp_dictionary;
