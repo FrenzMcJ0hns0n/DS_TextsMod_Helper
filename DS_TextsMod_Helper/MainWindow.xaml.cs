@@ -127,7 +127,7 @@ namespace DS_TextsMod_Helper
 
             if (PrepareModeReady())
             {
-                Dictionary<int, string> dict = ReturnPrepareDictionary(tbx_file1.Text, tbx_file2.Text, tbx_file3.Text, tbx_csvsepi.Text[0], tbx_csvsepo.Text[0], true);
+                Dictionary<int, string> dict = ReturnPrepareDictionary(tbx_file1.Text, tbx_file2.Text, tbx_file3.Text, true);
                 DisplayPreviewPrepare(dict, tbx_csvsepo.Text[0]);
 
                 btn_execute.IsEnabled = true;
@@ -150,7 +150,7 @@ namespace DS_TextsMod_Helper
 
             if (prepare_clicked)
             {
-                Dictionary<int, string> dict = ReturnPrepareDictionary(tbx_file1.Text, tbx_file2.Text, tbx_file3.Text, tbx_csvsepi.Text[0], tbx_csvsepo.Text[0], false);
+                Dictionary<int, string> dict = ReturnPrepareDictionary(tbx_file1.Text, tbx_file2.Text, tbx_file3.Text, false);
                 DoPrepare(dict, tbx_csvsepo.Text[0], output_filename);
                 MessageBox.Show($"Prepare mode: File \"{output_filename}\" created.");
             }
@@ -366,71 +366,67 @@ namespace DS_TextsMod_Helper
             SoulsFormats.FMG file_1 = new SoulsFormats.FMG { Entries = SoulsFormats.FMG.Read(ifile1).Entries };
             SoulsFormats.FMG file_2 = new SoulsFormats.FMG { Entries = SoulsFormats.FMG.Read(ifile2).Entries };
 
-            SortedDictionary<int, string> cmp_dictionary2 = new SortedDictionary<int, string>();
+            SortedDictionary<int, string> cmp_dictionary = new SortedDictionary<int, string>();
 
             // 1. Fill the dictionary with data from File1
-            int line_counter2 = 0;
+            int counter = 0;
             foreach (SoulsFormats.FMG.Entry entry in file_1.Entries)
             {
-                // Exclude lines without value
-                if (entry.Text == "")
+                if (entry.Text == "") // Exclude lines without value
                     continue;
 
-                // Do not exclude Text = " "
-                if (entry.Text != " ")
+                if (entry.Text != " ") // Preserve Text = " "
                     entry.Text = FormatValue(entry.Text);
 
-                cmp_dictionary2.Add(entry.ID, entry.Text);
-                line_counter2 += 1;
+                cmp_dictionary.Add(entry.ID, entry.Text);
+                counter += 1;
 
-                if (preview && line_counter2 == 6)
+                if (preview && counter == 6)
                     break;
             }
 
             // 2. Compare data of File1 & File2
-            line_counter2 = 0;
+            counter = 0;
             foreach(SoulsFormats.FMG.Entry entry in file_2.Entries)
             {
-                // Exclude lines without value
-                if (entry.Text == "")
+                if (entry.Text == "") // Exclude lines without value
                     continue;
 
-                // Do not exclude Text = " "
-                if (entry.Text != " ")
+                if (entry.Text != " ") // Preserve Text = " "
                     entry.Text = FormatValue(entry.Text);
 
-                if (cmp_dictionary2.ContainsKey(entry.ID)) // The key (id) has a value in both File1 & File2
+                if (cmp_dictionary.ContainsKey(entry.ID)) // The key (id) has a value in both File1 & File2
                 {
-                    if (cmp_dictionary2.TryGetValue(entry.ID, out string file1_value))
-                        cmp_dictionary2[entry.ID] = $"{entry.ID}{osep}{file1_value}{osep}{entry.Text}{osep}{(file1_value == entry.Text ? "true" : "false")}"; // => "id|value1|value2|true/false"
+                    if (cmp_dictionary.TryGetValue(entry.ID, out string file1_value))
+                        cmp_dictionary[entry.ID] = $"{entry.ID}{osep}{file1_value}{osep}{entry.Text}{osep}{(file1_value == entry.Text ? "true" : "false")}"; // => "id|value1|value2|true/false"
                 }
                 else // The key (id) has a value only in File2
-                    cmp_dictionary2.Add(entry.ID, $"{entry.ID}{osep}{osep}{entry.Text}{osep}false"); // => "id||value2|false"
+                    cmp_dictionary.Add(entry.ID, $"{entry.ID}{osep}{osep}{entry.Text}{osep}false"); // => "id||value2|false"
 
-                line_counter2 += 1;
+                counter += 1;
 
-                if (preview && line_counter2 == 6)
+                if (preview && counter == 6)
                     break;
             }
 
             // 3. Get back on formatting values from File1
-            SortedDictionary<int, string> replica_dictionary2 = new SortedDictionary<int, string>(cmp_dictionary2);
-            foreach (KeyValuePair<int, string> rd in replica_dictionary2)
+            SortedDictionary<int, string> replica_dictionary = new SortedDictionary<int, string>(cmp_dictionary);
+            foreach (KeyValuePair<int, string> rd in replica_dictionary)
             {
                 if (!rd.Value.Contains($"{osep}true") && !rd.Value.Contains($"{osep}false"))
                 {
-                    if (replica_dictionary2.TryGetValue(rd.Key, out string value1)) // The key (rd.Key) has a value only in File1
-                        cmp_dictionary2[rd.Key] = $"{rd.Key}{osep}{value1}{osep}{osep}false"; // => "id|value1||false"
+                    if (replica_dictionary.TryGetValue(rd.Key, out string value1)) // The key (rd.Key) has a value only in File1
+                        cmp_dictionary[rd.Key] = $"{rd.Key}{osep}{value1}{osep}{osep}false"; // => "id|value1||false"
                 }
             }
 
-            return cmp_dictionary2;
+            return cmp_dictionary;
         }
 
 
 
 
-        private Dictionary<int, string> ReturnPrepareDictionary(string ifile1, string ifile2, string ifile3, char isep, char osep, bool preview)
+        private Dictionary<int, string> ReturnPrepareDictionary(string ifile1, string ifile2, string ifile3, bool preview)
         {
             // Get input data
             SoulsFormats.FMG file_1 = new SoulsFormats.FMG { Entries = SoulsFormats.FMG.Read(ifile1).Entries };
