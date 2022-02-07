@@ -141,7 +141,7 @@ namespace DS_TextsMod_Helper
 
         private void btn_execute_Click(object sender, RoutedEventArgs e)
         {
-            string output_filename = tbx_outputfilename.Text + ".csv";
+            string output_filename = tbx_outputfilename.Text + lbl_outputfileext.Content;
 
             if (compare_clicked)
             {
