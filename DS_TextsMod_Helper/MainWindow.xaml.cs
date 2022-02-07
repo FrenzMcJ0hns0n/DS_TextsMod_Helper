@@ -300,14 +300,13 @@ namespace DS_TextsMod_Helper
         private void DoPrepare(Dictionary<int, string> dictionary_prepare, char osep, string ofilename)
         {
             string output_filepath = Path.Combine(ReturnOutputDirectoryPath(), ofilename);
-            using (StreamWriter writer = new StreamWriter(output_filepath, false))
+            SoulsFormats.FMG output = new SoulsFormats.FMG { };
+            foreach (KeyValuePair<int, string> od in dictionary_prepare)
             {
-                foreach (KeyValuePair<int, string> od in dictionary_prepare)
-                {
-                    writer.WriteLine($"{od.Key}{osep}{od.Value}"); // Data = "Text ID|Value"
-                }
+                output.Entries.Add(new SoulsFormats.FMG.Entry(od.Key, (od.Value == "") ? null : od.Value)); // Data = "Text ID|Value"
             }
-        }
+            output.Write(output_filepath);
+    }
 
 
 
@@ -430,6 +429,9 @@ namespace DS_TextsMod_Helper
             int counter = 0;
             foreach (SoulsFormats.FMG.Entry entry in file_1.Entries)
             {
+                if (entry.Text == null)
+                    prp_dictionary.Add(entry.ID, "");
+
                 if (entry.Text != " ") // Preserve Text = " "
                     entry.Text = FormatValue(entry.Text);
 
@@ -443,6 +445,9 @@ namespace DS_TextsMod_Helper
             // 2. Update values of dictionary when File1 & File2 values are identical
             foreach (SoulsFormats.FMG.Entry entry in file_2.Entries)
             {
+                if (entry.Text == null)
+                    continue;
+
                 if (entry.Text != " ") // Preserve Text = " "
                     entry.Text = FormatValue(entry.Text);
 
@@ -451,7 +456,7 @@ namespace DS_TextsMod_Helper
                     if (prp_dictionary.TryGetValue(entry.ID, out string file1_value))
                     {
                         if (entry.Text == file1_value)
-                            prp_dictionary[entry.ID] = ""; // Erase, to be replaced with File3 value
+                            prp_dictionary[entry.ID] = "TO_BE_REPLACED"; // Will write File3 value
                     }
                 } // else : File2 value ignored as not in File1 structure
             }
@@ -459,6 +464,9 @@ namespace DS_TextsMod_Helper
             // 3. Replace empty values with File3 ones
             foreach (SoulsFormats.FMG.Entry entry in file_3.Entries)
             {
+                if (entry.Text == null)
+                    continue;
+
                 // Preserve Text = " "
                 if (entry.Text != " ")
                     entry.Text = FormatValue(entry.Text);
@@ -467,7 +475,7 @@ namespace DS_TextsMod_Helper
                 {
                     if (prp_dictionary.TryGetValue(entry.ID, out string file1_value))
                     {
-                        if (file1_value == "")
+                        if (file1_value == "TO_BE_REPLACED")
                             prp_dictionary[entry.ID] = entry.Text; // Insert File3 value
                     }
                 } // else : File3 value ignored as not in File1 structure
