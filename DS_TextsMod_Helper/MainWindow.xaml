@@ -114,14 +114,15 @@
                     <Label Grid.Column="0" Grid.Row="0" VerticalAlignment="Center" Content="Output filename :" />
                     <TextBox x:Name="tbx_outputfilename" 
                              Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="2"
-                             HorizontalAlignment="Left" Width="292" Margin="106,0,0,0"
+                             HorizontalAlignment="Left" Width="286" Margin="106,0,0,0"
                              VerticalAlignment="Center"
                              TextAlignment="Right"
                              Text="result"
                              />
-                    <Label Grid.Column="1" Grid.Row="0" 
+                    <Label x:Name="lbl_outputfileext"
+                           Grid.Column="1" Grid.Row="0" 
                            HorizontalAlignment="Left" VerticalAlignment="Center" 
-                           Margin="160,0,0,0" 
+                           Margin="158,0,0,0" 
                            Content=".{ext}" 
                            />
 

@@ -30,8 +30,8 @@ namespace DS_TextsMod_Helper
             Directory.CreateDirectory(ReturnOutputDirectoryPath());
 
 
-            tbx_file1.Text = @"C:\Program Files (x86)\Steam\steamapps\common\DARK SOULS REMASTERED\pre-doa-backup\msg\ENGLISH\item.msgbnd.extract\FRPG\data\Msg\Data_ENGLISH\Item_long_desc_.fmg - test.csv";
-            tbx_file2.Text = @"C:\Program Files (x86)\Steam\steamapps\common\DARK SOULS REMASTERED\msg\ENGLISH\item.msgbnd.extract\FRPG\data\Msg\Data_ENGLISH\ItemDescriptions.fmg - test.csv";
+            tbx_file1.Text = @"C:\Program Files (x86)\Steam\steamapps\common\DARK SOULS REMASTERED\msg\ENGLISH\item.msgbnd.extract\FRPG\data\Msg\Data_ENGLISH\ArmorNames.fmg";
+            tbx_file2.Text = @"C:\Program Files (x86)\Steam\steamapps\common\DARK SOULS REMASTERED\pre-doa-backup\msg\ENGLISH\item.msgbnd.extract\FRPG\data\Msg\Data_ENGLISH\Armor_name_.fmg";
         }
 
 
@@ -92,6 +92,7 @@ namespace DS_TextsMod_Helper
             compare_clicked = true;
             prepare_clicked = false;
 
+            lbl_outputfileext.Content = ".csv";
             tbk_summary.Text = "[Compare/Compile] To generate a new file with data comparison\n"
                              + "Expected: File #1 is the modded file in {mod author's language}. File #2 is the same file in vanilla, in same language.\n"
                              + "The program will loop through contents of both files, scanning their Text IDs and values:\n"
@@ -117,6 +118,7 @@ namespace DS_TextsMod_Helper
             compare_clicked = false;
             prepare_clicked = true;
 
+            lbl_outputfileext.Content = ".fmg";
             tbk_summary.Text = "[Prepare/Comply] To prepare a new file for mod translation\n"
                              + "Expected: File #1 is the modded file in {mod author's language}. File #2 is the same file in vanilla, in same language. "
                              + "File #3 is the same file in vanilla, in {target new language}.\n"
@@ -361,7 +363,7 @@ namespace DS_TextsMod_Helper
             int counter = 0;
             foreach (SoulsFormats.FMG.Entry entry in file_1.Entries)
             {
-                if (entry.Text == "") // Exclude lines without value
+                if (entry.Text == null) // Exclude lines without value
                     continue;
 
                 if (entry.Text != " ") // Preserve Text = " "
@@ -378,7 +380,7 @@ namespace DS_TextsMod_Helper
             counter = 0;
             foreach(SoulsFormats.FMG.Entry entry in file_2.Entries)
             {
-                if (entry.Text == "") // Exclude lines without value
+                if (entry.Text == null) // Exclude lines without value
                     continue;
 
                 if (entry.Text != " ") // Preserve Text = " "
