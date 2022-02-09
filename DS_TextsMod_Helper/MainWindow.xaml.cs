@@ -28,21 +28,28 @@ namespace DS_TextsMod_Helper
         public MainWindow()
         {
             InitializeComponent();
+
             Directory.CreateDirectory(ReturnOutputDirectoryPath());
-
-
-            tbx_file1.Text = @"C:\Program Files (x86)\Steam\steamapps\common\DARK SOULS REMASTERED\msg\ENGLISH\item.msgbnd.extract\FRPG\data\Msg\Data_ENGLISH\ArmorNames.fmg";
-            tbx_file2.Text = @"C:\Program Files (x86)\Steam\steamapps\common\DARK SOULS REMASTERED\pre-doa-backup\msg\ENGLISH\item.msgbnd.extract\FRPG\data\Msg\Data_ENGLISH\Armor_name_.fmg";
+            FindSoulsFormatsDll();
         }
 
 
 
 
+        private string ReturnRootDirectoryPath()
+        {
+            return Directory.GetParent(Assembly.GetExecutingAssembly().Location).ToString();
+        }
+
         private string ReturnOutputDirectoryPath()
         {
-            string src_executable = Assembly.GetExecutingAssembly().Location;
-            string root_directory = Directory.GetParent(src_executable).ToString();
-            return Path.Combine(root_directory, "Output");
+            return Path.Combine(ReturnRootDirectoryPath(), "Output");
+        }
+
+        private void FindSoulsFormatsDll()
+        {
+            if (!File.Exists(Path.Combine(ReturnRootDirectoryPath(), "SoulsFormats.dll")))
+                MessageBox.Show("Fatal error : file 'SoulsFormats.dll' not found");
         }
 
 
