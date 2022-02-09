@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 using System.Windows;
@@ -57,7 +58,11 @@ namespace DS_TextsMod_Helper
         private void tbx_file1_Drop(object sender, DragEventArgs e)
         {
             if (AcceptDroppedInputFile(e))
+            {
                 DisplayInputFilepath(sender, e);
+                SyncFilename();
+            }
+                
         }
 
         private void tbx_file2_PreviewDragOver(object sender, DragEventArgs e)
@@ -78,6 +83,11 @@ namespace DS_TextsMod_Helper
         {
             if (AcceptDroppedInputFile(e))
                 DisplayInputFilepath(sender, e);
+        }
+
+        private void cbx_syncoutputfilename_Checked(object sender, RoutedEventArgs e)
+        {
+            SyncFilename();
         }
 
 
@@ -168,8 +178,12 @@ namespace DS_TextsMod_Helper
             if (file_info.Extension.ToLowerInvariant() != ".fmg")
                 return false;
 
-            try { _ = SoulsFormats.FMG.Read(file_info.FullName); }
-            catch { return false; }
+            try { SoulsFormats.FMG.Read(file_info.FullName); }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error while reading this input file : '" + ex.ToString() + "'");
+                return false;
+            }
             return true;
         }
 
@@ -181,6 +195,18 @@ namespace DS_TextsMod_Helper
             tbx.Text = filepath;
             tbx.FontStyle = FontStyles.Normal;
             tbx.Foreground = Brushes.Black;
+        }
+
+        private void SyncFilename()
+        {
+            if (cbx_syncoutputfilename.IsChecked == false)
+                return;
+
+            if (tbx_file1.Text == "Drop FMG file...")
+                return;
+
+            FileInfo file_info = new FileInfo(tbx_file1.Text);
+            tbx_outputfilename.Text = file_info.Name.Substring(0, file_info.Name.Length - file_info.Extension.Length);
         }
 
         private bool CompareModeReady()
