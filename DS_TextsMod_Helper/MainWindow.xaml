@@ -173,34 +173,34 @@
                              ToolTip="Enter header name to be used in output for File #2.&#x0a;(Compare/Compile mode only)"
                              />
 
-                    <!-- Trimming of values -->
+                    <!-- Replace values -->
                     <Label Grid.Column="3" Grid.Row="0" 
                            VerticalAlignment="Center" 
-                           Content="Trim beginning chars :" 
-                           Margin="29,0,0,0"
-                           ToolTip="The specified text will be removed from the beggining of values.&#x0a;For instance, use '/n/' to exclude useless line breaks from the data to be processed"
+                           Content="String to replace :" 
+                           Margin="48,0,0,0"
+                           ToolTip="Enter text to replace in entries&#x0a;For instance use '\n' here and '/n/' below&#x0a;= This will output the original line breaks syntax"
                            />
-                    <TextBox x:Name="tbx_trimbegin"
+                    <TextBox x:Name="tbx_replacesource"
                              Grid.Column="3" Grid.Row="0"
-                             HorizontalAlignment="Right" Width="74"
+                             HorizontalAlignment="Right" Width="80"
                              VerticalAlignment="Center"
                              TextAlignment="Right"
                              MaxLength="10"
-                             ToolTip="The specified text will be removed from the beggining of values.&#x0a;For instance, use '/n/' to exclude useless line breaks from the data to be processed"
+                             ToolTip="Enter text to replace in entries&#x0a;For instance use '\n' here and '/n/' below&#x0a;= This will output the original line breaks syntax"
                              />
                     <Label Grid.Column="3" Grid.Row="1" 
                            VerticalAlignment="Center" 
-                           Content="Trim ending chars :" 
-                           Margin="46,0,0,0"
-                           ToolTip="The specified text will be removed from the end of values.&#x0a;For instance, use '/n/' to exclude useless line breaks from the data to be processed"
+                           Content="Remplacement text :" 
+                           Margin="34,0,0,0"
+                           ToolTip="Enter replacing text for entries&#x0a;For instance use '/n/' here and '\n' above&#x0a;= This will output the original line breaks syntax"
                            />
-                    <TextBox x:Name="tbx_trimend"
+                    <TextBox x:Name="tbx_replacedest"
                              Grid.Column="3" Grid.Row="1"
-                             HorizontalAlignment="Right" Width="74"
+                             HorizontalAlignment="Right" Width="80"
                              VerticalAlignment="Center"
                              TextAlignment="Right"
                              MaxLength="10"
-                             ToolTip="The specified text will be removed from the end of values.&#x0a;For instance, use '/n/' to exclude useless line breaks from the data to be processed"
+                             ToolTip="Enter replacing text for entries&#x0a;For instance use '/n/' here and '\n' above&#x0a;= This will output the original line breaks syntax"
                              />
                 </Grid>
             </GroupBox>

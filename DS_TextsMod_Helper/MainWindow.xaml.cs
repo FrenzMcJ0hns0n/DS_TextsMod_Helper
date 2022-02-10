@@ -349,32 +349,18 @@ namespace DS_TextsMod_Helper
         // -----------------
         private string FormatValue(string value)
         {
-            value = TrimStart(value.Trim());
-            value = TrimEnd(value.Trim());
-
-            return value;
+            return ReplaceValue(value);
         }
-        private string TrimStart(string txt)
+        private string ReplaceValue(string txt)
         {
-            string trim_start = tbx_trimbegin.Text;
+            if (tbx_replacesource.Text == "")
+                return txt;
 
-            if (trim_start != "" && txt.Length > trim_start.Length)
-            {
-                while (txt.Substring(0, trim_start.Length) == trim_start)
-                    txt = txt.Substring(trim_start.Length);
-            }
+            if (txt.Contains(tbx_replacesource.Text))
+                return txt.Replace(tbx_replacesource.Text, tbx_replacedest.Text);
 
-            return txt;
-        }
-        private string TrimEnd(string txt)
-        {
-            string trim_end = tbx_trimend.Text;
-
-            if (trim_end != "" && txt.Length > trim_end.Length)
-            {
-                while (txt.Substring(txt.Length - trim_end.Length) == trim_end)
-                    txt = txt.Substring(0, txt.Length - trim_end.Length);
-            }
+            if (tbx_replacesource.Text == "\\n") // This seems hacky to me... TODO? Improve
+                return txt.Replace("\n", tbx_replacedest.Text);
 
             return txt;
         }
