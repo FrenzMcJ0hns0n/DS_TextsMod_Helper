@@ -29,9 +29,7 @@
                 </DataGrid>
             </DataTemplate>
 
-
             <DataTemplate x:Key="ComparedEntriesTemplate">
-                <!-- Ajouter dans <DataGrid> : Style="{StaticResource myStyle}" -->
                 <DataGrid ItemsSource="{Binding}">
                     <DataGrid.Columns>
                         <DataGridTextColumn Header="#" Width="200" FontSize="12" Binding="{Binding Path=Index}" />
@@ -56,11 +54,6 @@
                     </DataGrid.Columns>
                 </DataGrid>
             </DataTemplate>
-
-            <!--<DataTemplate x:Key="OnTemplate">
-                <TextBlock Text="{Binding Index}" Foreground="Gray" HorizontalAlignment="Center" />
-                <TextBlock Text="{Binding TextId}" HorizontalAlignment="Center" />
-            </DataTemplate>-->
 
         </Grid.Resources>
         
@@ -129,8 +122,6 @@
                                 <RowDefinition Height="1*" />
                                 <RowDefinition Height="1*" />
                             </Grid.RowDefinitions>
-
-                            <!-- TODO: Use panels to organize items together (v1.2+) -->
 
                             <!-- Output filename -->
                             <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
@@ -381,27 +372,6 @@
                 
             </DataGrid>
 
-            <!--<DataGrid x:Name="dtg_preview" ItemsSource="{Binding}" AutoGenerateColumns="False" >
-                <DataGrid.Columns>
-                    --><!--Custom column that shows the published date--><!--
-                    <DataGridTemplateColumn Header="#" 
-                                            CellTemplate="{StaticResource OffTemplate}"
-                                            />
-                    <DataGridTemplateColumn Header="Text Id" 
-                                            CellTemplate="{StaticResource OnTemplate}"
-                                            />
-                    <DataGridTemplateColumn Header="Value 1" 
-                                            CellTemplate="{StaticResource OnTemplate}"
-                                            />
-                    <DataGridTemplateColumn Header="Value 2" 
-                                            CellTemplate="{StaticResource OnTemplate}"
-                                            />
-                    <DataGridTemplateColumn Header="Same ?" 
-                                            CellTemplate="{StaticResource OnTemplate}"
-                                            />
-                </DataGrid.Columns>
-            </DataGrid>-->
-
         </GroupBox>
 
         <Grid Grid.Row="3" Margin="17,0,17,8">
@@ -417,33 +387,16 @@
                     All details
                 </Button>-->
             </StackPanel>
-            <!--<Grid.ColumnDefinitions>
-                <ColumnDefinition Width="1*" />
-                <ColumnDefinition Width="1*" />
-                <ColumnDefinition Width="1*" />
-                <ColumnDefinition Width="1*" />
-                <ColumnDefinition Width="1*" />
-                <ColumnDefinition Width="1*" />
-                <ColumnDefinition Width="1*" />
-                <ColumnDefinition Width="1*" />
-                <ColumnDefinition Width="1*" />
-            </Grid.ColumnDefinitions>
-            <Button Grid.Column="0" Margin="0,0,4,0">
-                Clear preview
-            </Button>
-            <Button Grid.Column="1" Margin="4,0,4,0">
-                Clear preview
-            </Button>-->
+
         </Grid>
 
         <!-- Execute -->
         <Grid Grid.Row="4" Margin="17,0,17,16">
-            <Button HorizontalAlignment="Stretch">
-            <StackPanel Orientation="Horizontal">
+            <Button x:Name="Btn_GenerateOutput" HorizontalAlignment="Stretch" Click="Btn_GenerateOutput_Click">
+                <StackPanel Orientation="Horizontal">
                     <TextBlock Padding="6,4,3,2" FontSize="14">Generate output file</TextBlock>
                     <TextBlock Padding="3,2,6,2" FontSize="18">&#128462;</TextBlock>
-            </StackPanel>
-                <!--Content="Generate output file &#x1f5ab; &#128462; &#x1F5CE; &#128193; &#x1F4C1; &#128190;"-->
+                </StackPanel>
             </Button>
         </Grid>
 
