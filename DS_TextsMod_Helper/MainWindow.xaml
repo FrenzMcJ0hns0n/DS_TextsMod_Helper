@@ -5,233 +5,447 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:DS_TextsMod_Helper"
         mc:Ignorable="d"
-        Width="1000" Height="800"
+        Width="1280" Height="800"
         ResizeMode="CanMinimize"
         Title="DS Texts Mod Helper">
 
-    <Grid Background="#EEE">
-        <Grid Margin="16">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="1*"/>
-                <ColumnDefinition Width="1*"/>
-            </Grid.ColumnDefinitions>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="10*" />
-                <RowDefinition Height="6*" />
-                <RowDefinition Height="8*" />
-                <RowDefinition Height="11*" />
-                <RowDefinition Height="13*" />
-                <RowDefinition Height="4*" />
-            </Grid.RowDefinitions>
+    <Grid x:Name="Grid_Main" Background="#EEE">
 
-            <!-- Input files -->
-            <GroupBox Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Header="Input files" BorderBrush="DarkGray" Margin="0,8,0,8">
-                <Grid Margin="8">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="1*"/>
-                        <ColumnDefinition Width="16*"/>
-                    </Grid.ColumnDefinitions>
+        <Grid.Resources>
+            <!-- Custom style for extra headers displayed with option "Show all details" -->
+            <Style x:Key="HeaderOff" TargetType="{x:Type DataGridColumnHeader}">
+                <Setter Property="Foreground" Value="Gray"/>
+            </Style>
+
+            <DataTemplate x:Key="KeyTry">
+                <DataGrid ItemsSource="{Binding Path=CompareMode.Entry}" AutoGenerateColumns="False" >
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="#" Width="*" Binding="{Binding Index}" />
+                        <DataGridTextColumn Header="TextId"  Width="*" Binding="{Binding TextId}" />
+                        <DataGridTextColumn Header="Value1" Width="*" Binding="{Binding Value1}" />
+                        <DataGridTextColumn Header="Value2" Width="*" Binding="{Binding Value2}" />
+                        <DataGridTextColumn Header="Same" Width="*" Binding="{Binding Same}" />
+                    </DataGrid.Columns>
+                </DataGrid>
+            </DataTemplate>
+
+
+            <DataTemplate x:Key="ComparedEntriesTemplate">
+                <!-- Ajouter dans <DataGrid> : Style="{StaticResource myStyle}" -->
+                <DataGrid ItemsSource="{Binding}">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="#" Width="200" FontSize="12" Binding="{Binding Path=Index}" />
+                        <DataGridTextColumn Header="TextId" Width="200" FontSize="12" Binding="{Binding Path=TextId}" />
+                        <DataGridTextColumn Header="Value1" Width="200" FontSize="12" Binding="{Binding Path=Value1}" />
+                        <DataGridTextColumn Header="Value2" Width="200" FontSize="12" Binding="{Binding Path=Value2}" />
+                        <DataGridTextColumn Header="Same?" Width="200" FontSize="12" Binding="{Binding Path=Same}" />
+                    </DataGrid.Columns>
+                </DataGrid>
+            </DataTemplate>
+
+            <DataTemplate x:Key="PreparedEntriesTemplate">
+                <DataGrid ItemsSource="{Binding}">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="#" Width="200" FontSize="12" Binding="{Binding Path=Index}" />
+                        <DataGridTextColumn Header="TextId" Width="200" FontSize="12" Binding="{Binding Path=TextId}" />
+                        <DataGridTextColumn Header="Value1" Width="200" FontSize="12" Binding="{Binding Path=Value1}" />
+                        <DataGridTextColumn Header="Value2" Width="200" FontSize="12" Binding="{Binding Path=Value2}" />
+                        <DataGridTextColumn Header="Value3" Width="200" FontSize="12" Binding="{Binding Path=Value3}" />
+                        <DataGridTextColumn Header="Output" Width="200" FontSize="12" Binding="{Binding Path=Output}" />
+                        <DataGridTextColumn Header="Source" Width="200" FontSize="12" Binding="{Binding Path=Source}" />
+                    </DataGrid.Columns>
+                </DataGrid>
+            </DataTemplate>
+
+            <!--<DataTemplate x:Key="OnTemplate">
+                <TextBlock Text="{Binding Index}" Foreground="Gray" HorizontalAlignment="Center" />
+                <TextBlock Text="{Binding TextId}" HorizontalAlignment="Center" />
+            </DataTemplate>-->
+
+        </Grid.Resources>
+        
+        <Grid.RowDefinitions>
+            <RowDefinition Height="18*" />
+            <RowDefinition Height="3*" />
+            <RowDefinition Height="18*" />
+            <RowDefinition Height="2*" />
+            <RowDefinition Height="3*" />
+        </Grid.RowDefinitions>
+
+        <TabControl x:Name="tbc_modes" Margin="16,16,16,8" >
+            <TabItem x:Name="tbi_compare" Header="Compare mode">
+                <Grid Background="#EEE">
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="1*" />
-                        <RowDefinition Height="1*" />
-                        <RowDefinition Height="1*" />
+                        <RowDefinition Height="8*" />
+                        <RowDefinition Height="7*" />
                     </Grid.RowDefinitions>
-                    <Label Grid.Column="0" Grid.Row="0" VerticalAlignment="Center" Content="File #1 :" />
-                    <TextBox x:Name="tbx_file1" 
+
+                    <GroupBox Grid.ColumnSpan="2" Margin="8,8,8,4" Header="Input files" BorderBrush="DarkGray">
+                        <Grid Margin="8,16,8,16">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="1*"/>
+                                <ColumnDefinition Width="21*"/>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="1*" />
+                                <RowDefinition Height="1*" />
+                            </Grid.RowDefinitions>
+
+                            <Label Grid.Column="0" Grid.Row="0" VerticalAlignment="Center" Content="File #1 :" />
+                            <TextBox x:Name="tbx_file1_compare" 
+                                     Grid.Column="1" Grid.Row="0" 
+                                     VerticalAlignment="Center" 
+                                     FontStyle="Italic" Foreground="Gray" Text="Drop FMG file..."
+                                     TextWrapping="NoWrap" IsReadOnly="True"
+                                     Cursor="Arrow"
+                                     AllowDrop="True"
+                                     PreviewDragOver="tbx_file1_compare_PreviewDragOver"
+                                     Drop="tbx_file1_compare_Drop"
+                                     />
+                            <Label Grid.Column="0" Grid.Row="1" VerticalAlignment="Center" Content="File #2 :" />
+                            <TextBox x:Name="tbx_file2_compare" 
+                                    Grid.Column="1" Grid.Row="1" 
+                                    VerticalAlignment="Center" 
+                                    FontStyle="Italic" Foreground="Gray" Text="Drop FMG file..."
+                                    TextWrapping="NoWrap" IsReadOnly="True"
+                                    Cursor="Arrow"
+                                    AllowDrop="True"
+                                     PreviewDragOver="tbx_file2_compare_PreviewDragOver"
+                                     Drop="tbx_file2_compare_Drop"
+                                    />
+                        </Grid>
+                    </GroupBox>
+
+                    <!-- Options -->
+                    <GroupBox Grid.Row="1" Grid.ColumnSpan="2" Margin="8,4,8,8" Header="Options" BorderBrush="DarkGray">
+                        <Grid Margin="8,12,8,12">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="14*"/>
+                                <ColumnDefinition Width="1*"/>
+                                <ColumnDefinition Width="12*"/>
+                                <ColumnDefinition Width="9*"/>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="1*" />
+                                <RowDefinition Height="1*" />
+                            </Grid.RowDefinitions>
+
+                            <!-- TODO: Use panels to organize items together (v1.2+) -->
+
+                            <!-- Output filename -->
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
+                                <Label VerticalAlignment="Center" Content="Output filename :" />
+                                <TextBox x:Name="Tbx_Cmp_OutputFilename" Width="308"
+                                         VerticalAlignment="Center"
+                                         TextAlignment="Right" 
+                                         Text="result"
+                                         />
+                                <Label VerticalAlignment="Center" 
+                                       Margin="-4,0,0,0" 
+                                       Content=".csv" 
+                                        />
+                            </StackPanel>
+
+                            <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center" Margin="-8,0,0,0">
+                                <CheckBox x:Name="Cbx_Cmp_UseInputFilename"
+                                          HorizontalAlignment="Left"
+                                          VerticalAlignment="Center"
+                                          Content="Use same filename as :"
+                                          Checked="Cbx_Cmp_UseInputFilename_Checked"
+                                          Unchecked="Cbx_Cmp_UseInputFilename_Unchecked"
+                                          />
+                                <ComboBox x:Name="Cmbx_Cmp_TargetInputFilename" 
+                                          VerticalAlignment="Center" Margin="8,0,0,0" Width="200"
+                                          IsEnabled="False">
+                                    <ComboBoxItem>Input File #1</ComboBoxItem>
+                                    <ComboBoxItem>Input File #2</ComboBoxItem>
+                                </ComboBox>
+                            </StackPanel>
+
+                            <!-- Output headers -->
+                            <StackPanel Grid.Column="2" Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Center">
+                                <Label VerticalAlignment="Center" 
+                                       Margin="0,0,0,0" 
+                                       Content="Header #1 :" 
+                                       ToolTip="Enter output header for File #1"
+                                       />
+                                <TextBox x:Name="tbx_header1"
+                                    HorizontalAlignment="Right" Width="240"
+                                    VerticalAlignment="Center"
+                                    TextAlignment="Right"
+                                    Text="File #1"
+                                    ToolTip="Enter output header for File #1"
+                                    LostFocus="tbx_header1_LostFocus"
+                                    />
+                            </StackPanel>
+                            <StackPanel Grid.Column="2" Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center">
+                                <Label VerticalAlignment="Center" 
+                                       Content="Header #2 :"
+                                       ToolTip="Enter output header for File #2"
+                                       />
+                                <TextBox x:Name="tbx_header2"
+                                     HorizontalAlignment="Right" Width="240"
+                                     VerticalAlignment="Center"
+                                     TextAlignment="Right"
+                                     Text="File #2"
+                                     ToolTip="Enter output header for File #2"
+                                     LostFocus="tbx_header2_LostFocus"
+                                     />
+                            </StackPanel>
+
+                            <!-- CSV output separator -->
+                            <StackPanel Grid.Column="3" Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Center">
+                                <Label HorizontalAlignment="Right" VerticalAlignment="Center" Content="CSV separator character:" />
+                                <TextBox x:Name="Tbx_CsvSeparator"
+                                     Width="22"
+                                     VerticalAlignment="Center" Height="22"
+                                     TextAlignment="Center" Text="|"
+                                     MaxLength="1"
+                             />
+                            </StackPanel>
+
+                            <CheckBox x:Name="Cbx_OneLinedValues" 
+                                      Grid.Column="3" Grid.Row="1" 
+                                      HorizontalAlignment="Center"
+                                      VerticalAlignment="Center"
+                                      Content="Disable multi line format"
+                                      IsChecked="False"
+                                      ToolTip="Replace every line breaks by /n/"
+                                      Checked="Cbx_OneLinedValues_Checked"
+                                      />
+                        </Grid>
+                    </GroupBox>
+
+                </Grid>
+            </TabItem>
+
+            <TabItem x:Name="tbi_prepare" Header="Prepare mode">
+                <Grid Background="#EEE">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="8*" />
+                        <RowDefinition Height="7*" />
+                    </Grid.RowDefinitions>
+
+                    <GroupBox Grid.ColumnSpan="2" Margin="8,8,8,4" Header="Input files" BorderBrush="DarkGray">
+                        <Grid Margin="8">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="1*"/>
+                                <ColumnDefinition Width="21*"/>
+                                <!--<ColumnDefinition Width="1*"/>-->
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="1*" />
+                                <RowDefinition Height="1*" />
+                                <RowDefinition Height="1*" />
+                            </Grid.RowDefinitions>
+                            <!--<StackPanel>
+                                Do that ?
+                            </StackPanel>-->
+                            <Label Grid.Column="0" Grid.Row="0" VerticalAlignment="Center" Content="File #1 :" />
+                            <TextBox x:Name="tbx_file1_prepare" 
                              Grid.Column="1" Grid.Row="0" 
                              VerticalAlignment="Center" 
                              FontStyle="Italic" Foreground="Gray" Text="Drop FMG file..."
                              TextWrapping="NoWrap" IsReadOnly="True"
                              Cursor="Arrow"
                              AllowDrop="True"
-                             PreviewDragOver="tbx_file1_PreviewDragOver"
-                             Drop="tbx_file1_Drop"
                              />
-                    <Label Grid.Column="0" Grid.Row="1" VerticalAlignment="Center" Content="File #2 :" />
-                    <TextBox x:Name="tbx_file2" 
+                            <!--<Button Grid.Column="2" Grid.Row="1" Margin="5"/>-->
+                            <Label Grid.Column="0" Grid.Row="1" VerticalAlignment="Center" Content="File #2 :" />
+                            <TextBox x:Name="tbx_file2_prepare" 
                              Grid.Column="1" Grid.Row="1" 
                              VerticalAlignment="Center" 
                              FontStyle="Italic" Foreground="Gray" Text="Drop FMG file..."
                              TextWrapping="NoWrap" IsReadOnly="True"
                              Cursor="Arrow"
                              AllowDrop="True"
-                             PreviewDragOver="tbx_file2_PreviewDragOver"
-                             Drop="tbx_file2_Drop"
                              />
-                    <Label Grid.Column="0" Grid.Row="2" VerticalAlignment="Center" Content="File #3 :" />
-                    <TextBox x:Name="tbx_file3" 
+                            <!--<Button Grid.Column="2" Grid.Row="2" Margin="5"/>-->
+                            <Label Grid.Column="0" Grid.Row="2" VerticalAlignment="Center" Content="File #3 :" />
+                            <TextBox x:Name="tbx_file3_prepare" 
                              Grid.Column="1" Grid.Row="2" 
                              VerticalAlignment="Center" 
                              FontStyle="Italic" Foreground="Gray" Text="Drop FMG file..."
                              TextWrapping="NoWrap" IsReadOnly="True"
                              Cursor="Arrow"
                              AllowDrop="True"
-                             PreviewDragOver="tbx_file3_PreviewDragOver"
-                             Drop="tbx_file3_Drop"
                              />
+                            <!--<Button Grid.Column="2" Grid.Row="0" Margin="5"/>-->
+                        </Grid>
+                    </GroupBox>
+
+                    <!-- Options -->
+                    <GroupBox Grid.Row="1" Grid.ColumnSpan="2" Margin="8,4,8,8" Header="Options" BorderBrush="DarkGray">
+                        <Grid Margin="8,12,8,12">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="14*"/>
+                                <ColumnDefinition Width="1*"/>
+                                <ColumnDefinition Width="12*"/>
+                                <ColumnDefinition Width="9*"/>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="1*" />
+                                <RowDefinition Height="1*" />
+                            </Grid.RowDefinitions>
+                            
+                            <!-- Output filename -->
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
+                                <Label VerticalAlignment="Center" Content="Output filename :" />
+                                <TextBox x:Name="Tbx_Prp_OutputFilename" Width="308"
+                                         VerticalAlignment="Center"
+                                         TextAlignment="Right" 
+                                         Text="result"
+                                         />
+                                <Label VerticalAlignment="Center" 
+                                       Margin="-4,0,0,0" 
+                                       Content=".fmg" 
+                                        />
+                            </StackPanel>
+
+                            <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center" Margin="-8,0,0,0">
+                                <CheckBox x:Name="Cbx_Prp_UseInputFilename"
+                                          HorizontalAlignment="Left"
+                                          VerticalAlignment="Center"
+                                          Content="Use same filename as :"
+                                          Checked="Cbx_Prp_UseInputFilename_Checked"
+                                          Unchecked="Cbx_Prp_UseInputFilename_Unchecked"
+                                          />
+                                <ComboBox x:Name="Cmbx_Prp_TargetInputFilename"
+                                          VerticalAlignment="Center" Margin="8,0,0,0" Width="200"
+                                          IsEnabled="False">
+                                    <ComboBoxItem>Input File #1</ComboBoxItem>
+                                    <ComboBoxItem>Input File #2</ComboBoxItem>
+                                    <ComboBoxItem>Input File #3</ComboBoxItem>
+                                </ComboBox>
+                            </StackPanel>
+
+                            <!-- Replace values -->
+                            <StackPanel Grid.Column="4" Grid.Row="0" Orientation="Horizontal">
+                                <Label VerticalAlignment="Center" 
+                                       Content="String to replace :"
+                                       ToolTip="Enter text to be replaced in entries"
+                                       />
+                                <TextBox x:Name="Tbx_Prp_TextToBeReplaced"
+                                         VerticalAlignment="Center"
+                                         Margin="24,0,0,0"
+                                         Width="120"
+                                         TextAlignment="Right"
+                                         ToolTip="Enter text to be replaced in entries"
+                                         />
+                            </StackPanel>
+
+                            <StackPanel Grid.Column="4" Grid.Row="1" Orientation="Horizontal">
+                                <Label VerticalAlignment="Center"
+                                       Content="Remplacement text :"
+                                       ToolTip="Enter replacing text for entries."
+                                       />
+                                <TextBox x:Name="Tbx_Prp_ReplacingText"
+                                         VerticalAlignment="Center"
+                                         Margin="9,0,0,0"
+                                         Width="120"
+                                         TextAlignment="Right"
+                                         ToolTip="Enter replacing text for entries."
+                                         />
+                            </StackPanel>
+                            
+                        </Grid>
+                    </GroupBox>
                 </Grid>
-            </GroupBox>
+            </TabItem>
+        </TabControl>
 
-            <!-- Actions -->
-            <GroupBox Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Header="Actions" BorderBrush="DarkGray" Margin="0,8,0,8">
-                <Grid Margin="8">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="1*"/>
-                        <ColumnDefinition Width="1*"/>
-                    </Grid.ColumnDefinitions>
-                    <Button x:Name="btn_comparefiles"
-                            Grid.Column="0"
-                            HorizontalAlignment="Right" Width="350" Margin="0,0,50,0"
-                            Content="Compare/Compile data from files #1, #2"
-                            Click="btn_comparefiles_Click"
-                            />
-                    <Button x:Name="btn_preparefile"
-                            Grid.Column="1"
-                            HorizontalAlignment="Left" Width="350" Margin="50,0,0,0"
-                            Content="Prepare/Comply data from files #1, #2, #3"
-                            Click="btn_preparefile_Click"
-                            />
-                </Grid>
-            </GroupBox>
-            
-            <!-- Options -->
-            <GroupBox Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" Margin="0,8,0,8" BorderBrush="DarkGray" Header="Options">
-                <Grid Margin="8">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="1*"/>
-                        <ColumnDefinition Width="1*"/>
-                        <ColumnDefinition Width="1*"/>
-                        <ColumnDefinition Width="1*"/>
-                    </Grid.ColumnDefinitions>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="1*" />
-                        <RowDefinition Height="1*" />
-                    </Grid.RowDefinitions>
-
-                    <!-- TODO: Use panels to organize items together (v1.2+) -->
-                    
-                    <!-- Output filename -->
-                    <Label Grid.Column="0" Grid.Row="0" VerticalAlignment="Center" Content="Output filename :" />
-                    <TextBox x:Name="tbx_outputfilename" 
-                             Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="2"
-                             HorizontalAlignment="Left" Width="287" Margin="105,0,0,0"
-                             VerticalAlignment="Center"
-                             TextAlignment="Right"
-                             Text="result"
-                             />
-                    <Label x:Name="lbl_outputfileext"
-                           Grid.Column="1" Grid.Row="0" 
-                           HorizontalAlignment="Left" VerticalAlignment="Center" 
-                           Margin="158,0,0,0" 
-                           Content=".{ext}" 
-                           />
-                    <CheckBox x:Name="cbx_syncoutputfilename" 
-                              Grid.Column="0" Grid.Row="1" 
-                              HorizontalAlignment="Left" Margin="4,0,0,0" 
-                              VerticalAlignment="Center"
-                              Content="Use same filename as File #1"
-                              Checked="cbx_syncoutputfilename_Checked"
-                              />
-
-                    <!-- CSV output separator -->
-                    <Label Grid.Column="1" Grid.Row="1" HorizontalAlignment="Right" VerticalAlignment="Center" Content="CSV separator :" Margin="0,0,67,0" />
-                    <TextBox x:Name="tbx_csvsepo" 
-                             Grid.Column="1" Grid.Row="1"
-                             HorizontalAlignment="Right" Width="22" Margin="0,0,43,0"
-                             VerticalAlignment="Center" Height="22"
-                             TextAlignment="Center" Text="|"
-                             MaxLength="1"
-                             />
-
-                    <!-- Output headers -->
-                    <Label Grid.Column="2" Grid.Row="0" 
-                           VerticalAlignment="Center" 
-                           Margin="-1,0,0,0" 
-                           Content="Header #1 :" 
-                           ToolTip="Enter header name to be used in output for File #1.&#x0a;(Compare/Compile mode only)"
-                           />
-                    <TextBox x:Name="tbx_header1" 
-                             Grid.Column="2" Grid.Row="0"
-                             HorizontalAlignment="Right" Width="160"
-                             VerticalAlignment="Center"
-                             TextAlignment="Right"
-                             Text="Value1"
-                             ToolTip="Enter header name to be used in output for File #1.&#x0a;(Compare/Compile mode only)"
-                             />
-                    <Label Grid.Column="2" Grid.Row="1" 
-                           VerticalAlignment="Center" 
-                           Content="Header #2 :" 
-                           Margin="-1,0,0,0"
-                           ToolTip="Enter header name to be used in output for File #2.&#x0a;(Compare/Compile mode only)"
-                           />
-                    <TextBox x:Name="tbx_header2"
-                             Grid.Column="2" Grid.Row="1"
-                             HorizontalAlignment="Right" Width="160"
-                             VerticalAlignment="Center"
-                             TextAlignment="Right"
-                             Text="Value2"
-                             ToolTip="Enter header name to be used in output for File #2.&#x0a;(Compare/Compile mode only)"
-                             />
-
-                    <!-- Replace values -->
-                    <Label Grid.Column="3" Grid.Row="0" 
-                           VerticalAlignment="Center" 
-                           Content="String to replace :" 
-                           Margin="48,0,0,0"
-                           ToolTip="Enter text to replace in entries&#x0a;For instance use '\n' here and '/n/' below&#x0a;= This will output the original line breaks syntax"
-                           />
-                    <TextBox x:Name="tbx_replacesource"
-                             Grid.Column="3" Grid.Row="0"
-                             HorizontalAlignment="Right" Width="80"
-                             VerticalAlignment="Center"
-                             TextAlignment="Right"
-                             MaxLength="10"
-                             ToolTip="Enter text to replace in entries&#x0a;For instance use '\n' here and '/n/' below&#x0a;= This will output the original line breaks syntax"
-                             />
-                    <Label Grid.Column="3" Grid.Row="1" 
-                           VerticalAlignment="Center" 
-                           Content="Remplacement text :" 
-                           Margin="34,0,0,0"
-                           ToolTip="Enter replacing text for entries&#x0a;For instance use '/n/' here and '\n' above&#x0a;= This will output the original line breaks syntax"
-                           />
-                    <TextBox x:Name="tbx_replacedest"
-                             Grid.Column="3" Grid.Row="1"
-                             HorizontalAlignment="Right" Width="80"
-                             VerticalAlignment="Center"
-                             TextAlignment="Right"
-                             MaxLength="10"
-                             ToolTip="Enter replacing text for entries&#x0a;For instance use '/n/' here and '\n' above&#x0a;= This will output the original line breaks syntax"
-                             />
-                </Grid>
-            </GroupBox>
-            
-            <!-- Explanations -->
-            <GroupBox Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" Margin="0,8,0,8" BorderBrush="DarkGray" Header="Explanation">
-                <Grid Margin="8">
-                    <TextBlock x:Name="tbk_summary" Margin="8,6,6,6" FontSize="11" />
-                </Grid>
-            </GroupBox>
-
-            <!-- Output preview -->
-            <GroupBox Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2" Margin="0,8,0,8" BorderBrush="DarkGray" Header="Output preview">
-                <Grid Margin="8">
-                    <Grid Background="White">
-                        <ScrollViewer VerticalScrollBarVisibility="Hidden">
-                            <TextBlock x:Name="tbk_preview" Margin="8,6,6,6" />
-                        </ScrollViewer>
-                    </Grid>
-                </Grid>
-            </GroupBox>
-
-            <!-- Execute -->
-            <Grid Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="2" Margin="0,8,0,8">
-                <Button x:Name="btn_execute"
-                        HorizontalAlignment="Stretch" Margin="66,0,66,0"
-                        Content="Execute"
-                        Click="btn_execute_Click"
-                        IsEnabled="False"
-                        />
-            </Grid>
+        <Grid Grid.Row="1" Margin="17,8,17,8">
+            <Button x:Name="Btn_RefreshPreview" HorizontalAlignment="Stretch" Click="Btn_RefreshPreview_Click">
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Padding="6,4,3,2" FontSize="14">Load/Reload preview</TextBlock>
+                    <TextBlock Padding="3,2,6,2" FontSize="18">&#x21bb;</TextBlock>
+                </StackPanel>
+            </Button>
+            <!--<Button Grid.Column="3" HorizontalAlignment="Center" VerticalAlignment="Center">
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Padding="6,4,3,2" FontSize="14">Save settings</TextBlock>
+                    <TextBlock Padding="3,2,6,2" FontSize="18">&#x1f5ab;</TextBlock>
+                </StackPanel>
+            </Button>-->
         </Grid>
+
+        <!-- Output preview -->
+        <GroupBox Grid.Row="2" Margin="16,0,16,1" BorderBrush="DarkGray" Header="Output preview" Padding="8">
+            <!--<Grid Background="White">
+                <ScrollViewer VerticalScrollBarVisibility="Hidden">
+                    <TextBlock x:Name="tbk_preview" Margin="6,6,6,6" />
+                </ScrollViewer>
+            </Grid>-->
+
+            <DataGrid x:Name="dtg_preview" HeadersVisibility="Column" Visibility="Hidden" AutoGenerateColumns="False" IsReadOnly="True">
+                
+            </DataGrid>
+
+            <!--<DataGrid x:Name="dtg_preview" ItemsSource="{Binding}" AutoGenerateColumns="False" >
+                <DataGrid.Columns>
+                    --><!--Custom column that shows the published date--><!--
+                    <DataGridTemplateColumn Header="#" 
+                                            CellTemplate="{StaticResource OffTemplate}"
+                                            />
+                    <DataGridTemplateColumn Header="Text Id" 
+                                            CellTemplate="{StaticResource OnTemplate}"
+                                            />
+                    <DataGridTemplateColumn Header="Value 1" 
+                                            CellTemplate="{StaticResource OnTemplate}"
+                                            />
+                    <DataGridTemplateColumn Header="Value 2" 
+                                            CellTemplate="{StaticResource OnTemplate}"
+                                            />
+                    <DataGridTemplateColumn Header="Same ?" 
+                                            CellTemplate="{StaticResource OnTemplate}"
+                                            />
+                </DataGrid.Columns>
+            </DataGrid>-->
+
+        </GroupBox>
+
+        <Grid Grid.Row="3" Margin="17,0,17,8">
+            <StackPanel Orientation="Horizontal">
+                <Button x:Name="Btn_ClearPreview" Width="72" Margin="0,0,2,0" Click="Btn_ClearPreview_Click">Clear</Button>
+                <Button x:Name="Btn_DetachPreview" Width="72" Margin="0,0,2,0" Click="Btn_DetachPreview_Click">Detach</Button>
+                <CheckBox x:Name="Cbx_PreviewAllDetails"
+                          VerticalAlignment="Center" Margin="8,0,0,0" Content="Show all details"
+                          ToolTip="Show all details about the processed data.&#x0a;Note that grey contents will not be written to output file."
+                          IsChecked="False"
+                          Checked="Cbx_PreviewAllDetails_Checked"/>
+                <!--<Button Width="72" Margin="0,0,6,0">
+                    All details
+                </Button>-->
+            </StackPanel>
+            <!--<Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1*" />
+                <ColumnDefinition Width="1*" />
+                <ColumnDefinition Width="1*" />
+                <ColumnDefinition Width="1*" />
+                <ColumnDefinition Width="1*" />
+                <ColumnDefinition Width="1*" />
+                <ColumnDefinition Width="1*" />
+                <ColumnDefinition Width="1*" />
+                <ColumnDefinition Width="1*" />
+            </Grid.ColumnDefinitions>
+            <Button Grid.Column="0" Margin="0,0,4,0">
+                Clear preview
+            </Button>
+            <Button Grid.Column="1" Margin="4,0,4,0">
+                Clear preview
+            </Button>-->
+        </Grid>
+
+        <!-- Execute -->
+        <Grid Grid.Row="4" Margin="17,0,17,16">
+            <Button HorizontalAlignment="Stretch">
+            <StackPanel Orientation="Horizontal">
+                    <TextBlock Padding="6,4,3,2" FontSize="14">Generate output file</TextBlock>
+                    <TextBlock Padding="3,2,6,2" FontSize="18">&#128462;</TextBlock>
+            </StackPanel>
+                <!--Content="Generate output file &#x1f5ab; &#128462; &#x1F5CE; &#128193; &#x1F4C1; &#128190;"-->
+            </Button>
+        </Grid>
+
     </Grid>
 </Window>
