@@ -66,7 +66,7 @@ namespace DS_TextsMod_Helper
             if (AcceptDroppedInputFile(e))
             {
                 DisplayInputFilepath(sender, e);
-                //SyncFilenames();
+                SyncFilenames(sender);
             }
         }
         private void Tbx_Cmp_iFile2_PreviewDragOver(object sender, DragEventArgs e) { e.Handled = true; }
@@ -75,7 +75,7 @@ namespace DS_TextsMod_Helper
             if (AcceptDroppedInputFile(e))
             {
                 DisplayInputFilepath(sender, e);
-                //SyncFilenames();
+                SyncFilenames(sender);
             }
         }
         private void Tbx_Cmp_oFilename_GotFocus(object sender, RoutedEventArgs e) { SelectTbxValue(sender); }
@@ -90,6 +90,7 @@ namespace DS_TextsMod_Helper
             Cmbx_Cmp_TargetInputFilename.IsEnabled = false;
             Cmbx_Cmp_TargetInputFilename.SelectedIndex = -1;
         }
+        private void Cmbx_Cmp_TargetInputFilename_SelectionChanged(object sender, SelectionChangedEventArgs e) { SyncFilenames(sender); }
         private void Tbx_Cmp_oHeader1_GotFocus(object sender, RoutedEventArgs e) { SelectTbxValue(sender); }
         private void Tbx_Cmp_oHeader1_LostFocus(object sender, RoutedEventArgs e) { ValidateTbxValue(sender); }
         private void Tbx_Cmp_oHeader2_GotFocus(object sender, RoutedEventArgs e) { SelectTbxValue(sender); }
@@ -107,7 +108,7 @@ namespace DS_TextsMod_Helper
             if (AcceptDroppedInputFile(e))
             {
                 DisplayInputFilepath(sender, e);
-                //SyncFilenames();
+                SyncFilenames(sender);
             }
         }
         private void Tbx_Prp_iFile2_PreviewDragOver(object sender, DragEventArgs e) { e.Handled = true; }
@@ -116,7 +117,7 @@ namespace DS_TextsMod_Helper
             if (AcceptDroppedInputFile(e))
             {
                 DisplayInputFilepath(sender, e);
-                //SyncFilenames();
+                SyncFilenames(sender);
             }
         }
         private void Tbx_Prp_iFile3_PreviewDragOver(object sender, DragEventArgs e) { e.Handled = true; }
@@ -125,7 +126,7 @@ namespace DS_TextsMod_Helper
             if (AcceptDroppedInputFile(e))
             {
                 DisplayInputFilepath(sender, e);
-                //SyncFilenames();
+                SyncFilenames(sender);
             }
         }
         private void Tbx_Prp_oFilename_GotFocus(object sender, RoutedEventArgs e) { SelectTbxValue(sender); }
@@ -140,17 +141,11 @@ namespace DS_TextsMod_Helper
             Cmbx_Prp_TargetInputFilename.IsEnabled = false;
             Cmbx_Prp_TargetInputFilename.SelectedIndex = -1;
         }
+        private void Cmbx_Prp_TargetInputFilename_SelectionChanged(object sender, SelectionChangedEventArgs e) { SyncFilenames(sender); }
         private void Tbx_Prp_TextToBeReplaced_GotFocus(object sender, RoutedEventArgs e) { SelectTbxValue(sender); }
         private void Tbx_Prp_ReplacingText_GotFocus(object sender, RoutedEventArgs e) { SelectTbxValue(sender); }
 
         #endregion
-
-
-        private void cbx_syncoutputfilename_Checked(object sender, RoutedEventArgs e)
-        {
-            //SyncFilenames();
-        }
-
 
 
         // --------------------
@@ -204,16 +199,59 @@ namespace DS_TextsMod_Helper
                 tbx.ClearValue(BorderBrushProperty);
         }
 
-        private void SyncFilename()
+        private void SyncFilenames(object sender) //TODO: Factorize
         {
-            //if (cbx_syncoutputfilename.IsChecked == false)
-            //    return;
+            if (sender is TextBox)
+            {
+                TextBox tbx = sender as TextBox;
 
-            //if (tbx_file1.Text == "Drop FMG file...")
-            //    return;
+                if (tbx.Name.Contains("Cmp") && (Cbx_Cmp_UseInputFilename.IsChecked ?? true)) // Sender is TextBox from Compare mode
+                {
+                    if (Cmbx_Cmp_TargetInputFilename.SelectedIndex == 0 && tbx == Tbx_Cmp_iFile1)
+                        Tbx_Cmp_oFilename.Text = new FileInfo(Tbx_Cmp_iFile1.Text).Name;
+                    else if (Cmbx_Cmp_TargetInputFilename.SelectedIndex == 1 && tbx == Tbx_Cmp_iFile2)
+                        Tbx_Cmp_oFilename.Text = new FileInfo(Tbx_Cmp_iFile2.Text).Name;
 
-            //FileInfo file_info = new FileInfo(tbx_file1.Text);
-            //tbx_outputfilename.Text = file_info.Name.Substring(0, file_info.Name.Length - file_info.Extension.Length);
+                    ValidateTbxValue(Tbx_Cmp_oFilename);
+                }
+                if (tbx.Name.Contains("Prp") && (Cbx_Prp_UseInputFilename.IsChecked ?? true)) // Sender is TextBox from Prepare mode
+                {
+                    if (Cmbx_Prp_TargetInputFilename.SelectedIndex == 0 && tbx == Tbx_Prp_iFile1)
+                        Tbx_Prp_oFilename.Text = new FileInfo(Tbx_Prp_iFile1.Text).Name;
+                    else if (Cmbx_Prp_TargetInputFilename.SelectedIndex == 1 && tbx == Tbx_Prp_iFile2)
+                        Tbx_Prp_oFilename.Text = new FileInfo(Tbx_Prp_iFile2.Text).Name;
+                    else if (Cmbx_Prp_TargetInputFilename.SelectedIndex == 2 && tbx == Tbx_Prp_iFile3)
+                        Tbx_Prp_oFilename.Text = new FileInfo(Tbx_Prp_iFile3.Text).Name;
+
+                    ValidateTbxValue(Tbx_Prp_oFilename);
+                }
+            }
+
+            if (sender is ComboBox)
+            {
+                ComboBox cmbx = sender as ComboBox;
+
+                if (cmbx == Cmbx_Cmp_TargetInputFilename) // Sender is ComboBox from Compare mode
+                {
+                    if (cmbx.SelectedIndex == 0 && Tbx_Cmp_iFile1.Text != "Drop FMG file...")
+                        Tbx_Cmp_oFilename.Text = new FileInfo(Tbx_Cmp_iFile1.Text).Name;
+                    else if (cmbx.SelectedIndex == 1 && Tbx_Cmp_iFile2.Text != "Drop FMG file...")
+                        Tbx_Cmp_oFilename.Text = new FileInfo(Tbx_Cmp_iFile2.Text).Name;
+
+                    ValidateTbxValue(Tbx_Cmp_oFilename);
+                }
+                if (cmbx == Cmbx_Prp_TargetInputFilename) // Sender is ComboBox from Prepare mode
+                {
+                    if (cmbx.SelectedIndex == 0 && Tbx_Prp_iFile1.Text != "Drop FMG file...")
+                        Tbx_Prp_oFilename.Text = new FileInfo(Tbx_Prp_iFile1.Text).Name;
+                    else if (cmbx.SelectedIndex == 1 && Tbx_Prp_iFile2.Text != "Drop FMG file...")
+                        Tbx_Prp_oFilename.Text = new FileInfo(Tbx_Prp_iFile2.Text).Name;
+                    else if (cmbx.SelectedIndex == 2 && Tbx_Prp_iFile3.Text != "Drop FMG file...")
+                        Tbx_Prp_oFilename.Text = new FileInfo(Tbx_Prp_iFile3.Text).Name;
+
+                    ValidateTbxValue(Tbx_Prp_oFilename);
+                }
+            }
         }
 
         private bool CompareModeReady()

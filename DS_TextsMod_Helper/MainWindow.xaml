@@ -149,7 +149,8 @@
                                           />
                                 <ComboBox x:Name="Cmbx_Cmp_TargetInputFilename" 
                                           VerticalAlignment="Center" Margin="8,0,0,0" Width="200"
-                                          IsEnabled="False">
+                                          IsEnabled="False"
+                                          SelectionChanged="Cmbx_Cmp_TargetInputFilename_SelectionChanged">
                                     <ComboBoxItem>Input File #1</ComboBoxItem>
                                     <ComboBoxItem>Input File #2</ComboBoxItem>
                                 </ComboBox>
@@ -316,7 +317,8 @@
                                           />
                                 <ComboBox x:Name="Cmbx_Prp_TargetInputFilename"
                                           VerticalAlignment="Center" Margin="8,0,0,0" Width="200"
-                                          IsEnabled="False">
+                                          IsEnabled="False"
+                                          SelectionChanged="Cmbx_Prp_TargetInputFilename_SelectionChanged">
                                     <ComboBoxItem>Input File #1</ComboBoxItem>
                                     <ComboBoxItem>Input File #2</ComboBoxItem>
                                     <ComboBoxItem>Input File #3</ComboBoxItem>
