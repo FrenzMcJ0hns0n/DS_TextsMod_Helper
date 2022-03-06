@@ -56,7 +56,7 @@
             </DataTemplate>
 
         </Grid.Resources>
-        
+
         <Grid.RowDefinitions>
             <RowDefinition Height="18*" />
             <RowDefinition Height="3*" />
@@ -65,8 +65,8 @@
             <RowDefinition Height="3*" />
         </Grid.RowDefinitions>
 
-        <TabControl x:Name="tbc_modes" Margin="16,16,16,8" >
-            <TabItem x:Name="tbi_compare" Header="Compare mode">
+        <TabControl x:Name="Tbc_Modes" Margin="16,16,16,8" >
+            <TabItem Header="Compare mode">
                 <Grid Background="#EEE">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="8*" />
@@ -126,10 +126,12 @@
                             <!-- Output filename -->
                             <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
                                 <Label VerticalAlignment="Center" Content="Output filename :" />
-                                <TextBox x:Name="Tbx_Cmp_OutputFilename" Width="308"
+                                <TextBox x:Name="Tbx_Cmp_oFilename" Width="308"
                                          VerticalAlignment="Center"
                                          TextAlignment="Right" 
                                          Text="result"
+                                         GotFocus="Tbx_Cmp_oFilename_GotFocus"
+                                         LostFocus="Tbx_Cmp_oFilename_LostFocus"
                                          />
                                 <Label VerticalAlignment="Center" 
                                        Margin="-4,0,0,0" 
@@ -155,62 +157,65 @@
 
                             <!-- Output headers -->
                             <StackPanel Grid.Column="2" Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Center">
-                                <Label VerticalAlignment="Center" 
-                                       Margin="0,0,0,0" 
+                                <Label VerticalAlignment="Center"
                                        Content="Header #1 :" 
                                        ToolTip="Enter output header for File #1"
                                        />
-                                <TextBox x:Name="tbx_header1"
-                                    HorizontalAlignment="Right" Width="240"
-                                    VerticalAlignment="Center"
-                                    TextAlignment="Right"
-                                    Text="File #1"
-                                    ToolTip="Enter output header for File #1"
-                                    LostFocus="tbx_header1_LostFocus"
-                                    />
+                                <TextBox x:Name="Tbx_Cmp_oHeader1"
+                                        HorizontalAlignment="Right" Width="240"
+                                        VerticalAlignment="Center"
+                                        TextAlignment="Right"
+                                        Text="File #1"
+                                        ToolTip="Enter output header for File #1"
+                                         GotFocus="Tbx_Cmp_oHeader1_GotFocus"
+                                        LostFocus="Tbx_Cmp_oHeader1_LostFocus"
+                                        />
                             </StackPanel>
                             <StackPanel Grid.Column="2" Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center">
                                 <Label VerticalAlignment="Center" 
                                        Content="Header #2 :"
                                        ToolTip="Enter output header for File #2"
                                        />
-                                <TextBox x:Name="tbx_header2"
-                                     HorizontalAlignment="Right" Width="240"
-                                     VerticalAlignment="Center"
-                                     TextAlignment="Right"
-                                     Text="File #2"
-                                     ToolTip="Enter output header for File #2"
-                                     LostFocus="tbx_header2_LostFocus"
-                                     />
+                                <TextBox x:Name="Tbx_Cmp_oHeader2"
+                                         HorizontalAlignment="Right" Width="240"
+                                         VerticalAlignment="Center"
+                                         TextAlignment="Right"
+                                         Text="File #2"
+                                         ToolTip="Enter output header for File #2"
+                                         GotFocus="Tbx_Cmp_oHeader2_GotFocus"
+                                         LostFocus="Tbx_Cmp_oHeader2_LostFocus"
+                                         />
                             </StackPanel>
 
                             <!-- CSV output separator -->
                             <StackPanel Grid.Column="3" Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Center">
-                                <Label HorizontalAlignment="Right" VerticalAlignment="Center" Content="CSV separator character:" />
-                                <TextBox x:Name="Tbx_CsvSeparator"
-                                     Width="22"
-                                     VerticalAlignment="Center" Height="22"
-                                     TextAlignment="Center" Text="|"
-                                     MaxLength="1"
-                             />
+                                <Label HorizontalAlignment="Right" VerticalAlignment="Center" Content="CSV separator character :" />
+                                <TextBox x:Name="Tbx_Cmp_CsvSeparator"
+                                         Width="22"
+                                         VerticalAlignment="Center" VerticalContentAlignment="Center" Padding="0,2,0,4"
+                                         TextAlignment="Center" Text="|"
+                                         MaxLength="1"
+                                         GotFocus="Tbx_Cmp_CsvSeparator_GotFocus"
+                                         LostFocus="Tbx_Cmp_CsvSeparator_LostFocus"
+                                         />
                             </StackPanel>
 
-                            <CheckBox x:Name="Cbx_OneLinedValues" 
+                            <CheckBox x:Name="Cbx_Cmp_OneLinedValues" 
                                       Grid.Column="3" Grid.Row="1" 
                                       HorizontalAlignment="Center"
                                       VerticalAlignment="Center"
                                       Content="Disable multi line format"
                                       IsChecked="False"
                                       ToolTip="Replace every line breaks by /n/"
-                                      Checked="Cbx_OneLinedValues_Checked"
                                       />
+                            <!--Checked="Cbx_OneLinedValues_Checked"-->
                         </Grid>
                     </GroupBox>
 
                 </Grid>
             </TabItem>
 
-            <TabItem x:Name="tbi_prepare" Header="Prepare mode">
+            <TabItem Header="Prepare mode">
                 <Grid Background="#EEE">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="8*" />
@@ -284,14 +289,16 @@
                                 <RowDefinition Height="1*" />
                                 <RowDefinition Height="1*" />
                             </Grid.RowDefinitions>
-                            
+
                             <!-- Output filename -->
                             <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
                                 <Label VerticalAlignment="Center" Content="Output filename :" />
-                                <TextBox x:Name="Tbx_Prp_OutputFilename" Width="308"
+                                <TextBox x:Name="Tbx_Prp_oFilename" Width="308"
                                          VerticalAlignment="Center"
                                          TextAlignment="Right" 
                                          Text="result"
+                                         GotFocus="Tbx_Prp_oFilename_GotFocus"
+                                         LostFocus="Tbx_Prp_oFilename_LostFocus"
                                          />
                                 <Label VerticalAlignment="Center" 
                                        Margin="-4,0,0,0" 
@@ -328,6 +335,7 @@
                                          Width="120"
                                          TextAlignment="Right"
                                          ToolTip="Enter text to be replaced in entries"
+                                         GotFocus="Tbx_Prp_TextToBeReplaced_GotFocus"
                                          />
                             </StackPanel>
 
@@ -342,9 +350,10 @@
                                          Width="120"
                                          TextAlignment="Right"
                                          ToolTip="Enter replacing text for entries."
+                                         GotFocus="Tbx_Prp_ReplacingText_GotFocus"
                                          />
                             </StackPanel>
-                            
+
                         </Grid>
                     </GroupBox>
                 </Grid>
@@ -375,7 +384,7 @@
             </Grid>-->
 
             <DataGrid x:Name="dtg_preview" HeadersVisibility="Column" Visibility="Hidden" AutoGenerateColumns="False" IsReadOnly="True">
-                
+
             </DataGrid>
 
         </GroupBox>

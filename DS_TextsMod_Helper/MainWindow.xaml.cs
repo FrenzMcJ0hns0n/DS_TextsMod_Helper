@@ -60,36 +60,26 @@ namespace DS_TextsMod_Helper
 
         #region Compare mode
 
-        private void Tbx_Cmp_iFile1_PreviewDragOver(object sender, DragEventArgs e)
-        {
-            e.Handled = true;
-        }
-
+        private void Tbx_Cmp_iFile1_PreviewDragOver(object sender, DragEventArgs e) { e.Handled = true; }
         private void Tbx_Cmp_iFile1_Drop(object sender, DragEventArgs e)
         {
             if (AcceptDroppedInputFile(e))
             {
                 DisplayInputFilepath(sender, e);
-                SyncFilename();
+                //SyncFilenames();
             }
         }
-
-        private void Tbx_Cmp_iFile2_PreviewDragOver(object sender, DragEventArgs e)
-        {
-            e.Handled = true;
-        }
-
+        private void Tbx_Cmp_iFile2_PreviewDragOver(object sender, DragEventArgs e) { e.Handled = true; }
         private void Tbx_Cmp_iFile2_Drop(object sender, DragEventArgs e)
         {
             if (AcceptDroppedInputFile(e))
             {
                 DisplayInputFilepath(sender, e);
-                SyncFilename();
+                //SyncFilenames();
             }
         }
-
-
-
+        private void Tbx_Cmp_oFilename_GotFocus(object sender, RoutedEventArgs e) { SelectTbxValue(sender); }
+        private void Tbx_Cmp_oFilename_LostFocus(object sender, RoutedEventArgs e) { ValidateTbxValue(sender); }
         private void Cbx_Cmp_UseInputFilename_Checked(object sender, RoutedEventArgs e)
         {
             Cmbx_Cmp_TargetInputFilename.IsEnabled = true;
@@ -100,104 +90,65 @@ namespace DS_TextsMod_Helper
             Cmbx_Cmp_TargetInputFilename.IsEnabled = false;
             Cmbx_Cmp_TargetInputFilename.SelectedIndex = -1;
         }
-
-
-
-        private void tbx_header1_LostFocus(object sender, RoutedEventArgs e)
-        {
-            ValidateHeadersValues(sender);
-        }
-        private void tbx_header2_LostFocus(object sender, RoutedEventArgs e)
-        {
-            ValidateHeadersValues(sender);
-        }
-
-        private void Cbx_OneLinedValues_Checked(object sender, RoutedEventArgs e)
-        {
-
-        }
-
-        private void ValidateHeadersValues(object sender)
-        {
-            TextBox tbx = sender as TextBox;
-
-            if (tbx.Text == "")
-            {
-                tbx.BorderBrush = Brushes.Red;
-                MessageBox.Show("Value is required");
-                return;
-            }
-
-            if (tbx.BorderBrush == Brushes.Red)
-                tbx.ClearValue(BorderBrushProperty);
-        }
+        private void Tbx_Cmp_oHeader1_GotFocus(object sender, RoutedEventArgs e) { SelectTbxValue(sender); }
+        private void Tbx_Cmp_oHeader1_LostFocus(object sender, RoutedEventArgs e) { ValidateTbxValue(sender); }
+        private void Tbx_Cmp_oHeader2_GotFocus(object sender, RoutedEventArgs e) { SelectTbxValue(sender); }
+        private void Tbx_Cmp_oHeader2_LostFocus(object sender, RoutedEventArgs e) { ValidateTbxValue(sender); }
+        private void Tbx_Cmp_CsvSeparator_GotFocus(object sender, RoutedEventArgs e) { SelectTbxValue(sender); }
+        private void Tbx_Cmp_CsvSeparator_LostFocus(object sender, RoutedEventArgs e) { ValidateTbxValue(sender); }
 
         #endregion
 
-
         #region Prepare mode
 
-        private void Tbx_Prp_iFile1_PreviewDragOver(object sender, DragEventArgs e)
-        {
-            e.Handled = true;
-        }
-
+        private void Tbx_Prp_iFile1_PreviewDragOver(object sender, DragEventArgs e) { e.Handled = true; }
         private void Tbx_Prp_iFile1_Drop(object sender, DragEventArgs e)
         {
             if (AcceptDroppedInputFile(e))
             {
                 DisplayInputFilepath(sender, e);
-                SyncFilename();
+                //SyncFilenames();
             }
         }
-
-        private void Tbx_Prp_iFile2_PreviewDragOver(object sender, DragEventArgs e)
-        {
-            e.Handled = true;
-        }
-
+        private void Tbx_Prp_iFile2_PreviewDragOver(object sender, DragEventArgs e) { e.Handled = true; }
         private void Tbx_Prp_iFile2_Drop(object sender, DragEventArgs e)
         {
             if (AcceptDroppedInputFile(e))
             {
                 DisplayInputFilepath(sender, e);
-                SyncFilename();
+                //SyncFilenames();
             }
         }
-
-        private void Tbx_Prp_iFile3_PreviewDragOver(object sender, DragEventArgs e)
-        {
-            e.Handled = true;
-        }
-
+        private void Tbx_Prp_iFile3_PreviewDragOver(object sender, DragEventArgs e) { e.Handled = true; }
         private void Tbx_Prp_iFile3_Drop(object sender, DragEventArgs e)
         {
             if (AcceptDroppedInputFile(e))
             {
                 DisplayInputFilepath(sender, e);
-                SyncFilename();
+                //SyncFilenames();
             }
         }
-
-
+        private void Tbx_Prp_oFilename_GotFocus(object sender, RoutedEventArgs e) { SelectTbxValue(sender); }
+        private void Tbx_Prp_oFilename_LostFocus(object sender, RoutedEventArgs e) { ValidateTbxValue(sender); }
         private void Cbx_Prp_UseInputFilename_Checked(object sender, RoutedEventArgs e)
         {
             Cmbx_Prp_TargetInputFilename.IsEnabled = true;
             Cmbx_Prp_TargetInputFilename.SelectedIndex = 2;
         }
-
         private void Cbx_Prp_UseInputFilename_Unchecked(object sender, RoutedEventArgs e)
         {
             Cmbx_Prp_TargetInputFilename.IsEnabled = false;
             Cmbx_Prp_TargetInputFilename.SelectedIndex = -1;
         }
+        private void Tbx_Prp_TextToBeReplaced_GotFocus(object sender, RoutedEventArgs e) { SelectTbxValue(sender); }
+        private void Tbx_Prp_ReplacingText_GotFocus(object sender, RoutedEventArgs e) { SelectTbxValue(sender); }
 
         #endregion
 
 
         private void cbx_syncoutputfilename_Checked(object sender, RoutedEventArgs e)
         {
-            SyncFilename();
+            //SyncFilenames();
         }
 
 
@@ -237,6 +188,22 @@ namespace DS_TextsMod_Helper
             tbx.Foreground = Brushes.Black;
         }
 
+        private void SelectTbxValue(object sender)
+        {
+            TextBox tbx = sender as TextBox;
+            tbx.SelectAll();
+        }
+
+        private void ValidateTbxValue(object sender)
+        {
+            TextBox tbx = sender as TextBox;
+
+            if (tbx.Text == "")
+                tbx.BorderBrush = Brushes.Red;
+            else
+                tbx.ClearValue(BorderBrushProperty);
+        }
+
         private void SyncFilename()
         {
             //if (cbx_syncoutputfilename.IsChecked == false)
@@ -253,10 +220,10 @@ namespace DS_TextsMod_Helper
         {
             string input_filepath1 = Tbx_Cmp_iFile1.Text;
             string input_filepath2 = Tbx_Cmp_iFile2.Text;
-            string output_header_1 = tbx_header1.Text;
-            string output_header_2 = tbx_header2.Text;
+            string output_header_1 = Tbx_Cmp_oHeader1.Text;
+            string output_header_2 = Tbx_Cmp_oHeader2.Text;
             string output_filename = "";
-            string sepa_csv_char_o = Tbx_CsvSeparator.Text;
+            string sepa_csv_char_o = Tbx_Cmp_CsvSeparator.Text;
 
             if (!File.Exists(input_filepath1) || !File.Exists(input_filepath2))
             {
@@ -373,12 +340,12 @@ namespace DS_TextsMod_Helper
             dtg_preview.Visibility = Visibility.Visible;
             dtg_preview.Columns.Clear();
 
-            if (tbc_modes.SelectedIndex == 0)
+            if (Tbc_Modes.SelectedIndex == 0)
             {
 
                 string iFile1 = Tbx_Cmp_iFile1.Text;
                 string iFile2 = Tbx_Cmp_iFile2.Text;
-                CompareMode c = new CompareMode(iFile1, iFile2) { OneLinedValues = Cbx_OneLinedValues.IsChecked ?? false };
+                CompareMode c = new CompareMode(iFile1, iFile2) { OneLinedValues = Cbx_Cmp_OneLinedValues.IsChecked ?? false };
 
                 //c.CheckFiles(); TODO!
                 c.ProcessFiles(true);
@@ -402,12 +369,12 @@ namespace DS_TextsMod_Helper
                         MaxWidth = 70
                     },
                     new DataGridTextColumn() {
-                        Header = tbx_header1.Text,
+                        Header = Tbx_Cmp_oHeader1.Text,
                         Binding = new Binding("Value1"),
                         MaxWidth = 500
                     },
                     new DataGridTextColumn() {
-                        Header = tbx_header2.Text,
+                        Header = Tbx_Cmp_oHeader2.Text,
                         Binding = new Binding("Value2"),
                         MaxWidth = 500
                     },
