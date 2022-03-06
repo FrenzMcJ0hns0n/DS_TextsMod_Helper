@@ -193,16 +193,23 @@ namespace DS_TextsMod_Helper
         // --------------------
         private bool AcceptDroppedInputFile(DragEventArgs e)
         {
-            FileInfo file_info = new FileInfo(((string[])e.Data.GetData(DataFormats.FileDrop))[0]);
-            if (file_info.Extension.ToLowerInvariant() != ".fmg")
+            if (!(e.Data.GetData(DataFormats.FileDrop) is string[]))
                 return false;
 
-            try { SoulsFormats.FMG.Read(file_info.FullName); }
+            string path = ((string[])e.Data.GetData(DataFormats.FileDrop))[0];
+            if (!File.Exists(path))
+                return false;
+
+            if (new FileInfo(path).Extension.ToLowerInvariant() != ".fmg")
+                return false;
+
+            try { _ = SoulsFormats.FMG.Read(path); }
             catch (Exception ex)
             {
-                MessageBox.Show("Error while reading this input file : '" + ex.ToString() + "'");
+                _ = MessageBox.Show("Error while reading this input file : '" + ex.ToString() + "'");
                 return false;
             }
+
             return true;
         }
 
