@@ -22,19 +22,19 @@ namespace DS_TextsMod_Helper
             FindSoulsFormatsDll();
 
 #if DEBUG
-            tbx_file1_compare.Text = @"C:\Sandbox\Modding data\DS_TMH\published 1.2\FMG test files\English - Daughters of Ash\RingDescriptions.fmg";
-            tbx_file2_compare.Text = @"C:\Sandbox\Modding data\DS_TMH\published 1.2\FMG test files\English - vanilla\Accessory_long_desc_.fmg";
+            Tbx_Cmp_iFile1.Text = @"C:\Sandbox\Modding data\DS_TMH\published 1.2\FMG test files\English - Daughters of Ash\RingDescriptions.fmg";
+            Tbx_Cmp_iFile2.Text = @"C:\Sandbox\Modding data\DS_TMH\published 1.2\FMG test files\English - vanilla\Accessory_long_desc_.fmg";
 
-            //tbx_file1_prepare.Text = @"C:\Sandbox\Modding data\DS_TMH\published 1.2\FMG test files\English - Daughters of Ash\RingDescriptions.fmg";
-            //tbx_file2_prepare.Text = @"C:\Sandbox\Modding data\DS_TMH\published 1.2\FMG test files\English - vanilla\Accessory_long_desc_.fmg";
-            //tbx_file3_prepare.Text = @"C:\Sandbox\Modding data\DS_TMH\published 1.2\FMG test files\French - vanilla\Accessory_long_desc_.fmg";
+            //Tbx_Prp_iFile1.Text = @"C:\Sandbox\Modding data\DS_TMH\published 1.2\FMG test files\English - Daughters of Ash\RingDescriptions.fmg";
+            //Tbx_Prp_iFile2.Text = @"C:\Sandbox\Modding data\DS_TMH\published 1.2\FMG test files\English - vanilla\Accessory_long_desc_.fmg";
+            //Tbx_Prp_iFile3.Text = @"C:\Sandbox\Modding data\DS_TMH\published 1.2\FMG test files\French - vanilla\Accessory_long_desc_.fmg";
 
-            //tbx_file1_compare.Text = @"C:\Sandbox\Modding data\DS_TMH\work in progress 1.3\FMG test files\Items - English - vanilla\Item_name_.fmg";
-            //tbx_file2_compare.Text = @"C:\Sandbox\Modding data\DS_TMH\work in progress 1.3\FMG test files\Items - English - Daughters of Ash\ItemNames.fmg";
+            //Tbx_Cmp_iFile1.Text = @"C:\Sandbox\Modding data\DS_TMH\work in progress 1.3\FMG test files\Items - English - vanilla\Item_name_.fmg";
+            //Tbx_Cmp_iFile2.Text = @"C:\Sandbox\Modding data\DS_TMH\work in progress 1.3\FMG test files\Items - English - Daughters of Ash\ItemNames.fmg";
 
-            tbx_file1_prepare.Text = @"C:\Sandbox\Modding data\DS_TMH\work in progress 1.3\FMG test files\Items - English - Daughters of Ash\ArmorDescriptions.fmg";
-            tbx_file2_prepare.Text = @"C:\Sandbox\Modding data\DS_TMH\work in progress 1.3\FMG test files\Items - English - vanilla\Armor_long_desc_.fmg";
-            tbx_file3_prepare.Text = @"C:\Sandbox\Modding data\DS_TMH\work in progress 1.3\FMG test files\Items - Italian - vanilla\Armor_long_desc_.fmg";
+            Tbx_Prp_iFile1.Text = @"C:\Sandbox\Modding data\DS_TMH\work in progress 1.3\FMG test files\Items - English - Daughters of Ash\ArmorDescriptions.fmg";
+            Tbx_Prp_iFile2.Text = @"C:\Sandbox\Modding data\DS_TMH\work in progress 1.3\FMG test files\Items - English - vanilla\Armor_long_desc_.fmg";
+            Tbx_Prp_iFile3.Text = @"C:\Sandbox\Modding data\DS_TMH\work in progress 1.3\FMG test files\Items - Italian - vanilla\Armor_long_desc_.fmg";
 #endif
         }
 
@@ -60,26 +60,32 @@ namespace DS_TextsMod_Helper
 
         #region Compare mode
 
-        private void tbx_file1_compare_PreviewDragOver(object sender, DragEventArgs e)
+        private void Tbx_Cmp_iFile1_PreviewDragOver(object sender, DragEventArgs e)
         {
             e.Handled = true;
         }
 
-        private void tbx_file1_compare_Drop(object sender, DragEventArgs e)
+        private void Tbx_Cmp_iFile1_Drop(object sender, DragEventArgs e)
         {
             if (AcceptDroppedInputFile(e))
+            {
                 DisplayInputFilepath(sender, e);
+                SyncFilename();
+            }
         }
 
-        private void tbx_file2_compare_PreviewDragOver(object sender, DragEventArgs e)
+        private void Tbx_Cmp_iFile2_PreviewDragOver(object sender, DragEventArgs e)
         {
             e.Handled = true;
         }
 
-        private void tbx_file2_compare_Drop(object sender, DragEventArgs e)
+        private void Tbx_Cmp_iFile2_Drop(object sender, DragEventArgs e)
         {
             if (AcceptDroppedInputFile(e))
+            {
                 DisplayInputFilepath(sender, e);
+                SyncFilename();
+            }
         }
 
 
@@ -131,6 +137,49 @@ namespace DS_TextsMod_Helper
 
         #region Prepare mode
 
+        private void Tbx_Prp_iFile1_PreviewDragOver(object sender, DragEventArgs e)
+        {
+            e.Handled = true;
+        }
+
+        private void Tbx_Prp_iFile1_Drop(object sender, DragEventArgs e)
+        {
+            if (AcceptDroppedInputFile(e))
+            {
+                DisplayInputFilepath(sender, e);
+                SyncFilename();
+            }
+        }
+
+        private void Tbx_Prp_iFile2_PreviewDragOver(object sender, DragEventArgs e)
+        {
+            e.Handled = true;
+        }
+
+        private void Tbx_Prp_iFile2_Drop(object sender, DragEventArgs e)
+        {
+            if (AcceptDroppedInputFile(e))
+            {
+                DisplayInputFilepath(sender, e);
+                SyncFilename();
+            }
+        }
+
+        private void Tbx_Prp_iFile3_PreviewDragOver(object sender, DragEventArgs e)
+        {
+            e.Handled = true;
+        }
+
+        private void Tbx_Prp_iFile3_Drop(object sender, DragEventArgs e)
+        {
+            if (AcceptDroppedInputFile(e))
+            {
+                DisplayInputFilepath(sender, e);
+                SyncFilename();
+            }
+        }
+
+
         private void Cbx_Prp_UseInputFilename_Checked(object sender, RoutedEventArgs e)
         {
             Cmbx_Prp_TargetInputFilename.IsEnabled = true;
@@ -145,41 +194,6 @@ namespace DS_TextsMod_Helper
 
         #endregion
 
-
-
-        private void tbx_file1_PreviewDragOver(object sender, DragEventArgs e)
-        {
-            e.Handled = true;
-        }
-        private void tbx_file1_Drop(object sender, DragEventArgs e)
-        {
-            if (AcceptDroppedInputFile(e))
-            {
-                DisplayInputFilepath(sender, e);
-                SyncFilename();
-            }
-                
-        }
-
-        private void tbx_file2_PreviewDragOver(object sender, DragEventArgs e)
-        {
-            e.Handled = true;
-        }
-        private void tbx_file2_Drop(object sender, DragEventArgs e)
-        {
-            if (AcceptDroppedInputFile(e))
-                DisplayInputFilepath(sender, e);
-        }
-
-        private void tbx_file3_PreviewDragOver(object sender, DragEventArgs e)
-        {
-            e.Handled = true;
-        }
-        private void tbx_file3_Drop(object sender, DragEventArgs e)
-        {
-            if (AcceptDroppedInputFile(e))
-                DisplayInputFilepath(sender, e);
-        }
 
         private void cbx_syncoutputfilename_Checked(object sender, RoutedEventArgs e)
         {
@@ -237,8 +251,8 @@ namespace DS_TextsMod_Helper
 
         private bool CompareModeReady()
         {
-            string input_filepath1 = tbx_file1_compare.Text;
-            string input_filepath2 = tbx_file2_compare.Text;
+            string input_filepath1 = Tbx_Cmp_iFile1.Text;
+            string input_filepath2 = Tbx_Cmp_iFile2.Text;
             string output_header_1 = tbx_header1.Text;
             string output_header_2 = tbx_header2.Text;
             string output_filename = "";
@@ -362,8 +376,8 @@ namespace DS_TextsMod_Helper
             if (tbc_modes.SelectedIndex == 0)
             {
 
-                string iFile1 = tbx_file1_compare.Text;
-                string iFile2 = tbx_file2_compare.Text;
+                string iFile1 = Tbx_Cmp_iFile1.Text;
+                string iFile2 = Tbx_Cmp_iFile2.Text;
                 CompareMode c = new CompareMode(iFile1, iFile2) { OneLinedValues = Cbx_OneLinedValues.IsChecked ?? false };
 
                 //c.CheckFiles(); TODO!
@@ -414,9 +428,9 @@ namespace DS_TextsMod_Helper
             }
             else
             {
-                string iFile1 = tbx_file1_prepare.Text;
-                string iFile2 = tbx_file2_prepare.Text;
-                string iFile3 = tbx_file3_prepare.Text;
+                string iFile1 = Tbx_Prp_iFile1.Text;
+                string iFile2 = Tbx_Prp_iFile2.Text;
+                string iFile3 = Tbx_Prp_iFile3.Text;
 
                 PrepareMode p = new PrepareMode(iFile1, iFile2, iFile3);
 
