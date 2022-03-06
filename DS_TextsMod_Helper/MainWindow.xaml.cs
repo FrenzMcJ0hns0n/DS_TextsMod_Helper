@@ -373,63 +373,24 @@ namespace DS_TextsMod_Helper
             // Reload preview, including index and other extra columns
         }
 
-        private void Btn_RefreshPreview_Click(object sender, RoutedEventArgs e)
+        private void Btn_RefreshPreview_Click(object sender, RoutedEventArgs e) // TODO: Sub-functions to validate data
         {
-            dtg_preview.Visibility = Visibility.Visible;
-            dtg_preview.Columns.Clear();
-
             if (Tbc_Modes.SelectedIndex == 0)
             {
-
                 string iFile1 = Tbx_Cmp_iFile1.Text;
                 string iFile2 = Tbx_Cmp_iFile2.Text;
-                CompareMode c = new CompareMode(iFile1, iFile2) { OneLinedValues = Cbx_Cmp_OneLinedValues.IsChecked ?? false };
 
-                //c.CheckFiles(); TODO!
-                c.ProcessFiles(true);
-                //List<CompareMode.Entry> cmp_entries = c.Entries;
-                DataContext = c.Entries;
-                //_ = MessageBox.Show($"What the damn is DataContext ? = {DataContext}");
-
-                //Style hdrOff = (Style)Grid_Main.Resources["HeaderOff"]
-                List<DataGridTextColumn> TextsColumns = new List<DataGridTextColumn>()
+                if (iFile1 == "" || iFile2 == "")
                 {
-                    new DataGridTextColumn() {
-                        Header = "#",
-                        HeaderStyle = (Style)Grid_Main.Resources["HeaderOff"],
-                        Foreground = Brushes.Gray,
-                        Binding = new Binding("Index"),
-                        MaxWidth = 30
-                    },
-                    new DataGridTextColumn() {
-                        Header = "Text ID",
-                        Binding = new Binding("TextId"),
-                        MaxWidth = 70
-                    },
-                    new DataGridTextColumn() {
-                        Header = Tbx_Cmp_oHeader1.Text,
-                        Binding = new Binding("Value1"),
-                        MaxWidth = 500
-                    },
-                    new DataGridTextColumn() {
-                        Header = Tbx_Cmp_oHeader2.Text,
-                        Binding = new Binding("Value2"),
-                        MaxWidth = 500
-                    },
-                    new DataGridTextColumn() {
-                        Header = "Same?",
-                        Binding = new Binding("Same"),
-                        MaxWidth = 50
-                    }
-                };
-                foreach (DataGridTextColumn column in TextsColumns)
-                    dtg_preview.Columns.Add(column);
+                    _ = MessageBox.Show("Invalid submitted data. Please check inputs");
+                    return;
+                }
 
-                dtg_preview.ItemsSource = c.Entries;
-                //dtg_preview.ItemsSource = c.Entries;
+                CompareMode c = new CompareMode(iFile1, iFile2) { OneLinedValues = Cbx_Cmp_OneLinedValues.IsChecked ?? false };
+                c.ProcessFiles(true);
 
-                //dtg_preview.Columns[0].Header = "#";
-                //dtg_preview.Columns[1].Header = "Text ID";
+                bool allDetails = Cbx_PreviewAllDetails.IsChecked ?? false;
+                PreviewCompare(c.Entries, allDetails);
             }
             else
             {
@@ -437,80 +398,29 @@ namespace DS_TextsMod_Helper
                 string iFile2 = Tbx_Prp_iFile2.Text;
                 string iFile3 = Tbx_Prp_iFile3.Text;
 
-                PrepareMode p = new PrepareMode(iFile1, iFile2, iFile3);
-
-                p.ProcessFiles(false);
-                DataContext = p.Entries;
-                //List<PrepareMode.Entry> prp_Entries = p.Entries;
-
-                List<DataGridTextColumn> TextsColumns = new List<DataGridTextColumn>()
+                if (iFile1 == "" || iFile2 == "" || iFile3 == "")
                 {
-                    new DataGridTextColumn() {
-                        Header = "#",
-                        HeaderStyle = (Style)Grid_Main.Resources["HeaderOff"],
-                        Foreground = Brushes.Gray,
-                        Binding = new Binding("Index"),
-                        MaxWidth = 30
-                    },
-                    new DataGridTextColumn() {
-                        Header = "Text ID",
-                        Binding = new Binding("TextId"),
-                        MaxWidth = 70
-                    },
-                    new DataGridTextColumn() {
-                        Header = "Value 1",
-                        HeaderStyle = (Style)Grid_Main.Resources["HeaderOff"],
-                        Foreground = Brushes.Gray,
-                        Binding = new Binding("Value1"),
-                        MaxWidth = 250
-                    },
-                    new DataGridTextColumn() {
-                        Header = "Value 2",
-                        HeaderStyle = (Style)Grid_Main.Resources["HeaderOff"],
-                        Foreground = Brushes.Gray,
-                        Binding = new Binding("Value2"),
-                        MaxWidth = 250
-                    },
-                    new DataGridTextColumn() {
-                        Header = "Value 3",
-                        HeaderStyle = (Style)Grid_Main.Resources["HeaderOff"],
-                        Foreground = Brushes.Gray,
-                        Binding = new Binding("Value3"),
-                        MaxWidth = 250
-                    },
-                    new DataGridTextColumn() {
-                        Header = "Output value",
-                        Binding = new Binding("Output"),
-                        MaxWidth = 250
-                    },
-                    new DataGridTextColumn() {
-                        Header = "From?",
-                        HeaderStyle = (Style)Grid_Main.Resources["HeaderOff"],
-                        Foreground = Brushes.Gray,
-                        Binding = new Binding("Source"),
-                        MaxWidth = 50
-                    }
-                };
-                foreach (DataGridTextColumn column in TextsColumns)
-                    dtg_preview.Columns.Add(column);
+                    _ = MessageBox.Show("Invalid submitted data. Please check inputs");
+                    return;
+                }
 
-                dtg_preview.ItemsSource = p.Entries;
-                //dtg_preview.ItemsSource = p.Entries;
+                PrepareMode p = new PrepareMode(iFile1, iFile2, iFile3);
+                p.ProcessFiles(true);
 
-                //dtg_preview.Columns[2].Header = "File #1 value";
-                //dtg_preview.Columns[2].MinWidth = 75;
-                //dtg_preview.Columns[2].MaxWidth = 260;
+                bool allDetails = Cbx_PreviewAllDetails.IsChecked ?? false;
+                PreviewPrepare(p.Entries, allDetails);
             }
         }
 
+        // TODO? Use this and provide [c|p].entries as DataContext
         private List<DataGridTextColumn> BuildDataGridTextColumns(FrameworkElement DataContext, string mode)
         {
-            List<DataGridTextColumn> ColumnsList = new List<DataGridTextColumn>();
+            List<DataGridTextColumn> columns = new List<DataGridTextColumn>();
 
             switch (mode)
             {
                 case "Compare":
-                    ColumnsList.Add(new DataGridTextColumn()
+                    columns.Add(new DataGridTextColumn()
                     {
                         Header = "#",
                         HeaderStyle = (Style)Grid_Main.Resources["HeaderOff"],
@@ -528,12 +438,172 @@ namespace DS_TextsMod_Helper
                     // Unkown, man you did wrong
                     break;
             }
-            return ColumnsList;
+            return columns;
         }
 
-        private void Btn_GenerateOutput_Click(object sender, RoutedEventArgs e)
+        private void Btn_GenerateOutput_Click(object sender, RoutedEventArgs e) // TODO: Sub-functions to validate data
         {
-            // Validate inputs before going
+            if (Tbc_Modes.SelectedIndex == 0)
+            {
+                string iFile1 = Tbx_Cmp_iFile1.Text;
+                string iFile2 = Tbx_Cmp_iFile2.Text;
+                string oFilename = Tbx_Cmp_oFilename.Text;
+                string oHdr1 = Tbx_Cmp_oHeader1.Text;
+                string oHdr2 = Tbx_Cmp_oHeader1.Text;
+                string csvSepChar = Tbx_Cmp_CsvSeparator.Text;
+
+                if (iFile1 == "" || iFile2 == "" || oFilename == "" || oHdr1 == "" || oHdr2 == "" || csvSepChar == "")
+                {
+                    _ = MessageBox.Show("Invalid submitted data. Please check inputs");
+                    return;
+                }
+
+                //CompareMode c = new CompareMode(iFile1, iFile2) { OneLinedValues = Cbx_Cmp_OneLinedValues.IsChecked ?? false };
+                //c.ProcessFiles(false);
+
+                //OutputCompare(c.Entries);
+            }
+            else
+            {
+                string iFile1 = Tbx_Prp_iFile1.Text;
+                string iFile2 = Tbx_Prp_iFile2.Text;
+                string iFile3 = Tbx_Prp_iFile3.Text;
+                string oFilename = Tbx_Prp_oFilename.Text;
+                string trimBegin = Tbx_Prp_TextToBeReplaced.Text;
+                string trimEnd = Tbx_Prp_ReplacingText.Text;
+
+                if (iFile1 == "" || iFile2 == "" || iFile3 == "" || oFilename == "")
+                {
+                    _ = MessageBox.Show("Invalid submitted data. Please check inputs");
+                    return;
+                }
+
+                // PrepareMode p = new PrepareMode(iFile1, iFile2, iFile3);
+                // c.ProcessFiles(true);
+
+                // OutputPrepare(p.Entries);
+            }
+        }
+
+        private void PreviewCompare(List<CompareMode.Entry> entries, bool allDetails)
+        {
+            dtg_preview.Visibility = Visibility.Visible;
+            dtg_preview.Columns.Clear();
+
+            DataContext = entries;
+
+            //// Dict with <Header + Binding>
+            //Dictionary<string, string> dict = new Dictionary<string, string>();
+            //if (allDetails)
+            //    dict.Add("#", "Index");
+            //dict.Add("Text ID", "TextId");
+
+            string oHeader1 = Tbx_Cmp_oHeader1.Text != "" ? Tbx_Cmp_oHeader1.Text : "Value 1";
+            string oHeader2 = Tbx_Cmp_oHeader2.Text != "" ? Tbx_Cmp_oHeader2.Text : "Value 2";
+
+            List<DataGridTextColumn> textsColumns = new List<DataGridTextColumn>();
+            //Style hdrOff = (Style)Grid_Main.Resources["HeaderOff"]
+            //Style style = new Style(DataGridColumnHeader) // TODO? See how to create new style in code behind
+
+            if (allDetails)
+                textsColumns.Add(new DataGridTextColumn()
+                {
+                    Header = "#",
+                    HeaderStyle = (Style)Grid_Main.Resources["HeaderOff"],
+                    Foreground = Brushes.Gray,
+                    Binding = new Binding("Index"),
+                    MaxWidth = 30
+                });
+
+            textsColumns.Add(new DataGridTextColumn() { Header = "Text ID", Binding = new Binding("TextId"), MaxWidth = 75 });
+            textsColumns.Add(new DataGridTextColumn() { Header = oHeader1, Binding = new Binding("Value1"), MaxWidth = 500 });
+            textsColumns.Add(new DataGridTextColumn() { Header = oHeader2, Binding = new Binding("Value2"), MaxWidth = 500 });
+            textsColumns.Add(new DataGridTextColumn() { Header = "Same?", Binding = new Binding("Same"), MaxWidth = 50 });
+
+            foreach (DataGridTextColumn column in textsColumns)
+                dtg_preview.Columns.Add(column);
+
+            dtg_preview.ItemsSource = entries;
+        }
+
+        private void PreviewPrepare(List<PrepareMode.Entry> entries, bool allDetails)
+        {
+            dtg_preview.Visibility = Visibility.Visible;
+            dtg_preview.Columns.Clear();
+
+            DataContext = entries;
+
+            List<DataGridTextColumn> textsColumns = new List<DataGridTextColumn>();
+
+            if (allDetails)
+                textsColumns.Add(new DataGridTextColumn()
+                {
+                    Header = "#",
+                    HeaderStyle = (Style)Grid_Main.Resources["HeaderOff"],
+                    Foreground = Brushes.Gray,
+                    Binding = new Binding("Index"),
+                    MaxWidth = 30
+                });
+
+            textsColumns.Add(new DataGridTextColumn() { Header = "Text ID", Binding = new Binding("TextId"), MaxWidth = 75 });
+
+            if (allDetails)
+            {
+                textsColumns.Add(new DataGridTextColumn()
+                {
+                    Header = "Value 1",
+                    HeaderStyle = (Style)Grid_Main.Resources["HeaderOff"],
+                    Foreground = Brushes.Gray,
+                    Binding = new Binding("Value1"),
+                    MaxWidth = 250
+                });
+                textsColumns.Add(new DataGridTextColumn()
+                {
+                    Header = "Value 2",
+                    HeaderStyle = (Style)Grid_Main.Resources["HeaderOff"],
+                    Foreground = Brushes.Gray,
+                    Binding = new Binding("Value2"),
+                    MaxWidth = 250
+                });
+                textsColumns.Add(new DataGridTextColumn()
+                {
+                    Header = "Value 3",
+                    HeaderStyle = (Style)Grid_Main.Resources["HeaderOff"],
+                    Foreground = Brushes.Gray,
+                    Binding = new Binding("Value3"),
+                    MaxWidth = 250
+                });
+            }
+
+            int maxWidth = allDetails ? 250 : 500;
+            textsColumns.Add(new DataGridTextColumn() { Header = "Output value", Binding = new Binding("Output"), MaxWidth = maxWidth });
+
+            if (allDetails)
+            {
+                textsColumns.Add(new DataGridTextColumn()
+                {
+                    Header = "From?",
+                    HeaderStyle = (Style)Grid_Main.Resources["HeaderOff"],
+                    Foreground = Brushes.Gray,
+                    Binding = new Binding("Source"),
+                    MaxWidth = 50
+                });
+            }
+
+            foreach (DataGridTextColumn column in textsColumns)
+                dtg_preview.Columns.Add(column);
+
+            dtg_preview.ItemsSource = entries;
+        }
+
+        private void OutputCompare()
+        {
+            // TODO: Adapt previous code
+        }
+
+        private void OutputPrepare()
+        {
+            // TODO: Adapt previous code
         }
 
     }

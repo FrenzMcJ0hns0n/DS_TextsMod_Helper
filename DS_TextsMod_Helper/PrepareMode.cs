@@ -17,7 +17,7 @@ namespace DS_TextsMod_Helper
         public List<Entry> Entries { get; set; }
 
 
-        public PrepareMode(string iFile1, string iFile2, string iFile3) //, string oFilename
+        public PrepareMode(string iFile1, string iFile2, string iFile3) // TODO: Add TrimBegin & TrimEnd
         {
             InputFiles = new List<string>() { iFile1, iFile2, iFile3 };
             //OutputFilename = oFilename;
