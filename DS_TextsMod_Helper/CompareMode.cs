@@ -57,8 +57,8 @@ namespace DS_TextsMod_Helper
 
         public string FormatValue(string value)
         {
-            //TODO: Check several spaces?
-            if (value == " ")
+            // Preserve white spaces, whatever their purpose
+            if (value.Count(char.IsWhiteSpace) == value.Length)
                 return value;
 
             if (OneLinedValues)

@@ -28,7 +28,8 @@ namespace DS_TextsMod_Helper
 
         public string FormatValue(string value)
         {
-            if (value == " ")
+            // Preserve white spaces, whatever their purpose
+            if (value.Count(char.IsWhiteSpace) == value.Length)
                 return value;
 
             if (TextToReplace == "")
