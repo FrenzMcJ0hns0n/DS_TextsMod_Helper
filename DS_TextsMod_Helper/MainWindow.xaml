@@ -385,7 +385,7 @@
                 </ScrollViewer>
             </Grid>-->
 
-            <DataGrid x:Name="dtg_preview" HeadersVisibility="Column" Visibility="Hidden" AutoGenerateColumns="False" IsReadOnly="True">
+            <DataGrid x:Name="Dtg_Preview" HeadersVisibility="Column" Visibility="Hidden" AutoGenerateColumns="False" IsReadOnly="True">
 
             </DataGrid>
 
