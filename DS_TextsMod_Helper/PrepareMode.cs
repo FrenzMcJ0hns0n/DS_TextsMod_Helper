@@ -10,17 +10,18 @@ namespace DS_TextsMod_Helper
     {
 
         public List<string> InputFiles { get; set; }
-        public string TrimBegin { get; set; }
-        public string TrimEnd { get; set; }
+        public string TextToReplace { get; set; }
+        public string ReplacingText { get; set; }
         public string OutputFilename { get; set; }
         public bool OneLinedPreview { get; set; }
         public List<Entry> Entries { get; set; }
 
 
-        public PrepareMode(string iFile1, string iFile2, string iFile3) // TODO: Add TrimBegin & TrimEnd
+        public PrepareMode(string iFile1, string iFile2, string iFile3, string textToReplace, string replacingText)
         {
             InputFiles = new List<string>() { iFile1, iFile2, iFile3 };
-            //OutputFilename = oFilename;
+            TextToReplace = textToReplace;
+            ReplacingText = replacingText;
             //Entries = new List<Entry>();
         }
 
@@ -30,11 +31,11 @@ namespace DS_TextsMod_Helper
             if (value == " ")
                 return value;
 
-            if (string.IsNullOrEmpty(TrimBegin))
+            if (TextToReplace == "")
                 return value.Trim();
 
-            if(value.Contains(TrimBegin))
-                return value.Replace(TrimBegin, TrimEnd).Trim();
+            if(value.Contains(TextToReplace))
+                return value.Replace(TextToReplace, ReplacingText).Trim();
 
             return value.Trim();
         }

@@ -331,13 +331,13 @@
                                        Content="String to replace :"
                                        ToolTip="Enter text to be replaced in entries"
                                        />
-                                <TextBox x:Name="Tbx_Prp_TextToBeReplaced"
+                                <TextBox x:Name="Tbx_Prp_TextToReplace"
                                          VerticalAlignment="Center"
                                          Margin="24,0,0,0"
                                          Width="120"
                                          TextAlignment="Right"
                                          ToolTip="Enter text to be replaced in entries"
-                                         GotFocus="Tbx_Prp_TextToBeReplaced_GotFocus"
+                                         GotFocus="Tbx_Prp_TextToReplace_GotFocus"
                                          />
                             </StackPanel>
 

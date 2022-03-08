@@ -142,7 +142,7 @@ namespace DS_TextsMod_Helper
             Cmbx_Prp_TargetInputFilename.SelectedIndex = -1;
         }
         private void Cmbx_Prp_TargetInputFilename_SelectionChanged(object sender, SelectionChangedEventArgs e) { SyncFilenames(sender); }
-        private void Tbx_Prp_TextToBeReplaced_GotFocus(object sender, RoutedEventArgs e) { SelectTbxValue(sender); }
+        private void Tbx_Prp_TextToReplace_GotFocus(object sender, RoutedEventArgs e) { SelectTbxValue(sender); }
         private void Tbx_Prp_ReplacingText_GotFocus(object sender, RoutedEventArgs e) { SelectTbxValue(sender); }
 
         #endregion
@@ -397,6 +397,8 @@ namespace DS_TextsMod_Helper
                 string iFile1 = Tbx_Prp_iFile1.Text;
                 string iFile2 = Tbx_Prp_iFile2.Text;
                 string iFile3 = Tbx_Prp_iFile3.Text;
+                string textToReplace = Tbx_Prp_TextToReplace.Text;
+                string replacingText = Tbx_Prp_ReplacingText.Text;
 
                 if (iFile1 == "" || iFile2 == "" || iFile3 == "")
                 {
@@ -404,7 +406,7 @@ namespace DS_TextsMod_Helper
                     return;
                 }
 
-                PrepareMode p = new PrepareMode(iFile1, iFile2, iFile3);
+                PrepareMode p = new PrepareMode(iFile1, iFile2, iFile3, textToReplace, replacingText);
                 p.ProcessFiles(true);
 
                 bool allDetails = Cbx_PreviewAllDetails.IsChecked ?? false;
@@ -444,8 +446,8 @@ namespace DS_TextsMod_Helper
                 string iFile2 = Tbx_Prp_iFile2.Text;
                 string iFile3 = Tbx_Prp_iFile3.Text;
                 string oFilename = Tbx_Prp_oFilename.Text;
-                string trimBegin = Tbx_Prp_TextToBeReplaced.Text;
-                string trimEnd = Tbx_Prp_ReplacingText.Text;
+                string textToReplace = Tbx_Prp_TextToReplace.Text;
+                string replacingText = Tbx_Prp_ReplacingText.Text;
 
                 if (iFile1 == "" || iFile2 == "" || iFile3 == "" || oFilename == "")
                 {
@@ -453,7 +455,7 @@ namespace DS_TextsMod_Helper
                     return;
                 }
 
-                // PrepareMode p = new PrepareMode(iFile1, iFile2, iFile3);
+                // PrepareMode p = new PrepareMode(iFile1, iFile2, iFile3, textToReplace, replacingText);
                 // c.ProcessFiles(true);
 
                 // OutputPrepare(p.Entries);
