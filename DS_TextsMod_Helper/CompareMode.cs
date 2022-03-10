@@ -11,43 +11,18 @@ namespace DS_TextsMod_Helper
     internal class CompareMode : IProcessingModes
     {
         public List<string> InputFiles { get; set; }
+        public bool OneLinedValues { get; set; }
         public string OutputFilename { get; set; }
         public string OutputHeader1 { get; set; }
         public string OutputHeader2 { get; set; }
         public char CsvSeparator { get; set; }
-        public bool OneLinedValues { get; set; }
         public List<Entry> Entries { get; set; }
 
 
-        public CompareMode(string iFile1, string iFile2) //, string oFilename, string oHdr1, string oHdr2, char oCsvSep
+        public CompareMode(string iFile1, string iFile2)
         {
             InputFiles = new List<string>() { iFile1, iFile2 };
             Entries = new List<Entry>();
-        }
-
-
-        public void CheckFiles()
-        {
-            foreach (string filepath in InputFiles)
-            {
-                try
-                {
-                    FileInfo info = new FileInfo(filepath);
-
-                    if (info.Extension != ".fmg")
-                    {
-                        _ = MessageBox.Show("Error: File extension must be .fmg");
-                        return;
-                    }
-
-                    _ = SoulsFormats.FMG.Read(filepath);
-                }
-                catch (Exception ex)
-                {
-                    _ = MessageBox.Show($"Error in method CompareMode.CheckFiles.\nException: {ex}");
-                }
-
-            }
         }
 
 

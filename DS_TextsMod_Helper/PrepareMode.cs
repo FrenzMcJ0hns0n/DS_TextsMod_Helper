@@ -8,12 +8,10 @@ namespace DS_TextsMod_Helper
 {
     internal class PrepareMode : IProcessingModes
     {
-
         public List<string> InputFiles { get; set; }
         public string TextToReplace { get; set; }
         public string ReplacingText { get; set; }
         public string OutputFilename { get; set; }
-        public bool OneLinedPreview { get; set; }
         public List<Entry> Entries { get; set; }
 
 
@@ -125,5 +123,6 @@ namespace DS_TextsMod_Helper
                 Source = source;
             }
         }
+
     }
 }
