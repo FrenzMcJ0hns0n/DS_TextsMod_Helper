@@ -6,25 +6,25 @@ namespace DS_TextsMod_Helper
     public class IOHelper
     {
 
-        public static string ReturnRootDirectoryPath()
+        public static string GetRootDirPath()
         {
             return Directory.GetParent(Assembly.GetExecutingAssembly().Location).ToString();
         }
 
-        public static string ReturnOutputDirectoryPath()
+        public static string GetOutputDirPath()
         {
-            return Path.Combine(ReturnRootDirectoryPath(), "Output");
+            return Path.Combine(GetRootDirPath(), "Output");
         }
 
 
-        public static string ReturnCompareOutputFilename(string filename)
+        public static string GetCompareOutputFilename(string filename)
         {
-            return Path.Combine(ReturnOutputDirectoryPath(), filename + ".csv");
+            return Path.Combine(GetOutputDirPath(), filename + ".csv");
         }
 
-        public static string ReturnPrepareOutputFilename(string filename)
+        public static string GetPrepareOutputFilename(string filename)
         {
-            return Path.Combine(ReturnOutputDirectoryPath(), filename + ".fmg");
+            return Path.Combine(GetOutputDirPath(), filename + ".fmg");
         }
 
     }

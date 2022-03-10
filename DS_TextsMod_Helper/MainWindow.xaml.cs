@@ -18,7 +18,7 @@ namespace DS_TextsMod_Helper
         {
             InitializeComponent();
 
-            Directory.CreateDirectory(IOHelper.ReturnOutputDirectoryPath());
+            Directory.CreateDirectory(IOHelper.GetOutputDirPath());
             FindSoulsFormatsDll();
 
 #if DEBUG
@@ -45,7 +45,7 @@ namespace DS_TextsMod_Helper
 
         private void FindSoulsFormatsDll()
         {
-            if (!File.Exists(Path.Combine(IOHelper.ReturnRootDirectoryPath(), "SoulsFormats.dll")))
+            if (!File.Exists(Path.Combine(IOHelper.GetRootDirPath(), "SoulsFormats.dll")))
                 MessageBox.Show("Fatal error : file 'SoulsFormats.dll' not found");
         }
 
@@ -401,7 +401,7 @@ namespace DS_TextsMod_Helper
                 c.ProcessFiles(false);
                 c.ProduceOutput(oFilename, oHdr1, oHdr2, csvSepChar);
 
-                _ = MessageBox.Show($"[Compare mode] File \"{oFilename}.csv\" created");
+                _ = MessageBox.Show($"[Compare mode] File \"{c.OutputFilename}\" created");
             }
             else
             {
@@ -422,7 +422,7 @@ namespace DS_TextsMod_Helper
                 p.ProcessFiles(false);
                 p.ProduceOutput(oFilename);
 
-                _ = MessageBox.Show($"[Prepare mode] File \"{oFilename}.fmg\" created");
+                _ = MessageBox.Show($"[Prepare mode] File \"{p.OutputFilename}\" created");
             }
         }
 
