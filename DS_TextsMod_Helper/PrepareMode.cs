@@ -22,7 +22,7 @@ namespace DS_TextsMod_Helper
             InputFiles = new List<string>() { iFile1, iFile2, iFile3 };
             TextToReplace = textToReplace;
             ReplacingText = replacingText;
-            //Entries = new List<Entry>();
+            Entries = new List<Entry>();
         }
 
 
@@ -44,15 +44,12 @@ namespace DS_TextsMod_Helper
 
         public void ProcessFiles(bool preview)
         {
-            Entries = new List<Entry>();
-
-            // Get input data
+            // 0. Get input data
             SoulsFormats.FMG file_1 = new SoulsFormats.FMG { Entries = SoulsFormats.FMG.Read(InputFiles[0]).Entries };
             SoulsFormats.FMG file_2 = new SoulsFormats.FMG { Entries = SoulsFormats.FMG.Read(InputFiles[1]).Entries };
             SoulsFormats.FMG file_3 = new SoulsFormats.FMG { Entries = SoulsFormats.FMG.Read(InputFiles[2]).Entries };
 
             Dictionary<int, List<string>> prp_dictionary = new Dictionary<int, List<string>>();
-
             // 1. Take all values from File1
             int counter = 0;
             foreach (SoulsFormats.FMG.Entry entry in file_1.Entries)
@@ -61,15 +58,13 @@ namespace DS_TextsMod_Helper
                     prp_dictionary.Add(entry.ID, new List<string>() { "", "", "" }); // Preserve null values. TODO: Test "" vs. null
 
                 entry.Text = FormatValue(entry.Text);
-
-                prp_dictionary.Add(entry.ID, new List<string>() { entry.Text, "", "" }); // Create entry, so far with File1 value
+                prp_dictionary.Add(entry.ID, new List<string>() { entry.Text, "", "" });
 
                 counter += 1;
                 if (preview && counter == 30)
                     break;
             }
-
-            // 2. Insert values from File2 for matching entry.ID
+            // 2. Insert value from File2 if entry.ID in File1
             foreach (SoulsFormats.FMG.Entry entry in file_2.Entries)
             {
                 if (entry.Text == null)
@@ -78,10 +73,9 @@ namespace DS_TextsMod_Helper
                 entry.Text = FormatValue(entry.Text);
 
                 if (prp_dictionary.ContainsKey(entry.ID))
-                    prp_dictionary[entry.ID][1] = entry.Text; // Insert File2 value
+                    prp_dictionary[entry.ID][1] = entry.Text;
             }
-
-            // 3. Insert values from File3 for matching entry.ID
+            // 3. Insert value from File3 if entry.ID in File1
             foreach (SoulsFormats.FMG.Entry entry in file_3.Entries)
             {
                 if (entry.Text == null)
@@ -90,11 +84,10 @@ namespace DS_TextsMod_Helper
                 entry.Text = FormatValue(entry.Text);
 
                 if (prp_dictionary.ContainsKey(entry.ID))
-                    prp_dictionary[entry.ID][2] = entry.Text; // Insert File3 value
-                // else : File3 value ignored as not in File1 structure
+                    prp_dictionary[entry.ID][2] = entry.Text; 
             }
 
-
+            // 4. Compare values and build Entry
             int index = 0;
             foreach (KeyValuePair<int, List<string>> prp in prp_dictionary)
             {
