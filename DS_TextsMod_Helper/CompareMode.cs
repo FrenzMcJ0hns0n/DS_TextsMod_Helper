@@ -15,7 +15,7 @@ namespace DS_TextsMod_Helper
         public string OutputFilename { get; set; }
         public string OutputHeader1 { get; set; }
         public string OutputHeader2 { get; set; }
-        public char CsvSeparator { get; set; }
+        public char Sep { get; set; }
         public List<Entry> Entries { get; set; }
 
 
@@ -89,6 +89,39 @@ namespace DS_TextsMod_Helper
                 bool isSame = cmp.Value[0] == cmp.Value[1];
 
                 Entries.Add(new Entry(index, textId, val1, val2, isSame.ToString()));
+            }
+        }
+
+
+        public void ProduceOutput(string oFilename, string oHdr1, string oHdr2, string csvSepChar)
+        {
+            OutputFilename = IOHelper.ReturnCompareOutputFilename(oFilename);
+            OutputHeader1 = oHdr1;
+            OutputHeader2 = oHdr2;
+            Sep = csvSepChar[0];
+            
+            using (StreamWriter writer = new StreamWriter(OutputFilename, false))
+            {
+                if (OneLinedValues)
+                {
+                    writer.WriteLine($"Text ID{Sep}{OutputHeader1}{Sep}{OutputHeader2}{Sep}Same?");
+
+                    foreach (Entry ce in Entries)
+                        writer.WriteLine($"{ce.TextId}{Sep}{ce.Value1}{Sep}{ce.Value2}{Sep}{ce.Same}");
+                }
+                else
+                {
+                    foreach (Entry ce in Entries)
+                    {
+                        writer.WriteLine($"Text ID = {ce.TextId}");
+                        writer.WriteLine($"{OutputHeader1} = {ce.Value1}");
+                        writer.WriteLine($"{OutputHeader2} = {ce.Value2}");
+                        writer.WriteLine($"Same? {ce.Same}");
+                        writer.WriteLine();
+                        writer.WriteLine();
+                    }
+                }
+                    
             }
         }
 

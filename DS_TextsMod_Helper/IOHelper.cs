@@ -16,5 +16,16 @@ namespace DS_TextsMod_Helper
             return Path.Combine(ReturnRootDirectoryPath(), "Output");
         }
 
+
+        public static string ReturnCompareOutputFilename(string filename)
+        {
+            return Path.Combine(ReturnOutputDirectoryPath(), filename + ".csv");
+        }
+
+        public static string ReturnPrepareOutputFilename(string filename)
+        {
+            return Path.Combine(ReturnOutputDirectoryPath(), filename + ".fmg");
+        }
+
     }
 }

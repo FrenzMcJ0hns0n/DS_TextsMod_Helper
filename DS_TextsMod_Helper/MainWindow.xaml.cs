@@ -317,32 +317,6 @@ namespace DS_TextsMod_Helper
         }
 
 
-        private void DoCompare(SortedDictionary<int, string> dictionary_compare, char osep, string oheader1, string oheader2, string ofilename)
-        {
-            string output_filepath = Path.Combine(IOHelper.ReturnOutputDirectoryPath(), ofilename);
-            using (StreamWriter writer = new StreamWriter(output_filepath, false))
-            {
-                writer.WriteLine($"Text ID{osep}{oheader1}{osep}{oheader2}{osep}Same?"); // Headers = "Text ID|Header 1|Header 2|Same?"
-                foreach (KeyValuePair<int, string> od in dictionary_compare)
-                {
-                    writer.WriteLine(od.Value); // Data = "Text ID|Value 1|Value 2|[True/False]"
-                }
-            }
-        }
-
-        private void DoPrepare(Dictionary<int, string> dictionary_prepare, char osep, string ofilename)
-        {
-            string output_filepath = Path.Combine(IOHelper.ReturnOutputDirectoryPath(), ofilename);
-            SoulsFormats.FMG output = new SoulsFormats.FMG { };
-            foreach (KeyValuePair<int, string> od in dictionary_prepare)
-            {
-                output.Entries.Add(new SoulsFormats.FMG.Entry(od.Key, (od.Value == "") ? null : od.Value)); // Data = "Text ID|Value"
-            }
-            output.Write(output_filepath);
-    }
-
-
-
         private void Btn_ClearPreview_Click(object sender, RoutedEventArgs e)
         {
             if (Dtg_Preview.Visibility == Visibility.Visible && Dtg_Preview.ItemsSource != null)
@@ -414,7 +388,7 @@ namespace DS_TextsMod_Helper
                 string iFile2 = Tbx_Cmp_iFile2.Text;
                 string oFilename = Tbx_Cmp_oFilename.Text;
                 string oHdr1 = Tbx_Cmp_oHeader1.Text;
-                string oHdr2 = Tbx_Cmp_oHeader1.Text;
+                string oHdr2 = Tbx_Cmp_oHeader2.Text;
                 string csvSepChar = Tbx_Cmp_CsvSeparator.Text;
 
                 if (iFile1 == "" || iFile2 == "" || oFilename == "" || oHdr1 == "" || oHdr2 == "" || csvSepChar == "")
@@ -423,14 +397,11 @@ namespace DS_TextsMod_Helper
                     return;
                 }
 
-                //CompareMode c = new CompareMode(iFile1, iFile2)
-                //{
-                //  OneLinedValues = Cbx_Cmp_OneLinedValues.IsChecked ?? false,
-                //  CsvSeparator = csvSepChar[0]
-                //};
-                //c.ProcessFiles(false);
+                CompareMode c = new CompareMode(iFile1, iFile2) { OneLinedValues = Cbx_Cmp_OneLinedValues.IsChecked ?? false };
+                c.ProcessFiles(false);
+                c.ProduceOutput(oFilename, oHdr1, oHdr2, csvSepChar);
 
-                //OutputCompare(c.Entries);
+                _ = MessageBox.Show($"[Compare mode] File \"{oFilename}.csv\" created");
             }
             else
             {
@@ -447,10 +418,11 @@ namespace DS_TextsMod_Helper
                     return;
                 }
 
-                // PrepareMode p = new PrepareMode(iFile1, iFile2, iFile3, textToReplace, replacingText);
-                // c.ProcessFiles(true);
+                PrepareMode p = new PrepareMode(iFile1, iFile2, iFile3, textToReplace, replacingText);
+                p.ProcessFiles(false);
+                p.ProduceOutput(oFilename);
 
-                // OutputPrepare(p.Entries);
+                _ = MessageBox.Show($"[Prepare mode] File \"{oFilename}.fmg\" created");
             }
         }
 
@@ -511,16 +483,6 @@ namespace DS_TextsMod_Helper
                 Dtg_Preview.Columns.Add(col);
 
             Dtg_Preview.ItemsSource = entries;
-        }
-
-        private void OutputCompare()
-        {
-            // TODO: Adapt previous code
-        }
-
-        private void OutputPrepare()
-        {
-            // TODO: Adapt previous code
         }
 
     }

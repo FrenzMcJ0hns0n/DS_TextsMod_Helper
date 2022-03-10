@@ -26,6 +26,9 @@ namespace DS_TextsMod_Helper
 
         public string FormatValue(string value)
         {
+            if (value is null)
+                return value;
+
             // Preserve white spaces, whatever their purpose
             if (value.Count(char.IsWhiteSpace) == value.Length)
                 return value;
@@ -52,9 +55,6 @@ namespace DS_TextsMod_Helper
             int counter = 0;
             foreach (SoulsFormats.FMG.Entry entry in file_1.Entries)
             {
-                if (entry.Text == null)
-                    prp_dictionary.Add(entry.ID, new List<string>() { "", "", "" }); // Preserve null values. TODO: Test "" vs. null
-
                 entry.Text = FormatValue(entry.Text);
                 prp_dictionary.Add(entry.ID, new List<string>() { entry.Text, "", "" });
 
@@ -99,6 +99,17 @@ namespace DS_TextsMod_Helper
 
                 Entries.Add(new Entry(index, textId, val1, val2, val3, output, source));
             }
+        }
+
+        public void ProduceOutput(string oFilename)
+        {
+            OutputFilename = IOHelper.ReturnPrepareOutputFilename(oFilename);
+
+            SoulsFormats.FMG output = new SoulsFormats.FMG { };
+            foreach (Entry pe in Entries)
+                output.Entries.Add(new SoulsFormats.FMG.Entry(pe.TextId, pe.Output));
+
+            output.Write(OutputFilename);
         }
 
 
