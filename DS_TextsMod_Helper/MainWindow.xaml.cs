@@ -18,7 +18,7 @@ namespace DS_TextsMod_Helper
         {
             InitializeComponent();
 
-            Directory.CreateDirectory(ReturnOutputDirectoryPath());
+            Directory.CreateDirectory(IOHelper.ReturnOutputDirectoryPath());
             FindSoulsFormatsDll();
 
 #if DEBUG
@@ -41,19 +41,11 @@ namespace DS_TextsMod_Helper
 
 
 
-        private string ReturnRootDirectoryPath()
-        {
-            return Directory.GetParent(Assembly.GetExecutingAssembly().Location).ToString();
-        }
 
-        private string ReturnOutputDirectoryPath()
-        {
-            return Path.Combine(ReturnRootDirectoryPath(), "Output");
-        }
 
         private void FindSoulsFormatsDll()
         {
-            if (!File.Exists(Path.Combine(ReturnRootDirectoryPath(), "SoulsFormats.dll")))
+            if (!File.Exists(Path.Combine(IOHelper.ReturnRootDirectoryPath(), "SoulsFormats.dll")))
                 MessageBox.Show("Fatal error : file 'SoulsFormats.dll' not found");
         }
 
@@ -327,7 +319,7 @@ namespace DS_TextsMod_Helper
 
         private void DoCompare(SortedDictionary<int, string> dictionary_compare, char osep, string oheader1, string oheader2, string ofilename)
         {
-            string output_filepath = Path.Combine(ReturnOutputDirectoryPath(), ofilename);
+            string output_filepath = Path.Combine(IOHelper.ReturnOutputDirectoryPath(), ofilename);
             using (StreamWriter writer = new StreamWriter(output_filepath, false))
             {
                 writer.WriteLine($"Text ID{osep}{oheader1}{osep}{oheader2}{osep}Same?"); // Headers = "Text ID|Header 1|Header 2|Same?"
@@ -340,7 +332,7 @@ namespace DS_TextsMod_Helper
 
         private void DoPrepare(Dictionary<int, string> dictionary_prepare, char osep, string ofilename)
         {
-            string output_filepath = Path.Combine(ReturnOutputDirectoryPath(), ofilename);
+            string output_filepath = Path.Combine(IOHelper.ReturnOutputDirectoryPath(), ofilename);
             SoulsFormats.FMG output = new SoulsFormats.FMG { };
             foreach (KeyValuePair<int, string> od in dictionary_prepare)
             {
