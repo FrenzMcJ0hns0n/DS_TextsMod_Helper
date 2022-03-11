@@ -102,24 +102,21 @@ namespace DS_TextsMod_Helper
             
             using (StreamWriter writer = new StreamWriter(OutputFilename, false))
             {
-                if (OneLinedValues)
-                {
-                    writer.WriteLine($"Text ID{Sep}{OutputHeader1}{Sep}{OutputHeader2}{Sep}Same?");
+                writer.WriteLine($"Text ID{Sep}{OutputHeader1}{Sep}{OutputHeader2}{Sep}Same?");
 
+                if (OneLinedValues)
                     foreach (Entry ce in Entries)
                         writer.WriteLine($"{ce.TextId}{Sep}{ce.Value1}{Sep}{ce.Value2}{Sep}{ce.Same}");
-                }
                 else
                 {
                     foreach (Entry ce in Entries)
                     {
-                        writer.WriteLine($"Text ID = {ce.TextId}");
-                        writer.WriteLine($"{OutputHeader1} = {ce.Value1}");
-                        writer.WriteLine($"{OutputHeader2} = {ce.Value2}");
-                        writer.WriteLine($"Same? {ce.Same}");
-                        writer.WriteLine();
-                        writer.WriteLine();
+                        ce.Value1 = ce.Value1.Replace("\"", "\"\"");
+                        ce.Value2 = ce.Value2.Replace("\"", "\"\"");
+
+                        writer.WriteLine($"{ce.TextId}{Sep}\"{ce.Value1}\"{Sep}\"{ce.Value2}\"{Sep}{ce.Same}");
                     }
+                        
                 }
                     
             }
