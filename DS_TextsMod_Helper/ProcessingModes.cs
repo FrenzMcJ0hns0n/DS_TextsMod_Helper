@@ -1,15 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
+﻿
 namespace DS_TextsMod_Helper
 {
-    interface IProcessingModes
+    internal interface IProcessingModes
     {
-
         string FormatValue(string value);
 
+        void ProcessFiles(bool preview);
+
+        // Waw so crazy man, you did implement an interface
     }
 }
