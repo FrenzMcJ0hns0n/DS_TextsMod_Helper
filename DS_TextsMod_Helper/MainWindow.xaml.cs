@@ -10,6 +10,20 @@ namespace DS_TextsMod_Helper
 {
     public partial class MainWindow : Window
     {
+
+        #region CONSTANTS
+
+        private const string TBX_DEFAULT = "Drop FMG file...";
+
+        private const string ERR_MISSING_IFILES = "Error : Missing input file(s)";
+        private const string ERR_MISSING_OFNAME = "Error : Missing output filename";
+        private const string ERR_MISSING_OHDRS = "Error : Missing output header(s)";
+        private const string ERR_MISSING_CSVSEP = "Error : Missing CSV separator";
+        private const string ERR_SAME_IFILE = "Error : Same file submitted several times";
+
+        #endregion
+
+
         public MainWindow()
         {
             InitializeComponent();
@@ -20,19 +34,21 @@ namespace DS_TextsMod_Helper
                 MessageBox.Show("Fatal error : file 'SoulsFormats.dll' not found");
 
 #if DEBUG
-            Tbx_Cmp_iFile1.Text = @"C:\Sandbox\Modding data\DS_TMH\published 1.2\FMG test files\English - Daughters of Ash\RingDescriptions.fmg";
-            Tbx_Cmp_iFile2.Text = @"C:\Sandbox\Modding data\DS_TMH\published 1.2\FMG test files\English - vanilla\Accessory_long_desc_.fmg";
+            //Tbx_Cmp_iFile1.Text = @"C:\Sandbox\Modding data\DS_TMH\work in progress 1.3\FMG test files\Items - English - vanilla\Item_name_.fmg";
+            //Tbx_Cmp_iFile2.Text = @"C:\Sandbox\Modding data\DS_TMH\work in progress 1.3\FMG test files\Items - English - Daughters of Ash\ItemNames.fmg";
 
             //Tbx_Prp_iFile1.Text = @"C:\Sandbox\Modding data\DS_TMH\published 1.2\FMG test files\English - Daughters of Ash\RingDescriptions.fmg";
             //Tbx_Prp_iFile2.Text = @"C:\Sandbox\Modding data\DS_TMH\published 1.2\FMG test files\English - vanilla\Accessory_long_desc_.fmg";
             //Tbx_Prp_iFile3.Text = @"C:\Sandbox\Modding data\DS_TMH\published 1.2\FMG test files\French - vanilla\Accessory_long_desc_.fmg";
 
-            //Tbx_Cmp_iFile1.Text = @"C:\Sandbox\Modding data\DS_TMH\work in progress 1.3\FMG test files\Items - English - vanilla\Item_name_.fmg";
-            //Tbx_Cmp_iFile2.Text = @"C:\Sandbox\Modding data\DS_TMH\work in progress 1.3\FMG test files\Items - English - Daughters of Ash\ItemNames.fmg";
 
-            Tbx_Prp_iFile1.Text = @"C:\Sandbox\Modding data\DS_TMH\work in progress 1.3\FMG test files\Items - English - Daughters of Ash\ArmorDescriptions.fmg";
-            Tbx_Prp_iFile2.Text = @"C:\Sandbox\Modding data\DS_TMH\work in progress 1.3\FMG test files\Items - English - vanilla\Armor_long_desc_.fmg";
-            Tbx_Prp_iFile3.Text = @"C:\Sandbox\Modding data\DS_TMH\work in progress 1.3\FMG test files\Items - Italian - vanilla\Armor_long_desc_.fmg";
+
+            //Tbx_Cmp_iFile1.Text = @"C:\Sandbox\Modding data\DS_TMH\published 1.2\FMG test files\English - Daughters of Ash\RingDescriptions.fmg";
+            //Tbx_Cmp_iFile2.Text = @"C:\Sandbox\Modding data\DS_TMH\published 1.2\FMG test files\English - vanilla\Accessory_long_desc_.fmg";
+
+            //Tbx_Prp_iFile1.Text = @"C:\Sandbox\Modding data\DS_TMH\work in progress 1.3\FMG test files\Items - English - Daughters of Ash\ArmorDescriptions.fmg";
+            //Tbx_Prp_iFile2.Text = @"C:\Sandbox\Modding data\DS_TMH\work in progress 1.3\FMG test files\Items - English - vanilla\Armor_long_desc_.fmg";
+            //Tbx_Prp_iFile3.Text = @"C:\Sandbox\Modding data\DS_TMH\work in progress 1.3\FMG test files\Items - Italian - vanilla\Armor_long_desc_.fmg";
 #endif
         }
 
@@ -212,20 +228,20 @@ namespace DS_TextsMod_Helper
 
                 if (cmbx == Cmbx_Cmp_TargetInputFilename) // Sender is ComboBox from Compare mode
                 {
-                    if (cmbx.SelectedIndex == 0 && Tbx_Cmp_iFile1.Text != "Drop FMG file...")
+                    if (cmbx.SelectedIndex == 0 && Tbx_Cmp_iFile1.Text != TBX_DEFAULT)
                         Tbx_Cmp_oFilename.Text = IOHelper.GetFilenameFromPath(Tbx_Cmp_iFile1.Text);
-                    else if (cmbx.SelectedIndex == 1 && Tbx_Cmp_iFile2.Text != "Drop FMG file...")
+                    else if (cmbx.SelectedIndex == 1 && Tbx_Cmp_iFile2.Text != TBX_DEFAULT)
                         Tbx_Cmp_oFilename.Text = IOHelper.GetFilenameFromPath(Tbx_Cmp_iFile2.Text);
 
                     ValidateTbxValue(Tbx_Cmp_oFilename);
                 }
                 if (cmbx == Cmbx_Prp_TargetInputFilename) // Sender is ComboBox from Prepare mode
                 {
-                    if (cmbx.SelectedIndex == 0 && Tbx_Prp_iFile1.Text != "Drop FMG file...")
+                    if (cmbx.SelectedIndex == 0 && Tbx_Prp_iFile1.Text != TBX_DEFAULT)
                         Tbx_Prp_oFilename.Text = IOHelper.GetFilenameFromPath(Tbx_Prp_iFile1.Text);
-                    else if (cmbx.SelectedIndex == 1 && Tbx_Prp_iFile2.Text != "Drop FMG file...")
+                    else if (cmbx.SelectedIndex == 1 && Tbx_Prp_iFile2.Text != TBX_DEFAULT)
                         Tbx_Prp_oFilename.Text = IOHelper.GetFilenameFromPath(Tbx_Prp_iFile2.Text);
-                    else if (cmbx.SelectedIndex == 2 && Tbx_Prp_iFile3.Text != "Drop FMG file...")
+                    else if (cmbx.SelectedIndex == 2 && Tbx_Prp_iFile3.Text != TBX_DEFAULT)
                         Tbx_Prp_oFilename.Text = IOHelper.GetFilenameFromPath(Tbx_Prp_iFile3.Text);
 
                     ValidateTbxValue(Tbx_Prp_oFilename);
@@ -253,9 +269,9 @@ namespace DS_TextsMod_Helper
                 string iFile1 = Tbx_Cmp_iFile1.Text;
                 string iFile2 = Tbx_Cmp_iFile2.Text;
 
-                if (iFile1 == "" || iFile2 == "")
+                if (iFile1 == "" || iFile1 == TBX_DEFAULT || iFile2 == "" || iFile2 == TBX_DEFAULT)
                 {
-                    _ = MessageBox.Show("Error : Missing input file(s)");
+                    _ = MessageBox.Show(ERR_MISSING_IFILES);
                     return;
                 }
 
@@ -275,9 +291,9 @@ namespace DS_TextsMod_Helper
                 string textToReplace = Tbx_Prp_TextToReplace.Text;
                 string replacingText = Tbx_Prp_ReplacingText.Text;
 
-                if (iFile1 == "" || iFile2 == "" || iFile3 == "")
+                if (iFile1 == "" || iFile1 == TBX_DEFAULT || iFile2 == "" || iFile2 == TBX_DEFAULT || iFile3 == "" || iFile3 == TBX_DEFAULT)
                 {
-                    _ = MessageBox.Show("Error : Missing input file(s)");
+                    _ = MessageBox.Show(ERR_MISSING_IFILES);
                     return;
                 }
 
@@ -447,19 +463,19 @@ namespace DS_TextsMod_Helper
             string sepa_csv_char_o = Tbx_Cmp_CsvSeparator.Text;
 
             if (!File.Exists(input_filepath1) || !File.Exists(input_filepath2))
-                errors.Add("Error : Missing input file(s)");
+                errors.Add(ERR_MISSING_IFILES);
 
             if (input_filepath1 == input_filepath2)
-                errors.Add("Error : Same file submitted twice");
+                errors.Add(ERR_SAME_IFILE);
 
             if (output_header_1 == "" || output_header_2 == "")
-                errors.Add("Error : Missing output header(s)");
+                errors.Add(ERR_MISSING_OHDRS);
 
             if (output_filename == "")
-                errors.Add("Error : Missing output filename");
+                errors.Add(ERR_MISSING_OFNAME);
 
             if (sepa_csv_char_o == "")
-                errors.Add("Error : Missing CSV separator");
+                errors.Add(ERR_MISSING_CSVSEP);
 
             if (errors.Count > 0)
             {
@@ -479,13 +495,13 @@ namespace DS_TextsMod_Helper
             string output_filename = Tbx_Prp_oFilename.Text;
 
             if (!File.Exists(input_filepath1) || !File.Exists(input_filepath2) || !File.Exists(input_filepath3))
-                errors.Add("Error : Missing input file(s)");
+                errors.Add(ERR_MISSING_IFILES);
 
             if ((input_filepath1 == input_filepath2) || (input_filepath2 == input_filepath3) || (input_filepath1 == input_filepath3))
-                errors.Add("Error : Same file submitted several times");
+                errors.Add(ERR_SAME_IFILE);
 
             if (output_filename == "")
-                errors.Add("Error : Missing output filename");
+                errors.Add(ERR_MISSING_OFNAME);
 
             if (errors.Count > 0)
             {
@@ -499,5 +515,4 @@ namespace DS_TextsMod_Helper
 
 
     }
-
 }
