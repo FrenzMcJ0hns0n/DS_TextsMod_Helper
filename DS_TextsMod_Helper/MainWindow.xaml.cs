@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Reflection;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -9,9 +8,6 @@ using System.Windows.Media;
 
 namespace DS_TextsMod_Helper
 {
-    /// <summary>
-    /// Logique d'interaction pour MainWindow.xaml
-    /// </summary>
     public partial class MainWindow : Window
     {
         public MainWindow()
@@ -19,7 +15,9 @@ namespace DS_TextsMod_Helper
             InitializeComponent();
 
             Directory.CreateDirectory(IOHelper.GetOutputDirPath());
-            FindSoulsFormatsDll();
+
+            if (!File.Exists(Path.Combine(IOHelper.GetRootDirPath(), "SoulsFormats.dll")))
+                MessageBox.Show("Fatal error : file 'SoulsFormats.dll' not found");
 
 #if DEBUG
             Tbx_Cmp_iFile1.Text = @"C:\Sandbox\Modding data\DS_TMH\published 1.2\FMG test files\English - Daughters of Ash\RingDescriptions.fmg";
@@ -39,18 +37,7 @@ namespace DS_TextsMod_Helper
         }
 
 
-
-
-
-
-        private void FindSoulsFormatsDll()
-        {
-            if (!File.Exists(Path.Combine(IOHelper.GetRootDirPath(), "SoulsFormats.dll")))
-                MessageBox.Show("Fatal error : file 'SoulsFormats.dll' not found");
-        }
-
-
-        #region Compare mode
+        #region GUI Compare mode
 
         private void Tbx_Cmp_iFile1_PreviewDragOver(object sender, DragEventArgs e) { e.Handled = true; }
         private void Tbx_Cmp_iFile1_Drop(object sender, DragEventArgs e)
@@ -92,7 +79,8 @@ namespace DS_TextsMod_Helper
 
         #endregion
 
-        #region Prepare mode
+
+        #region GUI Prepare mode
 
         private void Tbx_Prp_iFile1_PreviewDragOver(object sender, DragEventArgs e) { e.Handled = true; }
         private void Tbx_Prp_iFile1_Drop(object sender, DragEventArgs e)
@@ -140,9 +128,8 @@ namespace DS_TextsMod_Helper
         #endregion
 
 
-        // --------------------
-        // Validation & display
-        // --------------------
+        #region GUI Helpers
+
         private bool AcceptDroppedInputFile(DragEventArgs e)
         {
             if (!(e.Data.GetData(DataFormats.FileDrop) is string[]))
@@ -246,100 +233,12 @@ namespace DS_TextsMod_Helper
             }
         }
 
-        private bool CompareModeReady()
-        {
-            string input_filepath1 = Tbx_Cmp_iFile1.Text;
-            string input_filepath2 = Tbx_Cmp_iFile2.Text;
-            string output_header_1 = Tbx_Cmp_oHeader1.Text;
-            string output_header_2 = Tbx_Cmp_oHeader2.Text;
-            string output_filename = "";
-            string sepa_csv_char_o = Tbx_Cmp_CsvSeparator.Text;
-
-            if (!File.Exists(input_filepath1) || !File.Exists(input_filepath2))
-            {
-                MessageBox.Show("Error : missing input file(s)");
-                return false;
-            }
-
-            if (input_filepath1 == input_filepath2)
-            {
-                MessageBox.Show("Error : same file submitted twice");
-                return false;
-            }
-
-            if (output_header_1 == "" || output_header_2 == "")
-            {
-                MessageBox.Show("Error : missing output header(s)");
-                return false;
-            }
-
-            if (output_filename == "")
-            {
-                MessageBox.Show("Error : output filename not specified");
-                return false;
-            }
-
-            if (sepa_csv_char_o == "")
-            {
-                MessageBox.Show("Error : missing CSV separator");
-                return false;
-            }
-
-            return true;
-        }
-
-        private bool PrepareModeReady()
-        {
-            //string input_filepath1 = tbx_file1.Text;
-            //string input_filepath2 = tbx_file2.Text;
-            //string input_filepath3 = tbx_file3.Text;
-            string output_filename = "";
-
-            //if (!File.Exists(input_filepath1) || !File.Exists(input_filepath2) || !File.Exists(input_filepath3))
-            //{
-            //    MessageBox.Show("Error : missing input file(s)");
-            //    return false;
-            //}
-
-            //if ((input_filepath1 == input_filepath2) || (input_filepath2 == input_filepath3) || (input_filepath1 == input_filepath3))
-            //{
-            //    MessageBox.Show("Error : same file submitted several times");
-            //    return false;
-            //}
-
-            if (output_filename == "")
-            {
-                MessageBox.Show("Error : output filename not specified");
-                return false;
-            }
-
-            return true;
-        }
+        #endregion
 
 
-        private void Btn_ClearPreview_Click(object sender, RoutedEventArgs e)
-        {
-            if (Dtg_Preview.Visibility == Visibility.Visible && Dtg_Preview.ItemsSource != null)
-            {
-                Dtg_Preview.Visibility = Visibility.Hidden;
-                Dtg_Preview.ItemsSource = null;
-            }
-        }
+        #region Preview
 
-        private void Btn_DetachPreview_Click(object sender, RoutedEventArgs e)
-        {
-            if (Dtg_Preview.Visibility == Visibility.Visible && Dtg_Preview.ItemsSource != null)
-            {
-                // Detach preview to external new window
-            }
-        }
-
-        private void Cbx_PreviewAllDetails_Checked(object sender, RoutedEventArgs e)
-        {
-            // Reload preview, including index and other extra columns
-        }
-
-        private void Btn_RefreshPreview_Click(object sender, RoutedEventArgs e) // TODO: Sub-functions to validate data
+        private void Btn_RefreshPreview_Click(object sender, RoutedEventArgs e)
         {
             if (Tbc_Modes.SelectedIndex == 0)
             {
@@ -380,52 +279,6 @@ namespace DS_TextsMod_Helper
             }
         }
 
-        private void Btn_GenerateOutput_Click(object sender, RoutedEventArgs e) // TODO: Sub-functions to validate data
-        {
-            if (Tbc_Modes.SelectedIndex == 0)
-            {
-                string iFile1 = Tbx_Cmp_iFile1.Text;
-                string iFile2 = Tbx_Cmp_iFile2.Text;
-                string oFilename = Tbx_Cmp_oFilename.Text;
-                string oHdr1 = Tbx_Cmp_oHeader1.Text;
-                string oHdr2 = Tbx_Cmp_oHeader2.Text;
-                string csvSepChar = Tbx_Cmp_CsvSeparator.Text;
-
-                if (iFile1 == "" || iFile2 == "" || oFilename == "" || oHdr1 == "" || oHdr2 == "" || csvSepChar == "")
-                {
-                    _ = MessageBox.Show("Invalid submitted data. Please check inputs");
-                    return;
-                }
-
-                CompareMode c = new CompareMode(iFile1, iFile2) { OneLinedValues = Cbx_Cmp_OneLinedValues.IsChecked ?? false };
-                c.ProcessFiles(false);
-                c.ProduceOutput(oFilename, oHdr1, oHdr2, csvSepChar);
-
-                _ = MessageBox.Show($"[Compare mode] File \"{c.OutputFilename}\" created");
-            }
-            else
-            {
-                string iFile1 = Tbx_Prp_iFile1.Text;
-                string iFile2 = Tbx_Prp_iFile2.Text;
-                string iFile3 = Tbx_Prp_iFile3.Text;
-                string oFilename = Tbx_Prp_oFilename.Text;
-                string textToReplace = Tbx_Prp_TextToReplace.Text;
-                string replacingText = Tbx_Prp_ReplacingText.Text;
-
-                if (iFile1 == "" || iFile2 == "" || iFile3 == "" || oFilename == "")
-                {
-                    _ = MessageBox.Show("Invalid submitted data. Please check inputs");
-                    return;
-                }
-
-                PrepareMode p = new PrepareMode(iFile1, iFile2, iFile3, textToReplace, replacingText);
-                p.ProcessFiles(false);
-                p.ProduceOutput(oFilename);
-
-                _ = MessageBox.Show($"[Prepare mode] File \"{p.OutputFilename}\" created");
-            }
-        }
-
         private void PreviewCompare(List<CompareMode.Entry> entries, bool allDetails)
         {
             Dtg_Preview.Visibility = Visibility.Visible;
@@ -433,8 +286,8 @@ namespace DS_TextsMod_Helper
 
             DataContext = entries;
 
-            string oHeader1 = Tbx_Cmp_oHeader1.Text != "" ? Tbx_Cmp_oHeader1.Text : "Value 1";
-            string oHeader2 = Tbx_Cmp_oHeader2.Text != "" ? Tbx_Cmp_oHeader2.Text : "Value 2";
+            string oHeader1 = Tbx_Cmp_oHeader1.Text != "" ? Tbx_Cmp_oHeader1.Text : "Header #1";
+            string oHeader2 = Tbx_Cmp_oHeader2.Text != "" ? Tbx_Cmp_oHeader2.Text : "Header #2";
 
             List<DataGridTextColumn> columns = new List<DataGridTextColumn>()
             {
@@ -484,6 +337,139 @@ namespace DS_TextsMod_Helper
 
             Dtg_Preview.ItemsSource = entries;
         }
+
+        private void Btn_ClearPreview_Click(object sender, RoutedEventArgs e)
+        {
+            if (Dtg_Preview.Visibility == Visibility.Visible && Dtg_Preview.ItemsSource != null)
+            {
+                Dtg_Preview.Visibility = Visibility.Hidden;
+                Dtg_Preview.ItemsSource = null;
+            }
+        }
+
+        private void Btn_DetachPreview_Click(object sender, RoutedEventArgs e)
+        {
+            if (Dtg_Preview.Visibility == Visibility.Visible && Dtg_Preview.ItemsSource != null)
+            {
+                // Detach preview to external new window
+            }
+        }
+
+        private void Cbx_PreviewAllDetails_Checked(object sender, RoutedEventArgs e)
+        {
+            // Reload preview, including index and other extra columns
+        }
+
+        #endregion
+
+
+        #region Output
+
+        private void Btn_GenerateOutput_Click(object sender, RoutedEventArgs e)
+        {
+            if (Tbc_Modes.SelectedIndex == 0)
+            {
+                if (!ValidateCompareInputs())
+                    return;
+
+                string iFile1 = Tbx_Cmp_iFile1.Text;
+                string iFile2 = Tbx_Cmp_iFile2.Text;
+                string oFilename = Tbx_Cmp_oFilename.Text;
+                string oHdr1 = Tbx_Cmp_oHeader1.Text;
+                string oHdr2 = Tbx_Cmp_oHeader2.Text;
+                string csvSepChar = Tbx_Cmp_CsvSeparator.Text;
+
+                CompareMode c = new CompareMode(iFile1, iFile2) { OneLinedValues = Cbx_Cmp_OneLinedValues.IsChecked ?? false };
+                c.ProcessFiles(false);
+                c.ProduceOutput(oFilename, oHdr1, oHdr2, csvSepChar);
+
+                _ = MessageBox.Show($"[Compare mode] File \"{c.OutputFilename}\" created");
+            }
+            else
+            {
+                if (!ValidatePrepareInputs())
+                    return;
+
+                string iFile1 = Tbx_Prp_iFile1.Text;
+                string iFile2 = Tbx_Prp_iFile2.Text;
+                string iFile3 = Tbx_Prp_iFile3.Text;
+                string oFilename = Tbx_Prp_oFilename.Text;
+                string textToReplace = Tbx_Prp_TextToReplace.Text;
+                string replacingText = Tbx_Prp_ReplacingText.Text;
+
+                PrepareMode p = new PrepareMode(iFile1, iFile2, iFile3, textToReplace, replacingText);
+                p.ProcessFiles(false);
+                p.ProduceOutput(oFilename);
+
+                _ = MessageBox.Show($"[Prepare mode] File \"{p.OutputFilename}\" created");
+            }
+        }
+
+        private bool ValidateCompareInputs()
+        {
+            string input_filepath1 = Tbx_Cmp_iFile1.Text;
+            string input_filepath2 = Tbx_Cmp_iFile2.Text;
+            string output_header_1 = Tbx_Cmp_oHeader1.Text;
+            string output_header_2 = Tbx_Cmp_oHeader2.Text;
+            string output_filename = Tbx_Cmp_oFilename.Text;
+            string sepa_csv_char_o = Tbx_Cmp_CsvSeparator.Text;
+
+            if (!File.Exists(input_filepath1) || !File.Exists(input_filepath2))
+            {
+                _ = MessageBox.Show("Error : missing input file(s)");
+                return false;
+            }
+            if (input_filepath1 == input_filepath2)
+            {
+                _ = MessageBox.Show("Error : same file submitted twice");
+                return false;
+            }
+            if (output_header_1 == "" || output_header_2 == "")
+            {
+                _ = MessageBox.Show("Error : missing output header(s)");
+                return false;
+            }
+            if (output_filename == "")
+            {
+                _ = MessageBox.Show("Error : output filename not specified");
+                return false;
+            }
+            if (sepa_csv_char_o == "")
+            {
+                _ = MessageBox.Show("Error : missing CSV separator");
+                return false;
+            }
+
+            return true;
+        }
+
+        private bool ValidatePrepareInputs()
+        {
+            string input_filepath1 = Tbx_Prp_iFile1.Text;
+            string input_filepath2 = Tbx_Prp_iFile2.Text;
+            string input_filepath3 = Tbx_Prp_iFile3.Text;
+            string output_filename = Tbx_Prp_oFilename.Text;
+
+            if (!File.Exists(input_filepath1) || !File.Exists(input_filepath2) || !File.Exists(input_filepath3))
+            {
+                _ = MessageBox.Show("Error : missing input file(s)");
+                return false;
+            }
+            if ((input_filepath1 == input_filepath2) || (input_filepath2 == input_filepath3) || (input_filepath1 == input_filepath3))
+            {
+                _ = MessageBox.Show("Error : same file submitted several times");
+                return false;
+            }
+            if (output_filename == "")
+            {
+                _ = MessageBox.Show("Error : output filename not specified");
+                return false;
+            }
+
+            return true;
+        }
+
+        #endregion
 
     }
 
