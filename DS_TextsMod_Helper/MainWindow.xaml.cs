@@ -374,7 +374,7 @@ namespace DS_TextsMod_Helper
 
                 string iFile1 = Tbx_Cmp_iFile1.Text;
                 string iFile2 = Tbx_Cmp_iFile2.Text;
-                string oFilename = Tbx_Cmp_oFilename.Text;
+                string oFilename = Tbx_Cmp_oFilename.Text + ".csv";
                 string oHdr1 = Tbx_Cmp_oHeader1.Text;
                 string oHdr2 = Tbx_Cmp_oHeader2.Text;
                 string csvSepChar = Tbx_Cmp_CsvSeparator.Text;
@@ -393,7 +393,7 @@ namespace DS_TextsMod_Helper
                 string iFile1 = Tbx_Prp_iFile1.Text;
                 string iFile2 = Tbx_Prp_iFile2.Text;
                 string iFile3 = Tbx_Prp_iFile3.Text;
-                string oFilename = Tbx_Prp_oFilename.Text;
+                string oFilename = Tbx_Prp_oFilename.Text + ".fmg";
                 string textToReplace = Tbx_Prp_TextToReplace.Text;
                 string replacingText = Tbx_Prp_ReplacingText.Text;
 

@@ -102,7 +102,7 @@ namespace DS_TextsMod_Helper
 
                 if (OneLinedValues)
                     foreach (Entry ce in Entries)
-                        writer.WriteLine($"{ce.TextId}{Sep}{ce.Value1}{Sep}{ce.Value2}{Sep}{ce.Same}");
+                        writer.WriteLine($"{ce.TextId}{Sep}\"{ce.Value1}\"{Sep}\"{ce.Value2}\"{Sep}{ce.Same}");
                 else
                 {
                     foreach (Entry ce in Entries)

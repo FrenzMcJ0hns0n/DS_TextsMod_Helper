@@ -19,12 +19,12 @@ namespace DS_TextsMod_Helper
 
         public static string GetCompareOutputFilename(string filename)
         {
-            return Path.Combine(GetOutputDirPath(), filename + ".csv");
+            return Path.Combine(GetOutputDirPath(), filename);
         }
 
         public static string GetPrepareOutputFilename(string filename)
         {
-            return Path.Combine(GetOutputDirPath(), filename + ".fmg");
+            return Path.Combine(GetOutputDirPath(), filename);
         }
 
     }
