@@ -247,7 +247,7 @@ namespace DS_TextsMod_Helper
 
                 if (iFile1 == "" || iFile2 == "")
                 {
-                    _ = MessageBox.Show("Invalid submitted data. Please check inputs");
+                    _ = MessageBox.Show("Error : Missing input file(s)");
                     return;
                 }
 
@@ -267,7 +267,7 @@ namespace DS_TextsMod_Helper
 
                 if (iFile1 == "" || iFile2 == "" || iFile3 == "")
                 {
-                    _ = MessageBox.Show("Invalid submitted data. Please check inputs");
+                    _ = MessageBox.Show("Error : Missing input file(s)");
                     return;
                 }
 
@@ -279,12 +279,12 @@ namespace DS_TextsMod_Helper
             }
         }
 
-        private void PreviewCompare(List<CompareMode.Entry> entries, bool allDetails)
+        private void PreviewCompare(List<CompareMode.Entry> c_entries, bool allDetails)
         {
             Dtg_Preview.Visibility = Visibility.Visible;
             Dtg_Preview.Columns.Clear();
 
-            DataContext = entries;
+            DataContext = c_entries;
 
             string oHeader1 = Tbx_Cmp_oHeader1.Text != "" ? Tbx_Cmp_oHeader1.Text : "Header #1";
             string oHeader2 = Tbx_Cmp_oHeader2.Text != "" ? Tbx_Cmp_oHeader2.Text : "Header #2";
@@ -306,15 +306,15 @@ namespace DS_TextsMod_Helper
             foreach (DataGridTextColumn col in columns)
                 Dtg_Preview.Columns.Add(col);
 
-            Dtg_Preview.ItemsSource = entries;
+            Dtg_Preview.ItemsSource = c_entries;
         }
 
-        private void PreviewPrepare(List<PrepareMode.Entry> entries, bool allDetails)
+        private void PreviewPrepare(List<PrepareMode.Entry> p_entries, bool allDetails)
         {
             Dtg_Preview.Visibility = Visibility.Visible;
             Dtg_Preview.Columns.Clear();
 
-            DataContext = entries;
+            DataContext = p_entries;
 
             List<DataGridTextColumn> columns = new List<DataGridTextColumn>()
             {
@@ -326,16 +326,16 @@ namespace DS_TextsMod_Helper
             {
                 Style hdrOff = (Style)Grid_Main.Resources["HeaderOff"];
                 columns.Insert(0, new DataGridTextColumn() { Header = "#", HeaderStyle = hdrOff, Foreground = Brushes.Gray, Binding = new Binding("Index"), MaxWidth = 30 });
-                columns.Insert(2, new DataGridTextColumn() { Header = "Value 1", HeaderStyle = hdrOff, Foreground = Brushes.Gray, Binding = new Binding("Value1"), MaxWidth = 250 });
-                columns.Insert(3, new DataGridTextColumn() { Header = "Value 2", HeaderStyle = hdrOff, Foreground = Brushes.Gray, Binding = new Binding("Value2"), MaxWidth = 250 });
-                columns.Insert(4, new DataGridTextColumn() { Header = "Value 3", HeaderStyle = hdrOff, Foreground = Brushes.Gray, Binding = new Binding("Value3"), MaxWidth = 250 });
+                columns.Insert(2, new DataGridTextColumn() { Header = "File 1 value", HeaderStyle = hdrOff, Foreground = Brushes.Gray, Binding = new Binding("Value1"), MaxWidth = 250 });
+                columns.Insert(3, new DataGridTextColumn() { Header = "File 2 value", HeaderStyle = hdrOff, Foreground = Brushes.Gray, Binding = new Binding("Value2"), MaxWidth = 250 });
+                columns.Insert(4, new DataGridTextColumn() { Header = "File 3 value", HeaderStyle = hdrOff, Foreground = Brushes.Gray, Binding = new Binding("Value3"), MaxWidth = 250 });
                 columns.Insert(6, new DataGridTextColumn() { Header = "From?", HeaderStyle = hdrOff, Foreground = Brushes.Gray, Binding = new Binding("Source"), MaxWidth = 50 });
             }
 
             foreach (DataGridTextColumn col in columns)
                 Dtg_Preview.Columns.Add(col);
 
-            Dtg_Preview.ItemsSource = entries;
+            Dtg_Preview.ItemsSource = p_entries;
         }
 
         private void Btn_ClearPreview_Click(object sender, RoutedEventArgs e)
@@ -417,19 +417,19 @@ namespace DS_TextsMod_Helper
             string sepa_csv_char_o = Tbx_Cmp_CsvSeparator.Text;
 
             if (!File.Exists(input_filepath1) || !File.Exists(input_filepath2))
-                errors.Add("Error : missing input file(s)");
+                errors.Add("Error : Missing input file(s)");
 
             if (input_filepath1 == input_filepath2)
-                errors.Add("Error : same file submitted twice");
+                errors.Add("Error : Same file submitted twice");
 
             if (output_header_1 == "" || output_header_2 == "")
-                errors.Add("Error : missing output header(s)");
+                errors.Add("Error : Missing output header(s)");
 
             if (output_filename == "")
-                errors.Add("Error : output filename not specified");
+                errors.Add("Error : Missing output filename");
 
             if (sepa_csv_char_o == "")
-                errors.Add("Error : missing CSV separator");
+                errors.Add("Error : Missing CSV separator");
 
             if (errors.Count > 0)
             {
@@ -449,13 +449,13 @@ namespace DS_TextsMod_Helper
             string output_filename = Tbx_Prp_oFilename.Text;
 
             if (!File.Exists(input_filepath1) || !File.Exists(input_filepath2) || !File.Exists(input_filepath3))
-                errors.Add("Error : missing input file(s)");
+                errors.Add("Error : Missing input file(s)");
 
             if ((input_filepath1 == input_filepath2) || (input_filepath2 == input_filepath3) || (input_filepath1 == input_filepath3))
-                errors.Add("Error : same file submitted several times");
+                errors.Add("Error : Same file submitted several times");
 
             if (output_filename == "")
-                errors.Add("Error : output filename not specified");
+                errors.Add("Error : Missing output filename");
 
             if (errors.Count > 0)
             {
