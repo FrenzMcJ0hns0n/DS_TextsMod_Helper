@@ -357,7 +357,14 @@ namespace DS_TextsMod_Helper
 
         private void Cbx_PreviewAllDetails_Checked(object sender, RoutedEventArgs e)
         {
-            // Reload preview, including index and other extra columns
+            if (Dtg_Preview.Visibility == Visibility.Visible)
+                Btn_RefreshPreview_Click(sender, e);
+        }
+
+        private void Cbx_PreviewAllDetails_Unchecked(object sender, RoutedEventArgs e)
+        {
+            if (Dtg_Preview.Visibility == Visibility.Visible)
+                Btn_RefreshPreview_Click(sender, e);
         }
 
         #endregion
@@ -466,6 +473,7 @@ namespace DS_TextsMod_Helper
         }
 
         #endregion
+
 
     }
 

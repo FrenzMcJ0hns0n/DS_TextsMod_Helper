@@ -393,7 +393,8 @@
                           VerticalAlignment="Center" Margin="8,0,0,0" Content="Show all details"
                           ToolTip="Show all details about the processed data.&#x0a;Note that grey contents will not be written to output file."
                           IsChecked="False"
-                          Checked="Cbx_PreviewAllDetails_Checked"/>
+                          Checked="Cbx_PreviewAllDetails_Checked"
+                          Unchecked="Cbx_PreviewAllDetails_Unchecked"/>
             </StackPanel>
 
         </Grid>
