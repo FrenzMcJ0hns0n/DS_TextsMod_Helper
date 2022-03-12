@@ -187,20 +187,20 @@ namespace DS_TextsMod_Helper
                 if (tbx.Name.Contains("Cmp") && (Cbx_Cmp_UseInputFilename.IsChecked ?? true)) // Sender is TextBox from Compare mode
                 {
                     if (Cmbx_Cmp_TargetInputFilename.SelectedIndex == 0 && tbx == Tbx_Cmp_iFile1)
-                        Tbx_Cmp_oFilename.Text = new FileInfo(Tbx_Cmp_iFile1.Text).Name;
+                        Tbx_Cmp_oFilename.Text = IOHelper.GetFilenameFromPath(Tbx_Cmp_iFile1.Text);
                     else if (Cmbx_Cmp_TargetInputFilename.SelectedIndex == 1 && tbx == Tbx_Cmp_iFile2)
-                        Tbx_Cmp_oFilename.Text = new FileInfo(Tbx_Cmp_iFile2.Text).Name;
+                        Tbx_Cmp_oFilename.Text = IOHelper.GetFilenameFromPath(Tbx_Cmp_iFile2.Text);
 
                     ValidateTbxValue(Tbx_Cmp_oFilename);
                 }
                 if (tbx.Name.Contains("Prp") && (Cbx_Prp_UseInputFilename.IsChecked ?? true)) // Sender is TextBox from Prepare mode
                 {
                     if (Cmbx_Prp_TargetInputFilename.SelectedIndex == 0 && tbx == Tbx_Prp_iFile1)
-                        Tbx_Prp_oFilename.Text = new FileInfo(Tbx_Prp_iFile1.Text).Name;
+                        Tbx_Prp_oFilename.Text = IOHelper.GetFilenameFromPath(Tbx_Prp_iFile1.Text);
                     else if (Cmbx_Prp_TargetInputFilename.SelectedIndex == 1 && tbx == Tbx_Prp_iFile2)
-                        Tbx_Prp_oFilename.Text = new FileInfo(Tbx_Prp_iFile2.Text).Name;
+                        Tbx_Prp_oFilename.Text = IOHelper.GetFilenameFromPath(Tbx_Prp_iFile2.Text);
                     else if (Cmbx_Prp_TargetInputFilename.SelectedIndex == 2 && tbx == Tbx_Prp_iFile3)
-                        Tbx_Prp_oFilename.Text = new FileInfo(Tbx_Prp_iFile3.Text).Name;
+                        Tbx_Prp_oFilename.Text = IOHelper.GetFilenameFromPath(Tbx_Prp_iFile3.Text);
 
                     ValidateTbxValue(Tbx_Prp_oFilename);
                 }
@@ -213,20 +213,20 @@ namespace DS_TextsMod_Helper
                 if (cmbx == Cmbx_Cmp_TargetInputFilename) // Sender is ComboBox from Compare mode
                 {
                     if (cmbx.SelectedIndex == 0 && Tbx_Cmp_iFile1.Text != "Drop FMG file...")
-                        Tbx_Cmp_oFilename.Text = new FileInfo(Tbx_Cmp_iFile1.Text).Name;
+                        Tbx_Cmp_oFilename.Text = IOHelper.GetFilenameFromPath(Tbx_Cmp_iFile1.Text);
                     else if (cmbx.SelectedIndex == 1 && Tbx_Cmp_iFile2.Text != "Drop FMG file...")
-                        Tbx_Cmp_oFilename.Text = new FileInfo(Tbx_Cmp_iFile2.Text).Name;
+                        Tbx_Cmp_oFilename.Text = IOHelper.GetFilenameFromPath(Tbx_Cmp_iFile2.Text);
 
                     ValidateTbxValue(Tbx_Cmp_oFilename);
                 }
                 if (cmbx == Cmbx_Prp_TargetInputFilename) // Sender is ComboBox from Prepare mode
                 {
                     if (cmbx.SelectedIndex == 0 && Tbx_Prp_iFile1.Text != "Drop FMG file...")
-                        Tbx_Prp_oFilename.Text = new FileInfo(Tbx_Prp_iFile1.Text).Name;
+                        Tbx_Prp_oFilename.Text = IOHelper.GetFilenameFromPath(Tbx_Prp_iFile1.Text);
                     else if (cmbx.SelectedIndex == 1 && Tbx_Prp_iFile2.Text != "Drop FMG file...")
-                        Tbx_Prp_oFilename.Text = new FileInfo(Tbx_Prp_iFile2.Text).Name;
+                        Tbx_Prp_oFilename.Text = IOHelper.GetFilenameFromPath(Tbx_Prp_iFile2.Text);
                     else if (cmbx.SelectedIndex == 2 && Tbx_Prp_iFile3.Text != "Drop FMG file...")
-                        Tbx_Prp_oFilename.Text = new FileInfo(Tbx_Prp_iFile3.Text).Name;
+                        Tbx_Prp_oFilename.Text = IOHelper.GetFilenameFromPath(Tbx_Prp_iFile3.Text);
 
                     ValidateTbxValue(Tbx_Prp_oFilename);
                 }

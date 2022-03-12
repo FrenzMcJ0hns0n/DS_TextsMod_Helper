@@ -17,6 +17,7 @@ namespace DS_TextsMod_Helper
         }
 
 
+
         public static string GetCompareOutputFilename(string filename)
         {
             return Path.Combine(GetOutputDirPath(), filename);
@@ -27,5 +28,15 @@ namespace DS_TextsMod_Helper
             return Path.Combine(GetOutputDirPath(), filename);
         }
 
+
+
+        public static string GetFilenameFromPath(string path)
+        {
+            FileInfo info = new FileInfo(path);
+            string fileName = info.Name;
+            string fileExt = info.Extension;
+
+            return fileName.Replace(fileExt, "");
+        }
     }
 }
