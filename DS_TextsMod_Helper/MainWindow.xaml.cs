@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Windows;
 using System.Windows.Controls;
@@ -64,6 +65,10 @@ namespace DS_TextsMod_Helper
                 SyncFilenames(sender);
             }
         }
+        private void Btn_Cmp_ExploreFile1_Click(object sender, RoutedEventArgs e)
+        {
+            Explore(sender);
+        }
         private void Tbx_Cmp_iFile2_PreviewDragOver(object sender, DragEventArgs e) { e.Handled = true; }
         private void Tbx_Cmp_iFile2_Drop(object sender, DragEventArgs e)
         {
@@ -72,6 +77,10 @@ namespace DS_TextsMod_Helper
                 DisplayInputFilepath(sender, e);
                 SyncFilenames(sender);
             }
+        }
+        private void Btn_Cmp_ExploreFile2_Click(object sender, RoutedEventArgs e)
+        {
+            Explore(sender);
         }
         private void Tbx_Cmp_oFilename_GotFocus(object sender, RoutedEventArgs e) { SelectTbxValue(sender); }
         private void Tbx_Cmp_oFilename_LostFocus(object sender, RoutedEventArgs e) { ValidateTbxValue(sender); }
@@ -107,6 +116,10 @@ namespace DS_TextsMod_Helper
                 SyncFilenames(sender);
             }
         }
+        private void Btn_Prp_ExploreFile1_Click(object sender, RoutedEventArgs e)
+        {
+            Explore(sender);
+        }
         private void Tbx_Prp_iFile2_PreviewDragOver(object sender, DragEventArgs e) { e.Handled = true; }
         private void Tbx_Prp_iFile2_Drop(object sender, DragEventArgs e)
         {
@@ -116,6 +129,10 @@ namespace DS_TextsMod_Helper
                 SyncFilenames(sender);
             }
         }
+        private void Btn_Prp_ExploreFile2_Click(object sender, RoutedEventArgs e)
+        {
+            Explore(sender);
+        }
         private void Tbx_Prp_iFile3_PreviewDragOver(object sender, DragEventArgs e) { e.Handled = true; }
         private void Tbx_Prp_iFile3_Drop(object sender, DragEventArgs e)
         {
@@ -124,6 +141,10 @@ namespace DS_TextsMod_Helper
                 DisplayInputFilepath(sender, e);
                 SyncFilenames(sender);
             }
+        }
+        private void Btn_Prp_ExploreFile3_Click(object sender, RoutedEventArgs e)
+        {
+            Explore(sender);
         }
         private void Tbx_Prp_oFilename_GotFocus(object sender, RoutedEventArgs e) { SelectTbxValue(sender); }
         private void Tbx_Prp_oFilename_LostFocus(object sender, RoutedEventArgs e) { ValidateTbxValue(sender); }
@@ -176,6 +197,38 @@ namespace DS_TextsMod_Helper
             tbx.Text = filepath;
             tbx.FontStyle = FontStyles.Normal;
             tbx.Foreground = Brushes.Black;
+        }
+
+        private void Explore(object sender)
+        {
+            Button btn = sender as Button;
+
+            switch (btn.Name)
+            {
+                case "Btn_Cmp_ExploreFile1":
+                    if (Tbx_Cmp_iFile1.Text != TBX_DEFAULT)
+                        _ = Process.Start(IOHelper.GetParentFolder(Tbx_Cmp_iFile1.Text));
+                    break;
+                case "Btn_Cmp_ExploreFile2":
+                    if (Tbx_Cmp_iFile2.Text != TBX_DEFAULT)
+                        _ = Process.Start(IOHelper.GetParentFolder(Tbx_Cmp_iFile2.Text));
+                    break;
+                case "Btn_Prp_ExploreFile1":
+                    if (Tbx_Prp_iFile1.Text != TBX_DEFAULT)
+                        _ = Process.Start(IOHelper.GetParentFolder(Tbx_Prp_iFile1.Text));
+                    break;
+                case "Btn_Prp_ExploreFile2":
+                    if (Tbx_Prp_iFile2.Text != TBX_DEFAULT)
+                        _ = Process.Start(IOHelper.GetParentFolder(Tbx_Prp_iFile2.Text));
+                    break;
+                case "Btn_Prp_ExploreFile3":
+                    if (Tbx_Prp_iFile3.Text != TBX_DEFAULT)
+                        _ = Process.Start(IOHelper.GetParentFolder(Tbx_Prp_iFile3.Text));
+                    break;
+                default:
+                    _ = Process.Start(IOHelper.GetRootDirPath());
+                    break;
+            }
         }
 
         private void SelectTbxValue(object sender)
@@ -528,6 +581,7 @@ namespace DS_TextsMod_Helper
             }
             return true;
         }
+
 
         #endregion
 

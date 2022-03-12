@@ -40,6 +40,14 @@ namespace DS_TextsMod_Helper
             return fileName.Replace(fileExt, "");
         }
 
+        public static string GetParentFolder(string path)
+        {
+            FileInfo info = new FileInfo(path);
+            string parentFolder = info.DirectoryName;
+
+            return parentFolder;
+        }
+
         public static double GetColumnMaxWidth()
         {
             return SystemParameters.FullPrimaryScreenWidth >= 2500 ? 540 : 360;

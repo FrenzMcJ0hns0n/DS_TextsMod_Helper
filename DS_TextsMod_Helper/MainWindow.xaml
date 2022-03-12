@@ -73,11 +73,13 @@
                         <RowDefinition Height="7*" />
                     </Grid.RowDefinitions>
 
+                    <!-- Compare mode : Input files -->
                     <GroupBox Grid.ColumnSpan="2" Margin="8,8,8,4" Header="Input files" BorderBrush="DarkGray">
                         <Grid Margin="8,16,8,16">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="1*"/>
                                 <ColumnDefinition Width="21*"/>
+                                <ColumnDefinition Width="1*"/>
                             </Grid.ColumnDefinitions>
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="1*" />
@@ -95,6 +97,14 @@
                                      PreviewDragOver="Tbx_Cmp_iFile1_PreviewDragOver"
                                      Drop="Tbx_Cmp_iFile1_Drop"
                                      />
+                            <Button x:Name="Btn_Cmp_ExploreFile1"
+                                    Grid.Column="2" Grid.Row="0" 
+                                    HorizontalAlignment="Left" VerticalAlignment="Center" Width="24" Height="17" 
+                                    Margin="2,0,0,0"
+                                    Padding="0,0,0,1" 
+                                    Content="&#8901;&#8901;&#8901;"
+                                    Click="Btn_Cmp_ExploreFile1_Click"
+                                    />
                             <Label Grid.Column="0" Grid.Row="1" VerticalAlignment="Center" Content="File #2 :" />
                             <TextBox x:Name="Tbx_Cmp_iFile2" 
                                     Grid.Column="1" Grid.Row="1" 
@@ -106,10 +116,18 @@
                                      PreviewDragOver="Tbx_Cmp_iFile2_PreviewDragOver"
                                      Drop="Tbx_Cmp_iFile2_Drop"
                                     />
+                            <Button x:Name="Btn_Cmp_ExploreFile2"
+                                    Grid.Column="2" Grid.Row="1" 
+                                    HorizontalAlignment="Left" VerticalAlignment="Center" Width="24" Height="17" 
+                                    Margin="2,0,0,0"
+                                    Padding="0,0,0,1" 
+                                    Content="&#8901;&#8901;&#8901;"
+                                    Click="Btn_Cmp_ExploreFile2_Click"
+                                    />
                         </Grid>
                     </GroupBox>
 
-                    <!-- Options -->
+                    <!-- Compare mode : Options -->
                     <GroupBox Grid.Row="1" Grid.ColumnSpan="2" Margin="8,4,8,8" Header="Options" BorderBrush="DarkGray">
                         <Grid Margin="8,12,8,12">
                             <Grid.ColumnDefinitions>
@@ -201,6 +219,7 @@
                                          />
                             </StackPanel>
 
+                            <!-- One lined values -->
                             <CheckBox x:Name="Cbx_Cmp_OneLinedValues" 
                                       Grid.Column="3" Grid.Row="1" 
                                       HorizontalAlignment="Center"
@@ -222,24 +241,23 @@
                         <RowDefinition Height="7*" />
                     </Grid.RowDefinitions>
 
+                    <!-- Prepare mode : Input files -->
                     <GroupBox Grid.ColumnSpan="2" Margin="8,8,8,4" Header="Input files" BorderBrush="DarkGray">
                         <Grid Margin="8">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="1*"/>
                                 <ColumnDefinition Width="21*"/>
-                                <!--<ColumnDefinition Width="1*"/>-->
+                                <ColumnDefinition Width="1*"/>
                             </Grid.ColumnDefinitions>
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="1*" />
                                 <RowDefinition Height="1*" />
                                 <RowDefinition Height="1*" />
                             </Grid.RowDefinitions>
-                            <!--<StackPanel>
-                                Do that ?
-                            </StackPanel>-->
-                            <Label Grid.Column="0" Grid.Row="0" VerticalAlignment="Center" Content="File #1 :" />
+
+                            <Label VerticalAlignment="Center" Content="File #1 :" />
                             <TextBox x:Name="Tbx_Prp_iFile1" 
-                                     Grid.Column="1" Grid.Row="0" 
+                                     Grid.Column="1"
                                      VerticalAlignment="Center" 
                                      FontStyle="Italic" Foreground="Gray" Text="Drop FMG file..."
                                      TextWrapping="NoWrap" IsReadOnly="True"
@@ -248,8 +266,15 @@
                                      PreviewDragOver="Tbx_Prp_iFile1_PreviewDragOver"
                                      Drop="Tbx_Prp_iFile1_Drop"
                                     />
-                            <!--<Button Grid.Column="2" Grid.Row="1" Margin="5"/>-->
-                            <Label Grid.Column="0" Grid.Row="1" VerticalAlignment="Center" Content="File #2 :" />
+                            <Button x:Name="Btn_Prp_ExploreFile1"
+                                    Grid.Column="2" Grid.Row="0" 
+                                    HorizontalAlignment="Left" VerticalAlignment="Center" Width="24" Height="17" 
+                                    Margin="2,0,0,0"
+                                    Padding="0,0,0,1" 
+                                    Content="&#8901;&#8901;&#8901;"
+                                    Click="Btn_Prp_ExploreFile1_Click"
+                                    />
+                            <Label Grid.Row="1" VerticalAlignment="Center" Content="File #2 :" />
                             <TextBox x:Name="Tbx_Prp_iFile2" 
                                      Grid.Column="1" Grid.Row="1" 
                                      VerticalAlignment="Center" 
@@ -260,7 +285,14 @@
                                      PreviewDragOver="Tbx_Prp_iFile2_PreviewDragOver"
                                      Drop="Tbx_Prp_iFile2_Drop"
                                      />
-                            <!--<Button Grid.Column="2" Grid.Row="2" Margin="5"/>-->
+                            <Button x:Name="Btn_Prp_ExploreFile2"
+                                    Grid.Column="2" Grid.Row="1" 
+                                    HorizontalAlignment="Left" VerticalAlignment="Center" Width="24" Height="17" 
+                                    Margin="2,0,0,0"
+                                    Padding="0,0,0,1" 
+                                    Content="&#8901;&#8901;&#8901;"
+                                    Click="Btn_Prp_ExploreFile2_Click"
+                                    />
                             <Label Grid.Column="0" Grid.Row="2" VerticalAlignment="Center" Content="File #3 :" />
                             <TextBox x:Name="Tbx_Prp_iFile3" 
                                      Grid.Column="1" Grid.Row="2" 
@@ -272,11 +304,18 @@
                                      PreviewDragOver="Tbx_Prp_iFile3_PreviewDragOver"
                                      Drop="Tbx_Prp_iFile3_Drop"
                                      />
-                            <!--<Button Grid.Column="2" Grid.Row="0" Margin="5"/>-->
+                            <Button x:Name="Btn_Prp_ExploreFile3"
+                                    Grid.Column="2" Grid.Row="2" 
+                                    HorizontalAlignment="Left" VerticalAlignment="Center" Width="24" Height="17" 
+                                    Margin="2,0,0,0"
+                                    Padding="0,0,0,1" 
+                                    Content="&#8901;&#8901;&#8901;"
+                                    Click="Btn_Prp_ExploreFile3_Click"
+                                    />
                         </Grid>
                     </GroupBox>
 
-                    <!-- Options -->
+                    <!-- Prepare mode : Options -->
                     <GroupBox Grid.Row="1" Grid.ColumnSpan="2" Margin="8,4,8,8" Header="Options" BorderBrush="DarkGray">
                         <Grid Margin="8,12,8,12">
                             <Grid.ColumnDefinitions>
@@ -339,7 +378,6 @@
                                          GotFocus="Tbx_Prp_TextToReplace_GotFocus"
                                          />
                             </StackPanel>
-
                             <StackPanel Grid.Column="4" Grid.Row="1" Orientation="Horizontal">
                                 <Label VerticalAlignment="Center"
                                        Content="Remplacement text :"
@@ -371,21 +409,17 @@
         </Grid>
 
         <!-- Output preview -->
-        <GroupBox Grid.Row="2" Margin="16,0,16,1" BorderBrush="DarkGray" Header="Output preview" Padding="8">
+        <GroupBox Grid.Row="2" Margin="16,0,16,0" BorderBrush="DarkGray" Header="Output preview" Padding="8">
             <!-- Legacy preview, just in case -->
             <!--<Grid Background="White">
                 <ScrollViewer VerticalScrollBarVisibility="Hidden">
                     <TextBlock x:Name="tbk_preview" Margin="6,6,6,6" />
                 </ScrollViewer>
             </Grid>-->
-
-            <DataGrid x:Name="Dtg_Preview" HeadersVisibility="Column" Visibility="Hidden" AutoGenerateColumns="False" IsReadOnly="True">
-
-            </DataGrid>
-
+            <DataGrid x:Name="Dtg_Preview" HeadersVisibility="Column" Visibility="Hidden" AutoGenerateColumns="False" IsReadOnly="True" />
         </GroupBox>
 
-        <Grid Grid.Row="3" Margin="17,0,17,8">
+        <Grid Grid.Row="3" Margin="19,0,17,8">
             <StackPanel Orientation="Horizontal">
                 <Button x:Name="Btn_ClearPreview" Width="72" Margin="0,0,2,0" Click="Btn_ClearPreview_Click">Clear</Button>
                 <Button x:Name="Btn_DetachPreview" Width="72" Margin="0,0,2,0" Click="Btn_DetachPreview_Click">Detach</Button>
