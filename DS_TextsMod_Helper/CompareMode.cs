@@ -43,35 +43,27 @@ namespace DS_TextsMod_Helper
 
             SortedDictionary<int, List<string>> cmp_dictionary = new SortedDictionary<int, List<string>>();
             // 1. Insert value from File1
-            int counter = 0;
             foreach (SoulsFormats.FMG.Entry entry in file_1.Entries)
             {
                 if (entry.Text == null)
                     continue; // Exclude lines without value (TODO? v1.4: Give choice about that)
 
                 entry.Text = FormatValue(entry.Text);
+
                 cmp_dictionary.Add(entry.ID, new List<string>() { entry.Text, "" });
-                
-                counter += 1;
-                if (preview && counter == 30)
-                    break;
             }
             // 2. Insert value from File2
-            counter = 0;
             foreach (SoulsFormats.FMG.Entry entry in file_2.Entries)
             {
                 if (entry.Text == null)
                     continue; // Exclude lines without value (TODO? v1.4: Give choice about that)
 
                 entry.Text = FormatValue(entry.Text);
+
                 if (cmp_dictionary.ContainsKey(entry.ID))
                     cmp_dictionary[entry.ID][1] = entry.Text;
                 else
                     cmp_dictionary.Add(entry.ID, new List<string>() { "", entry.Text });
-
-                counter += 1;
-                if (preview && counter == 30)
-                    break;
             }
 
             // 3. Compare values and build Entry
@@ -85,6 +77,9 @@ namespace DS_TextsMod_Helper
                 bool isSame = cmp.Value[0] == cmp.Value[1];
 
                 Entries.Add(new Entry(index, textId, val1, val2, isSame.ToString()));
+
+                if (preview && index == 30) // New way to limit results. TODO? Investigate about performances
+                    break;
             }
         }
 
