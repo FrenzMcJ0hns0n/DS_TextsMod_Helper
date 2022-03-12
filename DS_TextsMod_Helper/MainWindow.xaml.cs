@@ -407,6 +407,8 @@ namespace DS_TextsMod_Helper
 
         private bool ValidateCompareInputs()
         {
+            List<string> errors = new List<string>();
+
             string input_filepath1 = Tbx_Cmp_iFile1.Text;
             string input_filepath2 = Tbx_Cmp_iFile2.Text;
             string output_header_1 = Tbx_Cmp_oHeader1.Text;
@@ -415,57 +417,51 @@ namespace DS_TextsMod_Helper
             string sepa_csv_char_o = Tbx_Cmp_CsvSeparator.Text;
 
             if (!File.Exists(input_filepath1) || !File.Exists(input_filepath2))
-            {
-                _ = MessageBox.Show("Error : missing input file(s)");
-                return false;
-            }
-            if (input_filepath1 == input_filepath2)
-            {
-                _ = MessageBox.Show("Error : same file submitted twice");
-                return false;
-            }
-            if (output_header_1 == "" || output_header_2 == "")
-            {
-                _ = MessageBox.Show("Error : missing output header(s)");
-                return false;
-            }
-            if (output_filename == "")
-            {
-                _ = MessageBox.Show("Error : output filename not specified");
-                return false;
-            }
-            if (sepa_csv_char_o == "")
-            {
-                _ = MessageBox.Show("Error : missing CSV separator");
-                return false;
-            }
+                errors.Add("Error : missing input file(s)");
 
+            if (input_filepath1 == input_filepath2)
+                errors.Add("Error : same file submitted twice");
+
+            if (output_header_1 == "" || output_header_2 == "")
+                errors.Add("Error : missing output header(s)");
+
+            if (output_filename == "")
+                errors.Add("Error : output filename not specified");
+
+            if (sepa_csv_char_o == "")
+                errors.Add("Error : missing CSV separator");
+
+            if (errors.Count > 0)
+            {
+                _ = MessageBox.Show(string.Join("\n\n", errors));
+                return false;
+            }
             return true;
         }
 
         private bool ValidatePrepareInputs()
         {
+            List<string> errors = new List<string>();
+
             string input_filepath1 = Tbx_Prp_iFile1.Text;
             string input_filepath2 = Tbx_Prp_iFile2.Text;
             string input_filepath3 = Tbx_Prp_iFile3.Text;
             string output_filename = Tbx_Prp_oFilename.Text;
 
             if (!File.Exists(input_filepath1) || !File.Exists(input_filepath2) || !File.Exists(input_filepath3))
-            {
-                _ = MessageBox.Show("Error : missing input file(s)");
-                return false;
-            }
-            if ((input_filepath1 == input_filepath2) || (input_filepath2 == input_filepath3) || (input_filepath1 == input_filepath3))
-            {
-                _ = MessageBox.Show("Error : same file submitted several times");
-                return false;
-            }
-            if (output_filename == "")
-            {
-                _ = MessageBox.Show("Error : output filename not specified");
-                return false;
-            }
+                errors.Add("Error : missing input file(s)");
 
+            if ((input_filepath1 == input_filepath2) || (input_filepath2 == input_filepath3) || (input_filepath1 == input_filepath3))
+                errors.Add("Error : same file submitted several times");
+
+            if (output_filename == "")
+                errors.Add("Error : output filename not specified");
+
+            if (errors.Count > 0)
+            {
+                _ = MessageBox.Show(string.Join("\n\n", errors));
+                return false;
+            }
             return true;
         }
 
