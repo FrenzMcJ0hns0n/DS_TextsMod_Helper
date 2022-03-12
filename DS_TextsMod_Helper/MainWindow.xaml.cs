@@ -465,7 +465,7 @@ namespace DS_TextsMod_Helper
             if (!File.Exists(input_filepath1) || !File.Exists(input_filepath2))
                 errors.Add(ERR_MISSING_IFILES);
 
-            if (input_filepath1 == input_filepath2)
+            if (input_filepath1 != TBX_DEFAULT && input_filepath1 == input_filepath2)
                 errors.Add(ERR_SAME_IFILE);
 
             if (output_header_1 == "" || output_header_2 == "")
@@ -497,7 +497,9 @@ namespace DS_TextsMod_Helper
             if (!File.Exists(input_filepath1) || !File.Exists(input_filepath2) || !File.Exists(input_filepath3))
                 errors.Add(ERR_MISSING_IFILES);
 
-            if ((input_filepath1 == input_filepath2) || (input_filepath2 == input_filepath3) || (input_filepath1 == input_filepath3))
+            if ((input_filepath1 != TBX_DEFAULT && input_filepath1 == input_filepath2) ||
+                (input_filepath2 != TBX_DEFAULT && input_filepath2 == input_filepath3) ||
+                (input_filepath3 != TBX_DEFAULT && input_filepath3 == input_filepath1))
                 errors.Add(ERR_SAME_IFILE);
 
             if (output_filename == "")
