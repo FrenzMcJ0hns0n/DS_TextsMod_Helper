@@ -238,8 +238,16 @@ namespace DS_TextsMod_Helper
 
         #region Preview
 
+        //TODO: Find better display condition than Visibility property
+
         private void Btn_RefreshPreview_Click(object sender, RoutedEventArgs e)
         {
+            Dtg_Preview.Visibility = Visibility.Visible;
+            Dtg_Preview.Columns.Clear();
+            
+            bool allDetails = Cbx_PreviewAllDetails.IsChecked ?? false;
+
+
             if (Tbc_Modes.SelectedIndex == 0)
             {
                 string iFile1 = Tbx_Cmp_iFile1.Text;
@@ -254,8 +262,10 @@ namespace DS_TextsMod_Helper
                 CompareMode c = new CompareMode(iFile1, iFile2) { OneLinedValues = Cbx_Cmp_OneLinedValues.IsChecked ?? false };
                 c.ProcessFiles(true);
 
-                bool allDetails = Cbx_PreviewAllDetails.IsChecked ?? false;
-                PreviewCompare(c.Entries, allDetails);
+                foreach (DataGridTextColumn col in GetCompareColumns(allDetails))
+                    Dtg_Preview.Columns.Add(col);
+
+                Dtg_Preview.ItemsSource = c.Entries;
             }
             else
             {
@@ -274,68 +284,12 @@ namespace DS_TextsMod_Helper
                 PrepareMode p = new PrepareMode(iFile1, iFile2, iFile3, textToReplace, replacingText);
                 p.ProcessFiles(true);
 
-                bool allDetails = Cbx_PreviewAllDetails.IsChecked ?? false;
-                PreviewPrepare(p.Entries, allDetails);
-            }
-        }
+                foreach (DataGridTextColumn col in GetPrepareColumns(allDetails))
+                    Dtg_Preview.Columns.Add(col);
 
-        private void PreviewCompare(List<CompareMode.Entry> c_entries, bool allDetails)
-        {
-            Dtg_Preview.Visibility = Visibility.Visible;
-            Dtg_Preview.Columns.Clear();
-
-            DataContext = c_entries;
-
-            string oHeader1 = Tbx_Cmp_oHeader1.Text != "" ? Tbx_Cmp_oHeader1.Text : "Header #1";
-            string oHeader2 = Tbx_Cmp_oHeader2.Text != "" ? Tbx_Cmp_oHeader2.Text : "Header #2";
-
-            List<DataGridTextColumn> columns = new List<DataGridTextColumn>()
-            {
-                new DataGridTextColumn() { Header = "Text ID", Binding = new Binding("TextId"), MaxWidth = 75 },
-                new DataGridTextColumn() { Header = oHeader1, Binding = new Binding("Value1"), MaxWidth = 500 },
-                new DataGridTextColumn() { Header = oHeader2, Binding = new Binding("Value2"), MaxWidth = 500 },
-                new DataGridTextColumn() { Header = "Same?", Binding = new Binding("Same"), MaxWidth = 50 }
-            };
-
-            if (allDetails)
-            {
-                Style hdrOff = (Style)Grid_Main.Resources["HeaderOff"]; //Style style = new Style() // TODO? See how to do this from code behind
-                columns.Insert(0, new DataGridTextColumn() { Header = "#", HeaderStyle = hdrOff, Foreground = Brushes.Gray, Binding = new Binding("Index"), MaxWidth = 30 });
+                Dtg_Preview.ItemsSource = p.Entries;
             }
 
-            foreach (DataGridTextColumn col in columns)
-                Dtg_Preview.Columns.Add(col);
-
-            Dtg_Preview.ItemsSource = c_entries;
-        }
-
-        private void PreviewPrepare(List<PrepareMode.Entry> p_entries, bool allDetails)
-        {
-            Dtg_Preview.Visibility = Visibility.Visible;
-            Dtg_Preview.Columns.Clear();
-
-            DataContext = p_entries;
-
-            List<DataGridTextColumn> columns = new List<DataGridTextColumn>()
-            {
-                new DataGridTextColumn() { Header = "Text ID", Binding = new Binding("TextId"), MaxWidth = 75 },
-                new DataGridTextColumn() { Header = "Output value", Binding = new Binding("Output"), MaxWidth = allDetails ? 250 : 500 }
-            };
-
-            if (allDetails)
-            {
-                Style hdrOff = (Style)Grid_Main.Resources["HeaderOff"];
-                columns.Insert(0, new DataGridTextColumn() { Header = "#", HeaderStyle = hdrOff, Foreground = Brushes.Gray, Binding = new Binding("Index"), MaxWidth = 30 });
-                columns.Insert(2, new DataGridTextColumn() { Header = "File 1 value", HeaderStyle = hdrOff, Foreground = Brushes.Gray, Binding = new Binding("Value1"), MaxWidth = 250 });
-                columns.Insert(3, new DataGridTextColumn() { Header = "File 2 value", HeaderStyle = hdrOff, Foreground = Brushes.Gray, Binding = new Binding("Value2"), MaxWidth = 250 });
-                columns.Insert(4, new DataGridTextColumn() { Header = "File 3 value", HeaderStyle = hdrOff, Foreground = Brushes.Gray, Binding = new Binding("Value3"), MaxWidth = 250 });
-                columns.Insert(6, new DataGridTextColumn() { Header = "From?", HeaderStyle = hdrOff, Foreground = Brushes.Gray, Binding = new Binding("Source"), MaxWidth = 50 });
-            }
-
-            foreach (DataGridTextColumn col in columns)
-                Dtg_Preview.Columns.Add(col);
-
-            Dtg_Preview.ItemsSource = p_entries;
         }
 
         private void Btn_ClearPreview_Click(object sender, RoutedEventArgs e)
@@ -352,14 +306,24 @@ namespace DS_TextsMod_Helper
             if (Dtg_Preview.Visibility != Visibility.Visible)
                 return;
 
+            //DataContext = Dtg_Preview.ItemsSource;
+
             DataGrid detachedDtgPreview = new DataGrid()
             {
                 Margin = new Thickness(16, 16, 16, 48), // Extra bottom margin = TODO? Replicate lower buttons
 
+                AutoGenerateColumns = false,
                 HeadersVisibility = DataGridHeadersVisibility.Column,
                 IsReadOnly = true,
                 ItemsSource = Dtg_Preview.ItemsSource
             };
+
+            bool allDetails = Cbx_PreviewAllDetails.IsChecked ?? false;
+            List<DataGridTextColumn> columns = Tbc_Modes.SelectedIndex == 0 ? GetCompareColumns(allDetails) : GetPrepareColumns(allDetails);
+
+            foreach (DataGridTextColumn col in columns)
+                detachedDtgPreview.Columns.Add(col);
+
             Window windowPreview = new Window()
             {
                 Title = "Output preview (detached)",
@@ -383,6 +347,47 @@ namespace DS_TextsMod_Helper
         {
             if (Dtg_Preview.Visibility == Visibility.Visible)
                 Btn_RefreshPreview_Click(sender, e);
+        }
+
+        private List<DataGridTextColumn> GetCompareColumns(bool allDetails)
+        {
+            List<DataGridTextColumn> columns = new List<DataGridTextColumn>();
+
+            string oHeader1 = Tbx_Cmp_oHeader1.Text != "" ? Tbx_Cmp_oHeader1.Text : "Header #1";
+            string oHeader2 = Tbx_Cmp_oHeader2.Text != "" ? Tbx_Cmp_oHeader2.Text : "Header #2";
+
+            columns.Add(new DataGridTextColumn() { Header = "Text ID", Binding = new Binding("TextId"), MaxWidth = 75 });
+            columns.Add(new DataGridTextColumn() { Header = oHeader1, Binding = new Binding("Value1"), MaxWidth = 500 });
+            columns.Add(new DataGridTextColumn() { Header = oHeader2, Binding = new Binding("Value2"), MaxWidth = 500 });
+            columns.Add(new DataGridTextColumn() { Header = "Same?", Binding = new Binding("Same"), MaxWidth = 75 });
+
+            if (allDetails)
+            {
+                Style hdrOff = (Style)Grid_Main.Resources["HeaderOff"]; //Style style = new Style() // TODO? See how to do this from code behind
+                columns.Insert(0, new DataGridTextColumn() { Header = "#", HeaderStyle = hdrOff, Foreground = Brushes.Gray, Binding = new Binding("Index"), MaxWidth = 30 });
+            }
+
+            return columns;
+        }
+
+        private List<DataGridTextColumn> GetPrepareColumns(bool allDetails)
+        {
+            List<DataGridTextColumn> columns = new List<DataGridTextColumn>();
+
+            columns.Add(new DataGridTextColumn() { Header = "Text ID", Binding = new Binding("TextId"), MaxWidth = 75 });
+            columns.Add(new DataGridTextColumn() { Header = "Output value", Binding = new Binding("Output"), MaxWidth = allDetails ? 250 : 500 });
+
+            if (allDetails)
+            {
+                Style hdrOff = (Style)Grid_Main.Resources["HeaderOff"];
+                columns.Insert(0, new DataGridTextColumn() { Header = "#", HeaderStyle = hdrOff, Foreground = Brushes.Gray, Binding = new Binding("Index"), MaxWidth = 30 });
+                columns.Insert(2, new DataGridTextColumn() { Header = "File #1 value", HeaderStyle = hdrOff, Foreground = Brushes.Gray, Binding = new Binding("Value1"), MaxWidth = 250 });
+                columns.Insert(3, new DataGridTextColumn() { Header = "File #2 value", HeaderStyle = hdrOff, Foreground = Brushes.Gray, Binding = new Binding("Value2"), MaxWidth = 250 });
+                columns.Insert(4, new DataGridTextColumn() { Header = "File #3 value", HeaderStyle = hdrOff, Foreground = Brushes.Gray, Binding = new Binding("Value3"), MaxWidth = 250 });
+                columns.Insert(6, new DataGridTextColumn() { Header = "From?", HeaderStyle = hdrOff, Foreground = Brushes.Gray, Binding = new Binding("Source"), MaxWidth = 50 });
+            }
+
+            return columns;
         }
 
         #endregion
