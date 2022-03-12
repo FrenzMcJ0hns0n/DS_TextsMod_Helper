@@ -347,12 +347,30 @@ namespace DS_TextsMod_Helper
             }
         }
 
-        private void Btn_DetachPreview_Click(object sender, RoutedEventArgs e)
+        private void Btn_DetachPreview_Click(object sender, RoutedEventArgs e) // TODO! Improve by using XAML
         {
-            if (Dtg_Preview.Visibility == Visibility.Visible && Dtg_Preview.ItemsSource != null)
+            if (Dtg_Preview.Visibility != Visibility.Visible)
+                return;
+
+            DataGrid detachedDtgPreview = new DataGrid()
             {
-                // Detach preview to external new window
-            }
+                Margin = new Thickness(16, 16, 16, 48), // Extra bottom margin = TODO? Replicate lower buttons
+
+                HeadersVisibility = DataGridHeadersVisibility.Column,
+                IsReadOnly = true,
+                ItemsSource = Dtg_Preview.ItemsSource
+            };
+            Window windowPreview = new Window()
+            {
+                Title = "Output preview (detached)",
+                Width = 1280,
+                Height = 800,
+                Background = (Brush)new BrushConverter().ConvertFrom("#EEE"),
+
+                Content = detachedDtgPreview,
+            };
+
+            _ = windowPreview.ShowDialog();
         }
 
         private void Cbx_PreviewAllDetails_Checked(object sender, RoutedEventArgs e)
