@@ -78,7 +78,7 @@ namespace DS_TextsMod_Helper
 
                 Entries.Add(new Entry(index, textId, val1, val2, isSame.ToString()));
 
-                if (preview && index == 30) // New way to limit results. TODO? Investigate about performances
+                if (preview && index == 30) // New better way to limit results
                     break;
             }
         }
