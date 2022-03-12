@@ -95,25 +95,19 @@ namespace DS_TextsMod_Helper
             OutputHeader1 = oHdr1;
             OutputHeader2 = oHdr2;
             Sep = csvSepChar[0];
-            
+
             using (StreamWriter writer = new StreamWriter(OutputFilename, false))
             {
                 writer.WriteLine($"Text ID{Sep}{OutputHeader1}{Sep}{OutputHeader2}{Sep}Same?");
 
-                if (OneLinedValues)
-                    foreach (Entry ce in Entries)
-                        writer.WriteLine($"{ce.TextId}{Sep}\"{ce.Value1}\"{Sep}\"{ce.Value2}\"{Sep}{ce.Same}");
-                else
+                foreach (Entry ce in Entries)
                 {
-                    foreach (Entry ce in Entries)
-                    {
-                        ce.Value1 = ce.Value1.Replace("\"", "\"\"");
-                        ce.Value2 = ce.Value2.Replace("\"", "\"\"");
+                    ce.Value1 = ce.Value1.Replace("\"", "\"\"");
+                    ce.Value2 = ce.Value2.Replace("\"", "\"\"");
 
-                        writer.WriteLine($"{ce.TextId}{Sep}\"{ce.Value1}\"{Sep}\"{ce.Value2}\"{Sep}{ce.Same}");
-                    }
+                    writer.WriteLine($"{ce.TextId}{Sep}\"{ce.Value1}\"{Sep}\"{ce.Value2}\"{Sep}{ce.Same}");
+                    // Generalized usage of double quotes, as it is Excel friendly (TODO? v1.4: Give choice about that)
                 }
-
             }
         }
 
