@@ -77,8 +77,8 @@
                     <GroupBox Grid.ColumnSpan="2" Margin="8,8,8,4" Header="Input files" BorderBrush="DarkGray">
                         <Grid Margin="8,16,8,16">
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="1*"/>
-                                <ColumnDefinition Width="21*"/>
+                                <ColumnDefinition Width="1.8*"/>
+                                <ColumnDefinition Width="36*"/>
                                 <ColumnDefinition Width="1*"/>
                             </Grid.ColumnDefinitions>
                             <Grid.RowDefinitions>
@@ -103,6 +103,7 @@
                                     Margin="2,0,0,0"
                                     Padding="0,0,0,1" 
                                     Content="&#8901;&#8901;&#8901;"
+                                    ToolTip="Open parent folder of the submitted file if any, else the root folder of DSTMH"
                                     Click="Btn_Cmp_ExploreFile1_Click"
                                     />
                             <Label Grid.Column="0" Grid.Row="1" VerticalAlignment="Center" Content="File #2 :" />
@@ -122,6 +123,7 @@
                                     Margin="2,0,0,0"
                                     Padding="0,0,0,1" 
                                     Content="&#8901;&#8901;&#8901;"
+                                    ToolTip="Open parent folder of the submitted file if any, else the root folder of DSTMH"
                                     Click="Btn_Cmp_ExploreFile2_Click"
                                     />
                         </Grid>
@@ -245,8 +247,8 @@
                     <GroupBox Grid.ColumnSpan="2" Margin="8,8,8,4" Header="Input files" BorderBrush="DarkGray">
                         <Grid Margin="8">
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="1*"/>
-                                <ColumnDefinition Width="21*"/>
+                                <ColumnDefinition Width="1.8*"/>
+                                <ColumnDefinition Width="36*"/>
                                 <ColumnDefinition Width="1*"/>
                             </Grid.ColumnDefinitions>
                             <Grid.RowDefinitions>
@@ -272,6 +274,7 @@
                                     Margin="2,0,0,0"
                                     Padding="0,0,0,1" 
                                     Content="&#8901;&#8901;&#8901;"
+                                    ToolTip="Open parent folder of the submitted file if any, else the root folder of DSTMH"
                                     Click="Btn_Prp_ExploreFile1_Click"
                                     />
                             <Label Grid.Row="1" VerticalAlignment="Center" Content="File #2 :" />
@@ -291,6 +294,7 @@
                                     Margin="2,0,0,0"
                                     Padding="0,0,0,1" 
                                     Content="&#8901;&#8901;&#8901;"
+                                    ToolTip="Open parent folder of the submitted file if any, else the root folder of DSTMH"
                                     Click="Btn_Prp_ExploreFile2_Click"
                                     />
                             <Label Grid.Column="0" Grid.Row="2" VerticalAlignment="Center" Content="File #3 :" />
@@ -310,6 +314,7 @@
                                     Margin="2,0,0,0"
                                     Padding="0,0,0,1" 
                                     Content="&#8901;&#8901;&#8901;"
+                                    ToolTip="Open parent folder of the submitted file if any, else the root folder of DSTMH"
                                     Click="Btn_Prp_ExploreFile3_Click"
                                     />
                         </Grid>

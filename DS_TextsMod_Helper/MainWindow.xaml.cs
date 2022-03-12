@@ -206,24 +206,19 @@ namespace DS_TextsMod_Helper
             switch (btn.Name)
             {
                 case "Btn_Cmp_ExploreFile1":
-                    if (Tbx_Cmp_iFile1.Text != TBX_DEFAULT)
-                        _ = Process.Start(IOHelper.GetParentFolder(Tbx_Cmp_iFile1.Text));
+                    _ = Process.Start(Tbx_Cmp_iFile1.Text != TBX_DEFAULT ? IOHelper.GetParentFolder(Tbx_Cmp_iFile1.Text) : IOHelper.GetRootDirPath());
                     break;
                 case "Btn_Cmp_ExploreFile2":
-                    if (Tbx_Cmp_iFile2.Text != TBX_DEFAULT)
-                        _ = Process.Start(IOHelper.GetParentFolder(Tbx_Cmp_iFile2.Text));
+                    _ = Process.Start(Tbx_Cmp_iFile2.Text != TBX_DEFAULT ? IOHelper.GetParentFolder(Tbx_Cmp_iFile2.Text) : IOHelper.GetRootDirPath());
                     break;
                 case "Btn_Prp_ExploreFile1":
-                    if (Tbx_Prp_iFile1.Text != TBX_DEFAULT)
-                        _ = Process.Start(IOHelper.GetParentFolder(Tbx_Prp_iFile1.Text));
+                    _ = Process.Start(Tbx_Prp_iFile1.Text != TBX_DEFAULT ? IOHelper.GetParentFolder(Tbx_Prp_iFile1.Text) : IOHelper.GetRootDirPath());
                     break;
                 case "Btn_Prp_ExploreFile2":
-                    if (Tbx_Prp_iFile2.Text != TBX_DEFAULT)
-                        _ = Process.Start(IOHelper.GetParentFolder(Tbx_Prp_iFile2.Text));
+                    _ = Process.Start(Tbx_Prp_iFile2.Text != TBX_DEFAULT ? IOHelper.GetParentFolder(Tbx_Prp_iFile2.Text) : IOHelper.GetRootDirPath());
                     break;
                 case "Btn_Prp_ExploreFile3":
-                    if (Tbx_Prp_iFile3.Text != TBX_DEFAULT)
-                        _ = Process.Start(IOHelper.GetParentFolder(Tbx_Prp_iFile3.Text));
+                    _ = Process.Start(Tbx_Prp_iFile3.Text != TBX_DEFAULT ? IOHelper.GetParentFolder(Tbx_Prp_iFile3.Text) : IOHelper.GetRootDirPath());
                     break;
                 default:
                     _ = Process.Start(IOHelper.GetRootDirPath());
