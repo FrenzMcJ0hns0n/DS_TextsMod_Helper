@@ -1,5 +1,6 @@
 ﻿using System.IO;
 using System.Reflection;
+using System.Windows;
 
 namespace DS_TextsMod_Helper
 {
@@ -38,5 +39,11 @@ namespace DS_TextsMod_Helper
 
             return fileName.Replace(fileExt, "");
         }
+
+        public static double GetColumnMaxWidth()
+        {
+            return SystemParameters.FullPrimaryScreenWidth >= 2500 ? 540 : 360;
+        }
+
     }
 }

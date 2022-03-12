@@ -258,11 +258,7 @@ namespace DS_TextsMod_Helper
 
         private void Btn_RefreshPreview_Click(object sender, RoutedEventArgs e)
         {
-            Dtg_Preview.Visibility = Visibility.Visible;
-            Dtg_Preview.Columns.Clear();
-            
             bool allDetails = Cbx_PreviewAllDetails.IsChecked ?? false;
-
 
             if (Tbc_Modes.SelectedIndex == 0)
             {
@@ -274,11 +270,13 @@ namespace DS_TextsMod_Helper
                     _ = MessageBox.Show(ERR_MISSING_IFILES);
                     return;
                 }
+                Dtg_Preview.Visibility = Visibility.Visible;
+                Dtg_Preview.Columns.Clear();
 
                 CompareMode c = new CompareMode(iFile1, iFile2) { OneLinedValues = Cbx_Cmp_OneLinedValues.IsChecked ?? false };
                 c.ProcessFiles(true);
 
-                foreach (DataGridTextColumn col in GetCompareColumns(allDetails))
+                foreach (DataGridTextColumn col in GetCompareColumns(allDetails, false))
                     Dtg_Preview.Columns.Add(col);
 
                 Dtg_Preview.ItemsSource = c.Entries;
@@ -296,11 +294,13 @@ namespace DS_TextsMod_Helper
                     _ = MessageBox.Show(ERR_MISSING_IFILES);
                     return;
                 }
+                Dtg_Preview.Visibility = Visibility.Visible;
+                Dtg_Preview.Columns.Clear();
 
                 PrepareMode p = new PrepareMode(iFile1, iFile2, iFile3, textToReplace, replacingText);
                 p.ProcessFiles(true);
 
-                foreach (DataGridTextColumn col in GetPrepareColumns(allDetails))
+                foreach (DataGridTextColumn col in GetPrepareColumns(allDetails, false))
                     Dtg_Preview.Columns.Add(col);
 
                 Dtg_Preview.ItemsSource = p.Entries;
@@ -330,12 +330,12 @@ namespace DS_TextsMod_Helper
 
                 AutoGenerateColumns = false,
                 HeadersVisibility = DataGridHeadersVisibility.Column,
-                IsReadOnly = true,
+                IsReadOnly = false,
                 ItemsSource = Dtg_Preview.ItemsSource
             };
 
             bool allDetails = Cbx_PreviewAllDetails.IsChecked ?? false;
-            List<DataGridTextColumn> columns = Tbc_Modes.SelectedIndex == 0 ? GetCompareColumns(allDetails) : GetPrepareColumns(allDetails);
+            List<DataGridTextColumn> columns = Tbc_Modes.SelectedIndex == 0 ? GetCompareColumns(allDetails, true) : GetPrepareColumns(allDetails, true);
 
             foreach (DataGridTextColumn col in columns)
                 detachedDtgPreview.Columns.Add(col);
@@ -365,42 +365,58 @@ namespace DS_TextsMod_Helper
                 Btn_RefreshPreview_Click(sender, e);
         }
 
-        private List<DataGridTextColumn> GetCompareColumns(bool allDetails)
+        private List<DataGridTextColumn> GetCompareColumns(bool allDetails, bool detached) // TODO! Something easier
         {
             List<DataGridTextColumn> columns = new List<DataGridTextColumn>();
+
+            double COL_MAXWIDTH = IOHelper.GetColumnMaxWidth() * 2; // 1080 or 720 depending of user's screen resolution
+
+            double maxWidth_RowNum = detached ? 80 : 40;
+            double maxWidth_TextId = detached ? 160 : 80;
+            double maxWidth_Value1 = detached ? COL_MAXWIDTH : 480;
+            double maxWidth_Value2 = detached ? COL_MAXWIDTH : 480;
 
             string oHeader1 = Tbx_Cmp_oHeader1.Text != "" ? Tbx_Cmp_oHeader1.Text : "Header #1";
             string oHeader2 = Tbx_Cmp_oHeader2.Text != "" ? Tbx_Cmp_oHeader2.Text : "Header #2";
 
-            columns.Add(new DataGridTextColumn() { Header = "Text ID", Binding = new Binding("TextId"), MaxWidth = 75 });
-            columns.Add(new DataGridTextColumn() { Header = oHeader1, Binding = new Binding("Value1"), MaxWidth = 500 });
-            columns.Add(new DataGridTextColumn() { Header = oHeader2, Binding = new Binding("Value2"), MaxWidth = 500 });
-            columns.Add(new DataGridTextColumn() { Header = "Same?", Binding = new Binding("Same"), MaxWidth = 75 });
+            columns.Add(new DataGridTextColumn() { Header = "Text ID", Binding = new Binding("TextId"), MaxWidth = maxWidth_TextId });
+            columns.Add(new DataGridTextColumn() { Header = oHeader1, Binding = new Binding("Value1"), MaxWidth = maxWidth_Value1 });
+            columns.Add(new DataGridTextColumn() { Header = oHeader2, Binding = new Binding("Value2"), MaxWidth = maxWidth_Value2 });
+            columns.Add(new DataGridTextColumn() { Header = "Same?", Binding = new Binding("Same"), MaxWidth = 80 });
 
             if (allDetails)
             {
                 Style hdrOff = (Style)Grid_Main.Resources["HeaderOff"]; //Style style = new Style() // TODO? See how to do this from code behind
-                columns.Insert(0, new DataGridTextColumn() { Header = "#", HeaderStyle = hdrOff, Foreground = Brushes.Gray, Binding = new Binding("Index"), MaxWidth = 30 });
+                columns.Insert(0, new DataGridTextColumn() { Header = "#", HeaderStyle = hdrOff, Foreground = Brushes.Gray, Binding = new Binding("Index"), MaxWidth = maxWidth_RowNum });
             }
 
             return columns;
         }
 
-        private List<DataGridTextColumn> GetPrepareColumns(bool allDetails)
+        private List<DataGridTextColumn> GetPrepareColumns(bool allDetails, bool detached) // TODO! Something easier
         {
             List<DataGridTextColumn> columns = new List<DataGridTextColumn>();
 
-            columns.Add(new DataGridTextColumn() { Header = "Text ID", Binding = new Binding("TextId"), MaxWidth = 75 });
-            columns.Add(new DataGridTextColumn() { Header = "Output value", Binding = new Binding("Output"), MaxWidth = allDetails ? 250 : 500 });
+            double COL_MAXWIDTH = IOHelper.GetColumnMaxWidth(); // 540 or 360 depending of user's screen resolution
+
+            double maxWidth_RowNum = detached ? 80 : 40;
+            double maxWidth_TextId = detached ? 200 : allDetails ? 80 : 120;
+            double maxWidth_Output = detached ? COL_MAXWIDTH : allDetails ? 240 : 360;
+            double maxWidth_Value1 = detached ? COL_MAXWIDTH : 240;
+            double maxWidth_Value2 = detached ? COL_MAXWIDTH : 240;
+            double maxWidth_Value3 = detached ? COL_MAXWIDTH : 240;
+
+            columns.Add(new DataGridTextColumn() { Header = "Text ID", Binding = new Binding("TextId"), MaxWidth = maxWidth_TextId });
+            columns.Add(new DataGridTextColumn() { Header = "Output value", Binding = new Binding("Output"), MaxWidth = maxWidth_Output });
 
             if (allDetails)
             {
                 Style hdrOff = (Style)Grid_Main.Resources["HeaderOff"];
-                columns.Insert(0, new DataGridTextColumn() { Header = "#", HeaderStyle = hdrOff, Foreground = Brushes.Gray, Binding = new Binding("Index"), MaxWidth = 30 });
-                columns.Insert(2, new DataGridTextColumn() { Header = "File #1 value", HeaderStyle = hdrOff, Foreground = Brushes.Gray, Binding = new Binding("Value1"), MaxWidth = 250 });
-                columns.Insert(3, new DataGridTextColumn() { Header = "File #2 value", HeaderStyle = hdrOff, Foreground = Brushes.Gray, Binding = new Binding("Value2"), MaxWidth = 250 });
-                columns.Insert(4, new DataGridTextColumn() { Header = "File #3 value", HeaderStyle = hdrOff, Foreground = Brushes.Gray, Binding = new Binding("Value3"), MaxWidth = 250 });
-                columns.Insert(6, new DataGridTextColumn() { Header = "From?", HeaderStyle = hdrOff, Foreground = Brushes.Gray, Binding = new Binding("Source"), MaxWidth = 50 });
+                columns.Insert(0, new DataGridTextColumn() { Header = "#", HeaderStyle = hdrOff, Foreground = Brushes.Gray, Binding = new Binding("Index"), MaxWidth = maxWidth_RowNum });
+                columns.Insert(2, new DataGridTextColumn() { Header = "File #1 value", HeaderStyle = hdrOff, Foreground = Brushes.Gray, Binding = new Binding("Value1"), MaxWidth = maxWidth_Value1 });
+                columns.Insert(3, new DataGridTextColumn() { Header = "File #2 value", HeaderStyle = hdrOff, Foreground = Brushes.Gray, Binding = new Binding("Value2"), MaxWidth = maxWidth_Value2 });
+                columns.Insert(4, new DataGridTextColumn() { Header = "File #3 value", HeaderStyle = hdrOff, Foreground = Brushes.Gray, Binding = new Binding("Value3"), MaxWidth = maxWidth_Value3 });
+                columns.Insert(6, new DataGridTextColumn() { Header = "From?", HeaderStyle = hdrOff, Foreground = Brushes.Gray, Binding = new Binding("Source"), MaxWidth = 80 });
             }
 
             return columns;
