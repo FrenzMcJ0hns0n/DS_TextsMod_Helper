@@ -86,7 +86,9 @@
                                 <RowDefinition Height="1*" />
                             </Grid.RowDefinitions>
 
-                            <Label Grid.Column="0" Grid.Row="0" VerticalAlignment="Center" Content="File #1 :" />
+                            <Label Grid.Column="0" Grid.Row="0" VerticalAlignment="Center" Content="File #1 :"
+                                   ToolTip="Expected here : one of the 2 FMG files to compare"
+                                   />
                             <TextBox x:Name="Tbx_Cmp_iFile1" 
                                      Grid.Column="1" Grid.Row="0" 
                                      VerticalAlignment="Center" 
@@ -106,7 +108,9 @@
                                     ToolTip="Open parent folder of the submitted file if any, else the root folder of DSTMH"
                                     Click="Btn_Cmp_ExploreFile1_Click"
                                     />
-                            <Label Grid.Column="0" Grid.Row="1" VerticalAlignment="Center" Content="File #2 :" />
+                            <Label Grid.Column="0" Grid.Row="1" VerticalAlignment="Center" Content="File #2 :"
+                                   ToolTip="Expected here : one of the 2 FMG files to compare"
+                                   />
                             <TextBox x:Name="Tbx_Cmp_iFile2" 
                                     Grid.Column="1" Grid.Row="1" 
                                     VerticalAlignment="Center" 
@@ -257,7 +261,9 @@
                                 <RowDefinition Height="1*" />
                             </Grid.RowDefinitions>
 
-                            <Label VerticalAlignment="Center" Content="File #1 :" />
+                            <Label VerticalAlignment="Center" Content="File #1 :"
+                                   ToolTip="Expected here : modded file that will be parsed as reference data"
+                                   />
                             <TextBox x:Name="Tbx_Prp_iFile1" 
                                      Grid.Column="1"
                                      VerticalAlignment="Center" 
@@ -277,7 +283,9 @@
                                     ToolTip="Open parent folder of the submitted file if any, else the root folder of DSTMH"
                                     Click="Btn_Prp_ExploreFile1_Click"
                                     />
-                            <Label Grid.Row="1" VerticalAlignment="Center" Content="File #2 :" />
+                            <Label Grid.Row="1" VerticalAlignment="Center" Content="File #2 :"
+                                   ToolTip="Expected here : vanilla file in same language of the modded file"
+                                   />
                             <TextBox x:Name="Tbx_Prp_iFile2" 
                                      Grid.Column="1" Grid.Row="1" 
                                      VerticalAlignment="Center" 
@@ -297,7 +305,9 @@
                                     ToolTip="Open parent folder of the submitted file if any, else the root folder of DSTMH"
                                     Click="Btn_Prp_ExploreFile2_Click"
                                     />
-                            <Label Grid.Column="0" Grid.Row="2" VerticalAlignment="Center" Content="File #3 :" />
+                            <Label Grid.Column="0" Grid.Row="2" VerticalAlignment="Center" Content="File #3 :"
+                                   ToolTip="Expected here : vanilla file in the language the mod will be translated in"
+                                   />
                             <TextBox x:Name="Tbx_Prp_iFile3" 
                                      Grid.Column="1" Grid.Row="2" 
                                      VerticalAlignment="Center" 
@@ -376,7 +386,7 @@
                                        />
                                 <TextBox x:Name="Tbx_Prp_TextToReplace"
                                          VerticalAlignment="Center"
-                                         Margin="24,0,0,0"
+                                         Margin="7,0,0,0"
                                          Width="120"
                                          TextAlignment="Right"
                                          ToolTip="Enter text to be replaced in entries"
@@ -385,7 +395,7 @@
                             </StackPanel>
                             <StackPanel Grid.Column="4" Grid.Row="1" Orientation="Horizontal">
                                 <Label VerticalAlignment="Center"
-                                       Content="Remplacement text :"
+                                       Content="Remplacing text :"
                                        ToolTip="Enter replacing text for entries."
                                        />
                                 <TextBox x:Name="Tbx_Prp_ReplacingText"
@@ -408,7 +418,7 @@
             <Button x:Name="Btn_RefreshPreview" HorizontalAlignment="Stretch" Click="Btn_RefreshPreview_Click">
                 <StackPanel Orientation="Horizontal">
                     <TextBlock Padding="6,4,3,2" FontSize="14">Load/Reload preview</TextBlock>
-                    <TextBlock Padding="3,2,6,2" FontSize="18">&#x21bb;</TextBlock>
+                    <TextBlock Padding="3,1,6,2" FontSize="18">&#x21bb;</TextBlock>
                 </StackPanel>
             </Button>
         </Grid>
@@ -426,8 +436,8 @@
 
         <Grid Grid.Row="3" Margin="19,0,17,8">
             <StackPanel Orientation="Horizontal">
-                <Button x:Name="Btn_ClearPreview" Width="72" Margin="0,0,2,0" Click="Btn_ClearPreview_Click">Clear</Button>
-                <Button x:Name="Btn_DetachPreview" Width="72" Margin="0,0,2,0" Click="Btn_DetachPreview_Click">Detach</Button>
+                <Button x:Name="Btn_ClearPreview" Width="72" Margin="0,0,2,0" Click="Btn_ClearPreview_Click">Clear &#160;&#10005;</Button>
+                <Button x:Name="Btn_DetachPreview" Width="72" Margin="0,0,2,0" Click="Btn_DetachPreview_Click">Detach &#160;&#11111;</Button>
                 <CheckBox x:Name="Cbx_PreviewAllDetails"
                           VerticalAlignment="Center" Margin="8,0,0,0" Content="Show all details"
                           ToolTip="Show all details about the processed data.&#x0a;Note that grey contents will not be written to output file."
@@ -443,7 +453,7 @@
             <Button x:Name="Btn_GenerateOutput" HorizontalAlignment="Stretch" Click="Btn_GenerateOutput_Click">
                 <StackPanel Orientation="Horizontal">
                     <TextBlock Padding="6,4,3,2" FontSize="14">Generate output file</TextBlock>
-                    <TextBlock Padding="3,2,6,2" FontSize="18">&#128462;</TextBlock>
+                    <TextBlock Padding="3,1,6,2" FontSize="18">&#128462;</TextBlock>
                 </StackPanel>
             </Button>
         </Grid>
