@@ -5,233 +5,458 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:DS_TextsMod_Helper"
         mc:Ignorable="d"
-        Width="1000" Height="800"
+        Width="1280" Height="800"
         ResizeMode="CanMinimize"
         Title="DS Texts Mod Helper">
 
-    <Grid Background="#EEE">
-        <Grid Margin="16">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="1*"/>
-                <ColumnDefinition Width="1*"/>
-            </Grid.ColumnDefinitions>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="10*" />
-                <RowDefinition Height="6*" />
-                <RowDefinition Height="8*" />
-                <RowDefinition Height="11*" />
-                <RowDefinition Height="13*" />
-                <RowDefinition Height="4*" />
-            </Grid.RowDefinitions>
+    <Grid x:Name="Grid_Main" Background="#EEE">
 
-            <!-- Input files -->
-            <GroupBox Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Header="Input files" BorderBrush="DarkGray" Margin="0,8,0,8">
-                <Grid Margin="8">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="1*"/>
-                        <ColumnDefinition Width="16*"/>
-                    </Grid.ColumnDefinitions>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="1*" />
-                        <RowDefinition Height="1*" />
-                        <RowDefinition Height="1*" />
-                    </Grid.RowDefinitions>
-                    <Label Grid.Column="0" Grid.Row="0" VerticalAlignment="Center" Content="File #1 :" />
-                    <TextBox x:Name="tbx_file1" 
-                             Grid.Column="1" Grid.Row="0" 
-                             VerticalAlignment="Center" 
-                             FontStyle="Italic" Foreground="Gray" Text="Drop FMG file..."
-                             TextWrapping="NoWrap" IsReadOnly="True"
-                             Cursor="Arrow"
-                             AllowDrop="True"
-                             PreviewDragOver="tbx_file1_PreviewDragOver"
-                             Drop="tbx_file1_Drop"
-                             />
-                    <Label Grid.Column="0" Grid.Row="1" VerticalAlignment="Center" Content="File #2 :" />
-                    <TextBox x:Name="tbx_file2" 
-                             Grid.Column="1" Grid.Row="1" 
-                             VerticalAlignment="Center" 
-                             FontStyle="Italic" Foreground="Gray" Text="Drop FMG file..."
-                             TextWrapping="NoWrap" IsReadOnly="True"
-                             Cursor="Arrow"
-                             AllowDrop="True"
-                             PreviewDragOver="tbx_file2_PreviewDragOver"
-                             Drop="tbx_file2_Drop"
-                             />
-                    <Label Grid.Column="0" Grid.Row="2" VerticalAlignment="Center" Content="File #3 :" />
-                    <TextBox x:Name="tbx_file3" 
-                             Grid.Column="1" Grid.Row="2" 
-                             VerticalAlignment="Center" 
-                             FontStyle="Italic" Foreground="Gray" Text="Drop FMG file..."
-                             TextWrapping="NoWrap" IsReadOnly="True"
-                             Cursor="Arrow"
-                             AllowDrop="True"
-                             PreviewDragOver="tbx_file3_PreviewDragOver"
-                             Drop="tbx_file3_Drop"
-                             />
-                </Grid>
-            </GroupBox>
+        <Grid.Resources>
+            <!-- Custom style for extra headers displayed with option "Show all details" -->
+            <Style x:Key="HeaderOff" TargetType="{x:Type DataGridColumnHeader}">
+                <Setter Property="Foreground" Value="Gray"/>
+            </Style>
 
-            <!-- Actions -->
-            <GroupBox Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Header="Actions" BorderBrush="DarkGray" Margin="0,8,0,8">
-                <Grid Margin="8">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="1*"/>
-                        <ColumnDefinition Width="1*"/>
-                    </Grid.ColumnDefinitions>
-                    <Button x:Name="btn_comparefiles"
-                            Grid.Column="0"
-                            HorizontalAlignment="Right" Width="350" Margin="0,0,50,0"
-                            Content="Compare/Compile data from files #1, #2"
-                            Click="btn_comparefiles_Click"
-                            />
-                    <Button x:Name="btn_preparefile"
-                            Grid.Column="1"
-                            HorizontalAlignment="Left" Width="350" Margin="50,0,0,0"
-                            Content="Prepare/Comply data from files #1, #2, #3"
-                            Click="btn_preparefile_Click"
-                            />
-                </Grid>
-            </GroupBox>
-            
-            <!-- Options -->
-            <GroupBox Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" Margin="0,8,0,8" BorderBrush="DarkGray" Header="Options">
-                <Grid Margin="8">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="1*"/>
-                        <ColumnDefinition Width="1*"/>
-                        <ColumnDefinition Width="1*"/>
-                        <ColumnDefinition Width="1*"/>
-                    </Grid.ColumnDefinitions>
+            <!-- Maybe for later with proper Bindings -->
+            <!--<DataTemplate x:Key="KeyTry">
+                <DataGrid ItemsSource="{Binding Path=CompareMode.Entry}" AutoGenerateColumns="False" >
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="#" Width="*" Binding="{Binding Index}" />
+                        <DataGridTextColumn Header="TextId"  Width="*" Binding="{Binding TextId}" />
+                        <DataGridTextColumn Header="Value1" Width="*" Binding="{Binding Value1}" />
+                        <DataGridTextColumn Header="Value2" Width="*" Binding="{Binding Value2}" />
+                        <DataGridTextColumn Header="Same" Width="*" Binding="{Binding Same}" />
+                    </DataGrid.Columns>
+                </DataGrid>
+            </DataTemplate>
+
+            <DataTemplate x:Key="ComparedEntriesTemplate">
+                <DataGrid ItemsSource="{Binding}">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="#" Width="200" FontSize="12" Binding="{Binding Path=Index}" />
+                        <DataGridTextColumn Header="TextId" Width="200" FontSize="12" Binding="{Binding Path=TextId}" />
+                        <DataGridTextColumn Header="Value1" Width="200" FontSize="12" Binding="{Binding Path=Value1}" />
+                        <DataGridTextColumn Header="Value2" Width="200" FontSize="12" Binding="{Binding Path=Value2}" />
+                        <DataGridTextColumn Header="Same?" Width="200" FontSize="12" Binding="{Binding Path=Same}" />
+                    </DataGrid.Columns>
+                </DataGrid>
+            </DataTemplate>
+
+            <DataTemplate x:Key="PreparedEntriesTemplate">
+                <DataGrid ItemsSource="{Binding}">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="#" Width="200" FontSize="12" Binding="{Binding Path=Index}" />
+                        <DataGridTextColumn Header="TextId" Width="200" FontSize="12" Binding="{Binding Path=TextId}" />
+                        <DataGridTextColumn Header="Value1" Width="200" FontSize="12" Binding="{Binding Path=Value1}" />
+                        <DataGridTextColumn Header="Value2" Width="200" FontSize="12" Binding="{Binding Path=Value2}" />
+                        <DataGridTextColumn Header="Value3" Width="200" FontSize="12" Binding="{Binding Path=Value3}" />
+                        <DataGridTextColumn Header="Output" Width="200" FontSize="12" Binding="{Binding Path=Output}" />
+                        <DataGridTextColumn Header="Source" Width="200" FontSize="12" Binding="{Binding Path=Source}" />
+                    </DataGrid.Columns>
+                </DataGrid>
+            </DataTemplate>-->
+        </Grid.Resources>
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="18*" />
+            <RowDefinition Height="3*" />
+            <RowDefinition Height="18*" />
+            <RowDefinition Height="2*" />
+            <RowDefinition Height="3*" />
+        </Grid.RowDefinitions>
+
+        <TabControl x:Name="Tbc_Modes" Margin="16,16,16,8" >
+            <TabItem Header="Compare mode">
+                <Grid Background="#EEE">
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="1*" />
-                        <RowDefinition Height="1*" />
+                        <RowDefinition Height="8*" />
+                        <RowDefinition Height="7*" />
                     </Grid.RowDefinitions>
 
-                    <!-- TODO: Use panels to organize items together (v1.2+) -->
-                    
-                    <!-- Output filename -->
-                    <Label Grid.Column="0" Grid.Row="0" VerticalAlignment="Center" Content="Output filename :" />
-                    <TextBox x:Name="tbx_outputfilename" 
-                             Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="2"
-                             HorizontalAlignment="Left" Width="287" Margin="105,0,0,0"
-                             VerticalAlignment="Center"
-                             TextAlignment="Right"
-                             Text="result"
-                             />
-                    <Label x:Name="lbl_outputfileext"
-                           Grid.Column="1" Grid.Row="0" 
-                           HorizontalAlignment="Left" VerticalAlignment="Center" 
-                           Margin="158,0,0,0" 
-                           Content=".{ext}" 
-                           />
-                    <CheckBox x:Name="cbx_syncoutputfilename" 
-                              Grid.Column="0" Grid.Row="1" 
-                              HorizontalAlignment="Left" Margin="4,0,0,0" 
-                              VerticalAlignment="Center"
-                              Content="Use same filename as File #1"
-                              Checked="cbx_syncoutputfilename_Checked"
-                              />
+                    <!-- Compare mode : Input files -->
+                    <GroupBox Grid.ColumnSpan="2" Margin="8,8,8,4" Header="Input files" BorderBrush="DarkGray">
+                        <Grid Margin="8,16,8,16">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="1.8*"/>
+                                <ColumnDefinition Width="36*"/>
+                                <ColumnDefinition Width="1*"/>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="1*" />
+                                <RowDefinition Height="1*" />
+                            </Grid.RowDefinitions>
 
-                    <!-- CSV output separator -->
-                    <Label Grid.Column="1" Grid.Row="1" HorizontalAlignment="Right" VerticalAlignment="Center" Content="CSV separator :" Margin="0,0,67,0" />
-                    <TextBox x:Name="tbx_csvsepo" 
-                             Grid.Column="1" Grid.Row="1"
-                             HorizontalAlignment="Right" Width="22" Margin="0,0,43,0"
-                             VerticalAlignment="Center" Height="22"
-                             TextAlignment="Center" Text="|"
-                             MaxLength="1"
-                             />
+                            <Label Grid.Column="0" Grid.Row="0" VerticalAlignment="Center" Content="File #1 :"
+                                   ToolTip="Expected here : one of the 2 FMG files to compare"
+                                   />
+                            <TextBox x:Name="Tbx_Cmp_iFile1" 
+                                     Grid.Column="1" Grid.Row="0" 
+                                     VerticalAlignment="Center" 
+                                     FontStyle="Italic" Foreground="Gray" Text="Drop FMG file..."
+                                     TextWrapping="NoWrap" IsReadOnly="True"
+                                     Cursor="Arrow"
+                                     AllowDrop="True"
+                                     PreviewDragOver="Tbx_Cmp_iFile1_PreviewDragOver"
+                                     Drop="Tbx_Cmp_iFile1_Drop"
+                                     />
+                            <Button x:Name="Btn_Cmp_ExploreFile1"
+                                    Grid.Column="2" Grid.Row="0" 
+                                    HorizontalAlignment="Left" VerticalAlignment="Center" Width="24" Height="17" 
+                                    Margin="2,0,0,0"
+                                    Padding="0,0,0,1" 
+                                    Content="&#8901;&#8901;&#8901;"
+                                    ToolTip="Open parent folder of the submitted file if any, else the root folder of DSTMH"
+                                    Click="Btn_Cmp_ExploreFile1_Click"
+                                    />
+                            <Label Grid.Column="0" Grid.Row="1" VerticalAlignment="Center" Content="File #2 :"
+                                   ToolTip="Expected here : one of the 2 FMG files to compare"
+                                   />
+                            <TextBox x:Name="Tbx_Cmp_iFile2" 
+                                    Grid.Column="1" Grid.Row="1" 
+                                    VerticalAlignment="Center" 
+                                    FontStyle="Italic" Foreground="Gray" Text="Drop FMG file..."
+                                    TextWrapping="NoWrap" IsReadOnly="True"
+                                    Cursor="Arrow"
+                                    AllowDrop="True"
+                                     PreviewDragOver="Tbx_Cmp_iFile2_PreviewDragOver"
+                                     Drop="Tbx_Cmp_iFile2_Drop"
+                                    />
+                            <Button x:Name="Btn_Cmp_ExploreFile2"
+                                    Grid.Column="2" Grid.Row="1" 
+                                    HorizontalAlignment="Left" VerticalAlignment="Center" Width="24" Height="17" 
+                                    Margin="2,0,0,0"
+                                    Padding="0,0,0,1" 
+                                    Content="&#8901;&#8901;&#8901;"
+                                    ToolTip="Open parent folder of the submitted file if any, else the root folder of DSTMH"
+                                    Click="Btn_Cmp_ExploreFile2_Click"
+                                    />
+                        </Grid>
+                    </GroupBox>
 
-                    <!-- Output headers -->
-                    <Label Grid.Column="2" Grid.Row="0" 
-                           VerticalAlignment="Center" 
-                           Margin="-1,0,0,0" 
-                           Content="Header #1 :" 
-                           ToolTip="Enter header name to be used in output for File #1.&#x0a;(Compare/Compile mode only)"
-                           />
-                    <TextBox x:Name="tbx_header1" 
-                             Grid.Column="2" Grid.Row="0"
-                             HorizontalAlignment="Right" Width="160"
-                             VerticalAlignment="Center"
-                             TextAlignment="Right"
-                             Text="Value1"
-                             ToolTip="Enter header name to be used in output for File #1.&#x0a;(Compare/Compile mode only)"
-                             />
-                    <Label Grid.Column="2" Grid.Row="1" 
-                           VerticalAlignment="Center" 
-                           Content="Header #2 :" 
-                           Margin="-1,0,0,0"
-                           ToolTip="Enter header name to be used in output for File #2.&#x0a;(Compare/Compile mode only)"
-                           />
-                    <TextBox x:Name="tbx_header2"
-                             Grid.Column="2" Grid.Row="1"
-                             HorizontalAlignment="Right" Width="160"
-                             VerticalAlignment="Center"
-                             TextAlignment="Right"
-                             Text="Value2"
-                             ToolTip="Enter header name to be used in output for File #2.&#x0a;(Compare/Compile mode only)"
-                             />
+                    <!-- Compare mode : Options -->
+                    <GroupBox Grid.Row="1" Grid.ColumnSpan="2" Margin="8,4,8,8" Header="Options" BorderBrush="DarkGray">
+                        <Grid Margin="8,12,8,12">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="14*"/>
+                                <ColumnDefinition Width="1*"/>
+                                <ColumnDefinition Width="12*"/>
+                                <ColumnDefinition Width="9*"/>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="1*" />
+                                <RowDefinition Height="1*" />
+                            </Grid.RowDefinitions>
 
-                    <!-- Replace values -->
-                    <Label Grid.Column="3" Grid.Row="0" 
-                           VerticalAlignment="Center" 
-                           Content="String to replace :" 
-                           Margin="48,0,0,0"
-                           ToolTip="Enter text to replace in entries&#x0a;For instance use '\n' here and '/n/' below&#x0a;= This will output the original line breaks syntax"
-                           />
-                    <TextBox x:Name="tbx_replacesource"
-                             Grid.Column="3" Grid.Row="0"
-                             HorizontalAlignment="Right" Width="80"
-                             VerticalAlignment="Center"
-                             TextAlignment="Right"
-                             MaxLength="10"
-                             ToolTip="Enter text to replace in entries&#x0a;For instance use '\n' here and '/n/' below&#x0a;= This will output the original line breaks syntax"
-                             />
-                    <Label Grid.Column="3" Grid.Row="1" 
-                           VerticalAlignment="Center" 
-                           Content="Remplacement text :" 
-                           Margin="34,0,0,0"
-                           ToolTip="Enter replacing text for entries&#x0a;For instance use '/n/' here and '\n' above&#x0a;= This will output the original line breaks syntax"
-                           />
-                    <TextBox x:Name="tbx_replacedest"
-                             Grid.Column="3" Grid.Row="1"
-                             HorizontalAlignment="Right" Width="80"
-                             VerticalAlignment="Center"
-                             TextAlignment="Right"
-                             MaxLength="10"
-                             ToolTip="Enter replacing text for entries&#x0a;For instance use '/n/' here and '\n' above&#x0a;= This will output the original line breaks syntax"
-                             />
+                            <!-- Output filename -->
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
+                                <Label VerticalAlignment="Center" Content="Output filename :" />
+                                <TextBox x:Name="Tbx_Cmp_oFilename" Width="308"
+                                         VerticalAlignment="Center"
+                                         TextAlignment="Right" 
+                                         Text="result"
+                                         GotFocus="Tbx_Cmp_oFilename_GotFocus"
+                                         LostFocus="Tbx_Cmp_oFilename_LostFocus"
+                                         />
+                                <Label VerticalAlignment="Center" 
+                                       Margin="-4,0,0,0" 
+                                       Content=".csv" 
+                                        />
+                            </StackPanel>
+
+                            <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center" Margin="-8,0,0,0">
+                                <CheckBox x:Name="Cbx_Cmp_UseInputFilename"
+                                          HorizontalAlignment="Left"
+                                          VerticalAlignment="Center"
+                                          Content="Use same filename as :"
+                                          Checked="Cbx_Cmp_UseInputFilename_Checked"
+                                          Unchecked="Cbx_Cmp_UseInputFilename_Unchecked"
+                                          />
+                                <ComboBox x:Name="Cmbx_Cmp_TargetInputFilename" 
+                                          VerticalAlignment="Center" Margin="8,0,0,0" Width="200"
+                                          IsEnabled="False"
+                                          SelectionChanged="Cmbx_Cmp_TargetInputFilename_SelectionChanged">
+                                    <ComboBoxItem>Input File #1</ComboBoxItem>
+                                    <ComboBoxItem>Input File #2</ComboBoxItem>
+                                </ComboBox>
+                            </StackPanel>
+
+                            <!-- Output headers -->
+                            <StackPanel Grid.Column="2" Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Center">
+                                <Label VerticalAlignment="Center"
+                                       Content="Header #1 :" 
+                                       ToolTip="Enter output header for File #1"
+                                       />
+                                <TextBox x:Name="Tbx_Cmp_oHeader1"
+                                        HorizontalAlignment="Right" Width="240"
+                                        VerticalAlignment="Center"
+                                        TextAlignment="Right"
+                                        Text="File #1"
+                                        ToolTip="Enter output header for File #1"
+                                         GotFocus="Tbx_Cmp_oHeader1_GotFocus"
+                                        LostFocus="Tbx_Cmp_oHeader1_LostFocus"
+                                        />
+                            </StackPanel>
+                            <StackPanel Grid.Column="2" Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center">
+                                <Label VerticalAlignment="Center" 
+                                       Content="Header #2 :"
+                                       ToolTip="Enter output header for File #2"
+                                       />
+                                <TextBox x:Name="Tbx_Cmp_oHeader2"
+                                         HorizontalAlignment="Right" Width="240"
+                                         VerticalAlignment="Center"
+                                         TextAlignment="Right"
+                                         Text="File #2"
+                                         ToolTip="Enter output header for File #2"
+                                         GotFocus="Tbx_Cmp_oHeader2_GotFocus"
+                                         LostFocus="Tbx_Cmp_oHeader2_LostFocus"
+                                         />
+                            </StackPanel>
+
+                            <!-- CSV output separator -->
+                            <StackPanel Grid.Column="3" Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Center">
+                                <Label HorizontalAlignment="Right" VerticalAlignment="Center" Content="CSV separator character :" />
+                                <TextBox x:Name="Tbx_Cmp_CsvSeparator"
+                                         Width="22"
+                                         VerticalAlignment="Center" VerticalContentAlignment="Center" Padding="0,2,0,4"
+                                         TextAlignment="Center" Text="|"
+                                         MaxLength="1"
+                                         GotFocus="Tbx_Cmp_CsvSeparator_GotFocus"
+                                         LostFocus="Tbx_Cmp_CsvSeparator_LostFocus"
+                                         />
+                            </StackPanel>
+
+                            <!-- One lined values -->
+                            <CheckBox x:Name="Cbx_Cmp_OneLinedValues" 
+                                      Grid.Column="3" Grid.Row="1" 
+                                      HorizontalAlignment="Center"
+                                      VerticalAlignment="Center"
+                                      Content="Disable multi line format"
+                                      IsChecked="False"
+                                      ToolTip="Replace every line breaks by /n/"
+                                      />
+                        </Grid>
+                    </GroupBox>
+
                 </Grid>
-            </GroupBox>
-            
-            <!-- Explanations -->
-            <GroupBox Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" Margin="0,8,0,8" BorderBrush="DarkGray" Header="Explanation">
-                <Grid Margin="8">
-                    <TextBlock x:Name="tbk_summary" Margin="8,6,6,6" FontSize="11" />
-                </Grid>
-            </GroupBox>
+            </TabItem>
 
-            <!-- Output preview -->
-            <GroupBox Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2" Margin="0,8,0,8" BorderBrush="DarkGray" Header="Output preview">
-                <Grid Margin="8">
-                    <Grid Background="White">
-                        <ScrollViewer VerticalScrollBarVisibility="Hidden">
-                            <TextBlock x:Name="tbk_preview" Margin="8,6,6,6" />
-                        </ScrollViewer>
-                    </Grid>
-                </Grid>
-            </GroupBox>
+            <TabItem Header="Prepare mode">
+                <Grid Background="#EEE">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="8*" />
+                        <RowDefinition Height="7*" />
+                    </Grid.RowDefinitions>
 
-            <!-- Execute -->
-            <Grid Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="2" Margin="0,8,0,8">
-                <Button x:Name="btn_execute"
-                        HorizontalAlignment="Stretch" Margin="66,0,66,0"
-                        Content="Execute"
-                        Click="btn_execute_Click"
-                        IsEnabled="False"
-                        />
-            </Grid>
+                    <!-- Prepare mode : Input files -->
+                    <GroupBox Grid.ColumnSpan="2" Margin="8,8,8,4" Header="Input files" BorderBrush="DarkGray">
+                        <Grid Margin="8">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="1.8*"/>
+                                <ColumnDefinition Width="36*"/>
+                                <ColumnDefinition Width="1*"/>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="1*" />
+                                <RowDefinition Height="1*" />
+                                <RowDefinition Height="1*" />
+                            </Grid.RowDefinitions>
+
+                            <Label VerticalAlignment="Center" Content="File #1 :"
+                                   ToolTip="Expected here : modded file that will be parsed as reference data"
+                                   />
+                            <TextBox x:Name="Tbx_Prp_iFile1" 
+                                     Grid.Column="1"
+                                     VerticalAlignment="Center" 
+                                     FontStyle="Italic" Foreground="Gray" Text="Drop FMG file..."
+                                     TextWrapping="NoWrap" IsReadOnly="True"
+                                     Cursor="Arrow"
+                                     AllowDrop="True"
+                                     PreviewDragOver="Tbx_Prp_iFile1_PreviewDragOver"
+                                     Drop="Tbx_Prp_iFile1_Drop"
+                                    />
+                            <Button x:Name="Btn_Prp_ExploreFile1"
+                                    Grid.Column="2" Grid.Row="0" 
+                                    HorizontalAlignment="Left" VerticalAlignment="Center" Width="24" Height="17" 
+                                    Margin="2,0,0,0"
+                                    Padding="0,0,0,1" 
+                                    Content="&#8901;&#8901;&#8901;"
+                                    ToolTip="Open parent folder of the submitted file if any, else the root folder of DSTMH"
+                                    Click="Btn_Prp_ExploreFile1_Click"
+                                    />
+                            <Label Grid.Row="1" VerticalAlignment="Center" Content="File #2 :"
+                                   ToolTip="Expected here : vanilla file in same language of the modded file"
+                                   />
+                            <TextBox x:Name="Tbx_Prp_iFile2" 
+                                     Grid.Column="1" Grid.Row="1" 
+                                     VerticalAlignment="Center" 
+                                     FontStyle="Italic" Foreground="Gray" Text="Drop FMG file..."
+                                     TextWrapping="NoWrap" IsReadOnly="True"
+                                     Cursor="Arrow"
+                                     AllowDrop="True"
+                                     PreviewDragOver="Tbx_Prp_iFile2_PreviewDragOver"
+                                     Drop="Tbx_Prp_iFile2_Drop"
+                                     />
+                            <Button x:Name="Btn_Prp_ExploreFile2"
+                                    Grid.Column="2" Grid.Row="1" 
+                                    HorizontalAlignment="Left" VerticalAlignment="Center" Width="24" Height="17" 
+                                    Margin="2,0,0,0"
+                                    Padding="0,0,0,1" 
+                                    Content="&#8901;&#8901;&#8901;"
+                                    ToolTip="Open parent folder of the submitted file if any, else the root folder of DSTMH"
+                                    Click="Btn_Prp_ExploreFile2_Click"
+                                    />
+                            <Label Grid.Column="0" Grid.Row="2" VerticalAlignment="Center" Content="File #3 :"
+                                   ToolTip="Expected here : vanilla file in the language the mod will be translated in"
+                                   />
+                            <TextBox x:Name="Tbx_Prp_iFile3" 
+                                     Grid.Column="1" Grid.Row="2" 
+                                     VerticalAlignment="Center" 
+                                     FontStyle="Italic" Foreground="Gray" Text="Drop FMG file..."
+                                     TextWrapping="NoWrap" IsReadOnly="True"
+                                     Cursor="Arrow"
+                                     AllowDrop="True"
+                                     PreviewDragOver="Tbx_Prp_iFile3_PreviewDragOver"
+                                     Drop="Tbx_Prp_iFile3_Drop"
+                                     />
+                            <Button x:Name="Btn_Prp_ExploreFile3"
+                                    Grid.Column="2" Grid.Row="2" 
+                                    HorizontalAlignment="Left" VerticalAlignment="Center" Width="24" Height="17" 
+                                    Margin="2,0,0,0"
+                                    Padding="0,0,0,1" 
+                                    Content="&#8901;&#8901;&#8901;"
+                                    ToolTip="Open parent folder of the submitted file if any, else the root folder of DSTMH"
+                                    Click="Btn_Prp_ExploreFile3_Click"
+                                    />
+                        </Grid>
+                    </GroupBox>
+
+                    <!-- Prepare mode : Options -->
+                    <GroupBox Grid.Row="1" Grid.ColumnSpan="2" Margin="8,4,8,8" Header="Options" BorderBrush="DarkGray">
+                        <Grid Margin="8,12,8,12">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="14*"/>
+                                <ColumnDefinition Width="1*"/>
+                                <ColumnDefinition Width="12*"/>
+                                <ColumnDefinition Width="9*"/>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="1*" />
+                                <RowDefinition Height="1*" />
+                            </Grid.RowDefinitions>
+
+                            <!-- Output filename -->
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
+                                <Label VerticalAlignment="Center" Content="Output filename :" />
+                                <TextBox x:Name="Tbx_Prp_oFilename" Width="308"
+                                         VerticalAlignment="Center"
+                                         TextAlignment="Right" 
+                                         Text="result"
+                                         GotFocus="Tbx_Prp_oFilename_GotFocus"
+                                         LostFocus="Tbx_Prp_oFilename_LostFocus"
+                                         />
+                                <Label VerticalAlignment="Center" 
+                                       Margin="-4,0,0,0" 
+                                       Content=".fmg" 
+                                        />
+                            </StackPanel>
+
+                            <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center" Margin="-8,0,0,0">
+                                <CheckBox x:Name="Cbx_Prp_UseInputFilename"
+                                          HorizontalAlignment="Left"
+                                          VerticalAlignment="Center"
+                                          Content="Use same filename as :"
+                                          Checked="Cbx_Prp_UseInputFilename_Checked"
+                                          Unchecked="Cbx_Prp_UseInputFilename_Unchecked"
+                                          />
+                                <ComboBox x:Name="Cmbx_Prp_TargetInputFilename"
+                                          VerticalAlignment="Center" Margin="8,0,0,0" Width="200"
+                                          IsEnabled="False"
+                                          SelectionChanged="Cmbx_Prp_TargetInputFilename_SelectionChanged">
+                                    <ComboBoxItem>Input File #1</ComboBoxItem>
+                                    <ComboBoxItem>Input File #2</ComboBoxItem>
+                                    <ComboBoxItem>Input File #3</ComboBoxItem>
+                                </ComboBox>
+                            </StackPanel>
+
+                            <!-- Replace values -->
+                            <StackPanel Grid.Column="4" Grid.Row="0" Orientation="Horizontal">
+                                <Label VerticalAlignment="Center" 
+                                       Content="String to replace :"
+                                       ToolTip="Enter text to be replaced in entries"
+                                       />
+                                <TextBox x:Name="Tbx_Prp_TextToReplace"
+                                         VerticalAlignment="Center"
+                                         Margin="7,0,0,0"
+                                         Width="120"
+                                         TextAlignment="Right"
+                                         ToolTip="Enter text to be replaced in entries"
+                                         GotFocus="Tbx_Prp_TextToReplace_GotFocus"
+                                         />
+                            </StackPanel>
+                            <StackPanel Grid.Column="4" Grid.Row="1" Orientation="Horizontal">
+                                <Label VerticalAlignment="Center"
+                                       Content="Remplacing text :"
+                                       ToolTip="Enter replacing text for entries."
+                                       />
+                                <TextBox x:Name="Tbx_Prp_ReplacingText"
+                                         VerticalAlignment="Center"
+                                         Margin="9,0,0,0"
+                                         Width="120"
+                                         TextAlignment="Right"
+                                         ToolTip="Enter replacing text for entries."
+                                         GotFocus="Tbx_Prp_ReplacingText_GotFocus"
+                                         />
+                            </StackPanel>
+
+                        </Grid>
+                    </GroupBox>
+                </Grid>
+            </TabItem>
+        </TabControl>
+
+        <Grid Grid.Row="1" Margin="17,8,17,8">
+            <Button x:Name="Btn_RefreshPreview" HorizontalAlignment="Stretch" Click="Btn_RefreshPreview_Click">
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Padding="6,4,3,2" FontSize="14">Load/Reload preview</TextBlock>
+                    <TextBlock Padding="3,1,6,2" FontSize="18">&#x21bb;</TextBlock>
+                </StackPanel>
+            </Button>
         </Grid>
+
+        <!-- Output preview -->
+        <GroupBox Grid.Row="2" Margin="16,0,16,0" BorderBrush="DarkGray" Header="Output preview" Padding="8">
+            <!-- Legacy preview, just in case -->
+            <!--<Grid Background="White">
+                <ScrollViewer VerticalScrollBarVisibility="Hidden">
+                    <TextBlock x:Name="tbk_preview" Margin="6,6,6,6" />
+                </ScrollViewer>
+            </Grid>-->
+            <DataGrid x:Name="Dtg_Preview" HeadersVisibility="Column" Visibility="Hidden" AutoGenerateColumns="False" IsReadOnly="True" />
+        </GroupBox>
+
+        <Grid Grid.Row="3" Margin="19,0,17,8">
+            <StackPanel Orientation="Horizontal">
+                <Button x:Name="Btn_ClearPreview" Width="72" Margin="0,0,2,0" Click="Btn_ClearPreview_Click">Clear &#160;&#10005;</Button>
+                <Button x:Name="Btn_DetachPreview" Width="72" Margin="0,0,2,0" Click="Btn_DetachPreview_Click">Detach &#160;&#11111;</Button>
+                <CheckBox x:Name="Cbx_PreviewAllDetails"
+                          VerticalAlignment="Center" Margin="8,0,0,0" Content="Show all details"
+                          ToolTip="Show all details about the processed data.&#x0a;Note that grey contents will not be written to output file."
+                          IsChecked="False"
+                          Checked="Cbx_PreviewAllDetails_Checked"
+                          Unchecked="Cbx_PreviewAllDetails_Unchecked"/>
+            </StackPanel>
+
+        </Grid>
+
+        <!-- Generate output file -->
+        <Grid Grid.Row="4" Margin="17,0,17,16">
+            <Button x:Name="Btn_GenerateOutput" HorizontalAlignment="Stretch" Click="Btn_GenerateOutput_Click">
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Padding="6,4,3,2" FontSize="14">Generate output file</TextBlock>
+                    <TextBlock Padding="3,1,6,2" FontSize="18">&#128462;</TextBlock>
+                </StackPanel>
+            </Button>
+        </Grid>
+
     </Grid>
 </Window>
