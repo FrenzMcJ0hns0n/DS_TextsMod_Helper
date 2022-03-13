@@ -100,7 +100,7 @@ namespace DS_TextsMod_Helper
 
         public void ProduceOutput(string oFilename)
         {
-            OutputFilename = IOHelper.GetPrepareOutputFilename(oFilename);
+            OutputFilename = Tools.GetPrepareOutputFilename(oFilename);
 
             SoulsFormats.FMG output = new SoulsFormats.FMG { };
             foreach (Entry pe in Entries)

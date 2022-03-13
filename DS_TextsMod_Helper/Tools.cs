@@ -4,7 +4,7 @@ using System.Windows;
 
 namespace DS_TextsMod_Helper
 {
-    public class IOHelper
+    public class Tools
     {
 
         public static string GetRootDirPath()

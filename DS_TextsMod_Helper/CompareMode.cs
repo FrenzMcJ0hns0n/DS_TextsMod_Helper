@@ -86,7 +86,7 @@ namespace DS_TextsMod_Helper
 
         public void ProduceOutput(string oFilename, string oHdr1, string oHdr2, string csvSepChar)
         {
-            OutputFilename = IOHelper.GetCompareOutputFilename(oFilename);
+            OutputFilename = Tools.GetCompareOutputFilename(oFilename);
             OutputHeader1 = oHdr1;
             OutputHeader2 = oHdr2;
             Sep = csvSepChar[0];

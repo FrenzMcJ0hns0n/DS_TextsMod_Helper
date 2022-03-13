@@ -29,9 +29,9 @@ namespace DS_TextsMod_Helper
         {
             InitializeComponent();
 
-            Directory.CreateDirectory(IOHelper.GetOutputDirPath());
+            Directory.CreateDirectory(Tools.GetOutputDirPath());
 
-            if (!File.Exists(Path.Combine(IOHelper.GetRootDirPath(), "SoulsFormats.dll")))
+            if (!File.Exists(Path.Combine(Tools.GetRootDirPath(), "SoulsFormats.dll")))
                 MessageBox.Show("Fatal error : file 'SoulsFormats.dll' not found");
 
 #if DEBUG
@@ -206,22 +206,22 @@ namespace DS_TextsMod_Helper
             switch (btn.Name)
             {
                 case "Btn_Cmp_ExploreFile1":
-                    _ = Process.Start(Tbx_Cmp_iFile1.Text != TBX_DEFAULT ? IOHelper.GetParentFolder(Tbx_Cmp_iFile1.Text) : IOHelper.GetRootDirPath());
+                    _ = Process.Start(Tbx_Cmp_iFile1.Text != TBX_DEFAULT ? Tools.GetParentFolder(Tbx_Cmp_iFile1.Text) : Tools.GetRootDirPath());
                     break;
                 case "Btn_Cmp_ExploreFile2":
-                    _ = Process.Start(Tbx_Cmp_iFile2.Text != TBX_DEFAULT ? IOHelper.GetParentFolder(Tbx_Cmp_iFile2.Text) : IOHelper.GetRootDirPath());
+                    _ = Process.Start(Tbx_Cmp_iFile2.Text != TBX_DEFAULT ? Tools.GetParentFolder(Tbx_Cmp_iFile2.Text) : Tools.GetRootDirPath());
                     break;
                 case "Btn_Prp_ExploreFile1":
-                    _ = Process.Start(Tbx_Prp_iFile1.Text != TBX_DEFAULT ? IOHelper.GetParentFolder(Tbx_Prp_iFile1.Text) : IOHelper.GetRootDirPath());
+                    _ = Process.Start(Tbx_Prp_iFile1.Text != TBX_DEFAULT ? Tools.GetParentFolder(Tbx_Prp_iFile1.Text) : Tools.GetRootDirPath());
                     break;
                 case "Btn_Prp_ExploreFile2":
-                    _ = Process.Start(Tbx_Prp_iFile2.Text != TBX_DEFAULT ? IOHelper.GetParentFolder(Tbx_Prp_iFile2.Text) : IOHelper.GetRootDirPath());
+                    _ = Process.Start(Tbx_Prp_iFile2.Text != TBX_DEFAULT ? Tools.GetParentFolder(Tbx_Prp_iFile2.Text) : Tools.GetRootDirPath());
                     break;
                 case "Btn_Prp_ExploreFile3":
-                    _ = Process.Start(Tbx_Prp_iFile3.Text != TBX_DEFAULT ? IOHelper.GetParentFolder(Tbx_Prp_iFile3.Text) : IOHelper.GetRootDirPath());
+                    _ = Process.Start(Tbx_Prp_iFile3.Text != TBX_DEFAULT ? Tools.GetParentFolder(Tbx_Prp_iFile3.Text) : Tools.GetRootDirPath());
                     break;
                 default:
-                    _ = Process.Start(IOHelper.GetRootDirPath());
+                    _ = Process.Start(Tools.GetRootDirPath());
                     break;
             }
         }
@@ -251,20 +251,20 @@ namespace DS_TextsMod_Helper
                 if (tbx.Name.Contains("Cmp") && (Cbx_Cmp_UseInputFilename.IsChecked ?? true)) // Sender is TextBox from Compare mode
                 {
                     if (Cmbx_Cmp_TargetInputFilename.SelectedIndex == 0 && tbx == Tbx_Cmp_iFile1)
-                        Tbx_Cmp_oFilename.Text = IOHelper.GetFilenameFromPath(Tbx_Cmp_iFile1.Text);
+                        Tbx_Cmp_oFilename.Text = Tools.GetFilenameFromPath(Tbx_Cmp_iFile1.Text);
                     else if (Cmbx_Cmp_TargetInputFilename.SelectedIndex == 1 && tbx == Tbx_Cmp_iFile2)
-                        Tbx_Cmp_oFilename.Text = IOHelper.GetFilenameFromPath(Tbx_Cmp_iFile2.Text);
+                        Tbx_Cmp_oFilename.Text = Tools.GetFilenameFromPath(Tbx_Cmp_iFile2.Text);
 
                     ValidateTbxValue(Tbx_Cmp_oFilename);
                 }
                 if (tbx.Name.Contains("Prp") && (Cbx_Prp_UseInputFilename.IsChecked ?? true)) // Sender is TextBox from Prepare mode
                 {
                     if (Cmbx_Prp_TargetInputFilename.SelectedIndex == 0 && tbx == Tbx_Prp_iFile1)
-                        Tbx_Prp_oFilename.Text = IOHelper.GetFilenameFromPath(Tbx_Prp_iFile1.Text);
+                        Tbx_Prp_oFilename.Text = Tools.GetFilenameFromPath(Tbx_Prp_iFile1.Text);
                     else if (Cmbx_Prp_TargetInputFilename.SelectedIndex == 1 && tbx == Tbx_Prp_iFile2)
-                        Tbx_Prp_oFilename.Text = IOHelper.GetFilenameFromPath(Tbx_Prp_iFile2.Text);
+                        Tbx_Prp_oFilename.Text = Tools.GetFilenameFromPath(Tbx_Prp_iFile2.Text);
                     else if (Cmbx_Prp_TargetInputFilename.SelectedIndex == 2 && tbx == Tbx_Prp_iFile3)
-                        Tbx_Prp_oFilename.Text = IOHelper.GetFilenameFromPath(Tbx_Prp_iFile3.Text);
+                        Tbx_Prp_oFilename.Text = Tools.GetFilenameFromPath(Tbx_Prp_iFile3.Text);
 
                     ValidateTbxValue(Tbx_Prp_oFilename);
                 }
@@ -277,20 +277,20 @@ namespace DS_TextsMod_Helper
                 if (cmbx == Cmbx_Cmp_TargetInputFilename) // Sender is ComboBox from Compare mode
                 {
                     if (cmbx.SelectedIndex == 0 && Tbx_Cmp_iFile1.Text != TBX_DEFAULT)
-                        Tbx_Cmp_oFilename.Text = IOHelper.GetFilenameFromPath(Tbx_Cmp_iFile1.Text);
+                        Tbx_Cmp_oFilename.Text = Tools.GetFilenameFromPath(Tbx_Cmp_iFile1.Text);
                     else if (cmbx.SelectedIndex == 1 && Tbx_Cmp_iFile2.Text != TBX_DEFAULT)
-                        Tbx_Cmp_oFilename.Text = IOHelper.GetFilenameFromPath(Tbx_Cmp_iFile2.Text);
+                        Tbx_Cmp_oFilename.Text = Tools.GetFilenameFromPath(Tbx_Cmp_iFile2.Text);
 
                     ValidateTbxValue(Tbx_Cmp_oFilename);
                 }
                 if (cmbx == Cmbx_Prp_TargetInputFilename) // Sender is ComboBox from Prepare mode
                 {
                     if (cmbx.SelectedIndex == 0 && Tbx_Prp_iFile1.Text != TBX_DEFAULT)
-                        Tbx_Prp_oFilename.Text = IOHelper.GetFilenameFromPath(Tbx_Prp_iFile1.Text);
+                        Tbx_Prp_oFilename.Text = Tools.GetFilenameFromPath(Tbx_Prp_iFile1.Text);
                     else if (cmbx.SelectedIndex == 1 && Tbx_Prp_iFile2.Text != TBX_DEFAULT)
-                        Tbx_Prp_oFilename.Text = IOHelper.GetFilenameFromPath(Tbx_Prp_iFile2.Text);
+                        Tbx_Prp_oFilename.Text = Tools.GetFilenameFromPath(Tbx_Prp_iFile2.Text);
                     else if (cmbx.SelectedIndex == 2 && Tbx_Prp_iFile3.Text != TBX_DEFAULT)
-                        Tbx_Prp_oFilename.Text = IOHelper.GetFilenameFromPath(Tbx_Prp_iFile3.Text);
+                        Tbx_Prp_oFilename.Text = Tools.GetFilenameFromPath(Tbx_Prp_iFile3.Text);
 
                     ValidateTbxValue(Tbx_Prp_oFilename);
                 }
@@ -417,7 +417,7 @@ namespace DS_TextsMod_Helper
         {
             List<DataGridTextColumn> columns = new List<DataGridTextColumn>();
 
-            double COL_MAXWIDTH = IOHelper.GetColumnMaxWidth() * 2; // 1080 or 720 depending of user's screen resolution
+            double COL_MAXWIDTH = Tools.GetColumnMaxWidth() * 2; // 1080 or 720 depending of user's screen resolution
 
             double maxWidth_RowNum = detached ? 80 : 40;
             double maxWidth_TextId = detached ? 160 : 80;
@@ -445,7 +445,7 @@ namespace DS_TextsMod_Helper
         {
             List<DataGridTextColumn> columns = new List<DataGridTextColumn>();
 
-            double COL_MAXWIDTH = IOHelper.GetColumnMaxWidth(); // 540 or 360 depending of user's screen resolution
+            double COL_MAXWIDTH = Tools.GetColumnMaxWidth(); // 540 or 360 depending of user's screen resolution
 
             double maxWidth_RowNum = detached ? 80 : 40;
             double maxWidth_TextId = detached ? 200 : allDetails ? 80 : 120;
