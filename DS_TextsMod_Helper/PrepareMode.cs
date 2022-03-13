@@ -56,7 +56,7 @@ namespace DS_TextsMod_Helper
                 prp_dictionary.Add(entry.ID, new List<string>() { entry.Text, "", "" });
 
                 counter += 1;
-                if (preview && counter == 30)
+                if (preview && counter == 50) // TODO? v1.4: Give choice about max results
                     break;
             }
             // 2. Insert value from File2 if entry.ID in File1

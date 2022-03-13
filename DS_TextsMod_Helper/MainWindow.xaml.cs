@@ -420,7 +420,7 @@ namespace DS_TextsMod_Helper
             double COL_MAXWIDTH = Tools.GetColumnMaxWidth() * 2; // 1080 or 720 depending of user's screen resolution
 
             double maxWidth_RowNum = detached ? 80 : 40;
-            double maxWidth_TextId = detached ? 160 : 80;
+            double maxWidth_TextId = detached ? 120 : 80;
             double maxWidth_Value1 = detached ? COL_MAXWIDTH : 480;
             double maxWidth_Value2 = detached ? COL_MAXWIDTH : 480;
 
@@ -448,7 +448,7 @@ namespace DS_TextsMod_Helper
             double COL_MAXWIDTH = Tools.GetColumnMaxWidth(); // 540 or 360 depending of user's screen resolution
 
             double maxWidth_RowNum = detached ? 80 : 40;
-            double maxWidth_TextId = detached ? 200 : allDetails ? 80 : 120;
+            double maxWidth_TextId = detached ? 120 : allDetails ? 80 : 120;
             double maxWidth_Output = detached ? COL_MAXWIDTH : allDetails ? 240 : 360;
             double maxWidth_Value1 = detached ? COL_MAXWIDTH : 240;
             double maxWidth_Value2 = detached ? COL_MAXWIDTH : 240;
