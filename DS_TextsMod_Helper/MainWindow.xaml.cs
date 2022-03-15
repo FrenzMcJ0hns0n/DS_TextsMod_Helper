@@ -15,9 +15,9 @@ namespace DS_TextsMod_Helper
         private enum PROCESS_MODE : int
         {
             None = -1,
-            // TODO: Add Read
-            Compare = 0,
-            Prepare = 1,
+            Read = 0,
+            Compare = 1,
+            Prepare = 2,
         };
 
 
@@ -311,13 +311,11 @@ namespace DS_TextsMod_Helper
 
         #region Preview
 
-        //TODO: Find better display condition than Visibility property
-
         private void Btn_RefreshPreview_Click(object sender, RoutedEventArgs e)
         {
             switch (SelectedMode())
             {
-                //case PROCESS_MODE.Read: PreviewRead(); break;
+                case PROCESS_MODE.Read: PreviewRead(); break;
                 case PROCESS_MODE.Compare: PreviewCompare(); break;
                 case PROCESS_MODE.Prepare: PreviewPrepare(); break;
             }
@@ -357,7 +355,7 @@ namespace DS_TextsMod_Helper
 
             switch (LoadedMode())
             {
-                //case PROCESS_MODE.Read: columns = GetCompareColumns(allDetails, detached); processMode = "Read mode"; break;
+                case PROCESS_MODE.Read: columns = GetReadColumns(allDetails, detached); processMode = "Read mode"; break; // TODO
                 case PROCESS_MODE.Compare: columns = GetCompareColumns(allDetails, detached); processMode = "Compare mode"; break;
                 case PROCESS_MODE.Prepare: columns = GetPrepareColumns(allDetails, detached); processMode = "Prepare mode"; break;
             }
@@ -380,7 +378,7 @@ namespace DS_TextsMod_Helper
 
         private void Cbx_PreviewAllDetails_Checked(object sender, RoutedEventArgs e)
         {
-            if (LoadedMode() == PROCESS_MODE.None) // TODO: Add || LoadedMode() == SelectedMode.Read
+            if (LoadedMode() == PROCESS_MODE.None || LoadedMode() == PROCESS_MODE.Read)
                 return;
 
             if (LoadedMode() == PROCESS_MODE.Compare)
@@ -392,7 +390,7 @@ namespace DS_TextsMod_Helper
 
         private void Cbx_PreviewAllDetails_Unchecked(object sender, RoutedEventArgs e)
         {
-            if (LoadedMode() == PROCESS_MODE.None) // TODO: Add || LoadedMode() == PROCESS_MODE.Read
+            if (LoadedMode() == PROCESS_MODE.None || LoadedMode() == PROCESS_MODE.Read)
                 return;
 
             if (LoadedMode() == PROCESS_MODE.Compare)
@@ -410,15 +408,13 @@ namespace DS_TextsMod_Helper
         /// </returns>
         private PROCESS_MODE SelectedMode()
         {
-            // TODO: Add PROCESS_MODE.Read
-
-            if (Tbc_Modes.SelectedIndex == 0)
-                return PROCESS_MODE.Compare;
-
-            if (Tbc_Modes.SelectedIndex == 1)
-                return PROCESS_MODE.Prepare;
-
-            return PROCESS_MODE.None;
+            switch (Tbc_Modes.SelectedIndex)
+            {
+                case 0: return PROCESS_MODE.Read;
+                case 1: return PROCESS_MODE.Compare;
+                case 2: return PROCESS_MODE.Prepare;
+                default: return PROCESS_MODE.None;
+            }
         }
 
         /// <summary>
@@ -429,7 +425,9 @@ namespace DS_TextsMod_Helper
         /// </returns>
         private PROCESS_MODE LoadedMode()
         {
-            // TODO: Add PROCESS_MODE.Read
+            // TODO: Create ReadMode class
+            //if (Dtg_Preview.ItemsSource is List<ReadMode.Entry>)
+            //    return PROCESS_MODE.Read;
 
             if (Dtg_Preview.ItemsSource is List<CompareMode.Entry>)
                 return PROCESS_MODE.Compare;
@@ -438,6 +436,11 @@ namespace DS_TextsMod_Helper
                 return PROCESS_MODE.Prepare;
 
             return PROCESS_MODE.None;
+        }
+
+        private void PreviewRead() // List<ReadMode.Entry> r_entries = null
+        {
+            // TODO
         }
 
         private void PreviewCompare(List<CompareMode.Entry> c_entries = null)
@@ -504,6 +507,15 @@ namespace DS_TextsMod_Helper
                 Dtg_Preview.Columns.Add(col);
 
             Dtg_Preview.ItemsSource = p_entries;
+        }
+
+        private List<DataGridTextColumn> GetReadColumns(bool allDetails, bool detached)
+        {
+            List<DataGridTextColumn> columns = new List<DataGridTextColumn>();
+
+            // TODO
+
+            return columns;
         }
 
         private List<DataGridTextColumn> GetCompareColumns(bool allDetails, bool detached) // TODO! Something easier
