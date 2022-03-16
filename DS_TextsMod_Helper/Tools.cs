@@ -19,12 +19,7 @@ namespace DS_TextsMod_Helper
 
 
 
-        public static string GetCompareOutputFilename(string filename)
-        {
-            return Path.Combine(GetOutputDirPath(), filename);
-        }
-
-        public static string GetPrepareOutputFilename(string filename)
+        public static string GetOutputFilepath(string filename)
         {
             return Path.Combine(GetOutputDirPath(), filename);
         }
