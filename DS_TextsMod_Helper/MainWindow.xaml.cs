@@ -461,7 +461,7 @@ namespace DS_TextsMod_Helper
 
                 if (iFile1 == "" || iFile1 == TBX_DEFAULT)
                 {
-                    _ = MessageBox.Show("[Compare mode] " + ERR_MISSING_IFILES);
+                    _ = MessageBox.Show("[Read mode] " + ERR_MISSING_IFILES);
                     return;
                 }
 
@@ -645,11 +645,11 @@ namespace DS_TextsMod_Helper
 
                     string rd_iFile1 = Tbx_Rd_iFile1.Text;
                     string rd_oFilename = Tbx_Rd_oFilename.Text + ".csv";
-                    //string csvSepChar = Tbx_Rd_CsvSeparator.Text; // TODO
+                    string rd_csvSepChar = Tbx_Rd_CsvSeparator.Text;
 
                     ReadMode r = new ReadMode(rd_iFile1) { OneLinedValues = Cbx_Rd_OneLinedValues.IsChecked ?? false };
                     r.ProcessFiles(false);
-                    r.ProduceOutput(rd_oFilename, ";"); // TODO : Add csvSepChar as var
+                    r.ProduceOutput(rd_oFilename, rd_csvSepChar); // TODO : Add csvSepChar as var
 
                     _ = MessageBox.Show($"[Read mode] File \"{r.OutputFilename}\" created");
                     break;
@@ -664,11 +664,11 @@ namespace DS_TextsMod_Helper
                     string cmp_oFilename = Tbx_Cmp_oFilename.Text + ".csv";
                     string oHdr1 = Tbx_Cmp_oHeader1.Text;
                     string oHdr2 = Tbx_Cmp_oHeader2.Text;
-                    string csvSepChar = Tbx_Cmp_CsvSeparator.Text;
+                    string cmp_csvSepChar = Tbx_Cmp_CsvSeparator.Text;
 
                     CompareMode c = new CompareMode(cmp_iFile1, cmp_iFile2) { OneLinedValues = Cbx_Cmp_OneLinedValues.IsChecked ?? false };
                     c.ProcessFiles(false);
-                    c.ProduceOutput(cmp_oFilename, oHdr1, oHdr2, csvSepChar);
+                    c.ProduceOutput(cmp_oFilename, oHdr1, oHdr2, cmp_csvSepChar);
 
                     _ = MessageBox.Show($"[Compare mode] File \"{c.OutputFilename}\" created");
                     break;
@@ -701,7 +701,7 @@ namespace DS_TextsMod_Helper
 
             string input_filepath1 = Tbx_Rd_iFile1.Text;
             string output_filename = Tbx_Rd_oFilename.Text;
-            //string sepa_csv_char_o = Tbx_Rd_CsvSeparator.Text; // TODO
+            string sepa_csv_char_o = Tbx_Rd_CsvSeparator.Text;
 
             if (!File.Exists(input_filepath1))
                 errors.Add(mode + ERR_MISSING_IFILES);
@@ -709,9 +709,8 @@ namespace DS_TextsMod_Helper
             if (output_filename == "")
                 errors.Add(mode + ERR_MISSING_OFNAME);
 
-            // TODO
-            //if (sepa_csv_char_o == "")
-            //    errors.Add(mode + ERR_MISSING_CSVSEP);
+            if (sepa_csv_char_o == "")
+                errors.Add(mode + ERR_MISSING_CSVSEP);
 
             if (errors.Count > 0)
             {
@@ -784,10 +783,6 @@ namespace DS_TextsMod_Helper
             }
             return true;
         }
-
-
-
-
 
         #endregion
 
