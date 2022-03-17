@@ -20,6 +20,37 @@ namespace DS_TextsMod_Helper
             Prepare = 2,
         };
 
+        /// <summary>
+        /// Return PROCESS MODE currently active in main TabControl
+        /// </summary>
+        private PROCESS_MODE SelectedMode()
+        {
+            switch (Tbc_Modes.SelectedIndex)
+            {
+                case 0: return PROCESS_MODE.Read;
+                case 1: return PROCESS_MODE.Compare;
+                case 2: return PROCESS_MODE.Prepare;
+                default: return PROCESS_MODE.None;
+            }
+        }
+
+        /// <summary>
+        /// Return PROCESS MODE currently loaded in Preview DataGrid
+        /// </summary>
+        private PROCESS_MODE LoadedMode()
+        {
+            if (Dtg_Preview.ItemsSource is List<ReadMode.Entry>)
+                return PROCESS_MODE.Read;
+
+            if (Dtg_Preview.ItemsSource is List<CompareMode.Entry>)
+                return PROCESS_MODE.Compare;
+
+            if (Dtg_Preview.ItemsSource is List<PrepareMode.Entry>)
+                return PROCESS_MODE.Prepare;
+
+            return PROCESS_MODE.None;
+        }
+
 
         #region CONSTANTS
 
@@ -44,22 +75,46 @@ namespace DS_TextsMod_Helper
                 MessageBox.Show("Fatal error : file 'SoulsFormats.dll' not found");
 
 #if DEBUG
+            Tbx_Rd_iFile1.Text = @"C:\Sandbox\Modding data\DS_TMH\work in progress 1.3\FMG test files\Items - English - Daughters of Ash\RingDescriptions.fmg";
             //Tbx_Rd_iFile1.Text = @"C:\Sandbox\Modding data\DS_TMH\work in progress 1.3\FMG test files\Items - English - vanilla\Item_name_.fmg";
-            Tbx_Rd_iFile1.Text = @"C:\Sandbox\Modding data\DS_TMH\published 1.2\FMG test files\English - Daughters of Ash\RingDescriptions.fmg";
 
-            //Tbx_Cmp_iFile1.Text = @"C:\Sandbox\Modding data\DS_TMH\work in progress 1.3\FMG test files\Items - English - vanilla\Item_name_.fmg";
-            //Tbx_Cmp_iFile2.Text = @"C:\Sandbox\Modding data\DS_TMH\work in progress 1.3\FMG test files\Items - English - Daughters of Ash\ItemNames.fmg";
-            //Tbx_Cmp_iFile1.Text = @"C:\Sandbox\Modding data\DS_TMH\published 1.2\FMG test files\English - Daughters of Ash\RingDescriptions.fmg";
-            //Tbx_Cmp_iFile2.Text = @"C:\Sandbox\Modding data\DS_TMH\published 1.2\FMG test files\English - vanilla\Accessory_long_desc_.fmg";
+            Tbx_Cmp_iFile1.Text = @"C:\Sandbox\Modding data\DS_TMH\work in progress 1.3\FMG test files\Items - English - Daughters of Ash\ItemNames.fmg";
+            Tbx_Cmp_iFile2.Text = @"C:\Sandbox\Modding data\DS_TMH\work in progress 1.3\FMG test files\Items - English - vanilla\Item_name_.fmg";
+            //Tbx_Cmp_iFile1.Text = @"C:\Sandbox\Modding data\DS_TMH\work in progress 1.3\FMG test files\Items - English - Daughters of Ash\RingDescriptions.fmg";
+            //Tbx_Cmp_iFile2.Text = @"C:\Sandbox\Modding data\DS_TMH\work in progress 1.3\FMG test files\Items - English - vanilla\Accessory_long_desc_.fmg";
 
-            //Tbx_Prp_iFile1.Text = @"C:\Sandbox\Modding data\DS_TMH\published 1.2\FMG test files\English - Daughters of Ash\RingDescriptions.fmg";
-            //Tbx_Prp_iFile2.Text = @"C:\Sandbox\Modding data\DS_TMH\published 1.2\FMG test files\English - vanilla\Accessory_long_desc_.fmg";
-            //Tbx_Prp_iFile3.Text = @"C:\Sandbox\Modding data\DS_TMH\published 1.2\FMG test files\French - vanilla\Accessory_long_desc_.fmg";
+            //Tbx_Prp_iFile1.Text = @"C:\Sandbox\Modding data\DS_TMH\work in progress 1.3\FMG test files\Items - English - Daughters of Ash\RingDescriptions.fmg";
+            //Tbx_Prp_iFile2.Text = @"C:\Sandbox\Modding data\DS_TMH\work in progress 1.3\FMG test files\Items - English - vanilla\Accessory_long_desc_.fmg";
+            //Tbx_Prp_iFile3.Text = @"C:\Sandbox\Modding data\DS_TMH\work in progress 1.3\FMG test files\Items - French - vanilla\Accessory_long_desc_.fmg";
             Tbx_Prp_iFile1.Text = @"C:\Sandbox\Modding data\DS_TMH\work in progress 1.3\FMG test files\Items - English - Daughters of Ash\ArmorDescriptions.fmg";
             Tbx_Prp_iFile2.Text = @"C:\Sandbox\Modding data\DS_TMH\work in progress 1.3\FMG test files\Items - English - vanilla\Armor_long_desc_.fmg";
             Tbx_Prp_iFile3.Text = @"C:\Sandbox\Modding data\DS_TMH\work in progress 1.3\FMG test files\Items - Italian - vanilla\Armor_long_desc_.fmg";
 #endif
         }
+
+
+        #region GUI Read mode
+
+        private void Tbx_Rd_iFile1_PreviewDragOver(object sender, DragEventArgs e) { e.Handled = true; }
+        private void Tbx_Rd_iFile1_Drop(object sender, DragEventArgs e)
+        {
+            if (AcceptDroppedInputFile(e))
+            {
+                DisplayInputFilepath(sender, e);
+                SyncFilenames(sender);
+            }
+        }
+        private void Btn_Rd_ExploreFile1_Click(object sender, RoutedEventArgs e)
+        {
+            Explore(sender);
+        }
+        private void Tbx_Rd_oFilename_GotFocus(object sender, RoutedEventArgs e) { SelectTbxValue(sender); }
+        private void Tbx_Rd_oFilename_LostFocus(object sender, RoutedEventArgs e) { ValidateTbxValue(sender); }
+        private void Cbx_Rd_UseInputFilename_Checked(object sender, RoutedEventArgs e) { SyncFilenames(sender); }
+        private void Tbx_Rd_CsvSeparator_GotFocus(object sender, RoutedEventArgs e) { SelectTbxValue(sender); }
+        private void Tbx_Rd_CsvSeparator_LostFocus(object sender, RoutedEventArgs e) { ValidateTbxValue(sender); }
+
+        #endregion
 
 
         #region GUI Compare mode
@@ -213,6 +268,9 @@ namespace DS_TextsMod_Helper
 
             switch (btn.Name)
             {
+                case "Btn_Rd_ExploreFile1":
+                    _ = Process.Start(Tbx_Rd_iFile1.Text != TBX_DEFAULT ? Tools.GetParentFolder(Tbx_Rd_iFile1.Text) : Tools.GetRootDirPath());
+                    break;
                 case "Btn_Cmp_ExploreFile1":
                     _ = Process.Start(Tbx_Cmp_iFile1.Text != TBX_DEFAULT ? Tools.GetParentFolder(Tbx_Cmp_iFile1.Text) : Tools.GetRootDirPath());
                     break;
@@ -250,12 +308,23 @@ namespace DS_TextsMod_Helper
                 tbx.ClearValue(BorderBrushProperty);
         }
 
-        private void SyncFilenames(object sender) //TODO: Factorize
+        private void SyncFilenames(object sender) // TODO: Factorize (use PROCESS_MODE ?)
         {
+            if (sender is CheckBox && Tbx_Rd_iFile1.Text != TBX_DEFAULT) // Sender is CheckBox from Read mode
+            {
+                Tbx_Rd_oFilename.Text = Tools.GetFilenameFromPath(Tbx_Rd_iFile1.Text);
+                ValidateTbxValue(Tbx_Rd_oFilename);
+            }
+
             if (sender is TextBox)
             {
                 TextBox tbx = sender as TextBox;
 
+                if (tbx.Name == "Tbx_Rd_iFile1" && (Cbx_Rd_UseInputFilename.IsChecked ?? true)) // Sender is TextBox from Read mode
+                {
+                    Tbx_Rd_oFilename.Text = Tools.GetFilenameFromPath(Tbx_Rd_iFile1.Text);
+                    ValidateTbxValue(Tbx_Rd_oFilename);
+                }
                 if (tbx.Name.Contains("Cmp") && (Cbx_Cmp_UseInputFilename.IsChecked ?? true)) // Sender is TextBox from Compare mode
                 {
                     if (Cmbx_Cmp_TargetInputFilename.SelectedIndex == 0 && tbx == Tbx_Cmp_iFile1)
@@ -395,43 +464,6 @@ namespace DS_TextsMod_Helper
                 case PROCESS_MODE.Compare: PreviewCompare((List<CompareMode.Entry>)Dtg_Preview.ItemsSource); break;
                 case PROCESS_MODE.Prepare: PreviewPrepare((List<PrepareMode.Entry>)Dtg_Preview.ItemsSource); break;
             }
-        }
-
-        /// <summary>
-        /// Return PROCESS MODE currently active in main TabControl
-        /// </summary>
-        /// <returns>
-        /// TODO
-        /// </returns>
-        private PROCESS_MODE SelectedMode()
-        {
-            switch (Tbc_Modes.SelectedIndex)
-            {
-                case 0: return PROCESS_MODE.Read;
-                case 1: return PROCESS_MODE.Compare;
-                case 2: return PROCESS_MODE.Prepare;
-                default: return PROCESS_MODE.None;
-            }
-        }
-
-        /// <summary>
-        /// Return PROCESS MODE currently loaded in Preview DataGrid
-        /// </summary>
-        /// <returns>
-        /// TODO
-        /// </returns>
-        private PROCESS_MODE LoadedMode()
-        {
-            if (Dtg_Preview.ItemsSource is List<ReadMode.Entry>)
-                return PROCESS_MODE.Read;
-
-            if (Dtg_Preview.ItemsSource is List<CompareMode.Entry>)
-                return PROCESS_MODE.Compare;
-
-            if (Dtg_Preview.ItemsSource is List<PrepareMode.Entry>)
-                return PROCESS_MODE.Prepare;
-
-            return PROCESS_MODE.None;
         }
 
         private void PreviewRead(List<ReadMode.Entry> r_entries = null)
@@ -765,6 +797,9 @@ namespace DS_TextsMod_Helper
             }
             return true;
         }
+
+
+
 
 
         #endregion

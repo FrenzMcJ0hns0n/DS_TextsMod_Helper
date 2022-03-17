@@ -95,6 +95,8 @@
                                      TextWrapping="NoWrap" IsReadOnly="True"
                                      Cursor="Arrow"
                                      AllowDrop="True"
+                                     PreviewDragOver="Tbx_Rd_iFile1_PreviewDragOver"
+                                     Drop="Tbx_Rd_iFile1_Drop"
                                      />
                             <Button x:Name="Btn_Rd_ExploreFile1"
                                     Grid.Column="2" Grid.Row="0" 
@@ -103,6 +105,7 @@
                                     Padding="0,0,0,1" 
                                     Content="&#8901;&#8901;&#8901;"
                                     ToolTip="Open parent folder of the submitted file if any, else the root folder of DSTMH"
+                                    Click="Btn_Rd_ExploreFile1_Click"
                                     />
                         </Grid>
                     </GroupBox>
@@ -128,6 +131,8 @@
                                          VerticalAlignment="Center"
                                          TextAlignment="Right" 
                                          Text="result"
+                                         GotFocus="Tbx_Rd_oFilename_GotFocus"
+                                         LostFocus="Tbx_Rd_oFilename_LostFocus"
                                          />
                                 <Label VerticalAlignment="Center" 
                                        Margin="-4,0,0,0" 
@@ -140,12 +145,26 @@
                                           HorizontalAlignment="Left"
                                           VerticalAlignment="Center"
                                           Content="Use same filename as input file"
+                                          Checked="Cbx_Rd_UseInputFilename_Checked"
                                           />
                             </StackPanel>
 
+                            <!-- CSV output separator -->
+                            <StackPanel Grid.Column="2" Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Center">
+                                <Label HorizontalAlignment="Right" VerticalAlignment="Center" Content="CSV separator character :" />
+                                <TextBox x:Name="Tbx_Rd_CsvSeparator"
+                                         Width="22"
+                                         VerticalAlignment="Center" VerticalContentAlignment="Center" Padding="0,2,0,4"
+                                         TextAlignment="Center" Text="|"
+                                         MaxLength="1"
+                                         GotFocus="Tbx_Rd_CsvSeparator_GotFocus"
+                                         LostFocus="Tbx_Rd_CsvSeparator_LostFocus"
+                                         />
+                            </StackPanel>
+                            
                             <!-- One lined values -->
                             <CheckBox x:Name="Cbx_Rd_OneLinedValues" 
-                                      Grid.Column="2" Grid.Row="0" Grid.RowSpan="2"
+                                      Grid.Column="2" Grid.Row="1"
                                       HorizontalAlignment="Center"
                                       VerticalAlignment="Center"
                                       Content="Disable multi line format"
