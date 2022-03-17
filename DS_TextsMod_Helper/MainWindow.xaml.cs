@@ -12,6 +12,21 @@ namespace DS_TextsMod_Helper
     public partial class MainWindow : Window
     {
 
+        #region CONSTANTS
+
+        private const string TBX_DEFAULT = "Drop FMG file...";
+
+        private const string ERR_MISSING_IFILES = "Error : Missing input file(s)";
+        private const string ERR_MISSING_OFNAME = "Error : Missing output filename";
+        private const string ERR_MISSING_OHDRS = "Error : Missing output header(s)";
+        private const string ERR_MISSING_CSVSEP = "Error : Missing CSV separator";
+        private const string ERR_SAME_IFILE = "Error : Same file submitted several times";
+
+        #endregion
+
+
+        #region ENUM
+
         private enum PROCESS_MODE : int
         {
             None = -1,
@@ -51,16 +66,6 @@ namespace DS_TextsMod_Helper
             return PROCESS_MODE.None;
         }
 
-
-        #region CONSTANTS
-
-        private const string TBX_DEFAULT = "Drop FMG file...";
-
-        private const string ERR_MISSING_IFILES = "Error : Missing input file(s)";
-        private const string ERR_MISSING_OFNAME = "Error : Missing output filename";
-        private const string ERR_MISSING_OHDRS = "Error : Missing output header(s)";
-        private const string ERR_MISSING_CSVSEP = "Error : Missing CSV separator";
-        private const string ERR_SAME_IFILE = "Error : Same file submitted several times";
 
         #endregion
 
@@ -104,10 +109,7 @@ namespace DS_TextsMod_Helper
                 SyncFilenames(sender);
             }
         }
-        private void Btn_Rd_ExploreFile1_Click(object sender, RoutedEventArgs e)
-        {
-            Explore(sender);
-        }
+        private void Btn_Rd_ExploreFile1_Click(object sender, RoutedEventArgs e) { Explore(sender); }
         private void Tbx_Rd_oFilename_GotFocus(object sender, RoutedEventArgs e) { SelectTbxValue(sender); }
         private void Tbx_Rd_oFilename_LostFocus(object sender, RoutedEventArgs e) { ValidateTbxValue(sender); }
         private void Cbx_Rd_UseInputFilename_Checked(object sender, RoutedEventArgs e) { SyncFilenames(sender); }
@@ -128,10 +130,7 @@ namespace DS_TextsMod_Helper
                 SyncFilenames(sender);
             }
         }
-        private void Btn_Cmp_ExploreFile1_Click(object sender, RoutedEventArgs e)
-        {
-            Explore(sender);
-        }
+        private void Btn_Cmp_ExploreFile1_Click(object sender, RoutedEventArgs e) { Explore(sender); }
         private void Tbx_Cmp_iFile2_PreviewDragOver(object sender, DragEventArgs e) { e.Handled = true; }
         private void Tbx_Cmp_iFile2_Drop(object sender, DragEventArgs e)
         {
@@ -141,10 +140,7 @@ namespace DS_TextsMod_Helper
                 SyncFilenames(sender);
             }
         }
-        private void Btn_Cmp_ExploreFile2_Click(object sender, RoutedEventArgs e)
-        {
-            Explore(sender);
-        }
+        private void Btn_Cmp_ExploreFile2_Click(object sender, RoutedEventArgs e) { Explore(sender); }
         private void Tbx_Cmp_oFilename_GotFocus(object sender, RoutedEventArgs e) { SelectTbxValue(sender); }
         private void Tbx_Cmp_oFilename_LostFocus(object sender, RoutedEventArgs e) { ValidateTbxValue(sender); }
         private void Cbx_Cmp_UseInputFilename_Checked(object sender, RoutedEventArgs e)
@@ -179,10 +175,7 @@ namespace DS_TextsMod_Helper
                 SyncFilenames(sender);
             }
         }
-        private void Btn_Prp_ExploreFile1_Click(object sender, RoutedEventArgs e)
-        {
-            Explore(sender);
-        }
+        private void Btn_Prp_ExploreFile1_Click(object sender, RoutedEventArgs e) { Explore(sender); }
         private void Tbx_Prp_iFile2_PreviewDragOver(object sender, DragEventArgs e) { e.Handled = true; }
         private void Tbx_Prp_iFile2_Drop(object sender, DragEventArgs e)
         {
@@ -192,10 +185,7 @@ namespace DS_TextsMod_Helper
                 SyncFilenames(sender);
             }
         }
-        private void Btn_Prp_ExploreFile2_Click(object sender, RoutedEventArgs e)
-        {
-            Explore(sender);
-        }
+        private void Btn_Prp_ExploreFile2_Click(object sender, RoutedEventArgs e) { Explore(sender); }
         private void Tbx_Prp_iFile3_PreviewDragOver(object sender, DragEventArgs e) { e.Handled = true; }
         private void Tbx_Prp_iFile3_Drop(object sender, DragEventArgs e)
         {
@@ -205,10 +195,7 @@ namespace DS_TextsMod_Helper
                 SyncFilenames(sender);
             }
         }
-        private void Btn_Prp_ExploreFile3_Click(object sender, RoutedEventArgs e)
-        {
-            Explore(sender);
-        }
+        private void Btn_Prp_ExploreFile3_Click(object sender, RoutedEventArgs e) { Explore(sender); }
         private void Tbx_Prp_oFilename_GotFocus(object sender, RoutedEventArgs e) { SelectTbxValue(sender); }
         private void Tbx_Prp_oFilename_LostFocus(object sender, RoutedEventArgs e) { ValidateTbxValue(sender); }
         private void Cbx_Prp_UseInputFilename_Checked(object sender, RoutedEventArgs e)
