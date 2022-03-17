@@ -77,7 +77,8 @@ namespace DS_TextsMod_Helper
 
                 foreach (Entry re in Entries)
                 {
-                    re.Value = re.Value.Replace("\"", "\"\"");
+                    if (re.Value != null)
+                        re.Value = re.Value.Replace("\"", "\"\"");
 
                     writer.WriteLine($"{re.TextId}{Sep}\"{re.Value}\"");
                     // Generalized usage of double quotes, as it is Excel friendly (TODO? v1.4: Give choice about that)
