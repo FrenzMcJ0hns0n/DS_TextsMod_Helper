@@ -25,6 +25,51 @@ namespace DS_TextsMod_Helper
         #endregion
 
 
+        #region ENUM
+
+        private enum PROCESS_MODE : int
+        {
+            None = -1,
+            Read = 0,
+            Compare = 1,
+            Prepare = 2,
+        };
+
+        /// <summary>
+        /// Return PROCESS MODE currently active in main TabControl
+        /// </summary>
+        private PROCESS_MODE SelectedMode()
+        {
+            switch (Tbc_Modes.SelectedIndex)
+            {
+                case 0: return PROCESS_MODE.Read;
+                case 1: return PROCESS_MODE.Compare;
+                case 2: return PROCESS_MODE.Prepare;
+                default: return PROCESS_MODE.None;
+            }
+        }
+
+        /// <summary>
+        /// Return PROCESS MODE currently loaded in Preview DataGrid
+        /// </summary>
+        private PROCESS_MODE LoadedMode()
+        {
+            if (Dtg_Preview.ItemsSource is List<ReadMode.Entry>)
+                return PROCESS_MODE.Read;
+
+            if (Dtg_Preview.ItemsSource is List<CompareMode.Entry>)
+                return PROCESS_MODE.Compare;
+
+            if (Dtg_Preview.ItemsSource is List<PrepareMode.Entry>)
+                return PROCESS_MODE.Prepare;
+
+            return PROCESS_MODE.None;
+        }
+
+
+        #endregion
+
+
         public MainWindow()
         {
             InitializeComponent();
@@ -35,23 +80,43 @@ namespace DS_TextsMod_Helper
                 MessageBox.Show("Fatal error : file 'SoulsFormats.dll' not found");
 
 #if DEBUG
-            //Tbx_Cmp_iFile1.Text = @"C:\Sandbox\Modding data\DS_TMH\work in progress 1.3\FMG test files\Items - English - vanilla\Item_name_.fmg";
-            //Tbx_Cmp_iFile2.Text = @"C:\Sandbox\Modding data\DS_TMH\work in progress 1.3\FMG test files\Items - English - Daughters of Ash\ItemNames.fmg";
+            Tbx_Rd_iFile1.Text = @"C:\Sandbox\Modding data\DS_TMH\work in progress 1.3\FMG test files\Items - English - Daughters of Ash\RingDescriptions.fmg";
+            //Tbx_Rd_iFile1.Text = @"C:\Sandbox\Modding data\DS_TMH\work in progress 1.3\FMG test files\Items - English - vanilla\Item_name_.fmg";
 
-            //Tbx_Prp_iFile1.Text = @"C:\Sandbox\Modding data\DS_TMH\published 1.2\FMG test files\English - Daughters of Ash\RingDescriptions.fmg";
-            //Tbx_Prp_iFile2.Text = @"C:\Sandbox\Modding data\DS_TMH\published 1.2\FMG test files\English - vanilla\Accessory_long_desc_.fmg";
-            //Tbx_Prp_iFile3.Text = @"C:\Sandbox\Modding data\DS_TMH\published 1.2\FMG test files\French - vanilla\Accessory_long_desc_.fmg";
+            Tbx_Cmp_iFile1.Text = @"C:\Sandbox\Modding data\DS_TMH\work in progress 1.3\FMG test files\Items - English - Daughters of Ash\ItemNames.fmg";
+            Tbx_Cmp_iFile2.Text = @"C:\Sandbox\Modding data\DS_TMH\work in progress 1.3\FMG test files\Items - English - vanilla\Item_name_.fmg";
+            //Tbx_Cmp_iFile1.Text = @"C:\Sandbox\Modding data\DS_TMH\work in progress 1.3\FMG test files\Items - English - Daughters of Ash\RingDescriptions.fmg";
+            //Tbx_Cmp_iFile2.Text = @"C:\Sandbox\Modding data\DS_TMH\work in progress 1.3\FMG test files\Items - English - vanilla\Accessory_long_desc_.fmg";
 
-
-
-            //Tbx_Cmp_iFile1.Text = @"C:\Sandbox\Modding data\DS_TMH\published 1.2\FMG test files\English - Daughters of Ash\RingDescriptions.fmg";
-            //Tbx_Cmp_iFile2.Text = @"C:\Sandbox\Modding data\DS_TMH\published 1.2\FMG test files\English - vanilla\Accessory_long_desc_.fmg";
-
-            //Tbx_Prp_iFile1.Text = @"C:\Sandbox\Modding data\DS_TMH\work in progress 1.3\FMG test files\Items - English - Daughters of Ash\ArmorDescriptions.fmg";
-            //Tbx_Prp_iFile2.Text = @"C:\Sandbox\Modding data\DS_TMH\work in progress 1.3\FMG test files\Items - English - vanilla\Armor_long_desc_.fmg";
-            //Tbx_Prp_iFile3.Text = @"C:\Sandbox\Modding data\DS_TMH\work in progress 1.3\FMG test files\Items - Italian - vanilla\Armor_long_desc_.fmg";
+            //Tbx_Prp_iFile1.Text = @"C:\Sandbox\Modding data\DS_TMH\work in progress 1.3\FMG test files\Items - English - Daughters of Ash\RingDescriptions.fmg";
+            //Tbx_Prp_iFile2.Text = @"C:\Sandbox\Modding data\DS_TMH\work in progress 1.3\FMG test files\Items - English - vanilla\Accessory_long_desc_.fmg";
+            //Tbx_Prp_iFile3.Text = @"C:\Sandbox\Modding data\DS_TMH\work in progress 1.3\FMG test files\Items - French - vanilla\Accessory_long_desc_.fmg";
+            Tbx_Prp_iFile1.Text = @"C:\Sandbox\Modding data\DS_TMH\work in progress 1.3\FMG test files\Items - English - Daughters of Ash\ArmorDescriptions.fmg";
+            Tbx_Prp_iFile2.Text = @"C:\Sandbox\Modding data\DS_TMH\work in progress 1.3\FMG test files\Items - English - vanilla\Armor_long_desc_.fmg";
+            Tbx_Prp_iFile3.Text = @"C:\Sandbox\Modding data\DS_TMH\work in progress 1.3\FMG test files\Items - Italian - vanilla\Armor_long_desc_.fmg";
 #endif
         }
+
+
+        #region GUI Read mode
+
+        private void Tbx_Rd_iFile1_PreviewDragOver(object sender, DragEventArgs e) { e.Handled = true; }
+        private void Tbx_Rd_iFile1_Drop(object sender, DragEventArgs e)
+        {
+            if (AcceptDroppedInputFile(e))
+            {
+                DisplayInputFilepath(sender, e);
+                SyncFilenames(sender);
+            }
+        }
+        private void Btn_Rd_ExploreFile1_Click(object sender, RoutedEventArgs e) { Explore(sender); }
+        private void Tbx_Rd_oFilename_GotFocus(object sender, RoutedEventArgs e) { SelectTbxValue(sender); }
+        private void Tbx_Rd_oFilename_LostFocus(object sender, RoutedEventArgs e) { ValidateTbxValue(sender); }
+        private void Cbx_Rd_UseInputFilename_Checked(object sender, RoutedEventArgs e) { SyncFilenames(sender); }
+        private void Tbx_Rd_CsvSeparator_GotFocus(object sender, RoutedEventArgs e) { SelectTbxValue(sender); }
+        private void Tbx_Rd_CsvSeparator_LostFocus(object sender, RoutedEventArgs e) { ValidateTbxValue(sender); }
+
+        #endregion
 
 
         #region GUI Compare mode
@@ -65,10 +130,7 @@ namespace DS_TextsMod_Helper
                 SyncFilenames(sender);
             }
         }
-        private void Btn_Cmp_ExploreFile1_Click(object sender, RoutedEventArgs e)
-        {
-            Explore(sender);
-        }
+        private void Btn_Cmp_ExploreFile1_Click(object sender, RoutedEventArgs e) { Explore(sender); }
         private void Tbx_Cmp_iFile2_PreviewDragOver(object sender, DragEventArgs e) { e.Handled = true; }
         private void Tbx_Cmp_iFile2_Drop(object sender, DragEventArgs e)
         {
@@ -78,10 +140,7 @@ namespace DS_TextsMod_Helper
                 SyncFilenames(sender);
             }
         }
-        private void Btn_Cmp_ExploreFile2_Click(object sender, RoutedEventArgs e)
-        {
-            Explore(sender);
-        }
+        private void Btn_Cmp_ExploreFile2_Click(object sender, RoutedEventArgs e) { Explore(sender); }
         private void Tbx_Cmp_oFilename_GotFocus(object sender, RoutedEventArgs e) { SelectTbxValue(sender); }
         private void Tbx_Cmp_oFilename_LostFocus(object sender, RoutedEventArgs e) { ValidateTbxValue(sender); }
         private void Cbx_Cmp_UseInputFilename_Checked(object sender, RoutedEventArgs e)
@@ -116,10 +175,7 @@ namespace DS_TextsMod_Helper
                 SyncFilenames(sender);
             }
         }
-        private void Btn_Prp_ExploreFile1_Click(object sender, RoutedEventArgs e)
-        {
-            Explore(sender);
-        }
+        private void Btn_Prp_ExploreFile1_Click(object sender, RoutedEventArgs e) { Explore(sender); }
         private void Tbx_Prp_iFile2_PreviewDragOver(object sender, DragEventArgs e) { e.Handled = true; }
         private void Tbx_Prp_iFile2_Drop(object sender, DragEventArgs e)
         {
@@ -129,10 +185,7 @@ namespace DS_TextsMod_Helper
                 SyncFilenames(sender);
             }
         }
-        private void Btn_Prp_ExploreFile2_Click(object sender, RoutedEventArgs e)
-        {
-            Explore(sender);
-        }
+        private void Btn_Prp_ExploreFile2_Click(object sender, RoutedEventArgs e) { Explore(sender); }
         private void Tbx_Prp_iFile3_PreviewDragOver(object sender, DragEventArgs e) { e.Handled = true; }
         private void Tbx_Prp_iFile3_Drop(object sender, DragEventArgs e)
         {
@@ -142,10 +195,7 @@ namespace DS_TextsMod_Helper
                 SyncFilenames(sender);
             }
         }
-        private void Btn_Prp_ExploreFile3_Click(object sender, RoutedEventArgs e)
-        {
-            Explore(sender);
-        }
+        private void Btn_Prp_ExploreFile3_Click(object sender, RoutedEventArgs e) { Explore(sender); }
         private void Tbx_Prp_oFilename_GotFocus(object sender, RoutedEventArgs e) { SelectTbxValue(sender); }
         private void Tbx_Prp_oFilename_LostFocus(object sender, RoutedEventArgs e) { ValidateTbxValue(sender); }
         private void Cbx_Prp_UseInputFilename_Checked(object sender, RoutedEventArgs e)
@@ -205,6 +255,9 @@ namespace DS_TextsMod_Helper
 
             switch (btn.Name)
             {
+                case "Btn_Rd_ExploreFile1":
+                    _ = Process.Start(Tbx_Rd_iFile1.Text != TBX_DEFAULT ? Tools.GetParentFolder(Tbx_Rd_iFile1.Text) : Tools.GetRootDirPath());
+                    break;
                 case "Btn_Cmp_ExploreFile1":
                     _ = Process.Start(Tbx_Cmp_iFile1.Text != TBX_DEFAULT ? Tools.GetParentFolder(Tbx_Cmp_iFile1.Text) : Tools.GetRootDirPath());
                     break;
@@ -242,12 +295,23 @@ namespace DS_TextsMod_Helper
                 tbx.ClearValue(BorderBrushProperty);
         }
 
-        private void SyncFilenames(object sender) //TODO: Factorize
+        private void SyncFilenames(object sender) // TODO: Factorize (use PROCESS_MODE ?)
         {
+            if (sender is CheckBox && Tbx_Rd_iFile1.Text != TBX_DEFAULT) // Sender is CheckBox from Read mode
+            {
+                Tbx_Rd_oFilename.Text = Tools.GetFilenameFromPath(Tbx_Rd_iFile1.Text);
+                ValidateTbxValue(Tbx_Rd_oFilename);
+            }
+
             if (sender is TextBox)
             {
                 TextBox tbx = sender as TextBox;
 
+                if (tbx.Name == "Tbx_Rd_iFile1" && (Cbx_Rd_UseInputFilename.IsChecked ?? true)) // Sender is TextBox from Read mode
+                {
+                    Tbx_Rd_oFilename.Text = Tools.GetFilenameFromPath(Tbx_Rd_iFile1.Text);
+                    ValidateTbxValue(Tbx_Rd_oFilename);
+                }
                 if (tbx.Name.Contains("Cmp") && (Cbx_Cmp_UseInputFilename.IsChecked ?? true)) // Sender is TextBox from Compare mode
                 {
                     if (Cmbx_Cmp_TargetInputFilename.SelectedIndex == 0 && tbx == Tbx_Cmp_iFile1)
@@ -302,63 +366,19 @@ namespace DS_TextsMod_Helper
 
         #region Preview
 
-        //TODO: Find better display condition than Visibility property
-
         private void Btn_RefreshPreview_Click(object sender, RoutedEventArgs e)
         {
-            bool allDetails = Cbx_PreviewAllDetails.IsChecked ?? false;
-
-            if (Tbc_Modes.SelectedIndex == 0)
+            switch (SelectedMode())
             {
-                string iFile1 = Tbx_Cmp_iFile1.Text;
-                string iFile2 = Tbx_Cmp_iFile2.Text;
-
-                if (iFile1 == "" || iFile1 == TBX_DEFAULT || iFile2 == "" || iFile2 == TBX_DEFAULT)
-                {
-                    _ = MessageBox.Show(ERR_MISSING_IFILES);
-                    return;
-                }
-                Dtg_Preview.Visibility = Visibility.Visible;
-                Dtg_Preview.Columns.Clear();
-
-                CompareMode c = new CompareMode(iFile1, iFile2) { OneLinedValues = Cbx_Cmp_OneLinedValues.IsChecked ?? false };
-                c.ProcessFiles(true);
-
-                foreach (DataGridTextColumn col in GetCompareColumns(allDetails, false))
-                    Dtg_Preview.Columns.Add(col);
-
-                Dtg_Preview.ItemsSource = c.Entries;
+                case PROCESS_MODE.Read: PreviewRead(); break;
+                case PROCESS_MODE.Compare: PreviewCompare(); break;
+                case PROCESS_MODE.Prepare: PreviewPrepare(); break;
             }
-            else
-            {
-                string iFile1 = Tbx_Prp_iFile1.Text;
-                string iFile2 = Tbx_Prp_iFile2.Text;
-                string iFile3 = Tbx_Prp_iFile3.Text;
-                string textToReplace = Tbx_Prp_TextToReplace.Text;
-                string replacingText = Tbx_Prp_ReplacingText.Text;
-
-                if (iFile1 == "" || iFile1 == TBX_DEFAULT || iFile2 == "" || iFile2 == TBX_DEFAULT || iFile3 == "" || iFile3 == TBX_DEFAULT)
-                {
-                    _ = MessageBox.Show(ERR_MISSING_IFILES);
-                    return;
-                }
-                Dtg_Preview.Visibility = Visibility.Visible;
-                Dtg_Preview.Columns.Clear();
-
-                PrepareMode p = new PrepareMode(iFile1, iFile2, iFile3, textToReplace, replacingText);
-                p.ProcessFiles(true);
-
-                foreach (DataGridTextColumn col in GetPrepareColumns(allDetails, false))
-                    Dtg_Preview.Columns.Add(col);
-
-                Dtg_Preview.ItemsSource = p.Entries;
-            }
-
         }
 
         private void Btn_ClearPreview_Click(object sender, RoutedEventArgs e)
         {
-            if (Dtg_Preview.Visibility == Visibility.Visible && Dtg_Preview.ItemsSource != null)
+            if (LoadedMode() != PROCESS_MODE.None)
             {
                 Dtg_Preview.Visibility = Visibility.Hidden;
                 Dtg_Preview.ItemsSource = null;
@@ -367,7 +387,7 @@ namespace DS_TextsMod_Helper
 
         private void Btn_DetachPreview_Click(object sender, RoutedEventArgs e) // TODO! Improve by using XAML
         {
-            if (Dtg_Preview.Visibility != Visibility.Visible)
+            if (LoadedMode() == PROCESS_MODE.None)
                 return;
 
             //DataContext = Dtg_Preview.ItemsSource;
@@ -383,14 +403,24 @@ namespace DS_TextsMod_Helper
             };
 
             bool allDetails = Cbx_PreviewAllDetails.IsChecked ?? false;
-            List<DataGridTextColumn> columns = Tbc_Modes.SelectedIndex == 0 ? GetCompareColumns(allDetails, true) : GetPrepareColumns(allDetails, true);
+            bool detached = true;
+
+            List<DataGridTextColumn> columns = null;
+            string processMode = null;
+
+            switch (LoadedMode())
+            {
+                case PROCESS_MODE.Read: columns = GetReadColumns(allDetails, detached); processMode = "Read mode"; break;
+                case PROCESS_MODE.Compare: columns = GetCompareColumns(allDetails, detached); processMode = "Compare mode"; break;
+                case PROCESS_MODE.Prepare: columns = GetPrepareColumns(allDetails, detached); processMode = "Prepare mode"; break;
+            }
 
             foreach (DataGridTextColumn col in columns)
                 detachedDtgPreview.Columns.Add(col);
 
             Window windowPreview = new Window()
             {
-                Title = "Output preview (detached)",
+                Title = "Detached output preview : " + processMode,
                 Width = 1280,
                 Height = 800,
                 Background = (Brush)new BrushConverter().ConvertFrom("#EEE"),
@@ -403,14 +433,143 @@ namespace DS_TextsMod_Helper
 
         private void Cbx_PreviewAllDetails_Checked(object sender, RoutedEventArgs e)
         {
-            if (Dtg_Preview.Visibility == Visibility.Visible)
-                Btn_RefreshPreview_Click(sender, e);
+            switch (LoadedMode())
+            {
+                case PROCESS_MODE.None: return;
+                case PROCESS_MODE.Read: PreviewRead((List<ReadMode.Entry>)Dtg_Preview.ItemsSource); break;
+                case PROCESS_MODE.Compare: PreviewCompare((List<CompareMode.Entry>)Dtg_Preview.ItemsSource); break;
+                case PROCESS_MODE.Prepare: PreviewPrepare((List<PrepareMode.Entry>)Dtg_Preview.ItemsSource); break;
+            }
         }
 
         private void Cbx_PreviewAllDetails_Unchecked(object sender, RoutedEventArgs e)
         {
-            if (Dtg_Preview.Visibility == Visibility.Visible)
-                Btn_RefreshPreview_Click(sender, e);
+            switch (LoadedMode())
+            {
+                case PROCESS_MODE.None: return;
+                case PROCESS_MODE.Read: PreviewRead((List<ReadMode.Entry>)Dtg_Preview.ItemsSource); break;
+                case PROCESS_MODE.Compare: PreviewCompare((List<CompareMode.Entry>)Dtg_Preview.ItemsSource); break;
+                case PROCESS_MODE.Prepare: PreviewPrepare((List<PrepareMode.Entry>)Dtg_Preview.ItemsSource); break;
+            }
+        }
+
+        private void PreviewRead(List<ReadMode.Entry> r_entries = null)
+        {
+            if (r_entries is null)
+            {
+                string iFile1 = Tbx_Rd_iFile1.Text;
+
+                if (iFile1 == "" || iFile1 == TBX_DEFAULT)
+                {
+                    _ = MessageBox.Show("[Read mode] " + ERR_MISSING_IFILES);
+                    return;
+                }
+
+                ReadMode r = new ReadMode(iFile1) { OneLinedValues = Cbx_Rd_OneLinedValues.IsChecked ?? false };
+                r.ProcessFiles(true);
+                r_entries = r.Entries;
+            }
+
+            Dtg_Preview.Visibility = Visibility.Visible;
+            Dtg_Preview.Columns.Clear();
+
+            bool allDetails = Cbx_PreviewAllDetails.IsChecked ?? false;
+            bool detached = false;
+
+            List<DataGridTextColumn> columns = GetReadColumns(allDetails, detached);
+            foreach (DataGridTextColumn col in columns)
+                Dtg_Preview.Columns.Add(col);
+
+            Dtg_Preview.ItemsSource = r_entries;
+
+        }
+
+        private void PreviewCompare(List<CompareMode.Entry> c_entries = null)
+        {
+            if (c_entries is null)
+            {
+                string iFile1 = Tbx_Cmp_iFile1.Text;
+                string iFile2 = Tbx_Cmp_iFile2.Text;
+
+                if (iFile1 == "" || iFile1 == TBX_DEFAULT || iFile2 == "" || iFile2 == TBX_DEFAULT)
+                {
+                    _ = MessageBox.Show("[Compare mode] " + ERR_MISSING_IFILES);
+                    return;
+                }
+
+                CompareMode c = new CompareMode(iFile1, iFile2) { OneLinedValues = Cbx_Cmp_OneLinedValues.IsChecked ?? false };
+                c.ProcessFiles(true);
+                c_entries = c.Entries;
+            }
+
+            Dtg_Preview.Visibility = Visibility.Visible;
+            Dtg_Preview.Columns.Clear();
+
+            bool allDetails = Cbx_PreviewAllDetails.IsChecked ?? false;
+            bool detached = false;
+
+            List<DataGridTextColumn> columns = GetCompareColumns(allDetails, detached);
+            foreach (DataGridTextColumn col in columns)
+                Dtg_Preview.Columns.Add(col);
+
+            Dtg_Preview.ItemsSource = c_entries;
+        }
+
+        private void PreviewPrepare(List<PrepareMode.Entry> p_entries = null)
+        {
+            if (p_entries is null)
+            {
+                string iFile1 = Tbx_Prp_iFile1.Text;
+                string iFile2 = Tbx_Prp_iFile2.Text;
+                string iFile3 = Tbx_Prp_iFile3.Text;
+                string textToReplace = Tbx_Prp_TextToReplace.Text;
+                string replacingText = Tbx_Prp_ReplacingText.Text;
+
+                if (iFile1 == "" || iFile1 == TBX_DEFAULT || iFile2 == "" || iFile2 == TBX_DEFAULT || iFile3 == "" || iFile3 == TBX_DEFAULT)
+                {
+                    _ = MessageBox.Show("[Prepare mode] " + ERR_MISSING_IFILES);
+                    Cbx_PreviewAllDetails.IsChecked = false;
+                    return;
+                }
+
+                PrepareMode p = new PrepareMode(iFile1, iFile2, iFile3, textToReplace, replacingText);
+                p.ProcessFiles(true);
+                p_entries = p.Entries;
+            }
+
+            Dtg_Preview.Visibility = Visibility.Visible;
+            Dtg_Preview.Columns.Clear();
+
+            bool allDetails = Cbx_PreviewAllDetails.IsChecked ?? false;
+            bool detached = false;
+
+            List<DataGridTextColumn> columns = GetPrepareColumns(allDetails, detached);
+            foreach (DataGridTextColumn col in columns)
+                Dtg_Preview.Columns.Add(col);
+
+            Dtg_Preview.ItemsSource = p_entries;
+        }
+
+        private List<DataGridTextColumn> GetReadColumns(bool allDetails, bool detached)
+        {
+            List<DataGridTextColumn> columns = new List<DataGridTextColumn>();
+
+            double COL_MAXWIDTH = Tools.GetColumnMaxWidth() * 4; // 2160 or 1440 depending of user's screen resolution
+
+            double maxWidth_RowNum = detached ? 80 : 40;
+            double maxWidth_TextId = detached ? 120 : 80;
+            double maxWidth_Value = detached ? COL_MAXWIDTH : 1000;
+
+            columns.Add(new DataGridTextColumn() { Header = "Text ID", Binding = new Binding("TextId"), MaxWidth = maxWidth_TextId });
+            columns.Add(new DataGridTextColumn() { Header = "Value", Binding = new Binding("Value"), MaxWidth = maxWidth_Value });
+
+            if (allDetails)
+            {
+                Style hdrOff = (Style)Grid_Main.Resources["HeaderOff"]; //Style style = new Style() // TODO? See how to do this from code behind
+                columns.Insert(0, new DataGridTextColumn() { Header = "#", HeaderStyle = hdrOff, Foreground = Brushes.Gray, Binding = new Binding("Index"), MaxWidth = maxWidth_RowNum });
+            }
+
+            return columns;
         }
 
         private List<DataGridTextColumn> GetCompareColumns(bool allDetails, bool detached) // TODO! Something easier
@@ -477,46 +636,93 @@ namespace DS_TextsMod_Helper
 
         private void Btn_GenerateOutput_Click(object sender, RoutedEventArgs e)
         {
-            if (Tbc_Modes.SelectedIndex == 0)
+            switch (SelectedMode())
             {
-                if (!ValidateCompareInputs())
-                    return;
+                case PROCESS_MODE.Read:
 
-                string iFile1 = Tbx_Cmp_iFile1.Text;
-                string iFile2 = Tbx_Cmp_iFile2.Text;
-                string oFilename = Tbx_Cmp_oFilename.Text + ".csv";
-                string oHdr1 = Tbx_Cmp_oHeader1.Text;
-                string oHdr2 = Tbx_Cmp_oHeader2.Text;
-                string csvSepChar = Tbx_Cmp_CsvSeparator.Text;
+                    if (!ValidateReadInputs())
+                        return;
 
-                CompareMode c = new CompareMode(iFile1, iFile2) { OneLinedValues = Cbx_Cmp_OneLinedValues.IsChecked ?? false };
-                c.ProcessFiles(false);
-                c.ProduceOutput(oFilename, oHdr1, oHdr2, csvSepChar);
+                    string rd_iFile1 = Tbx_Rd_iFile1.Text;
+                    string rd_oFilename = Tbx_Rd_oFilename.Text + ".csv";
+                    string rd_csvSepChar = Tbx_Rd_CsvSeparator.Text;
 
-                _ = MessageBox.Show($"[Compare mode] File \"{c.OutputFilename}\" created");
+                    ReadMode r = new ReadMode(rd_iFile1) { OneLinedValues = Cbx_Rd_OneLinedValues.IsChecked ?? false };
+                    r.ProcessFiles(false);
+                    r.ProduceOutput(rd_oFilename, rd_csvSepChar); // TODO : Add csvSepChar as var
+
+                    _ = MessageBox.Show($"[Read mode] File \"{r.OutputFilename}\" created");
+                    break;
+
+                case PROCESS_MODE.Compare:
+
+                    if (!ValidateCompareInputs())
+                        return;
+
+                    string cmp_iFile1 = Tbx_Cmp_iFile1.Text;
+                    string cmp_iFile2 = Tbx_Cmp_iFile2.Text;
+                    string cmp_oFilename = Tbx_Cmp_oFilename.Text + ".csv";
+                    string oHdr1 = Tbx_Cmp_oHeader1.Text;
+                    string oHdr2 = Tbx_Cmp_oHeader2.Text;
+                    string cmp_csvSepChar = Tbx_Cmp_CsvSeparator.Text;
+
+                    CompareMode c = new CompareMode(cmp_iFile1, cmp_iFile2) { OneLinedValues = Cbx_Cmp_OneLinedValues.IsChecked ?? false };
+                    c.ProcessFiles(false);
+                    c.ProduceOutput(cmp_oFilename, oHdr1, oHdr2, cmp_csvSepChar);
+
+                    _ = MessageBox.Show($"[Compare mode] File \"{c.OutputFilename}\" created");
+                    break;
+
+                case PROCESS_MODE.Prepare:
+
+                    if (!ValidatePrepareInputs())
+                        return;
+
+                    string prp_iFile1 = Tbx_Prp_iFile1.Text;
+                    string prp_iFile2 = Tbx_Prp_iFile2.Text;
+                    string prp_iFile3 = Tbx_Prp_iFile3.Text;
+                    string prp_oFilename = Tbx_Prp_oFilename.Text + ".fmg";
+                    string textToReplace = Tbx_Prp_TextToReplace.Text;
+                    string replacingText = Tbx_Prp_ReplacingText.Text;
+
+                    PrepareMode p = new PrepareMode(prp_iFile1, prp_iFile2, prp_iFile3, textToReplace, replacingText);
+                    p.ProcessFiles(false);
+                    p.ProduceOutput(prp_oFilename);
+
+                    _ = MessageBox.Show($"[Prepare mode] File \"{p.OutputFilename}\" created");
+                    break;
             }
-            else
+        }
+
+        private bool ValidateReadInputs()
+        {
+            string mode = "[Read mode] ";
+            List<string> errors = new List<string>();
+
+            string input_filepath1 = Tbx_Rd_iFile1.Text;
+            string output_filename = Tbx_Rd_oFilename.Text;
+            string sepa_csv_char_o = Tbx_Rd_CsvSeparator.Text;
+
+            if (!File.Exists(input_filepath1))
+                errors.Add(mode + ERR_MISSING_IFILES);
+
+            if (output_filename == "")
+                errors.Add(mode + ERR_MISSING_OFNAME);
+
+            if (sepa_csv_char_o == "")
+                errors.Add(mode + ERR_MISSING_CSVSEP);
+
+            if (errors.Count > 0)
             {
-                if (!ValidatePrepareInputs())
-                    return;
-
-                string iFile1 = Tbx_Prp_iFile1.Text;
-                string iFile2 = Tbx_Prp_iFile2.Text;
-                string iFile3 = Tbx_Prp_iFile3.Text;
-                string oFilename = Tbx_Prp_oFilename.Text + ".fmg";
-                string textToReplace = Tbx_Prp_TextToReplace.Text;
-                string replacingText = Tbx_Prp_ReplacingText.Text;
-
-                PrepareMode p = new PrepareMode(iFile1, iFile2, iFile3, textToReplace, replacingText);
-                p.ProcessFiles(false);
-                p.ProduceOutput(oFilename);
-
-                _ = MessageBox.Show($"[Prepare mode] File \"{p.OutputFilename}\" created");
+                _ = MessageBox.Show(string.Join("\n\n", errors));
+                return false;
             }
+            return true;
         }
 
         private bool ValidateCompareInputs()
         {
+            string mode = "[Compare mode] ";
             List<string> errors = new List<string>();
 
             string input_filepath1 = Tbx_Cmp_iFile1.Text;
@@ -527,19 +733,19 @@ namespace DS_TextsMod_Helper
             string sepa_csv_char_o = Tbx_Cmp_CsvSeparator.Text;
 
             if (!File.Exists(input_filepath1) || !File.Exists(input_filepath2))
-                errors.Add(ERR_MISSING_IFILES);
+                errors.Add(mode + ERR_MISSING_IFILES);
 
             if (input_filepath1 != TBX_DEFAULT && input_filepath1 == input_filepath2)
-                errors.Add(ERR_SAME_IFILE);
+                errors.Add(mode + ERR_SAME_IFILE);
 
             if (output_header_1 == "" || output_header_2 == "")
-                errors.Add(ERR_MISSING_OHDRS);
+                errors.Add(mode + ERR_MISSING_OHDRS);
 
             if (output_filename == "")
-                errors.Add(ERR_MISSING_OFNAME);
+                errors.Add(mode + ERR_MISSING_OFNAME);
 
             if (sepa_csv_char_o == "")
-                errors.Add(ERR_MISSING_CSVSEP);
+                errors.Add(mode + ERR_MISSING_CSVSEP);
 
             if (errors.Count > 0)
             {
@@ -551,6 +757,7 @@ namespace DS_TextsMod_Helper
 
         private bool ValidatePrepareInputs()
         {
+            string mode = "[Prepare mode] ";
             List<string> errors = new List<string>();
 
             string input_filepath1 = Tbx_Prp_iFile1.Text;
@@ -559,15 +766,15 @@ namespace DS_TextsMod_Helper
             string output_filename = Tbx_Prp_oFilename.Text;
 
             if (!File.Exists(input_filepath1) || !File.Exists(input_filepath2) || !File.Exists(input_filepath3))
-                errors.Add(ERR_MISSING_IFILES);
+                errors.Add(mode + ERR_MISSING_IFILES);
 
             if ((input_filepath1 != TBX_DEFAULT && input_filepath1 == input_filepath2) ||
                 (input_filepath2 != TBX_DEFAULT && input_filepath2 == input_filepath3) ||
                 (input_filepath3 != TBX_DEFAULT && input_filepath3 == input_filepath1))
-                errors.Add(ERR_SAME_IFILE);
+                errors.Add(mode + ERR_SAME_IFILE);
 
             if (output_filename == "")
-                errors.Add(ERR_MISSING_OFNAME);
+                errors.Add(mode + ERR_MISSING_OFNAME);
 
             if (errors.Count > 0)
             {
@@ -576,7 +783,6 @@ namespace DS_TextsMod_Helper
             }
             return true;
         }
-
 
         #endregion
 
