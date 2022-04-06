@@ -17,8 +17,6 @@ namespace DS_TextsMod_Helper
             return Path.Combine(GetRootDirPath(), "Output");
         }
 
-
-
         public static string GetOutputFilepath(string filename)
         {
             return Path.Combine(GetOutputDirPath(), filename);
@@ -26,7 +24,8 @@ namespace DS_TextsMod_Helper
 
 
 
-        public static string GetFilenameFromPath(string path)
+
+        public static string GetFileName(string path)
         {
             FileInfo info = new FileInfo(path);
             string fileName = info.Name;
@@ -35,13 +34,16 @@ namespace DS_TextsMod_Helper
             return fileName.Replace(fileExt, "");
         }
 
-        public static string GetParentFolder(string path)
+        public static string GetParentDirPath(string path)
         {
             FileInfo info = new FileInfo(path);
             string parentFolder = info.DirectoryName;
 
             return parentFolder;
         }
+
+
+
 
         public static double GetColumnMaxWidth()
         {
