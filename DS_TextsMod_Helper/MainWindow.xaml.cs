@@ -537,7 +537,7 @@ namespace DS_TextsMod_Helper
 
                 AutoGenerateColumns = false,
                 HeadersVisibility = DataGridHeadersVisibility.Column,
-                IsReadOnly = false,
+                IsReadOnly = true,
                 ItemsSource = Dtg_Preview.ItemsSource
             };
 
