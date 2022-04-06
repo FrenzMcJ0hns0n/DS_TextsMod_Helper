@@ -105,6 +105,13 @@ namespace DS_TextsMod_Helper
 
             if (!File.Exists(Tools.GetSoulsFormatsDllPath()))
                 MessageBox.Show(ERR_MISSING_SFDLL);
+
+            //Tbk_Rd_iFile1.Text = fakeRd1a;
+            //Tbk_Cmp_iFile1.Text = fakeCmp1a;
+            //Tbk_Cmp_iFile2.Text = fakeCmp2a;
+            //Tbk_Prp_iFile1.Text = fakePrp1a;
+            //Tbk_Prp_iFile2.Text = fakePrp2a;
+            //Tbk_Prp_iFile3.Text = fakePrp3a;
         }
 
 
@@ -119,7 +126,7 @@ namespace DS_TextsMod_Helper
 
             SyncFilenames(sender);
         }
-        private void Btn_Rd_ExploreFile1_Click(object sender, RoutedEventArgs e) { Explore(sender); }
+        private void Btn_Rd_ExploreFile1_Click(object sender, RoutedEventArgs e) { Explore((Button)sender); }
         private void Tbx_Rd_oFilename_GotFocus(object sender, RoutedEventArgs e) { SelectTbxValue(sender); }
         private void Tbx_Rd_oFilename_LostFocus(object sender, RoutedEventArgs e) { ValidateTbxValue(sender); }
         private void Cbx_Rd_UseInputFilename_Checked(object sender, RoutedEventArgs e) { SyncFilenames(sender); }
@@ -140,7 +147,7 @@ namespace DS_TextsMod_Helper
 
             SyncFilenames(sender);
         }
-        private void Btn_Cmp_ExploreFile1_Click(object sender, RoutedEventArgs e) { Explore(sender); }
+        private void Btn_Cmp_ExploreFile1_Click(object sender, RoutedEventArgs e) { Explore((Button)sender); }
         private void Tbk_Cmp_iFile2_PreviewDragOver(object sender, DragEventArgs e) { e.Handled = true; }
         private void Tbk_Cmp_iFile2_Drop(object sender, DragEventArgs e)
         {
@@ -150,7 +157,7 @@ namespace DS_TextsMod_Helper
 
             SyncFilenames(sender);
         }
-        private void Btn_Cmp_ExploreFile2_Click(object sender, RoutedEventArgs e) { Explore(sender); }
+        private void Btn_Cmp_ExploreFile2_Click(object sender, RoutedEventArgs e) { Explore((Button)sender); }
         private void Tbx_Cmp_oFilename_GotFocus(object sender, RoutedEventArgs e) { SelectTbxValue(sender); }
         private void Tbx_Cmp_oFilename_LostFocus(object sender, RoutedEventArgs e) { ValidateTbxValue(sender); }
         private void Cbx_Cmp_UseInputFilename_Checked(object sender, RoutedEventArgs e)
@@ -185,7 +192,7 @@ namespace DS_TextsMod_Helper
 
             SyncFilenames(sender);
         }
-        private void Btn_Prp_ExploreFile1_Click(object sender, RoutedEventArgs e) { Explore(sender); }
+        private void Btn_Prp_ExploreFile1_Click(object sender, RoutedEventArgs e) { Explore((Button)sender); }
         private void Tbk_Prp_iFile2_PreviewDragOver(object sender, DragEventArgs e) { e.Handled = true; }
         private void Tbk_Prp_iFile2_Drop(object sender, DragEventArgs e)
         {
@@ -195,7 +202,7 @@ namespace DS_TextsMod_Helper
 
             SyncFilenames(sender);
         }
-        private void Btn_Prp_ExploreFile2_Click(object sender, RoutedEventArgs e) { Explore(sender); }
+        private void Btn_Prp_ExploreFile2_Click(object sender, RoutedEventArgs e) { Explore((Button)sender); }
         private void Tbk_Prp_iFile3_PreviewDragOver(object sender, DragEventArgs e) { e.Handled = true; }
         private void Tbk_Prp_iFile3_Drop(object sender, DragEventArgs e)
         {
@@ -205,7 +212,7 @@ namespace DS_TextsMod_Helper
 
             SyncFilenames(sender);
         }
-        private void Btn_Prp_ExploreFile3_Click(object sender, RoutedEventArgs e) { Explore(sender); }
+        private void Btn_Prp_ExploreFile3_Click(object sender, RoutedEventArgs e) { Explore((Button)sender); }
         private void Tbx_Prp_oFilename_GotFocus(object sender, RoutedEventArgs e) { SelectTbxValue(sender); }
         private void Tbx_Prp_oFilename_LostFocus(object sender, RoutedEventArgs e) { ValidateTbxValue(sender); }
         private void Cbx_Prp_UseInputFilename_Checked(object sender, RoutedEventArgs e)
@@ -369,10 +376,13 @@ namespace DS_TextsMod_Helper
                 tbk.ToolTip = WRN_DISTINCTS_FNAMES + tbk.ToolTip.ToString();
         }
 
-        private void Explore(object sender)
-        {
-            Button btn = sender as Button;
+        #endregion
 
+
+        #region GUI Helpers : Misc.
+
+        private void Explore(Button btn)
+        {
             switch (btn.Name)
             {
                 case "Btn_Rd_ExploreFile1":
@@ -778,7 +788,7 @@ namespace DS_TextsMod_Helper
 
                     ReadMode r = new ReadMode(rd_iFile1) { OneLinedValues = Cbx_Rd_OneLinedValues.IsChecked ?? false };
                     r.ProcessFiles(false);
-                    r.ProduceOutput(rd_oFilename, rd_csvSepChar); // TODO : Add csvSepChar as var
+                    r.ProduceOutput(rd_oFilename, rd_csvSepChar);
 
                     MessageBox.Show($"[Read mode] File \"{r.OutputFilename}\" created");
                     break;
