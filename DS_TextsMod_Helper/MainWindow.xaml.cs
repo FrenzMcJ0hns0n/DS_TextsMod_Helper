@@ -376,25 +376,25 @@ namespace DS_TextsMod_Helper
             switch (btn.Name)
             {
                 case "Btn_Rd_ExploreFile1":
-                    _ = Process.Start(Tbk_Rd_iFile1.Text != DROP_FMG ? Tools.GetParentDirPath(Tbk_Rd_iFile1.Text) : Tools.GetRootDirPath());
+                    Process.Start(Tbk_Rd_iFile1.Text != DROP_FMG ? Tools.GetParentDirPath(Tbk_Rd_iFile1.Text) : Tools.GetRootDirPath());
                     break;
                 case "Btn_Cmp_ExploreFile1":
-                    _ = Process.Start(Tbk_Cmp_iFile1.Text != DROP_FMG ? Tools.GetParentDirPath(Tbk_Cmp_iFile1.Text) : Tools.GetRootDirPath());
+                    Process.Start(Tbk_Cmp_iFile1.Text != DROP_FMG ? Tools.GetParentDirPath(Tbk_Cmp_iFile1.Text) : Tools.GetRootDirPath());
                     break;
                 case "Btn_Cmp_ExploreFile2":
-                    _ = Process.Start(Tbk_Cmp_iFile2.Text != DROP_FMG ? Tools.GetParentDirPath(Tbk_Cmp_iFile2.Text) : Tools.GetRootDirPath());
+                    Process.Start(Tbk_Cmp_iFile2.Text != DROP_FMG ? Tools.GetParentDirPath(Tbk_Cmp_iFile2.Text) : Tools.GetRootDirPath());
                     break;
                 case "Btn_Prp_ExploreFile1":
-                    _ = Process.Start(Tbk_Prp_iFile1.Text != DROP_FMG ? Tools.GetParentDirPath(Tbk_Prp_iFile1.Text) : Tools.GetRootDirPath());
+                    Process.Start(Tbk_Prp_iFile1.Text != DROP_FMG ? Tools.GetParentDirPath(Tbk_Prp_iFile1.Text) : Tools.GetRootDirPath());
                     break;
                 case "Btn_Prp_ExploreFile2":
-                    _ = Process.Start(Tbk_Prp_iFile2.Text != DROP_FMG ? Tools.GetParentDirPath(Tbk_Prp_iFile2.Text) : Tools.GetRootDirPath());
+                    Process.Start(Tbk_Prp_iFile2.Text != DROP_FMG ? Tools.GetParentDirPath(Tbk_Prp_iFile2.Text) : Tools.GetRootDirPath());
                     break;
                 case "Btn_Prp_ExploreFile3":
-                    _ = Process.Start(Tbk_Prp_iFile3.Text != DROP_FMG ? Tools.GetParentDirPath(Tbk_Prp_iFile3.Text) : Tools.GetRootDirPath());
+                    Process.Start(Tbk_Prp_iFile3.Text != DROP_FMG ? Tools.GetParentDirPath(Tbk_Prp_iFile3.Text) : Tools.GetRootDirPath());
                     break;
                 default:
-                    _ = Process.Start(Tools.GetRootDirPath());
+                    Process.Start(Tools.GetRootDirPath());
                     break;
             }
         }
@@ -557,7 +557,7 @@ namespace DS_TextsMod_Helper
                 Content = detachedDtgPreview,
             };
 
-            _ = windowPreview.ShowDialog();
+            windowPreview.ShowDialog();
         }
 
         private void Cbx_PreviewAllDetails_Checked(object sender, RoutedEventArgs e)
@@ -590,7 +590,7 @@ namespace DS_TextsMod_Helper
 
                 if (iFile1 == DROP_FMG)
                 {
-                    _ = MessageBox.Show("[Read mode] " + ERR_MISSING_IFILES);
+                    MessageBox.Show("[Read mode] " + ERR_MISSING_IFILES);
                     return;
                 }
 
@@ -622,7 +622,7 @@ namespace DS_TextsMod_Helper
 
                 if (iFile1 == DROP_FMG || iFile2 == DROP_FMG)
                 {
-                    _ = MessageBox.Show("[Compare mode] " + ERR_MISSING_IFILES);
+                    MessageBox.Show("[Compare mode] " + ERR_MISSING_IFILES);
                     return;
                 }
 
@@ -656,7 +656,7 @@ namespace DS_TextsMod_Helper
 
                 if (iFile1 == DROP_FMG || iFile2 == DROP_FMG || iFile3 == DROP_FMG)
                 {
-                    _ = MessageBox.Show("[Prepare mode] " + ERR_MISSING_IFILES);
+                    MessageBox.Show("[Prepare mode] " + ERR_MISSING_IFILES);
                     Cbx_PreviewAllDetails.IsChecked = false;
                     return;
                 }
@@ -780,7 +780,7 @@ namespace DS_TextsMod_Helper
                     r.ProcessFiles(false);
                     r.ProduceOutput(rd_oFilename, rd_csvSepChar); // TODO : Add csvSepChar as var
 
-                    _ = MessageBox.Show($"[Read mode] File \"{r.OutputFilename}\" created");
+                    MessageBox.Show($"[Read mode] File \"{r.OutputFilename}\" created");
                     break;
 
                 case PROCESS_MODE.Compare:
@@ -799,7 +799,7 @@ namespace DS_TextsMod_Helper
                     c.ProcessFiles(false);
                     c.ProduceOutput(cmp_oFilename, oHdr1, oHdr2, cmp_csvSepChar);
 
-                    _ = MessageBox.Show($"[Compare mode] File \"{c.OutputFilename}\" created");
+                    MessageBox.Show($"[Compare mode] File \"{c.OutputFilename}\" created");
                     break;
 
                 case PROCESS_MODE.Prepare:
@@ -818,7 +818,7 @@ namespace DS_TextsMod_Helper
                     p.ProcessFiles(false);
                     p.ProduceOutput(prp_oFilename);
 
-                    _ = MessageBox.Show($"[Prepare mode] File \"{p.OutputFilename}\" created");
+                    MessageBox.Show($"[Prepare mode] File \"{p.OutputFilename}\" created");
                     break;
             }
         }
@@ -843,7 +843,7 @@ namespace DS_TextsMod_Helper
 
             if (errors.Count > 0)
             {
-                _ = MessageBox.Show(string.Join("\n\n", errors));
+                MessageBox.Show(string.Join("\n\n", errors));
                 return false;
             }
             return true;
@@ -878,7 +878,7 @@ namespace DS_TextsMod_Helper
 
             if (errors.Count > 0)
             {
-                _ = MessageBox.Show(string.Join("\n\n", errors));
+                MessageBox.Show(string.Join("\n\n", errors));
                 return false;
             }
             return true;
@@ -907,7 +907,7 @@ namespace DS_TextsMod_Helper
 
             if (errors.Count > 0)
             {
-                _ = MessageBox.Show(string.Join("\n\n", errors));
+                MessageBox.Show(string.Join("\n\n", errors));
                 return false;
             }
             return true;
