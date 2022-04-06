@@ -504,7 +504,7 @@ namespace DS_TextsMod_Helper
             {
                 string iFile1 = Tbk_Rd_iFile1.Text;
 
-                if (iFile1 == "" || iFile1 == DROP_FMG)
+                if (iFile1 == DROP_FMG)
                 {
                     _ = MessageBox.Show("[Read mode] " + ERR_MISSING_IFILES);
                     return;
@@ -536,7 +536,7 @@ namespace DS_TextsMod_Helper
                 string iFile1 = Tbk_Cmp_iFile1.Text;
                 string iFile2 = Tbk_Cmp_iFile2.Text;
 
-                if (iFile1 == "" || iFile1 == DROP_FMG || iFile2 == "" || iFile2 == DROP_FMG)
+                if (iFile1 == DROP_FMG || iFile2 == DROP_FMG)
                 {
                     _ = MessageBox.Show("[Compare mode] " + ERR_MISSING_IFILES);
                     return;
@@ -570,7 +570,7 @@ namespace DS_TextsMod_Helper
                 string textToReplace = Tbx_Prp_TextToReplace.Text;
                 string replacingText = Tbx_Prp_ReplacingText.Text;
 
-                if (iFile1 == "" || iFile1 == DROP_FMG || iFile2 == "" || iFile2 == DROP_FMG || iFile3 == "" || iFile3 == DROP_FMG)
+                if (iFile1 == DROP_FMG || iFile2 == DROP_FMG || iFile3 == DROP_FMG)
                 {
                     _ = MessageBox.Show("[Prepare mode] " + ERR_MISSING_IFILES);
                     Cbx_PreviewAllDetails.IsChecked = false;
