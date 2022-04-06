@@ -1,9 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
+using SoulsFormats;
 
 namespace DS_TextsMod_Helper
 {
@@ -42,12 +41,12 @@ namespace DS_TextsMod_Helper
         public void ProcessFiles(bool preview)
         {
             // 0. Get input data
-            SoulsFormats.FMG file_1 = new SoulsFormats.FMG { Entries = SoulsFormats.FMG.Read(InputFile).Entries };
+            FMG file_1 = new FMG { Entries = FMG.Read(InputFile).Entries };
 
             Dictionary<int, string> rd_dictionary = new Dictionary<int, string>();
 
             // 1. Read file
-            foreach (SoulsFormats.FMG.Entry entry in file_1.Entries)
+            foreach (FMG.Entry entry in file_1.Entries)
                 rd_dictionary.Add(entry.ID, FormatValue(entry.Text));
 
             // 2. Build Entry
