@@ -80,28 +80,15 @@ namespace DS_TextsMod_Helper
                 MessageBox.Show("Fatal error : file 'SoulsFormats.dll' not found");
 
 #if DEBUG
-            Tbx_Rd_iFile1.Text = @"C:\Sandbox\Modding data\DS_TMH\work in progress 1.3\FMG test files\Items - English - Daughters of Ash\RingDescriptions.fmg";
-            //Tbx_Rd_iFile1.Text = @"C:\Sandbox\Modding data\DS_TMH\work in progress 1.3\FMG test files\Items - English - vanilla\Item_name_.fmg";
-
-            Tbx_Cmp_iFile1.Text = @"C:\Sandbox\Modding data\DS_TMH\work in progress 1.3\FMG test files\Items - English - Daughters of Ash\ItemNames.fmg";
-            Tbx_Cmp_iFile2.Text = @"C:\Sandbox\Modding data\DS_TMH\work in progress 1.3\FMG test files\Items - English - vanilla\Item_name_.fmg";
-            //Tbx_Cmp_iFile1.Text = @"C:\Sandbox\Modding data\DS_TMH\work in progress 1.3\FMG test files\Items - English - Daughters of Ash\RingDescriptions.fmg";
-            //Tbx_Cmp_iFile2.Text = @"C:\Sandbox\Modding data\DS_TMH\work in progress 1.3\FMG test files\Items - English - vanilla\Accessory_long_desc_.fmg";
-
-            //Tbx_Prp_iFile1.Text = @"C:\Sandbox\Modding data\DS_TMH\work in progress 1.3\FMG test files\Items - English - Daughters of Ash\RingDescriptions.fmg";
-            //Tbx_Prp_iFile2.Text = @"C:\Sandbox\Modding data\DS_TMH\work in progress 1.3\FMG test files\Items - English - vanilla\Accessory_long_desc_.fmg";
-            //Tbx_Prp_iFile3.Text = @"C:\Sandbox\Modding data\DS_TMH\work in progress 1.3\FMG test files\Items - French - vanilla\Accessory_long_desc_.fmg";
-            Tbx_Prp_iFile1.Text = @"C:\Sandbox\Modding data\DS_TMH\work in progress 1.3\FMG test files\Items - English - Daughters of Ash\ArmorDescriptions.fmg";
-            Tbx_Prp_iFile2.Text = @"C:\Sandbox\Modding data\DS_TMH\work in progress 1.3\FMG test files\Items - English - vanilla\Armor_long_desc_.fmg";
-            Tbx_Prp_iFile3.Text = @"C:\Sandbox\Modding data\DS_TMH\work in progress 1.3\FMG test files\Items - Italian - vanilla\Armor_long_desc_.fmg";
+            // TODO
 #endif
         }
 
 
         #region GUI Read mode
 
-        private void Tbx_Rd_iFile1_PreviewDragOver(object sender, DragEventArgs e) { e.Handled = true; }
-        private void Tbx_Rd_iFile1_Drop(object sender, DragEventArgs e)
+        private void Tbk_Rd_iFile1_PreviewDragOver(object sender, DragEventArgs e) { e.Handled = true; }
+        private void Tbk_Rd_iFile1_Drop(object sender, DragEventArgs e)
         {
             if (AcceptDroppedInputFile(e))
             {
@@ -121,8 +108,8 @@ namespace DS_TextsMod_Helper
 
         #region GUI Compare mode
 
-        private void Tbx_Cmp_iFile1_PreviewDragOver(object sender, DragEventArgs e) { e.Handled = true; }
-        private void Tbx_Cmp_iFile1_Drop(object sender, DragEventArgs e)
+        private void Tbk_Cmp_iFile1_PreviewDragOver(object sender, DragEventArgs e) { e.Handled = true; }
+        private void Tbk_Cmp_iFile1_Drop(object sender, DragEventArgs e)
         {
             if (AcceptDroppedInputFile(e))
             {
@@ -131,8 +118,8 @@ namespace DS_TextsMod_Helper
             }
         }
         private void Btn_Cmp_ExploreFile1_Click(object sender, RoutedEventArgs e) { Explore(sender); }
-        private void Tbx_Cmp_iFile2_PreviewDragOver(object sender, DragEventArgs e) { e.Handled = true; }
-        private void Tbx_Cmp_iFile2_Drop(object sender, DragEventArgs e)
+        private void Tbk_Cmp_iFile2_PreviewDragOver(object sender, DragEventArgs e) { e.Handled = true; }
+        private void Tbk_Cmp_iFile2_Drop(object sender, DragEventArgs e)
         {
             if (AcceptDroppedInputFile(e))
             {
@@ -166,8 +153,8 @@ namespace DS_TextsMod_Helper
 
         #region GUI Prepare mode
 
-        private void Tbx_Prp_iFile1_PreviewDragOver(object sender, DragEventArgs e) { e.Handled = true; }
-        private void Tbx_Prp_iFile1_Drop(object sender, DragEventArgs e)
+        private void Tbk_Prp_iFile1_PreviewDragOver(object sender, DragEventArgs e) { e.Handled = true; }
+        private void Tbk_Prp_iFile1_Drop(object sender, DragEventArgs e)
         {
             if (AcceptDroppedInputFile(e))
             {
@@ -176,8 +163,8 @@ namespace DS_TextsMod_Helper
             }
         }
         private void Btn_Prp_ExploreFile1_Click(object sender, RoutedEventArgs e) { Explore(sender); }
-        private void Tbx_Prp_iFile2_PreviewDragOver(object sender, DragEventArgs e) { e.Handled = true; }
-        private void Tbx_Prp_iFile2_Drop(object sender, DragEventArgs e)
+        private void Tbk_Prp_iFile2_PreviewDragOver(object sender, DragEventArgs e) { e.Handled = true; }
+        private void Tbk_Prp_iFile2_Drop(object sender, DragEventArgs e)
         {
             if (AcceptDroppedInputFile(e))
             {
@@ -186,8 +173,8 @@ namespace DS_TextsMod_Helper
             }
         }
         private void Btn_Prp_ExploreFile2_Click(object sender, RoutedEventArgs e) { Explore(sender); }
-        private void Tbx_Prp_iFile3_PreviewDragOver(object sender, DragEventArgs e) { e.Handled = true; }
-        private void Tbx_Prp_iFile3_Drop(object sender, DragEventArgs e)
+        private void Tbk_Prp_iFile3_PreviewDragOver(object sender, DragEventArgs e) { e.Handled = true; }
+        private void Tbk_Prp_iFile3_Drop(object sender, DragEventArgs e)
         {
             if (AcceptDroppedInputFile(e))
             {
@@ -256,22 +243,22 @@ namespace DS_TextsMod_Helper
             switch (btn.Name)
             {
                 case "Btn_Rd_ExploreFile1":
-                    _ = Process.Start(Tbx_Rd_iFile1.Text != TBX_DEFAULT ? Tools.GetParentFolder(Tbx_Rd_iFile1.Text) : Tools.GetRootDirPath());
+                    _ = Process.Start(Tbk_Rd_iFile1.Text != TBX_DEFAULT ? Tools.GetParentFolder(Tbk_Rd_iFile1.Text) : Tools.GetRootDirPath());
                     break;
                 case "Btn_Cmp_ExploreFile1":
-                    _ = Process.Start(Tbx_Cmp_iFile1.Text != TBX_DEFAULT ? Tools.GetParentFolder(Tbx_Cmp_iFile1.Text) : Tools.GetRootDirPath());
+                    _ = Process.Start(Tbk_Cmp_iFile1.Text != TBX_DEFAULT ? Tools.GetParentFolder(Tbk_Cmp_iFile1.Text) : Tools.GetRootDirPath());
                     break;
                 case "Btn_Cmp_ExploreFile2":
-                    _ = Process.Start(Tbx_Cmp_iFile2.Text != TBX_DEFAULT ? Tools.GetParentFolder(Tbx_Cmp_iFile2.Text) : Tools.GetRootDirPath());
+                    _ = Process.Start(Tbk_Cmp_iFile2.Text != TBX_DEFAULT ? Tools.GetParentFolder(Tbk_Cmp_iFile2.Text) : Tools.GetRootDirPath());
                     break;
                 case "Btn_Prp_ExploreFile1":
-                    _ = Process.Start(Tbx_Prp_iFile1.Text != TBX_DEFAULT ? Tools.GetParentFolder(Tbx_Prp_iFile1.Text) : Tools.GetRootDirPath());
+                    _ = Process.Start(Tbk_Prp_iFile1.Text != TBX_DEFAULT ? Tools.GetParentFolder(Tbk_Prp_iFile1.Text) : Tools.GetRootDirPath());
                     break;
                 case "Btn_Prp_ExploreFile2":
-                    _ = Process.Start(Tbx_Prp_iFile2.Text != TBX_DEFAULT ? Tools.GetParentFolder(Tbx_Prp_iFile2.Text) : Tools.GetRootDirPath());
+                    _ = Process.Start(Tbk_Prp_iFile2.Text != TBX_DEFAULT ? Tools.GetParentFolder(Tbk_Prp_iFile2.Text) : Tools.GetRootDirPath());
                     break;
                 case "Btn_Prp_ExploreFile3":
-                    _ = Process.Start(Tbx_Prp_iFile3.Text != TBX_DEFAULT ? Tools.GetParentFolder(Tbx_Prp_iFile3.Text) : Tools.GetRootDirPath());
+                    _ = Process.Start(Tbk_Prp_iFile3.Text != TBX_DEFAULT ? Tools.GetParentFolder(Tbk_Prp_iFile3.Text) : Tools.GetRootDirPath());
                     break;
                 default:
                     _ = Process.Start(Tools.GetRootDirPath());
@@ -297,38 +284,38 @@ namespace DS_TextsMod_Helper
 
         private void SyncFilenames(object sender) // TODO: Factorize (use PROCESS_MODE ?)
         {
-            if (sender is CheckBox && Tbx_Rd_iFile1.Text != TBX_DEFAULT) // Sender is CheckBox from Read mode
+            if (sender is CheckBox && Tbk_Rd_iFile1.Text != TBX_DEFAULT) // Sender is CheckBox from Read mode
             {
-                Tbx_Rd_oFilename.Text = Tools.GetFilenameFromPath(Tbx_Rd_iFile1.Text);
+                Tbx_Rd_oFilename.Text = Tools.GetFilenameFromPath(Tbk_Rd_iFile1.Text);
                 ValidateTbxValue(Tbx_Rd_oFilename);
             }
 
-            if (sender is TextBox)
+            if (sender is TextBlock)
             {
-                TextBox tbx = sender as TextBox;
+                TextBlock tbk = sender as TextBlock;
 
-                if (tbx.Name == "Tbx_Rd_iFile1" && (Cbx_Rd_UseInputFilename.IsChecked ?? true)) // Sender is TextBox from Read mode
+                if (tbk.Name == "Tbx_Rd_iFile1" && (Cbx_Rd_UseInputFilename.IsChecked ?? true)) // Sender is TextBox from Read mode
                 {
-                    Tbx_Rd_oFilename.Text = Tools.GetFilenameFromPath(Tbx_Rd_iFile1.Text);
+                    Tbx_Rd_oFilename.Text = Tools.GetFilenameFromPath(Tbk_Rd_iFile1.Text);
                     ValidateTbxValue(Tbx_Rd_oFilename);
                 }
-                if (tbx.Name.Contains("Cmp") && (Cbx_Cmp_UseInputFilename.IsChecked ?? true)) // Sender is TextBox from Compare mode
+                if (tbk.Name.Contains("Cmp") && (Cbx_Cmp_UseInputFilename.IsChecked ?? true)) // Sender is TextBox from Compare mode
                 {
-                    if (Cmbx_Cmp_TargetInputFilename.SelectedIndex == 0 && tbx == Tbx_Cmp_iFile1)
-                        Tbx_Cmp_oFilename.Text = Tools.GetFilenameFromPath(Tbx_Cmp_iFile1.Text);
-                    else if (Cmbx_Cmp_TargetInputFilename.SelectedIndex == 1 && tbx == Tbx_Cmp_iFile2)
-                        Tbx_Cmp_oFilename.Text = Tools.GetFilenameFromPath(Tbx_Cmp_iFile2.Text);
+                    if (Cmbx_Cmp_TargetInputFilename.SelectedIndex == 0 && tbk == Tbk_Cmp_iFile1)
+                        Tbx_Cmp_oFilename.Text = Tools.GetFilenameFromPath(Tbk_Cmp_iFile1.Text);
+                    else if (Cmbx_Cmp_TargetInputFilename.SelectedIndex == 1 && tbk == Tbk_Cmp_iFile2)
+                        Tbx_Cmp_oFilename.Text = Tools.GetFilenameFromPath(Tbk_Cmp_iFile2.Text);
 
                     ValidateTbxValue(Tbx_Cmp_oFilename);
                 }
-                if (tbx.Name.Contains("Prp") && (Cbx_Prp_UseInputFilename.IsChecked ?? true)) // Sender is TextBox from Prepare mode
+                if (tbk.Name.Contains("Prp") && (Cbx_Prp_UseInputFilename.IsChecked ?? true)) // Sender is TextBox from Prepare mode
                 {
-                    if (Cmbx_Prp_TargetInputFilename.SelectedIndex == 0 && tbx == Tbx_Prp_iFile1)
-                        Tbx_Prp_oFilename.Text = Tools.GetFilenameFromPath(Tbx_Prp_iFile1.Text);
-                    else if (Cmbx_Prp_TargetInputFilename.SelectedIndex == 1 && tbx == Tbx_Prp_iFile2)
-                        Tbx_Prp_oFilename.Text = Tools.GetFilenameFromPath(Tbx_Prp_iFile2.Text);
-                    else if (Cmbx_Prp_TargetInputFilename.SelectedIndex == 2 && tbx == Tbx_Prp_iFile3)
-                        Tbx_Prp_oFilename.Text = Tools.GetFilenameFromPath(Tbx_Prp_iFile3.Text);
+                    if (Cmbx_Prp_TargetInputFilename.SelectedIndex == 0 && tbk == Tbk_Prp_iFile1)
+                        Tbx_Prp_oFilename.Text = Tools.GetFilenameFromPath(Tbk_Prp_iFile1.Text);
+                    else if (Cmbx_Prp_TargetInputFilename.SelectedIndex == 1 && tbk == Tbk_Prp_iFile2)
+                        Tbx_Prp_oFilename.Text = Tools.GetFilenameFromPath(Tbk_Prp_iFile2.Text);
+                    else if (Cmbx_Prp_TargetInputFilename.SelectedIndex == 2 && tbk == Tbk_Prp_iFile3)
+                        Tbx_Prp_oFilename.Text = Tools.GetFilenameFromPath(Tbk_Prp_iFile3.Text);
 
                     ValidateTbxValue(Tbx_Prp_oFilename);
                 }
@@ -340,21 +327,21 @@ namespace DS_TextsMod_Helper
 
                 if (cmbx == Cmbx_Cmp_TargetInputFilename) // Sender is ComboBox from Compare mode
                 {
-                    if (cmbx.SelectedIndex == 0 && Tbx_Cmp_iFile1.Text != TBX_DEFAULT)
-                        Tbx_Cmp_oFilename.Text = Tools.GetFilenameFromPath(Tbx_Cmp_iFile1.Text);
-                    else if (cmbx.SelectedIndex == 1 && Tbx_Cmp_iFile2.Text != TBX_DEFAULT)
-                        Tbx_Cmp_oFilename.Text = Tools.GetFilenameFromPath(Tbx_Cmp_iFile2.Text);
+                    if (cmbx.SelectedIndex == 0 && Tbk_Cmp_iFile1.Text != TBX_DEFAULT)
+                        Tbx_Cmp_oFilename.Text = Tools.GetFilenameFromPath(Tbk_Cmp_iFile1.Text);
+                    else if (cmbx.SelectedIndex == 1 && Tbk_Cmp_iFile2.Text != TBX_DEFAULT)
+                        Tbx_Cmp_oFilename.Text = Tools.GetFilenameFromPath(Tbk_Cmp_iFile2.Text);
 
                     ValidateTbxValue(Tbx_Cmp_oFilename);
                 }
                 if (cmbx == Cmbx_Prp_TargetInputFilename) // Sender is ComboBox from Prepare mode
                 {
-                    if (cmbx.SelectedIndex == 0 && Tbx_Prp_iFile1.Text != TBX_DEFAULT)
-                        Tbx_Prp_oFilename.Text = Tools.GetFilenameFromPath(Tbx_Prp_iFile1.Text);
-                    else if (cmbx.SelectedIndex == 1 && Tbx_Prp_iFile2.Text != TBX_DEFAULT)
-                        Tbx_Prp_oFilename.Text = Tools.GetFilenameFromPath(Tbx_Prp_iFile2.Text);
-                    else if (cmbx.SelectedIndex == 2 && Tbx_Prp_iFile3.Text != TBX_DEFAULT)
-                        Tbx_Prp_oFilename.Text = Tools.GetFilenameFromPath(Tbx_Prp_iFile3.Text);
+                    if (cmbx.SelectedIndex == 0 && Tbk_Prp_iFile1.Text != TBX_DEFAULT)
+                        Tbx_Prp_oFilename.Text = Tools.GetFilenameFromPath(Tbk_Prp_iFile1.Text);
+                    else if (cmbx.SelectedIndex == 1 && Tbk_Prp_iFile2.Text != TBX_DEFAULT)
+                        Tbx_Prp_oFilename.Text = Tools.GetFilenameFromPath(Tbk_Prp_iFile2.Text);
+                    else if (cmbx.SelectedIndex == 2 && Tbk_Prp_iFile3.Text != TBX_DEFAULT)
+                        Tbx_Prp_oFilename.Text = Tools.GetFilenameFromPath(Tbk_Prp_iFile3.Text);
 
                     ValidateTbxValue(Tbx_Prp_oFilename);
                 }
@@ -457,7 +444,7 @@ namespace DS_TextsMod_Helper
         {
             if (r_entries is null)
             {
-                string iFile1 = Tbx_Rd_iFile1.Text;
+                string iFile1 = Tbk_Rd_iFile1.Text;
 
                 if (iFile1 == "" || iFile1 == TBX_DEFAULT)
                 {
@@ -488,8 +475,8 @@ namespace DS_TextsMod_Helper
         {
             if (c_entries is null)
             {
-                string iFile1 = Tbx_Cmp_iFile1.Text;
-                string iFile2 = Tbx_Cmp_iFile2.Text;
+                string iFile1 = Tbk_Cmp_iFile1.Text;
+                string iFile2 = Tbk_Cmp_iFile2.Text;
 
                 if (iFile1 == "" || iFile1 == TBX_DEFAULT || iFile2 == "" || iFile2 == TBX_DEFAULT)
                 {
@@ -519,9 +506,9 @@ namespace DS_TextsMod_Helper
         {
             if (p_entries is null)
             {
-                string iFile1 = Tbx_Prp_iFile1.Text;
-                string iFile2 = Tbx_Prp_iFile2.Text;
-                string iFile3 = Tbx_Prp_iFile3.Text;
+                string iFile1 = Tbk_Prp_iFile1.Text;
+                string iFile2 = Tbk_Prp_iFile2.Text;
+                string iFile3 = Tbk_Prp_iFile3.Text;
                 string textToReplace = Tbx_Prp_TextToReplace.Text;
                 string replacingText = Tbx_Prp_ReplacingText.Text;
 
@@ -643,7 +630,7 @@ namespace DS_TextsMod_Helper
                     if (!ValidateReadInputs())
                         return;
 
-                    string rd_iFile1 = Tbx_Rd_iFile1.Text;
+                    string rd_iFile1 = Tbk_Rd_iFile1.Text;
                     string rd_oFilename = Tbx_Rd_oFilename.Text + ".csv";
                     string rd_csvSepChar = Tbx_Rd_CsvSeparator.Text;
 
@@ -659,8 +646,8 @@ namespace DS_TextsMod_Helper
                     if (!ValidateCompareInputs())
                         return;
 
-                    string cmp_iFile1 = Tbx_Cmp_iFile1.Text;
-                    string cmp_iFile2 = Tbx_Cmp_iFile2.Text;
+                    string cmp_iFile1 = Tbk_Cmp_iFile1.Text;
+                    string cmp_iFile2 = Tbk_Cmp_iFile2.Text;
                     string cmp_oFilename = Tbx_Cmp_oFilename.Text + ".csv";
                     string oHdr1 = Tbx_Cmp_oHeader1.Text;
                     string oHdr2 = Tbx_Cmp_oHeader2.Text;
@@ -678,9 +665,9 @@ namespace DS_TextsMod_Helper
                     if (!ValidatePrepareInputs())
                         return;
 
-                    string prp_iFile1 = Tbx_Prp_iFile1.Text;
-                    string prp_iFile2 = Tbx_Prp_iFile2.Text;
-                    string prp_iFile3 = Tbx_Prp_iFile3.Text;
+                    string prp_iFile1 = Tbk_Prp_iFile1.Text;
+                    string prp_iFile2 = Tbk_Prp_iFile2.Text;
+                    string prp_iFile3 = Tbk_Prp_iFile3.Text;
                     string prp_oFilename = Tbx_Prp_oFilename.Text + ".fmg";
                     string textToReplace = Tbx_Prp_TextToReplace.Text;
                     string replacingText = Tbx_Prp_ReplacingText.Text;
@@ -699,7 +686,7 @@ namespace DS_TextsMod_Helper
             string mode = "[Read mode] ";
             List<string> errors = new List<string>();
 
-            string input_filepath1 = Tbx_Rd_iFile1.Text;
+            string input_filepath1 = Tbk_Rd_iFile1.Text;
             string output_filename = Tbx_Rd_oFilename.Text;
             string sepa_csv_char_o = Tbx_Rd_CsvSeparator.Text;
 
@@ -725,8 +712,8 @@ namespace DS_TextsMod_Helper
             string mode = "[Compare mode] ";
             List<string> errors = new List<string>();
 
-            string input_filepath1 = Tbx_Cmp_iFile1.Text;
-            string input_filepath2 = Tbx_Cmp_iFile2.Text;
+            string input_filepath1 = Tbk_Cmp_iFile1.Text;
+            string input_filepath2 = Tbk_Cmp_iFile2.Text;
             string output_header_1 = Tbx_Cmp_oHeader1.Text;
             string output_header_2 = Tbx_Cmp_oHeader2.Text;
             string output_filename = Tbx_Cmp_oFilename.Text;
@@ -760,9 +747,9 @@ namespace DS_TextsMod_Helper
             string mode = "[Prepare mode] ";
             List<string> errors = new List<string>();
 
-            string input_filepath1 = Tbx_Prp_iFile1.Text;
-            string input_filepath2 = Tbx_Prp_iFile2.Text;
-            string input_filepath3 = Tbx_Prp_iFile3.Text;
+            string input_filepath1 = Tbk_Prp_iFile1.Text;
+            string input_filepath2 = Tbk_Prp_iFile2.Text;
+            string input_filepath3 = Tbk_Prp_iFile3.Text;
             string output_filename = Tbx_Prp_oFilename.Text;
 
             if (!File.Exists(input_filepath1) || !File.Exists(input_filepath2) || !File.Exists(input_filepath3))
