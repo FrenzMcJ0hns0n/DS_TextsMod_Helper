@@ -202,6 +202,20 @@ namespace DS_TextsMod_Helper
         #endregion
 
 
+        #region GUI Helpers : Manage tabs
+
+        private void FocusMe(PROCESS_MODE targetMode)
+        {
+            if (SelectedMode() != targetMode)
+                Tbc_Modes.SelectedIndex = (int)targetMode;
+        }
+        private void Tbi_Rd_DragOver(object sender, DragEventArgs e) { FocusMe(PROCESS_MODE.Read); }
+        private void Tbi_Cmp_DragOver(object sender, DragEventArgs e) { FocusMe(PROCESS_MODE.Compare); }
+        private void Tbi_Prp_DragOver(object sender, DragEventArgs e) { FocusMe(PROCESS_MODE.Prepare); }
+
+        #endregion
+
+
         #region GUI Helpers
 
         private bool AcceptDroppedInputFile(DragEventArgs e)

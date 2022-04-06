@@ -65,8 +65,8 @@
             <RowDefinition Height="3*" />
         </Grid.RowDefinitions>
 
-        <TabControl x:Name="Tbc_Modes" Margin="16,16,16,8" >
-            <TabItem Header="Read mode">
+        <TabControl x:Name="Tbc_Modes" Margin="16,16,16,8" AllowDrop="True">
+            <TabItem x:Name ="Tbi_Rd" Header="Read mode" DragOver="Tbi_Rd_DragOver">
                 <Grid Background="#EEE">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="8*" />
@@ -181,8 +181,8 @@
                     </GroupBox>
                 </Grid>
             </TabItem>
-            
-            <TabItem Header="Compare mode">
+
+            <TabItem x:Name ="Tbi_Cmp" Header="Compare mode" DragOver="Tbi_Cmp_DragOver">
                 <Grid Background="#EEE">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="8*" />
@@ -374,7 +374,7 @@
                 </Grid>
             </TabItem>
 
-            <TabItem Header="Prepare mode">
+            <TabItem x:Name ="Tbi_Prp" Header="Prepare mode" DragOver="Tbi_Prp_DragOver">
                 <Grid Background="#EEE">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="8*" />
