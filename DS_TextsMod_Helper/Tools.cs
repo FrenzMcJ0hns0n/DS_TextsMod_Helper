@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Reflection;
 using System.Windows;
 
@@ -34,12 +35,41 @@ namespace DS_TextsMod_Helper
             return fileName.Replace(fileExt, "");
         }
 
+        public static long GetFileSize(string path)
+        {
+            return new FileInfo(path).Length;
+        }
+
         public static string GetParentDirPath(string path)
         {
             FileInfo info = new FileInfo(path);
             string parentFolder = info.DirectoryName;
 
             return parentFolder;
+        }
+
+
+
+
+        public static string GetTimeSinceLastEdit(string path)
+        {
+            int seconds = GetSecondsSinceLastEdit(path);
+
+            if (seconds > 60 * 60 * 24)
+                return $"{seconds / (60 * 60 * 24)} day(s)";
+
+            else if (seconds > 60 * 60)
+                return $"{seconds / (60 * 60)} hour(s)";
+
+            else return $"{seconds / 60} minute(s)";
+        }
+
+        private static int GetSecondsSinceLastEdit(string path)
+        {
+            DateTime lastWriteTime = new FileInfo(path).LastWriteTime;
+            DateTime loadedNow = DateTime.Now;
+
+            return (int)(loadedNow - lastWriteTime).TotalSeconds;
         }
 
 

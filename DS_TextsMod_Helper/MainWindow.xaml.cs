@@ -2,9 +2,11 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
+using System.Windows.Documents;
 using System.Windows.Media;
 
 namespace DS_TextsMod_Helper
@@ -90,11 +92,11 @@ namespace DS_TextsMod_Helper
         private void Tbk_Rd_iFile1_PreviewDragOver(object sender, DragEventArgs e) { e.Handled = true; }
         private void Tbk_Rd_iFile1_Drop(object sender, DragEventArgs e)
         {
-            if (AcceptDroppedInputFile(e))
-            {
-                DisplayInputFilepath(sender, e);
-                SyncFilenames(sender);
-            }
+            List<InputFile> iFiles = CollectInputFiles(e);
+            foreach (InputFile iFile in iFiles)
+                ValidateInputFile((TextBlock)sender, iFile);
+
+            SyncFilenames(sender);
         }
         private void Btn_Rd_ExploreFile1_Click(object sender, RoutedEventArgs e) { Explore(sender); }
         private void Tbx_Rd_oFilename_GotFocus(object sender, RoutedEventArgs e) { SelectTbxValue(sender); }
@@ -111,21 +113,21 @@ namespace DS_TextsMod_Helper
         private void Tbk_Cmp_iFile1_PreviewDragOver(object sender, DragEventArgs e) { e.Handled = true; }
         private void Tbk_Cmp_iFile1_Drop(object sender, DragEventArgs e)
         {
-            if (AcceptDroppedInputFile(e))
-            {
-                DisplayInputFilepath(sender, e);
-                SyncFilenames(sender);
-            }
+            List<InputFile> iFiles = CollectInputFiles(e);
+            foreach (InputFile iFile in iFiles)
+                ValidateInputFile((TextBlock)sender, iFile);
+
+            SyncFilenames(sender);
         }
         private void Btn_Cmp_ExploreFile1_Click(object sender, RoutedEventArgs e) { Explore(sender); }
         private void Tbk_Cmp_iFile2_PreviewDragOver(object sender, DragEventArgs e) { e.Handled = true; }
         private void Tbk_Cmp_iFile2_Drop(object sender, DragEventArgs e)
         {
-            if (AcceptDroppedInputFile(e))
-            {
-                DisplayInputFilepath(sender, e);
-                SyncFilenames(sender);
-            }
+            List<InputFile> iFiles = CollectInputFiles(e);
+            foreach (InputFile iFile in iFiles)
+                ValidateInputFile((TextBlock)sender, iFile);
+
+            SyncFilenames(sender);
         }
         private void Btn_Cmp_ExploreFile2_Click(object sender, RoutedEventArgs e) { Explore(sender); }
         private void Tbx_Cmp_oFilename_GotFocus(object sender, RoutedEventArgs e) { SelectTbxValue(sender); }
@@ -156,31 +158,31 @@ namespace DS_TextsMod_Helper
         private void Tbk_Prp_iFile1_PreviewDragOver(object sender, DragEventArgs e) { e.Handled = true; }
         private void Tbk_Prp_iFile1_Drop(object sender, DragEventArgs e)
         {
-            if (AcceptDroppedInputFile(e))
-            {
-                DisplayInputFilepath(sender, e);
-                SyncFilenames(sender);
-            }
+            List<InputFile> iFiles = CollectInputFiles(e);
+            foreach (InputFile iFile in iFiles)
+                ValidateInputFile((TextBlock)sender, iFile);
+
+            SyncFilenames(sender);
         }
         private void Btn_Prp_ExploreFile1_Click(object sender, RoutedEventArgs e) { Explore(sender); }
         private void Tbk_Prp_iFile2_PreviewDragOver(object sender, DragEventArgs e) { e.Handled = true; }
         private void Tbk_Prp_iFile2_Drop(object sender, DragEventArgs e)
         {
-            if (AcceptDroppedInputFile(e))
-            {
-                DisplayInputFilepath(sender, e);
-                SyncFilenames(sender);
-            }
+            List<InputFile> iFiles = CollectInputFiles(e);
+            foreach (InputFile iFile in iFiles)
+                ValidateInputFile((TextBlock)sender, iFile);
+
+            SyncFilenames(sender);
         }
         private void Btn_Prp_ExploreFile2_Click(object sender, RoutedEventArgs e) { Explore(sender); }
         private void Tbk_Prp_iFile3_PreviewDragOver(object sender, DragEventArgs e) { e.Handled = true; }
         private void Tbk_Prp_iFile3_Drop(object sender, DragEventArgs e)
         {
-            if (AcceptDroppedInputFile(e))
-            {
-                DisplayInputFilepath(sender, e);
-                SyncFilenames(sender);
-            }
+            List<InputFile> iFiles = CollectInputFiles(e);
+            foreach (InputFile iFile in iFiles)
+                ValidateInputFile((TextBlock)sender, iFile);
+
+            SyncFilenames(sender);
         }
         private void Btn_Prp_ExploreFile3_Click(object sender, RoutedEventArgs e) { Explore(sender); }
         private void Tbx_Prp_oFilename_GotFocus(object sender, RoutedEventArgs e) { SelectTbxValue(sender); }
@@ -216,38 +218,53 @@ namespace DS_TextsMod_Helper
         #endregion
 
 
-        #region GUI Helpers
+        #region GUI Helpers : Process input files
 
-        private bool AcceptDroppedInputFile(DragEventArgs e)
+        private List<InputFile> CollectInputFiles(DragEventArgs e)
         {
-            if (!(e.Data.GetData(DataFormats.FileDrop) is string[]))
-                return false;
+            List<InputFile> iFiles = new List<InputFile>();
 
-            string path = ((string[])e.Data.GetData(DataFormats.FileDrop))[0];
-            if (!File.Exists(path))
-                return false;
+            string[] droppedFiles = (string[])e.Data.GetData(DataFormats.FileDrop);
+            foreach (string filepath in droppedFiles)
+                iFiles.Add(new InputFile(filepath));
 
-            if (new FileInfo(path).Extension.ToLowerInvariant() != ".fmg")
-                return false;
-
-            try { _ = SoulsFormats.FMG.Read(path); }
-            catch (Exception ex)
-            {
-                _ = MessageBox.Show("Error while reading this input file : '" + ex.ToString() + "'");
-                return false;
-            }
-
-            return true;
+            return iFiles;
         }
 
-        private void DisplayInputFilepath(object sender, DragEventArgs e)
+        private void ValidateInputFile(TextBlock tbk, InputFile iFile)
         {
-            string filepath = ((string[])e.Data.GetData(DataFormats.FileDrop))[0];
-            TextBox tbx = sender as TextBox;
+            bool isValid = iFile.Error is null;
 
-            tbx.Text = filepath;
-            tbx.FontStyle = FontStyles.Normal;
-            tbx.Foreground = Brushes.Black;
+            if (isValid)
+            {
+                tbk.Inlines.Clear();
+                tbk.Inlines.Add(new Run($"{iFile.PDir}\\"));
+                tbk.Inlines.Add(new Bold(new Run($"{iFile.Name}.fmg")));
+
+                tbk.FontStyle = FontStyles.Normal;
+                tbk.Foreground = Brushes.Black;
+            }
+            else
+            {
+                tbk.Inlines.Clear();
+                tbk.Inlines.Add(new Run(DROP_FMG));
+
+                tbk.FontStyle = FontStyles.Italic;
+                tbk.Foreground = Brushes.Gray;
+            }
+
+            tbk.ToolTip = iFile.GetToolTipText(isValid);
+
+            _ = ConfirmValidation(tbk, isValid);
+        }
+
+        private async Task ConfirmValidation(TextBlock tbk, bool fileIsValid)
+        {
+            SolidColorBrush softGreen = (SolidColorBrush)new BrushConverter().ConvertFrom("#c8eac8");
+
+            tbk.Background = fileIsValid ? Brushes.LimeGreen : Brushes.Red;
+            await Task.Delay(100);
+            tbk.Background = fileIsValid ? softGreen : Brushes.White;
         }
 
         private void Explore(object sender)
