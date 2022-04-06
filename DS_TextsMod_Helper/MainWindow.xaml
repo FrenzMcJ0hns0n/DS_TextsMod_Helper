@@ -7,7 +7,7 @@
         mc:Ignorable="d"
         Width="1280" Height="800"
         ResizeMode="CanMinimize"
-        Title="DS Texts Mod Helper">
+        Title="DS Texts Mod Helper - v1.3.2">
 
     <Grid x:Name="Grid_Main" Background="#EEE">
 
