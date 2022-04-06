@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System;
+using SoulsFormats;
 
 namespace DS_TextsMod_Helper
 {
@@ -38,12 +40,12 @@ namespace DS_TextsMod_Helper
         public void ProcessFiles(bool preview)
         {
             // 0. Get input data
-            SoulsFormats.FMG file_1 = new SoulsFormats.FMG { Entries = SoulsFormats.FMG.Read(InputFiles[0]).Entries };
-            SoulsFormats.FMG file_2 = new SoulsFormats.FMG { Entries = SoulsFormats.FMG.Read(InputFiles[1]).Entries };
+            FMG file_1 = new FMG { Entries = FMG.Read(InputFiles[0]).Entries };
+            FMG file_2 = new FMG { Entries = FMG.Read(InputFiles[1]).Entries };
 
             SortedDictionary<int, List<string>> cmp_dictionary = new SortedDictionary<int, List<string>>();
             // 1. Insert value from File1
-            foreach (SoulsFormats.FMG.Entry entry in file_1.Entries)
+            foreach (FMG.Entry entry in file_1.Entries)
             {
                 if (entry.Text == null)
                     continue; // Exclude lines without value (TODO? v1.4: Give choice about that)
@@ -53,7 +55,7 @@ namespace DS_TextsMod_Helper
                 cmp_dictionary.Add(entry.ID, new List<string>() { entry.Text, "" });
             }
             // 2. Insert value from File2
-            foreach (SoulsFormats.FMG.Entry entry in file_2.Entries)
+            foreach (FMG.Entry entry in file_2.Entries)
             {
                 if (entry.Text == null)
                     continue; // Exclude lines without value (TODO? v1.4: Give choice about that)
