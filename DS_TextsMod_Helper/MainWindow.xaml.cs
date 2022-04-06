@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -36,6 +37,9 @@ namespace DS_TextsMod_Helper
         #region CONSTANTS
 
         private const string DROP_FMG = "Drop FMG file...";
+
+        private const string WRN_DISTINCTS_FNAMES = "Warning : inconsistent filename(s).\r\n"
+                                                  + "Make sure to use the right input files\r\n\r\n";
 
         private const string ERR_MISSING_IFILES = "Error : Missing input file(s)";
         private const string ERR_MISSING_OFNAME = "Error : Missing output filename";
@@ -282,6 +286,87 @@ namespace DS_TextsMod_Helper
             tbk.Background = fileIsValid ? Brushes.LimeGreen : Brushes.Red;
             await Task.Delay(100);
             tbk.Background = fileIsValid ? softGreen : Brushes.White;
+
+            CompareFilenames();
+        }
+
+        private void CompareFilenames()
+        {
+            switch (SelectedMode())
+            {
+                case PROCESS_MODE.Compare:
+
+                    List<TextBlock> cmpTbks = new List<TextBlock>() { Tbk_Cmp_iFile1, Tbk_Cmp_iFile2 };
+                    List<string> cmpNames = new List<string>();
+                    foreach (TextBlock tbk in cmpTbks)
+                    {
+                        if (tbk.Text == DROP_FMG)
+                            return;
+                        cmpNames.Add(Tools.GetFileName(tbk.Text));
+                    }
+
+                    // Count distinct values in 2 TextBlocks
+                    int cmpDistincts = cmpNames.Distinct().ToList().Count;
+                    switch (cmpDistincts)
+                    {
+                        case 1: foreach (TextBlock tbk in cmpTbks) ShowSameFilenames(tbk); break;
+                        case 2: foreach (TextBlock tbk in cmpTbks) ShowDistinctFilenames(tbk); break;
+                    }
+                    break;
+
+                case PROCESS_MODE.Prepare:
+
+                    List<TextBlock> prpTbks = new List<TextBlock>() { Tbk_Prp_iFile1, Tbk_Prp_iFile2, Tbk_Prp_iFile3 };
+                    List<string> prpNames = new List<string>();
+                    foreach (TextBlock tbk in prpTbks)
+                    {
+                        if (tbk.Text == DROP_FMG)
+                            return;
+                        prpNames.Add(Tools.GetFileName(tbk.Text));
+                    }
+
+                    // Count distinct values in 3 TextBlocks
+                    int prpDistincts = prpNames.Distinct().ToList().Count;
+                    switch (prpDistincts)
+                    {
+                        case 1: foreach (TextBlock tbk in prpTbks) ShowSameFilenames(tbk); break;
+                        case 2: // 3 Tbk are sharing 2 distincts filenames : find the isolated one = warning only on it
+                                // There could have been a great story here but we finally want them all to be Yellow
+                                //string distinctValue = prpNames.GroupBy(n => n)
+                                //                       .Where(g => g.Count() == 1)
+                                //                       .Select(g => g.Key)
+                                //                       .ToList()
+                                //                       .First();
+
+                        //for (int i = 0; i < prpNames.Count; i++)
+                        //    if (prpNames[i] == distinctValue)
+                        //        ShowDistinctFilenames(prpTbks[i]);
+                        //break;
+                        case 3: foreach (TextBlock tbk in prpTbks) ShowDistinctFilenames(tbk); break;
+                    }
+                    break;
+            }
+        }
+
+        private void ShowSameFilenames(TextBlock tbk)
+        {
+            SolidColorBrush softGreen = (SolidColorBrush)new BrushConverter().ConvertFrom("#c8eac8");
+            tbk.Background = softGreen;
+
+            // Wonky but functional
+            int warningLength = WRN_DISTINCTS_FNAMES.Length;
+            if (tbk.ToolTip.ToString().Substring(0, warningLength) == WRN_DISTINCTS_FNAMES)
+                tbk.ToolTip = tbk.ToolTip.ToString().Remove(0, warningLength);
+        }
+
+        private void ShowDistinctFilenames(TextBlock tbk)
+        {
+            tbk.Background = Brushes.PaleGoldenrod;
+
+            // Wonky but functional
+            int warningLength = WRN_DISTINCTS_FNAMES.Length;
+            if (tbk.ToolTip.ToString().Substring(0, warningLength) != WRN_DISTINCTS_FNAMES)
+                tbk.ToolTip = WRN_DISTINCTS_FNAMES + tbk.ToolTip.ToString();
         }
 
         private void Explore(object sender)
