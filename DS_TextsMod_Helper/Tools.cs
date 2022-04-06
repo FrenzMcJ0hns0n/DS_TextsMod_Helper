@@ -23,6 +23,11 @@ namespace DS_TextsMod_Helper
             return Path.Combine(GetOutputDirPath(), filename);
         }
 
+        public static string GetSoulsFormatsDllPath()
+        {
+            return Path.Combine(GetRootDirPath(), "SoulsFormats.dll");
+        }
+
 
 
 

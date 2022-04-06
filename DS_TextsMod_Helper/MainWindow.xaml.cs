@@ -14,6 +14,26 @@ namespace DS_TextsMod_Helper
     public partial class MainWindow : Window
     {
 
+#if DEBUG
+        static readonly string basePath1_3 = @"C:\Sandbox\Modding data\DS_TMH\work in progress 1.3\FMG test files";
+        static readonly string basePath1_4 = ""; // TODO => @"C:\Sandbox\Modding data\DS_TMH\
+
+        //static readonly string fakeRd1a = Path.Combine(basePath1_3, @"Items - English - Daughters of Ash\RingDescriptions.fmg");
+        //static readonly string fakeRd1b = Path.Combine(basePath1_3, @"Items - English - vanilla\Item_name_.fmg");
+
+        //static readonly string fakeCmp1a = Path.Combine(basePath1_3, @"Items - English - Daughters of Ash\ItemNames.fmg");
+        //static readonly string fakeCmp2a = Path.Combine(basePath1_3, @"Items - English - vanilla\Item_name_.fmg");
+        //static readonly string fakeCmp1b = Path.Combine(basePath1_3, @"Items - English - Daughters of Ash\ItemNames.fmg");
+        //static readonly string fakeCmp2b = Path.Combine(basePath1_3, @"Items - English - vanilla\Item_name_.fmg");
+
+        //static readonly string fakePrp1a = Path.Combine(basePath1_3, @"Items - English - Daughters of Ash\RingDescriptions.fmg");
+        //static readonly string fakePrp2a = Path.Combine(basePath1_3, @"Items - English - vanilla\Accessory_long_desc_.fmg");
+        //static readonly string fakePrp3a = Path.Combine(basePath1_3, @"Items - French - vanilla\Accessory_long_desc_.fmg");
+        //static readonly string fakePrp1b = Path.Combine(basePath1_3, @"Items - English - Daughters of Ash\ArmorDescriptions.fmg");
+        //static readonly string fakePrp2b = Path.Combine(basePath1_3, @"Items - English - vanilla\Armor_long_desc_.fmg"); 
+        //static readonly string fakePrp3b = Path.Combine(basePath1_3, @"Items - Italian - vanilla\Armor_long_desc_.fmg");
+#endif
+
         #region CONSTANTS
 
         private const string DROP_FMG = "Drop FMG file...";
@@ -23,6 +43,8 @@ namespace DS_TextsMod_Helper
         private const string ERR_MISSING_OHDRS = "Error : Missing output header(s)";
         private const string ERR_MISSING_CSVSEP = "Error : Missing CSV separator";
         private const string ERR_SAME_IFILE = "Error : Same file submitted several times";
+
+        private const string ERR_MISSING_SFDLL = "Fatal error : file 'SoulsFormats.dll' not found";
 
         #endregion
 
@@ -78,12 +100,8 @@ namespace DS_TextsMod_Helper
 
             Directory.CreateDirectory(Tools.GetOutputDirPath());
 
-            if (!File.Exists(Path.Combine(Tools.GetRootDirPath(), "SoulsFormats.dll")))
-                MessageBox.Show("Fatal error : file 'SoulsFormats.dll' not found");
-
-#if DEBUG
-            // TODO
-#endif
+            if (!File.Exists(Tools.GetSoulsFormatsDllPath()))
+                MessageBox.Show(ERR_MISSING_SFDLL);
         }
 
 
