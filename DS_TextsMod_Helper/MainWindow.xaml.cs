@@ -14,7 +14,7 @@ namespace DS_TextsMod_Helper
 
         #region CONSTANTS
 
-        private const string TBX_DEFAULT = "Drop FMG file...";
+        private const string DROP_FMG = "Drop FMG file...";
 
         private const string ERR_MISSING_IFILES = "Error : Missing input file(s)";
         private const string ERR_MISSING_OFNAME = "Error : Missing output filename";
@@ -243,22 +243,22 @@ namespace DS_TextsMod_Helper
             switch (btn.Name)
             {
                 case "Btn_Rd_ExploreFile1":
-                    _ = Process.Start(Tbk_Rd_iFile1.Text != TBX_DEFAULT ? Tools.GetParentFolder(Tbk_Rd_iFile1.Text) : Tools.GetRootDirPath());
+                    _ = Process.Start(Tbk_Rd_iFile1.Text != DROP_FMG ? Tools.GetParentFolder(Tbk_Rd_iFile1.Text) : Tools.GetRootDirPath());
                     break;
                 case "Btn_Cmp_ExploreFile1":
-                    _ = Process.Start(Tbk_Cmp_iFile1.Text != TBX_DEFAULT ? Tools.GetParentFolder(Tbk_Cmp_iFile1.Text) : Tools.GetRootDirPath());
+                    _ = Process.Start(Tbk_Cmp_iFile1.Text != DROP_FMG ? Tools.GetParentFolder(Tbk_Cmp_iFile1.Text) : Tools.GetRootDirPath());
                     break;
                 case "Btn_Cmp_ExploreFile2":
-                    _ = Process.Start(Tbk_Cmp_iFile2.Text != TBX_DEFAULT ? Tools.GetParentFolder(Tbk_Cmp_iFile2.Text) : Tools.GetRootDirPath());
+                    _ = Process.Start(Tbk_Cmp_iFile2.Text != DROP_FMG ? Tools.GetParentFolder(Tbk_Cmp_iFile2.Text) : Tools.GetRootDirPath());
                     break;
                 case "Btn_Prp_ExploreFile1":
-                    _ = Process.Start(Tbk_Prp_iFile1.Text != TBX_DEFAULT ? Tools.GetParentFolder(Tbk_Prp_iFile1.Text) : Tools.GetRootDirPath());
+                    _ = Process.Start(Tbk_Prp_iFile1.Text != DROP_FMG ? Tools.GetParentFolder(Tbk_Prp_iFile1.Text) : Tools.GetRootDirPath());
                     break;
                 case "Btn_Prp_ExploreFile2":
-                    _ = Process.Start(Tbk_Prp_iFile2.Text != TBX_DEFAULT ? Tools.GetParentFolder(Tbk_Prp_iFile2.Text) : Tools.GetRootDirPath());
+                    _ = Process.Start(Tbk_Prp_iFile2.Text != DROP_FMG ? Tools.GetParentFolder(Tbk_Prp_iFile2.Text) : Tools.GetRootDirPath());
                     break;
                 case "Btn_Prp_ExploreFile3":
-                    _ = Process.Start(Tbk_Prp_iFile3.Text != TBX_DEFAULT ? Tools.GetParentFolder(Tbk_Prp_iFile3.Text) : Tools.GetRootDirPath());
+                    _ = Process.Start(Tbk_Prp_iFile3.Text != DROP_FMG ? Tools.GetParentFolder(Tbk_Prp_iFile3.Text) : Tools.GetRootDirPath());
                     break;
                 default:
                     _ = Process.Start(Tools.GetRootDirPath());
@@ -284,7 +284,7 @@ namespace DS_TextsMod_Helper
 
         private void SyncFilenames(object sender) // TODO: Factorize (use PROCESS_MODE ?)
         {
-            if (sender is CheckBox && Tbk_Rd_iFile1.Text != TBX_DEFAULT) // Sender is CheckBox from Read mode
+            if (sender is CheckBox && Tbk_Rd_iFile1.Text != DROP_FMG) // Sender is CheckBox from Read mode
             {
                 Tbx_Rd_oFilename.Text = Tools.GetFilenameFromPath(Tbk_Rd_iFile1.Text);
                 ValidateTbxValue(Tbx_Rd_oFilename);
@@ -327,20 +327,20 @@ namespace DS_TextsMod_Helper
 
                 if (cmbx == Cmbx_Cmp_TargetInputFilename) // Sender is ComboBox from Compare mode
                 {
-                    if (cmbx.SelectedIndex == 0 && Tbk_Cmp_iFile1.Text != TBX_DEFAULT)
+                    if (cmbx.SelectedIndex == 0 && Tbk_Cmp_iFile1.Text != DROP_FMG)
                         Tbx_Cmp_oFilename.Text = Tools.GetFilenameFromPath(Tbk_Cmp_iFile1.Text);
-                    else if (cmbx.SelectedIndex == 1 && Tbk_Cmp_iFile2.Text != TBX_DEFAULT)
+                    else if (cmbx.SelectedIndex == 1 && Tbk_Cmp_iFile2.Text != DROP_FMG)
                         Tbx_Cmp_oFilename.Text = Tools.GetFilenameFromPath(Tbk_Cmp_iFile2.Text);
 
                     ValidateTbxValue(Tbx_Cmp_oFilename);
                 }
                 if (cmbx == Cmbx_Prp_TargetInputFilename) // Sender is ComboBox from Prepare mode
                 {
-                    if (cmbx.SelectedIndex == 0 && Tbk_Prp_iFile1.Text != TBX_DEFAULT)
+                    if (cmbx.SelectedIndex == 0 && Tbk_Prp_iFile1.Text != DROP_FMG)
                         Tbx_Prp_oFilename.Text = Tools.GetFilenameFromPath(Tbk_Prp_iFile1.Text);
-                    else if (cmbx.SelectedIndex == 1 && Tbk_Prp_iFile2.Text != TBX_DEFAULT)
+                    else if (cmbx.SelectedIndex == 1 && Tbk_Prp_iFile2.Text != DROP_FMG)
                         Tbx_Prp_oFilename.Text = Tools.GetFilenameFromPath(Tbk_Prp_iFile2.Text);
-                    else if (cmbx.SelectedIndex == 2 && Tbk_Prp_iFile3.Text != TBX_DEFAULT)
+                    else if (cmbx.SelectedIndex == 2 && Tbk_Prp_iFile3.Text != DROP_FMG)
                         Tbx_Prp_oFilename.Text = Tools.GetFilenameFromPath(Tbk_Prp_iFile3.Text);
 
                     ValidateTbxValue(Tbx_Prp_oFilename);
@@ -446,7 +446,7 @@ namespace DS_TextsMod_Helper
             {
                 string iFile1 = Tbk_Rd_iFile1.Text;
 
-                if (iFile1 == "" || iFile1 == TBX_DEFAULT)
+                if (iFile1 == "" || iFile1 == DROP_FMG)
                 {
                     _ = MessageBox.Show("[Read mode] " + ERR_MISSING_IFILES);
                     return;
@@ -478,7 +478,7 @@ namespace DS_TextsMod_Helper
                 string iFile1 = Tbk_Cmp_iFile1.Text;
                 string iFile2 = Tbk_Cmp_iFile2.Text;
 
-                if (iFile1 == "" || iFile1 == TBX_DEFAULT || iFile2 == "" || iFile2 == TBX_DEFAULT)
+                if (iFile1 == "" || iFile1 == DROP_FMG || iFile2 == "" || iFile2 == DROP_FMG)
                 {
                     _ = MessageBox.Show("[Compare mode] " + ERR_MISSING_IFILES);
                     return;
@@ -512,7 +512,7 @@ namespace DS_TextsMod_Helper
                 string textToReplace = Tbx_Prp_TextToReplace.Text;
                 string replacingText = Tbx_Prp_ReplacingText.Text;
 
-                if (iFile1 == "" || iFile1 == TBX_DEFAULT || iFile2 == "" || iFile2 == TBX_DEFAULT || iFile3 == "" || iFile3 == TBX_DEFAULT)
+                if (iFile1 == "" || iFile1 == DROP_FMG || iFile2 == "" || iFile2 == DROP_FMG || iFile3 == "" || iFile3 == DROP_FMG)
                 {
                     _ = MessageBox.Show("[Prepare mode] " + ERR_MISSING_IFILES);
                     Cbx_PreviewAllDetails.IsChecked = false;
@@ -722,7 +722,7 @@ namespace DS_TextsMod_Helper
             if (!File.Exists(input_filepath1) || !File.Exists(input_filepath2))
                 errors.Add(mode + ERR_MISSING_IFILES);
 
-            if (input_filepath1 != TBX_DEFAULT && input_filepath1 == input_filepath2)
+            if (input_filepath1 != DROP_FMG && input_filepath1 == input_filepath2)
                 errors.Add(mode + ERR_SAME_IFILE);
 
             if (output_header_1 == "" || output_header_2 == "")
@@ -755,9 +755,9 @@ namespace DS_TextsMod_Helper
             if (!File.Exists(input_filepath1) || !File.Exists(input_filepath2) || !File.Exists(input_filepath3))
                 errors.Add(mode + ERR_MISSING_IFILES);
 
-            if ((input_filepath1 != TBX_DEFAULT && input_filepath1 == input_filepath2) ||
-                (input_filepath2 != TBX_DEFAULT && input_filepath2 == input_filepath3) ||
-                (input_filepath3 != TBX_DEFAULT && input_filepath3 == input_filepath1))
+            if ((input_filepath1 != DROP_FMG && input_filepath1 == input_filepath2) ||
+                (input_filepath2 != DROP_FMG && input_filepath2 == input_filepath3) ||
+                (input_filepath3 != DROP_FMG && input_filepath3 == input_filepath1))
                 errors.Add(mode + ERR_SAME_IFILE);
 
             if (output_filename == "")
