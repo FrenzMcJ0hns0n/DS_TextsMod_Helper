@@ -897,7 +897,7 @@ namespace DS_TextsMod_Helper
                     p.SetOutputVersion(outputVersion);
                     p.ProduceOutput(prp_oFilename);
 
-                    MessageBox.Show($"[Prepare mode] File \"{p.OutputFilename}\" created");
+                    MessageBox.Show($"[Prepare mode] File \"{p.OutputFilename}\" created for \"{outputVersion}\"");
                     break;
             }
         }
