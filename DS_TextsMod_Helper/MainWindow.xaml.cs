@@ -237,7 +237,28 @@ namespace DS_TextsMod_Helper
 
             tbk.ToolTip = iFile.GetToolTipText(isValid);
 
+            // Store FMG versions of Prepare mode iFiles in hidden labels (lazy and hacky)
+            if (SelectedMode() == PROCESS_MODE.Prepare)
+            {
+                Label lbl = Match_Tbk_Lbl(tbk);
+                lbl.Content = iFile.Version;
+            }
+
             _ = ConfirmValidation(tbk, isValid);
+        }
+
+        /// <summary>
+        /// Match Textblock (input file dropped) and hidden Label (FMG version)
+        /// </summary>
+        private Label Match_Tbk_Lbl(TextBlock tbk)
+        {
+            switch (tbk.Name)
+            {
+                case "Tbk_Prp_iFile1": return Lbl_Prp_FmgVersion1;
+                case "Tbk_Prp_iFile2": return Lbl_Prp_FmgVersion2;
+                case "Tbk_Prp_iFile3": return Lbl_Prp_FmgVersion3;
+                default: return new Label(); //never used default;
+            }
         }
 
         private async Task ConfirmValidation(TextBlock tbk, bool fileIsValid)
@@ -328,6 +349,94 @@ namespace DS_TextsMod_Helper
             int warningLength = WRN_DISTINCTS_FNAMES.Length;
             if (tbk.ToolTip.ToString().Substring(0, warningLength) != WRN_DISTINCTS_FNAMES)
                 tbk.ToolTip = WRN_DISTINCTS_FNAMES + tbk.ToolTip.ToString();
+        }
+
+        /// <summary>
+        /// Return FMG version to be used in output
+        /// </summary>
+        private string GetOutputFmgVersion()
+        {
+            List<string> versions = new List<string>()
+            {
+                Lbl_Prp_FmgVersion1.Content.ToString(),
+                Lbl_Prp_FmgVersion2.Content.ToString(),
+                Lbl_Prp_FmgVersion3.Content.ToString()
+            };
+            return versions.Distinct().ToList().Count > 1 ? SetOutputFileVersion(versions) : versions.First();
+        }
+
+
+        public string SetOutputFileVersion(List<string> versions)
+        {
+            Label lblMessage = new Label()
+            {
+                HorizontalAlignment = HorizontalAlignment.Center,
+                HorizontalContentAlignment = HorizontalAlignment.Center,
+                Background = Brushes.PaleGoldenrod,
+
+                Content = new System.Text.StringBuilder()
+                              .AppendLine("Submitted FMG input files belong to different Souls games.")
+                              .Append("Please select the appropriate format to use in output :")
+                              .ToString()
+            };
+
+            ListBox lbxChoices = new ListBox()
+            {
+                Margin = new Thickness(0, 8, 0, 8),
+                ItemsSource = versions.Distinct().ToList()
+            };
+
+            Button btnConfirm = new Button()
+            {
+                Margin = new Thickness(8),
+                Padding = new Thickness(6),
+                Width = 64,
+                Content = "Confirm"
+            };
+
+            StackPanel stkContainer = new StackPanel()
+            {
+                HorizontalAlignment = HorizontalAlignment.Center,
+                VerticalAlignment = VerticalAlignment.Center,
+                Orientation = Orientation.Vertical
+            };
+            stkContainer.Children.Add(lblMessage);
+            stkContainer.Children.Add(lbxChoices);
+            stkContainer.Children.Add(btnConfirm);
+
+            Window customDialog = new Window()
+            {
+                Content = stkContainer,
+                Width = 360,
+                Height = 220,
+                Title = "Select output FMG version",
+                ResizeMode = ResizeMode.NoResize,
+                WindowStartupLocation = WindowStartupLocation.CenterOwner
+            };
+
+            string outputValue = "";
+            btnConfirm.Click += (sender, e) =>
+            {
+                if (lbxChoices.SelectedItem is null)
+                {
+                    MessageBox.Show("Please select a FMG version");
+                    return;
+                }
+                outputValue = lbxChoices.SelectedItem.ToString();
+                customDialog.Close();
+            };
+
+            lbxChoices.MouseDoubleClick += (sender, e) =>
+            {
+                if (lbxChoices.SelectedItem is null)
+                    return;
+
+                outputValue = lbxChoices.SelectedItem.ToString();
+                customDialog.Close();
+            };
+
+            customDialog.ShowDialog();
+            return outputValue;
         }
 
         #endregion
@@ -779,8 +888,13 @@ namespace DS_TextsMod_Helper
                     string textToReplace = Tbx_Prp_TextToReplace.Text;
                     string replacingText = Tbx_Prp_ReplacingText.Text;
 
+                    string outputVersion = GetOutputFmgVersion();
+                    if (string.IsNullOrEmpty(outputVersion))
+                        return;
+
                     PrepareMode p = new PrepareMode(prp_iFile1, prp_iFile2, prp_iFile3, textToReplace, replacingText);
                     p.ProcessFiles(false);
+                    p.SetOutputVersion(outputVersion);
                     p.ProduceOutput(prp_oFilename);
 
                     MessageBox.Show($"[Prepare mode] File \"{p.OutputFilename}\" created");

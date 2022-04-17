@@ -329,6 +329,7 @@
                             <Border Grid.Column="1" Style="{StaticResource Brd_InputFmg}">
                                 <TextBlock x:Name="Tbk_Prp_iFile1" Style="{StaticResource Tbk_InputFmg}"/>
                             </Border>
+                            <Label x:Name="Lbl_Prp_FmgVersion1" Visibility="Collapsed"/>
                             <Button x:Name="Btn_Prp_ExploreFile1" Grid.Column="2" Style="{StaticResource Btn_Explore}"/>
 
                             
@@ -338,6 +339,7 @@
                             <Border Grid.Column="1" Grid.Row="1" Style="{StaticResource Brd_InputFmg}">
                                 <TextBlock x:Name="Tbk_Prp_iFile2" Style="{StaticResource Tbk_InputFmg}"/>
                             </Border>
+                            <Label x:Name="Lbl_Prp_FmgVersion2" Visibility="Collapsed"/>
                             <Button x:Name="Btn_Prp_ExploreFile2" Grid.Column="2" Grid.Row="1" Style="{StaticResource Btn_Explore}"/>
                             
                             
@@ -347,6 +349,7 @@
                             <Border Grid.Column="1" Grid.Row="2" Style="{StaticResource Brd_InputFmg}">
                                 <TextBlock x:Name="Tbk_Prp_iFile3" Style="{StaticResource Tbk_InputFmg}"/>
                             </Border>
+                            <Label x:Name="Lbl_Prp_FmgVersion3" Visibility="Collapsed"/>
                             <Button x:Name="Btn_Prp_ExploreFile3" Grid.Column="2" Grid.Row="2" Style="{StaticResource Btn_Explore}"/>
                             
                             
