@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:DS_TextsMod_Helper"
         mc:Ignorable="d"
-        Width="1280" Height="800" ResizeMode="CanMinimize" Title="DS Texts Mod Helper - v1.3.2">
+        Width="1280" Height="800" ResizeMode="CanMinimize" Title="DS Texts Mod Helper - v1.4">
 
     <Window.Resources>
         <Style x:Key="Brd_InputFmg" TargetType="{x:Type Border}">
