@@ -15,23 +15,24 @@ namespace DS_TextsMod_Helper
     {
 
 #if DEBUG
-        static readonly string basePath1_3 = @"C:\Sandbox\Modding data\DS_TMH\work in progress 1.3\FMG test files";
-        static readonly string basePath1_4 = ""; // TODO => @"C:\Sandbox\Modding data\DS_TMH\
+        private static readonly string basePath1_4 = @"C:\Sandbox\Modding data\DS_TMH\1.4\Test files\";
 
-        //static readonly string fakeRd1a = Path.Combine(basePath1_3, @"Items - English - Daughters of Ash\RingDescriptions.fmg");
-        //static readonly string fakeRd1b = Path.Combine(basePath1_3, @"Items - English - vanilla\Item_name_.fmg");
+        private static readonly string fakeRd1a = Path.Combine(basePath1_4, @"Items - English - Daughters of Ash\RingDescriptions.fmg");
+        //static readonly string fakeRd1b = Path.Combine(basePath1_4, @"Items - English - vanilla\Item_name_.fmg");
 
-        //static readonly string fakeCmp1a = Path.Combine(basePath1_3, @"Items - English - Daughters of Ash\ItemNames.fmg");
-        //static readonly string fakeCmp2a = Path.Combine(basePath1_3, @"Items - English - vanilla\Item_name_.fmg");
-        //static readonly string fakeCmp1b = Path.Combine(basePath1_3, @"Items - English - Daughters of Ash\ItemNames.fmg");
-        //static readonly string fakeCmp2b = Path.Combine(basePath1_3, @"Items - English - vanilla\Item_name_.fmg");
+        private static readonly string fakeCmp1a = Path.Combine(basePath1_4, @"Items - English - Daughters of Ash\ItemNames.fmg");
+        private static readonly string fakeCmp2a = Path.Combine(basePath1_4, @"Items - English - vanilla\Item_name_.fmg");
+        //static readonly string fakeCmp1b = Path.Combine(basePath1_4, @"Items - English - Daughters of Ash\ItemNames.fmg");
+        //static readonly string fakeCmp2b = Path.Combine(basePath1_4, @"Items - English - vanilla\Item_name_.fmg");
 
-        //static readonly string fakePrp1a = Path.Combine(basePath1_3, @"Items - English - Daughters of Ash\RingDescriptions.fmg");
-        //static readonly string fakePrp2a = Path.Combine(basePath1_3, @"Items - English - vanilla\Accessory_long_desc_.fmg");
-        //static readonly string fakePrp3a = Path.Combine(basePath1_3, @"Items - French - vanilla\Accessory_long_desc_.fmg");
-        //static readonly string fakePrp1b = Path.Combine(basePath1_3, @"Items - English - Daughters of Ash\ArmorDescriptions.fmg");
-        //static readonly string fakePrp2b = Path.Combine(basePath1_3, @"Items - English - vanilla\Armor_long_desc_.fmg"); 
-        //static readonly string fakePrp3b = Path.Combine(basePath1_3, @"Items - Italian - vanilla\Armor_long_desc_.fmg");
+        private static readonly string fakePrp1a = Path.Combine(basePath1_4, @"Items - English - Daughters of Ash\RingDescriptions.fmg");
+        private static readonly string fakePrp2a = Path.Combine(basePath1_4, @"Items - English - vanilla\Accessory_long_desc_.fmg");
+        private static readonly string fakePrp3a = Path.Combine(basePath1_4, @"Items - French - vanilla\Accessory_long_desc_.fmg");
+        //static readonly string fakePrp1b = Path.Combine(basePath1_4, @"Items - English - Daughters of Ash\ArmorDescriptions.fmg");
+        //static readonly string fakePrp2b = Path.Combine(basePath1_4, @"Items - English - vanilla\Armor_long_desc_.fmg"); 
+        //static readonly string fakePrp3b = Path.Combine(basePath1_4, @"Items - Italian - vanilla\Armor_long_desc_.fmg");
+
+        private static readonly List<string> fakePaths = new List<string>() { fakeRd1a, fakeCmp1a, fakeCmp2a, fakePrp1a, fakePrp2a, fakePrp3a };
 #endif
 
         #region CONSTANTS
@@ -106,12 +107,14 @@ namespace DS_TextsMod_Helper
             if (!File.Exists(Tools.GetSoulsFormatsDllPath()))
                 MessageBox.Show(ERR_MISSING_SFDLL);
 
-            //Tbk_Rd_iFile1.Text = fakeRd1a;
-            //Tbk_Cmp_iFile1.Text = fakeCmp1a;
-            //Tbk_Cmp_iFile2.Text = fakeCmp2a;
-            //Tbk_Prp_iFile1.Text = fakePrp1a;
-            //Tbk_Prp_iFile2.Text = fakePrp2a;
-            //Tbk_Prp_iFile3.Text = fakePrp3a;
+#if DEBUG
+            Tbk_Rd_iFile1.Text = fakeRd1a;
+            Tbk_Cmp_iFile1.Text = fakeCmp1a;
+            Tbk_Cmp_iFile2.Text = fakeCmp2a;
+            Tbk_Prp_iFile1.Text = fakePrp1a;
+            Tbk_Prp_iFile2.Text = fakePrp2a;
+            Tbk_Prp_iFile3.Text = fakePrp3a;
+#endif
         }
 
 
@@ -261,7 +264,7 @@ namespace DS_TextsMod_Helper
             }
         }
 
-        private async Task ConfirmValidation(TextBlock tbk, bool fileIsValid)
+        private async Task ConfirmValidation(TextBlock tbk, bool fileIsValid) // TODO: Understand & Improve async from sync
         {
             SolidColorBrush softGreen = (SolidColorBrush)new BrushConverter().ConvertFrom("#c8eac8");
 
@@ -282,7 +285,7 @@ namespace DS_TextsMod_Helper
                     List<string> cmpNames = new List<string>();
                     foreach (TextBlock tbk in cmpTbks)
                     {
-                        if (tbk.Text == DROP_FMG)
+                        if (tbk.Text == DROP_FMG) // || fakePaths.Contains(tbk.Text)) // DEBUG
                             return;
                         cmpNames.Add(Tools.GetFileName(tbk.Text));
                     }
@@ -302,7 +305,7 @@ namespace DS_TextsMod_Helper
                     List<string> prpNames = new List<string>();
                     foreach (TextBlock tbk in prpTbks)
                     {
-                        if (tbk.Text == DROP_FMG)
+                        if (tbk.Text == DROP_FMG) // || fakePaths.Contains(tbk.Text)) // DEBUG
                             return;
                         prpNames.Add(Tools.GetFileName(tbk.Text));
                     }
@@ -312,18 +315,7 @@ namespace DS_TextsMod_Helper
                     switch (prpDistincts)
                     {
                         case 1: foreach (TextBlock tbk in prpTbks) ShowSameFilenames(tbk); break;
-                        case 2: // 3 Tbk are sharing 2 distincts filenames : find the isolated one = warning only on it
-                                // There could have been a great story here but we finally want them all to be Yellow
-                                //string distinctValue = prpNames.GroupBy(n => n)
-                                //                       .Where(g => g.Count() == 1)
-                                //                       .Select(g => g.Key)
-                                //                       .ToList()
-                                //                       .First();
-
-                        //for (int i = 0; i < prpNames.Count; i++)
-                        //    if (prpNames[i] == distinctValue)
-                        //        ShowDistinctFilenames(prpTbks[i]);
-                        //break;
+                        case 2: // Same behaviour for 2 and 3 distinct filenames
                         case 3: foreach (TextBlock tbk in prpTbks) ShowDistinctFilenames(tbk); break;
                     }
                     break;
@@ -335,7 +327,7 @@ namespace DS_TextsMod_Helper
             SolidColorBrush softGreen = (SolidColorBrush)new BrushConverter().ConvertFrom("#c8eac8");
             tbk.Background = softGreen;
 
-            // Wonky but functional
+            // Rely on ToolTip's text, quite hacky
             int warningLength = WRN_DISTINCTS_FNAMES.Length;
             if (tbk.ToolTip.ToString().Substring(0, warningLength) == WRN_DISTINCTS_FNAMES)
                 tbk.ToolTip = tbk.ToolTip.ToString().Remove(0, warningLength);
@@ -345,7 +337,7 @@ namespace DS_TextsMod_Helper
         {
             tbk.Background = Brushes.PaleGoldenrod;
 
-            // Wonky but functional
+            // Rely on ToolTip's text, quite hacky
             int warningLength = WRN_DISTINCTS_FNAMES.Length;
             if (tbk.ToolTip.ToString().Substring(0, warningLength) != WRN_DISTINCTS_FNAMES)
                 tbk.ToolTip = WRN_DISTINCTS_FNAMES + tbk.ToolTip.ToString();
