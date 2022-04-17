@@ -220,7 +220,7 @@ namespace DS_TextsMod_Helper
             if (isValid)
             {
                 tbk.Inlines.Clear();
-                tbk.Inlines.Add(new Run($"{iFile.PDir}\\"));
+                tbk.Inlines.Add(new Run($"{iFile.Directory}\\"));
                 tbk.Inlines.Add(new Bold(new Run($"{iFile.Name}.fmg")));
 
                 tbk.FontStyle = FontStyles.Normal;

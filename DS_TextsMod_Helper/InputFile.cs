@@ -10,12 +10,11 @@ namespace DS_TextsMod_Helper
 {
     internal class InputFile
     {
-
-        public string Edit { get; set; }
-        public string Name { get; set; }
         public string Path { get; set; }
-        public string PDir { get; set; }
+        public string Directory { get; set; }
+        public string Name { get; set; }
         public long Size { get; set; }
+        public string Edit { get; set; }
 
         public string Error { get; set; }
 
@@ -43,16 +42,16 @@ namespace DS_TextsMod_Helper
 
             try
             {
-                Edit = Tools.GetTimeSinceLastEdit(filepath);
+                Directory = Tools.GetParentDirPath(filepath);
                 Name = Tools.GetFileName(filepath);
-                PDir = Tools.GetParentDirPath(filepath);
                 Size = Tools.GetFileSize(filepath);
+                Edit = Tools.GetTimeSinceLastEdit(filepath);
 
                 FMG fmg = FMG.Read(filepath);
 
                 TotalEntries = fmg.Entries.Count;
                 NonNullEntries = ParseNonNullEntries(fmg);
-                SetVersion(fmg.Version);
+                Version = GetVersion(fmg.Version);
             }
             catch (Exception exception)
             {
@@ -68,7 +67,7 @@ namespace DS_TextsMod_Helper
             if (fileIsValid)
             {
                 sb.AppendLine("[File info]");
-                sb.AppendLine($"Name = {Name}.fmg");
+                sb.AppendLine($"Name = \"{Name}.fmg\"");
                 sb.AppendLine($"Modified = {Edit} ago");
                 sb.AppendLine($"Size = {Size} bytes");
                 sb.AppendLine();
@@ -97,21 +96,17 @@ namespace DS_TextsMod_Helper
         }
 
 
-        private void SetVersion(FMG.FMGVersion version)
+        /// <summary>
+        /// Translate FMG version from FMG.FMGVersion to more readable and displayable String
+        /// </summary>
+        private string GetVersion(FMG.FMGVersion version)
         {
             switch (version)
             {
-                case FMG.FMGVersion.DemonsSouls:
-                    Version = "Demon's Souls";
-                    break;
-
-                case FMG.FMGVersion.DarkSouls1:
-                    Version = "Dark Souls 1 / Dark Souls 2";
-                    break;
-
-                case FMG.FMGVersion.DarkSouls3:
-                    Version = "Dark Souls 3 / Bloodborne";
-                    break;
+                case FMG.FMGVersion.DemonsSouls: return "Demon's Souls";
+                case FMG.FMGVersion.DarkSouls1: return "Dark Souls 1 / Dark Souls 2";
+                case FMG.FMGVersion.DarkSouls3: return "Dark Souls 3 / Bloodborne";
+                default: return "Dark Souls 1 / Dark Souls 2";
             }
         }
     }
