@@ -85,7 +85,7 @@
 
                             
                             <Label VerticalAlignment="Center" Content="File #1 :"
-                                   ToolTip="Expected here : Single FMG file to read"
+                                   ToolTip="Expected : Single FMG file to read"
                                    />
                             <Border Grid.Column="1" Style="{StaticResource Brd_InputFmg}">
                                 <TextBlock x:Name="Tbk_Rd_iFile1" Style="{StaticResource Tbk_InputFmg}"/>
@@ -179,7 +179,7 @@
 
                             
                             <Label VerticalAlignment="Center" Content="File #1 :"
-                                   ToolTip="Expected here : one of the 2 FMG files to compare"
+                                   ToolTip="Expected : 1st FMG file to compare"
                                    />
                             <Border Grid.Column="1" Style="{StaticResource Brd_InputFmg}">
                                 <TextBlock x:Name="Tbk_Cmp_iFile1" Style="{StaticResource Tbk_InputFmg}"/>
@@ -188,7 +188,7 @@
 
                             
                             <Label Grid.Row="1" VerticalAlignment="Center" Content="File #2 :"
-                                   ToolTip="Expected here : one of the 2 FMG files to compare"
+                                   ToolTip="Expected : 2nd FMG file to compare"
                                    />
                             <Border Grid.Column="1" Grid.Row="1" Style="{StaticResource Brd_InputFmg}">
                                 <TextBlock x:Name="Tbk_Cmp_iFile2" Style="{StaticResource Tbk_InputFmg}"/>
@@ -246,7 +246,7 @@
                             <StackPanel Grid.Column="2" Orientation="Horizontal" HorizontalAlignment="Center">
                                 <Label VerticalAlignment="Center"
                                        Content="Header #1 :" 
-                                       ToolTip="Enter output header for File #1"
+                                       ToolTip="Output header for File #1"
                                        />
                                 <TextBox x:Name="Tbx_Cmp_oHeader1"
                                         HorizontalAlignment="Right" Width="240"
@@ -261,7 +261,7 @@
                             <StackPanel Grid.Column="2" Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center">
                                 <Label VerticalAlignment="Center" 
                                        Content="Header #2 :"
-                                       ToolTip="Enter output header for File #2"
+                                       ToolTip="Output header for File #2"
                                        />
                                 <TextBox x:Name="Tbx_Cmp_oHeader2"
                                          HorizontalAlignment="Right" Width="240"
@@ -324,7 +324,7 @@
 
                             
                             <Label VerticalAlignment="Center" Content="File #1 :"
-                                   ToolTip="Expected here : modded file that will be parsed as reference data"
+                                   ToolTip="Expected : a modded file, to serve as reference data"
                                    />
                             <Border Grid.Column="1" Style="{StaticResource Brd_InputFmg}">
                                 <TextBlock x:Name="Tbk_Prp_iFile1" Style="{StaticResource Tbk_InputFmg}"/>
@@ -333,7 +333,7 @@
 
                             
                             <Label Grid.Row="1" VerticalAlignment="Center" Content="File #2 :"
-                                   ToolTip="Expected here : vanilla file in same language of the modded file"
+                                   ToolTip="Expected : vanilla file in same language as modded file"
                                    />
                             <Border Grid.Column="1" Grid.Row="1" Style="{StaticResource Brd_InputFmg}">
                                 <TextBlock x:Name="Tbk_Prp_iFile2" Style="{StaticResource Tbk_InputFmg}"/>
@@ -342,7 +342,7 @@
                             
                             
                             <Label Grid.Row="2" VerticalAlignment="Center" Content="File #3 :"
-                                   ToolTip="Expected here : vanilla file in the language the mod will be translated in"
+                                   ToolTip="Expected : vanilla file in the new translation language"
                                    />
                             <Border Grid.Column="1" Grid.Row="2" Style="{StaticResource Brd_InputFmg}">
                                 <TextBlock x:Name="Tbk_Prp_iFile3" Style="{StaticResource Tbk_InputFmg}"/>
@@ -401,28 +401,28 @@
                             <StackPanel Grid.Column="4" Orientation="Horizontal">
                                 <Label VerticalAlignment="Center" 
                                        Content="String to replace :"
-                                       ToolTip="Enter text to be replaced in entries"
+                                       ToolTip="Text to be replaced in entries"
                                        />
                                 <TextBox x:Name="Tbx_Prp_TextToReplace"
                                          VerticalAlignment="Center"
                                          Margin="7,0,0,0"
                                          Width="120"
                                          TextAlignment="Right"
-                                         ToolTip="Enter text to be replaced in entries"
+                                         ToolTip="Text to be replaced in entries"
                                          GotFocus="Tbx_Prp_TextToReplace_GotFocus"
                                          />
                             </StackPanel>
                             <StackPanel Grid.Column="4" Grid.Row="1" Orientation="Horizontal">
                                 <Label VerticalAlignment="Center"
                                        Content="Remplacing text :"
-                                       ToolTip="Enter replacing text for entries."
+                                       ToolTip="Replacing text in entries"
                                        />
                                 <TextBox x:Name="Tbx_Prp_ReplacingText"
                                          VerticalAlignment="Center"
                                          Margin="9,0,0,0"
                                          Width="120"
                                          TextAlignment="Right"
-                                         ToolTip="Enter replacing text for entries."
+                                         ToolTip="Replacing text in entries"
                                          GotFocus="Tbx_Prp_ReplacingText_GotFocus"
                                          />
                             </StackPanel>
