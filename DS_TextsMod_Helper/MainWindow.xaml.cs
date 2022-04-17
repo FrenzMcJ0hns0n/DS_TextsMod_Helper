@@ -117,16 +117,6 @@ namespace DS_TextsMod_Helper
 
         #region GUI Read mode
 
-        private void Tbk_Rd_iFile1_PreviewDragOver(object sender, DragEventArgs e) { e.Handled = true; }
-        private void Tbk_Rd_iFile1_Drop(object sender, DragEventArgs e)
-        {
-            List<InputFile> iFiles = CollectInputFiles(e);
-            foreach (InputFile iFile in iFiles)
-                ValidateInputFile((TextBlock)sender, iFile);
-
-            SyncFilenames(sender);
-        }
-        private void Btn_Rd_ExploreFile1_Click(object sender, RoutedEventArgs e) { Explore((Button)sender); }
         private void Tbx_Rd_oFilename_GotFocus(object sender, RoutedEventArgs e) { SelectTbxValue(sender); }
         private void Tbx_Rd_oFilename_LostFocus(object sender, RoutedEventArgs e) { ValidateTbxValue(sender); }
         private void Cbx_Rd_UseInputFilename_Checked(object sender, RoutedEventArgs e) { SyncFilenames(sender); }
@@ -138,26 +128,6 @@ namespace DS_TextsMod_Helper
 
         #region GUI Compare mode
 
-        private void Tbk_Cmp_iFile1_PreviewDragOver(object sender, DragEventArgs e) { e.Handled = true; }
-        private void Tbk_Cmp_iFile1_Drop(object sender, DragEventArgs e)
-        {
-            List<InputFile> iFiles = CollectInputFiles(e);
-            foreach (InputFile iFile in iFiles)
-                ValidateInputFile((TextBlock)sender, iFile);
-
-            SyncFilenames(sender);
-        }
-        private void Btn_Cmp_ExploreFile1_Click(object sender, RoutedEventArgs e) { Explore((Button)sender); }
-        private void Tbk_Cmp_iFile2_PreviewDragOver(object sender, DragEventArgs e) { e.Handled = true; }
-        private void Tbk_Cmp_iFile2_Drop(object sender, DragEventArgs e)
-        {
-            List<InputFile> iFiles = CollectInputFiles(e);
-            foreach (InputFile iFile in iFiles)
-                ValidateInputFile((TextBlock)sender, iFile);
-
-            SyncFilenames(sender);
-        }
-        private void Btn_Cmp_ExploreFile2_Click(object sender, RoutedEventArgs e) { Explore((Button)sender); }
         private void Tbx_Cmp_oFilename_GotFocus(object sender, RoutedEventArgs e) { SelectTbxValue(sender); }
         private void Tbx_Cmp_oFilename_LostFocus(object sender, RoutedEventArgs e) { ValidateTbxValue(sender); }
         private void Cbx_Cmp_UseInputFilename_Checked(object sender, RoutedEventArgs e)
@@ -183,36 +153,6 @@ namespace DS_TextsMod_Helper
 
         #region GUI Prepare mode
 
-        private void Tbk_Prp_iFile1_PreviewDragOver(object sender, DragEventArgs e) { e.Handled = true; }
-        private void Tbk_Prp_iFile1_Drop(object sender, DragEventArgs e)
-        {
-            List<InputFile> iFiles = CollectInputFiles(e);
-            foreach (InputFile iFile in iFiles)
-                ValidateInputFile((TextBlock)sender, iFile);
-
-            SyncFilenames(sender);
-        }
-        private void Btn_Prp_ExploreFile1_Click(object sender, RoutedEventArgs e) { Explore((Button)sender); }
-        private void Tbk_Prp_iFile2_PreviewDragOver(object sender, DragEventArgs e) { e.Handled = true; }
-        private void Tbk_Prp_iFile2_Drop(object sender, DragEventArgs e)
-        {
-            List<InputFile> iFiles = CollectInputFiles(e);
-            foreach (InputFile iFile in iFiles)
-                ValidateInputFile((TextBlock)sender, iFile);
-
-            SyncFilenames(sender);
-        }
-        private void Btn_Prp_ExploreFile2_Click(object sender, RoutedEventArgs e) { Explore((Button)sender); }
-        private void Tbk_Prp_iFile3_PreviewDragOver(object sender, DragEventArgs e) { e.Handled = true; }
-        private void Tbk_Prp_iFile3_Drop(object sender, DragEventArgs e)
-        {
-            List<InputFile> iFiles = CollectInputFiles(e);
-            foreach (InputFile iFile in iFiles)
-                ValidateInputFile((TextBlock)sender, iFile);
-
-            SyncFilenames(sender);
-        }
-        private void Btn_Prp_ExploreFile3_Click(object sender, RoutedEventArgs e) { Explore((Button)sender); }
         private void Tbx_Prp_oFilename_GotFocus(object sender, RoutedEventArgs e) { SelectTbxValue(sender); }
         private void Tbx_Prp_oFilename_LostFocus(object sender, RoutedEventArgs e) { ValidateTbxValue(sender); }
         private void Cbx_Prp_UseInputFilename_Checked(object sender, RoutedEventArgs e)
@@ -247,6 +187,20 @@ namespace DS_TextsMod_Helper
 
 
         #region GUI Helpers : Process input files
+
+        private void Tbk_InputFmg_PreviewDragOver(object sender, DragEventArgs e)
+        {
+            e.Handled = true;
+        }
+
+        private void Tbk_InputFmg_Drop(object sender, DragEventArgs e)
+        {
+            List<InputFile> iFiles = CollectInputFiles(e);
+            foreach (InputFile iFile in iFiles)
+                ValidateInputFile((TextBlock)sender, iFile);
+
+            SyncFilenames(sender);
+        }
 
         private List<InputFile> CollectInputFiles(DragEventArgs e)
         {
@@ -381,8 +335,9 @@ namespace DS_TextsMod_Helper
 
         #region GUI Helpers : Misc.
 
-        private void Explore(Button btn)
+        private void Btn_Explore_Click(object sender, RoutedEventArgs e)
         {
+            Button btn = sender as Button;
             switch (btn.Name)
             {
                 case "Btn_Rd_ExploreFile1":

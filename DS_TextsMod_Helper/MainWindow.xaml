@@ -5,56 +5,54 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:DS_TextsMod_Helper"
         mc:Ignorable="d"
-        Width="1280" Height="800"
-        ResizeMode="CanMinimize"
-        Title="DS Texts Mod Helper - v1.3.2">
+        Width="1280" Height="800" ResizeMode="CanMinimize" Title="DS Texts Mod Helper - v1.3.2">
+
+    <Window.Resources>
+        <Style x:Key="Brd_InputFmg" TargetType="{x:Type Border}">
+            <Setter Property="HorizontalAlignment" Value="Stretch"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="BorderBrush" Value="DarkGray"/>
+            <Setter Property="SnapsToDevicePixels" Value="True"/>
+        </Style>
+
+        <Style x:Key="Tbk_InputFmg" TargetType="{x:Type TextBlock}">
+            <Setter Property="TextWrapping" Value="NoWrap"/>
+            <Setter Property="Padding" Value="2,0,0,0"/>
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="Foreground" Value="Gray"/>
+            <Setter Property="FontStyle" Value="Italic"/>
+            <Setter Property="Text" Value="Drop FMG file..."/>
+            <Setter Property="AllowDrop" Value="True"/>
+            <Setter Property="ToolTipService.InitialShowDelay" Value="50"/>
+            <Setter Property="ToolTipService.ShowDuration" Value="15000"/>
+
+            <EventSetter Event="PreviewDragOver" Handler="Tbk_InputFmg_PreviewDragOver"/>
+            <EventSetter Event="Drop" Handler="Tbk_InputFmg_Drop"/>
+        </Style>
+
+        <Style x:Key="Btn_Explore" TargetType="{x:Type Button}">
+            <Setter Property="HorizontalAlignment" Value="Left"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="Margin" Value="2,0,0,0"/>
+            <Setter Property="Padding" Value="0,0,0,1"/>
+            <Setter Property="Width" Value="24"/>
+            <Setter Property="Height" Value="17"/>
+            <Setter Property="Content" Value="&#8901;&#8901;&#8901;"/>
+            <Setter Property="ToolTip" Value="Open parent folder of the submitted file if any, else the root folder of DSTMH"/>
+            <Setter Property="ToolTipService.InitialShowDelay" Value="50"/>
+            <Setter Property="ToolTipService.ShowDuration" Value="15000"/>
+            
+            <EventSetter Event="Click" Handler="Btn_Explore_Click"/>
+        </Style>
+    </Window.Resources>
 
     <Grid x:Name="Grid_Main" Background="#EEE">
-
         <Grid.Resources>
             <!-- Custom style for extra headers displayed with option "Show all details" -->
             <Style x:Key="HeaderOff" TargetType="{x:Type DataGridColumnHeader}">
                 <Setter Property="Foreground" Value="Gray"/>
             </Style>
-
-            <!-- Maybe for later with proper Bindings -->
-            <!--<DataTemplate x:Key="KeyTry">
-                <DataGrid ItemsSource="{Binding Path=CompareMode.Entry}" AutoGenerateColumns="False" >
-                    <DataGrid.Columns>
-                        <DataGridTextColumn Header="#" Width="*" Binding="{Binding Index}" />
-                        <DataGridTextColumn Header="TextId"  Width="*" Binding="{Binding TextId}" />
-                        <DataGridTextColumn Header="Value1" Width="*" Binding="{Binding Value1}" />
-                        <DataGridTextColumn Header="Value2" Width="*" Binding="{Binding Value2}" />
-                        <DataGridTextColumn Header="Same" Width="*" Binding="{Binding Same}" />
-                    </DataGrid.Columns>
-                </DataGrid>
-            </DataTemplate>
-
-            <DataTemplate x:Key="ComparedEntriesTemplate">
-                <DataGrid ItemsSource="{Binding}">
-                    <DataGrid.Columns>
-                        <DataGridTextColumn Header="#" Width="200" FontSize="12" Binding="{Binding Path=Index}" />
-                        <DataGridTextColumn Header="TextId" Width="200" FontSize="12" Binding="{Binding Path=TextId}" />
-                        <DataGridTextColumn Header="Value1" Width="200" FontSize="12" Binding="{Binding Path=Value1}" />
-                        <DataGridTextColumn Header="Value2" Width="200" FontSize="12" Binding="{Binding Path=Value2}" />
-                        <DataGridTextColumn Header="Same?" Width="200" FontSize="12" Binding="{Binding Path=Same}" />
-                    </DataGrid.Columns>
-                </DataGrid>
-            </DataTemplate>
-
-            <DataTemplate x:Key="PreparedEntriesTemplate">
-                <DataGrid ItemsSource="{Binding}">
-                    <DataGrid.Columns>
-                        <DataGridTextColumn Header="#" Width="200" FontSize="12" Binding="{Binding Path=Index}" />
-                        <DataGridTextColumn Header="TextId" Width="200" FontSize="12" Binding="{Binding Path=TextId}" />
-                        <DataGridTextColumn Header="Value1" Width="200" FontSize="12" Binding="{Binding Path=Value1}" />
-                        <DataGridTextColumn Header="Value2" Width="200" FontSize="12" Binding="{Binding Path=Value2}" />
-                        <DataGridTextColumn Header="Value3" Width="200" FontSize="12" Binding="{Binding Path=Value3}" />
-                        <DataGridTextColumn Header="Output" Width="200" FontSize="12" Binding="{Binding Path=Output}" />
-                        <DataGridTextColumn Header="Source" Width="200" FontSize="12" Binding="{Binding Path=Source}" />
-                    </DataGrid.Columns>
-                </DataGrid>
-            </DataTemplate>-->
         </Grid.Resources>
 
         <Grid.RowDefinitions>
@@ -85,39 +83,16 @@
                                 <RowDefinition Height="1*" />
                             </Grid.RowDefinitions>
 
+                            
                             <Label VerticalAlignment="Center" Content="File #1 :"
                                    ToolTip="Expected here : Single FMG file to read"
                                    />
-                            <Border Grid.Column="1"
-                                    HorizontalAlignment="Stretch"
-                                    VerticalAlignment="Center"
-                                    BorderThickness="1"
-                                    BorderBrush="DarkGray"
-                                    SnapsToDevicePixels="True"
-                                    >
-                                <TextBlock x:Name="Tbk_Rd_iFile1"
-                                           Background="White"
-                                           Padding="2,0,0,0"
-                                           FontStyle="Italic"
-                                           Foreground="Gray"
-                                           TextWrapping="NoWrap"
-                                           Text="Drop FMG file..."
-                                           AllowDrop="True"
-                                           PreviewDragOver="Tbk_Rd_iFile1_PreviewDragOver"
-                                           Drop="Tbk_Rd_iFile1_Drop"
-                                           ToolTipService.InitialShowDelay="50"
-                                           ToolTipService.ShowDuration="15000"
-                                           />
+                            <Border Grid.Column="1" Style="{StaticResource Brd_InputFmg}">
+                                <TextBlock x:Name="Tbk_Rd_iFile1" Style="{StaticResource Tbk_InputFmg}"/>
                             </Border>
-                            <Button x:Name="Btn_Rd_ExploreFile1"
-                                    Grid.Column="2"
-                                    HorizontalAlignment="Left" VerticalAlignment="Center" Width="24" Height="17" 
-                                    Margin="2,0,0,0"
-                                    Padding="0,0,0,1" 
-                                    Content="&#8901;&#8901;&#8901;"
-                                    ToolTip="Open parent folder of the submitted file if any, else the root folder of DSTMH"
-                                    Click="Btn_Rd_ExploreFile1_Click"
-                                    />
+                            <Button x:Name="Btn_Rd_ExploreFile1" Grid.Column="2" Style="{StaticResource Btn_Explore}"/>
+                            
+                            
                         </Grid>
                     </GroupBox>
 
@@ -202,73 +177,25 @@
                                 <RowDefinition Height="1*" />
                             </Grid.RowDefinitions>
 
+                            
                             <Label VerticalAlignment="Center" Content="File #1 :"
                                    ToolTip="Expected here : one of the 2 FMG files to compare"
                                    />
-                            <Border Grid.Column="1"
-                                    HorizontalAlignment="Stretch"
-                                    VerticalAlignment="Center"
-                                    BorderThickness="1"
-                                    BorderBrush="DarkGray"
-                                    SnapsToDevicePixels="True"
-                                    >
-                                <TextBlock x:Name="Tbk_Cmp_iFile1"
-                                           Background="White"
-                                           Padding="2,0,0,0"
-                                           FontStyle="Italic"
-                                           Foreground="Gray"
-                                           TextWrapping="NoWrap"
-                                           Text="Drop FMG file..."
-                                           AllowDrop="True"
-                                           PreviewDragOver="Tbk_Cmp_iFile1_PreviewDragOver"
-                                           Drop="Tbk_Cmp_iFile1_Drop"
-                                           ToolTipService.InitialShowDelay="50"
-                                           ToolTipService.ShowDuration="15000"
-                                           />
+                            <Border Grid.Column="1" Style="{StaticResource Brd_InputFmg}">
+                                <TextBlock x:Name="Tbk_Cmp_iFile1" Style="{StaticResource Tbk_InputFmg}"/>
                             </Border>
-                            <Button x:Name="Btn_Cmp_ExploreFile1"
-                                    Grid.Column="2"
-                                    HorizontalAlignment="Left" VerticalAlignment="Center" Width="24" Height="17" 
-                                    Margin="2,0,0,0"
-                                    Padding="0,0,0,1" 
-                                    Content="&#8901;&#8901;&#8901;"
-                                    ToolTip="Open parent folder of the submitted file if any, else the root folder of DSTMH"
-                                    Click="Btn_Cmp_ExploreFile1_Click"
-                                    />
+                            <Button x:Name="Btn_Cmp_ExploreFile1" Grid.Column="2" Style="{StaticResource Btn_Explore}"/>
+
                             
                             <Label Grid.Row="1" VerticalAlignment="Center" Content="File #2 :"
                                    ToolTip="Expected here : one of the 2 FMG files to compare"
                                    />
-                            <Border Grid.Column="1" Grid.Row="1"
-                                    HorizontalAlignment="Stretch"
-                                    VerticalAlignment="Center"
-                                    BorderThickness="1"
-                                    BorderBrush="DarkGray"
-                                    SnapsToDevicePixels="True"
-                                    >
-                                <TextBlock x:Name="Tbk_Cmp_iFile2"
-                                           Background="White"
-                                           Padding="2,0,0,0"
-                                           FontStyle="Italic"
-                                           Foreground="Gray"
-                                           TextWrapping="NoWrap"
-                                           Text="Drop FMG file..."
-                                           AllowDrop="True"
-                                           PreviewDragOver="Tbk_Cmp_iFile2_PreviewDragOver"
-                                           Drop="Tbk_Cmp_iFile2_Drop"
-                                           ToolTipService.InitialShowDelay="50"
-                                           ToolTipService.ShowDuration="15000"
-                                           />
+                            <Border Grid.Column="1" Grid.Row="1" Style="{StaticResource Brd_InputFmg}">
+                                <TextBlock x:Name="Tbk_Cmp_iFile2" Style="{StaticResource Tbk_InputFmg}"/>
                             </Border>
-                            <Button x:Name="Btn_Cmp_ExploreFile2"
-                                    Grid.Column="2" Grid.Row="1" 
-                                    HorizontalAlignment="Left" VerticalAlignment="Center" Width="24" Height="17" 
-                                    Margin="2,0,0,0"
-                                    Padding="0,0,0,1" 
-                                    Content="&#8901;&#8901;&#8901;"
-                                    ToolTip="Open parent folder of the submitted file if any, else the root folder of DSTMH"
-                                    Click="Btn_Cmp_ExploreFile2_Click"
-                                    />
+                            <Button x:Name="Btn_Cmp_ExploreFile2" Grid.Column="2" Grid.Row="1" Style="{StaticResource Btn_Explore}"/>
+
+                            
                         </Grid>
                     </GroupBox>
 
@@ -395,106 +322,34 @@
                                 <RowDefinition Height="1*" />
                             </Grid.RowDefinitions>
 
+                            
                             <Label VerticalAlignment="Center" Content="File #1 :"
                                    ToolTip="Expected here : modded file that will be parsed as reference data"
                                    />
-                            <Border Grid.Column="1"
-                                    HorizontalAlignment="Stretch"
-                                    VerticalAlignment="Center"
-                                    BorderThickness="1"
-                                    BorderBrush="DarkGray"
-                                    SnapsToDevicePixels="True"
-                                    >
-                                <TextBlock x:Name="Tbk_Prp_iFile1"
-                                           Background="White"
-                                           Padding="2,0,0,0"
-                                           FontStyle="Italic"
-                                           Foreground="Gray"
-                                           TextWrapping="NoWrap"
-                                           Text="Drop FMG file..."
-                                           AllowDrop="True"
-                                           PreviewDragOver="Tbk_Prp_iFile1_PreviewDragOver"
-                                           Drop="Tbk_Prp_iFile1_Drop"
-                                           ToolTipService.InitialShowDelay="50"
-                                           ToolTipService.ShowDuration="15000"
-                                           />
+                            <Border Grid.Column="1" Style="{StaticResource Brd_InputFmg}">
+                                <TextBlock x:Name="Tbk_Prp_iFile1" Style="{StaticResource Tbk_InputFmg}"/>
                             </Border>
-                            <Button x:Name="Btn_Prp_ExploreFile1"
-                                    Grid.Column="2"
-                                    HorizontalAlignment="Left" VerticalAlignment="Center" Width="24" Height="17" 
-                                    Margin="2,0,0,0"
-                                    Padding="0,0,0,1" 
-                                    Content="&#8901;&#8901;&#8901;"
-                                    ToolTip="Open parent folder of the submitted file if any, else the root folder of DSTMH"
-                                    Click="Btn_Prp_ExploreFile1_Click"
-                                    />
+                            <Button x:Name="Btn_Prp_ExploreFile1" Grid.Column="2" Style="{StaticResource Btn_Explore}"/>
+
                             
                             <Label Grid.Row="1" VerticalAlignment="Center" Content="File #2 :"
                                    ToolTip="Expected here : vanilla file in same language of the modded file"
                                    />
-                            <Border Grid.Column="1" Grid.Row="1"
-                                    HorizontalAlignment="Stretch"
-                                    VerticalAlignment="Center"
-                                    BorderThickness="1"
-                                    BorderBrush="DarkGray"
-                                    SnapsToDevicePixels="True"
-                                    >
-                                <TextBlock x:Name="Tbk_Prp_iFile2"
-                                           Background="White"
-                                           Padding="2,0,0,0"
-                                           FontStyle="Italic"
-                                           Foreground="Gray"
-                                           TextWrapping="NoWrap"
-                                           Text="Drop FMG file..."
-                                           AllowDrop="True"
-                                           PreviewDragOver="Tbk_Prp_iFile2_PreviewDragOver"
-                                           Drop="Tbk_Prp_iFile2_Drop"
-                                           ToolTipService.InitialShowDelay="50"
-                                           ToolTipService.ShowDuration="15000"
-                                           />
+                            <Border Grid.Column="1" Grid.Row="1" Style="{StaticResource Brd_InputFmg}">
+                                <TextBlock x:Name="Tbk_Prp_iFile2" Style="{StaticResource Tbk_InputFmg}"/>
                             </Border>
-                            <Button x:Name="Btn_Prp_ExploreFile2"
-                                    Grid.Column="2" Grid.Row="1" 
-                                    HorizontalAlignment="Left" VerticalAlignment="Center" Width="24" Height="17" 
-                                    Margin="2,0,0,0"
-                                    Padding="0,0,0,1" 
-                                    Content="&#8901;&#8901;&#8901;"
-                                    ToolTip="Open parent folder of the submitted file if any, else the root folder of DSTMH"
-                                    Click="Btn_Prp_ExploreFile2_Click"
-                                    />
+                            <Button x:Name="Btn_Prp_ExploreFile2" Grid.Column="2" Grid.Row="1" Style="{StaticResource Btn_Explore}"/>
+                            
+                            
                             <Label Grid.Row="2" VerticalAlignment="Center" Content="File #3 :"
                                    ToolTip="Expected here : vanilla file in the language the mod will be translated in"
                                    />
-                            <Border Grid.Column="1" Grid.Row="2"
-                                    HorizontalAlignment="Stretch"
-                                    VerticalAlignment="Center"
-                                    BorderThickness="1"
-                                    BorderBrush="DarkGray"
-                                    SnapsToDevicePixels="True"
-                                    >
-                                <TextBlock x:Name="Tbk_Prp_iFile3"
-                                           Background="White"
-                                           Padding="2,0,0,0"
-                                           FontStyle="Italic"
-                                           Foreground="Gray"
-                                           TextWrapping="NoWrap"
-                                           Text="Drop FMG file..."
-                                           AllowDrop="True"
-                                           PreviewDragOver="Tbk_Prp_iFile3_PreviewDragOver"
-                                           Drop="Tbk_Prp_iFile3_Drop"
-                                           ToolTipService.InitialShowDelay="50"
-                                           ToolTipService.ShowDuration="15000"
-                                           />
+                            <Border Grid.Column="1" Grid.Row="2" Style="{StaticResource Brd_InputFmg}">
+                                <TextBlock x:Name="Tbk_Prp_iFile3" Style="{StaticResource Tbk_InputFmg}"/>
                             </Border>
-                            <Button x:Name="Btn_Prp_ExploreFile3"
-                                    Grid.Column="2" Grid.Row="2" 
-                                    HorizontalAlignment="Left" VerticalAlignment="Center" Width="24" Height="17" 
-                                    Margin="2,0,0,0"
-                                    Padding="0,0,0,1" 
-                                    Content="&#8901;&#8901;&#8901;"
-                                    ToolTip="Open parent folder of the submitted file if any, else the root folder of DSTMH"
-                                    Click="Btn_Prp_ExploreFile3_Click"
-                                    />
+                            <Button x:Name="Btn_Prp_ExploreFile3" Grid.Column="2" Grid.Row="2" Style="{StaticResource Btn_Explore}"/>
+                            
+                            
                         </Grid>
                     </GroupBox>
 
@@ -621,6 +476,5 @@
                 </StackPanel>
             </Button>
         </Grid>
-
     </Grid>
 </Window>
