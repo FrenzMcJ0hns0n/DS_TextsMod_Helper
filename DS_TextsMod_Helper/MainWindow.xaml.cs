@@ -15,23 +15,24 @@ namespace DS_TextsMod_Helper
     {
 
 #if DEBUG
-        static readonly string basePath1_3 = @"C:\Sandbox\Modding data\DS_TMH\work in progress 1.3\FMG test files";
-        static readonly string basePath1_4 = ""; // TODO => @"C:\Sandbox\Modding data\DS_TMH\
+        private static readonly string basePath1_4 = @"C:\Sandbox\Modding data\DS_TMH\1.4\Test files\";
 
-        //static readonly string fakeRd1a = Path.Combine(basePath1_3, @"Items - English - Daughters of Ash\RingDescriptions.fmg");
-        //static readonly string fakeRd1b = Path.Combine(basePath1_3, @"Items - English - vanilla\Item_name_.fmg");
+        private static readonly string fakeRd1a = Path.Combine(basePath1_4, @"Items - English - Daughters of Ash\RingDescriptions.fmg");
+        //static readonly string fakeRd1b = Path.Combine(basePath1_4, @"Items - English - vanilla\Item_name_.fmg");
 
-        //static readonly string fakeCmp1a = Path.Combine(basePath1_3, @"Items - English - Daughters of Ash\ItemNames.fmg");
-        //static readonly string fakeCmp2a = Path.Combine(basePath1_3, @"Items - English - vanilla\Item_name_.fmg");
-        //static readonly string fakeCmp1b = Path.Combine(basePath1_3, @"Items - English - Daughters of Ash\ItemNames.fmg");
-        //static readonly string fakeCmp2b = Path.Combine(basePath1_3, @"Items - English - vanilla\Item_name_.fmg");
+        private static readonly string fakeCmp1a = Path.Combine(basePath1_4, @"Items - English - Daughters of Ash\ItemNames.fmg");
+        private static readonly string fakeCmp2a = Path.Combine(basePath1_4, @"Items - English - vanilla\Item_name_.fmg");
+        //static readonly string fakeCmp1b = Path.Combine(basePath1_4, @"Items - English - Daughters of Ash\ItemNames.fmg");
+        //static readonly string fakeCmp2b = Path.Combine(basePath1_4, @"Items - English - vanilla\Item_name_.fmg");
 
-        //static readonly string fakePrp1a = Path.Combine(basePath1_3, @"Items - English - Daughters of Ash\RingDescriptions.fmg");
-        //static readonly string fakePrp2a = Path.Combine(basePath1_3, @"Items - English - vanilla\Accessory_long_desc_.fmg");
-        //static readonly string fakePrp3a = Path.Combine(basePath1_3, @"Items - French - vanilla\Accessory_long_desc_.fmg");
-        //static readonly string fakePrp1b = Path.Combine(basePath1_3, @"Items - English - Daughters of Ash\ArmorDescriptions.fmg");
-        //static readonly string fakePrp2b = Path.Combine(basePath1_3, @"Items - English - vanilla\Armor_long_desc_.fmg"); 
-        //static readonly string fakePrp3b = Path.Combine(basePath1_3, @"Items - Italian - vanilla\Armor_long_desc_.fmg");
+        private static readonly string fakePrp1a = Path.Combine(basePath1_4, @"Items - English - Daughters of Ash\RingDescriptions.fmg");
+        private static readonly string fakePrp2a = Path.Combine(basePath1_4, @"Items - English - vanilla\Accessory_long_desc_.fmg");
+        private static readonly string fakePrp3a = Path.Combine(basePath1_4, @"Items - French - vanilla\Accessory_long_desc_.fmg");
+        //static readonly string fakePrp1b = Path.Combine(basePath1_4, @"Items - English - Daughters of Ash\ArmorDescriptions.fmg");
+        //static readonly string fakePrp2b = Path.Combine(basePath1_4, @"Items - English - vanilla\Armor_long_desc_.fmg"); 
+        //static readonly string fakePrp3b = Path.Combine(basePath1_4, @"Items - Italian - vanilla\Armor_long_desc_.fmg");
+
+        private static readonly List<string> fakePaths = new List<string>() { fakeRd1a, fakeCmp1a, fakeCmp2a, fakePrp1a, fakePrp2a, fakePrp3a };
 #endif
 
         #region CONSTANTS
@@ -106,27 +107,19 @@ namespace DS_TextsMod_Helper
             if (!File.Exists(Tools.GetSoulsFormatsDllPath()))
                 MessageBox.Show(ERR_MISSING_SFDLL);
 
-            //Tbk_Rd_iFile1.Text = fakeRd1a;
-            //Tbk_Cmp_iFile1.Text = fakeCmp1a;
-            //Tbk_Cmp_iFile2.Text = fakeCmp2a;
-            //Tbk_Prp_iFile1.Text = fakePrp1a;
-            //Tbk_Prp_iFile2.Text = fakePrp2a;
-            //Tbk_Prp_iFile3.Text = fakePrp3a;
+#if DEBUG
+            Tbk_Rd_iFile1.Text = fakeRd1a;
+            Tbk_Cmp_iFile1.Text = fakeCmp1a;
+            Tbk_Cmp_iFile2.Text = fakeCmp2a;
+            Tbk_Prp_iFile1.Text = fakePrp1a;
+            Tbk_Prp_iFile2.Text = fakePrp2a;
+            Tbk_Prp_iFile3.Text = fakePrp3a;
+#endif
         }
 
 
         #region GUI Read mode
 
-        private void Tbk_Rd_iFile1_PreviewDragOver(object sender, DragEventArgs e) { e.Handled = true; }
-        private void Tbk_Rd_iFile1_Drop(object sender, DragEventArgs e)
-        {
-            List<InputFile> iFiles = CollectInputFiles(e);
-            foreach (InputFile iFile in iFiles)
-                ValidateInputFile((TextBlock)sender, iFile);
-
-            SyncFilenames(sender);
-        }
-        private void Btn_Rd_ExploreFile1_Click(object sender, RoutedEventArgs e) { Explore((Button)sender); }
         private void Tbx_Rd_oFilename_GotFocus(object sender, RoutedEventArgs e) { SelectTbxValue(sender); }
         private void Tbx_Rd_oFilename_LostFocus(object sender, RoutedEventArgs e) { ValidateTbxValue(sender); }
         private void Cbx_Rd_UseInputFilename_Checked(object sender, RoutedEventArgs e) { SyncFilenames(sender); }
@@ -138,26 +131,6 @@ namespace DS_TextsMod_Helper
 
         #region GUI Compare mode
 
-        private void Tbk_Cmp_iFile1_PreviewDragOver(object sender, DragEventArgs e) { e.Handled = true; }
-        private void Tbk_Cmp_iFile1_Drop(object sender, DragEventArgs e)
-        {
-            List<InputFile> iFiles = CollectInputFiles(e);
-            foreach (InputFile iFile in iFiles)
-                ValidateInputFile((TextBlock)sender, iFile);
-
-            SyncFilenames(sender);
-        }
-        private void Btn_Cmp_ExploreFile1_Click(object sender, RoutedEventArgs e) { Explore((Button)sender); }
-        private void Tbk_Cmp_iFile2_PreviewDragOver(object sender, DragEventArgs e) { e.Handled = true; }
-        private void Tbk_Cmp_iFile2_Drop(object sender, DragEventArgs e)
-        {
-            List<InputFile> iFiles = CollectInputFiles(e);
-            foreach (InputFile iFile in iFiles)
-                ValidateInputFile((TextBlock)sender, iFile);
-
-            SyncFilenames(sender);
-        }
-        private void Btn_Cmp_ExploreFile2_Click(object sender, RoutedEventArgs e) { Explore((Button)sender); }
         private void Tbx_Cmp_oFilename_GotFocus(object sender, RoutedEventArgs e) { SelectTbxValue(sender); }
         private void Tbx_Cmp_oFilename_LostFocus(object sender, RoutedEventArgs e) { ValidateTbxValue(sender); }
         private void Cbx_Cmp_UseInputFilename_Checked(object sender, RoutedEventArgs e)
@@ -183,36 +156,6 @@ namespace DS_TextsMod_Helper
 
         #region GUI Prepare mode
 
-        private void Tbk_Prp_iFile1_PreviewDragOver(object sender, DragEventArgs e) { e.Handled = true; }
-        private void Tbk_Prp_iFile1_Drop(object sender, DragEventArgs e)
-        {
-            List<InputFile> iFiles = CollectInputFiles(e);
-            foreach (InputFile iFile in iFiles)
-                ValidateInputFile((TextBlock)sender, iFile);
-
-            SyncFilenames(sender);
-        }
-        private void Btn_Prp_ExploreFile1_Click(object sender, RoutedEventArgs e) { Explore((Button)sender); }
-        private void Tbk_Prp_iFile2_PreviewDragOver(object sender, DragEventArgs e) { e.Handled = true; }
-        private void Tbk_Prp_iFile2_Drop(object sender, DragEventArgs e)
-        {
-            List<InputFile> iFiles = CollectInputFiles(e);
-            foreach (InputFile iFile in iFiles)
-                ValidateInputFile((TextBlock)sender, iFile);
-
-            SyncFilenames(sender);
-        }
-        private void Btn_Prp_ExploreFile2_Click(object sender, RoutedEventArgs e) { Explore((Button)sender); }
-        private void Tbk_Prp_iFile3_PreviewDragOver(object sender, DragEventArgs e) { e.Handled = true; }
-        private void Tbk_Prp_iFile3_Drop(object sender, DragEventArgs e)
-        {
-            List<InputFile> iFiles = CollectInputFiles(e);
-            foreach (InputFile iFile in iFiles)
-                ValidateInputFile((TextBlock)sender, iFile);
-
-            SyncFilenames(sender);
-        }
-        private void Btn_Prp_ExploreFile3_Click(object sender, RoutedEventArgs e) { Explore((Button)sender); }
         private void Tbx_Prp_oFilename_GotFocus(object sender, RoutedEventArgs e) { SelectTbxValue(sender); }
         private void Tbx_Prp_oFilename_LostFocus(object sender, RoutedEventArgs e) { ValidateTbxValue(sender); }
         private void Cbx_Prp_UseInputFilename_Checked(object sender, RoutedEventArgs e)
@@ -248,6 +191,22 @@ namespace DS_TextsMod_Helper
 
         #region GUI Helpers : Process input files
 
+        private void Tbk_InputFmg_PreviewDragOver(object sender, DragEventArgs e)
+        {
+            Activate();
+            Focus();
+            e.Handled = true;
+        }
+
+        private void Tbk_InputFmg_Drop(object sender, DragEventArgs e)
+        {
+            List<InputFile> iFiles = CollectInputFiles(e);
+            foreach (InputFile iFile in iFiles)
+                ValidateInputFile((TextBlock)sender, iFile);
+
+            SyncFilenames(sender);
+        }
+
         private List<InputFile> CollectInputFiles(DragEventArgs e)
         {
             List<InputFile> iFiles = new List<InputFile>();
@@ -266,7 +225,7 @@ namespace DS_TextsMod_Helper
             if (isValid)
             {
                 tbk.Inlines.Clear();
-                tbk.Inlines.Add(new Run($"{iFile.PDir}\\"));
+                tbk.Inlines.Add(new Run($"{iFile.Directory}\\"));
                 tbk.Inlines.Add(new Bold(new Run($"{iFile.Name}.fmg")));
 
                 tbk.FontStyle = FontStyles.Normal;
@@ -283,10 +242,31 @@ namespace DS_TextsMod_Helper
 
             tbk.ToolTip = iFile.GetToolTipText(isValid);
 
+            // Store FMG versions of Prepare mode iFiles in hidden labels (lazy and hacky)
+            if (SelectedMode() == PROCESS_MODE.Prepare)
+            {
+                Label lbl = Match_Tbk_Lbl(tbk);
+                lbl.Content = iFile.Version;
+            }
+
             _ = ConfirmValidation(tbk, isValid);
         }
 
-        private async Task ConfirmValidation(TextBlock tbk, bool fileIsValid)
+        /// <summary>
+        /// Match Textblock (input file dropped) and hidden Label (FMG version)
+        /// </summary>
+        private Label Match_Tbk_Lbl(TextBlock tbk)
+        {
+            switch (tbk.Name)
+            {
+                case "Tbk_Prp_iFile1": return Lbl_Prp_FmgVersion1;
+                case "Tbk_Prp_iFile2": return Lbl_Prp_FmgVersion2;
+                case "Tbk_Prp_iFile3": return Lbl_Prp_FmgVersion3;
+                default: return new Label(); //never used default;
+            }
+        }
+
+        private async Task ConfirmValidation(TextBlock tbk, bool fileIsValid) // TODO: Understand & Improve async from sync
         {
             SolidColorBrush softGreen = (SolidColorBrush)new BrushConverter().ConvertFrom("#c8eac8");
 
@@ -307,7 +287,7 @@ namespace DS_TextsMod_Helper
                     List<string> cmpNames = new List<string>();
                     foreach (TextBlock tbk in cmpTbks)
                     {
-                        if (tbk.Text == DROP_FMG)
+                        if (tbk.Text == DROP_FMG) // || fakePaths.Contains(tbk.Text)) // DEBUG
                             return;
                         cmpNames.Add(Tools.GetFileName(tbk.Text));
                     }
@@ -327,7 +307,7 @@ namespace DS_TextsMod_Helper
                     List<string> prpNames = new List<string>();
                     foreach (TextBlock tbk in prpTbks)
                     {
-                        if (tbk.Text == DROP_FMG)
+                        if (tbk.Text == DROP_FMG) // || fakePaths.Contains(tbk.Text)) // DEBUG
                             return;
                         prpNames.Add(Tools.GetFileName(tbk.Text));
                     }
@@ -337,18 +317,7 @@ namespace DS_TextsMod_Helper
                     switch (prpDistincts)
                     {
                         case 1: foreach (TextBlock tbk in prpTbks) ShowSameFilenames(tbk); break;
-                        case 2: // 3 Tbk are sharing 2 distincts filenames : find the isolated one = warning only on it
-                                // There could have been a great story here but we finally want them all to be Yellow
-                                //string distinctValue = prpNames.GroupBy(n => n)
-                                //                       .Where(g => g.Count() == 1)
-                                //                       .Select(g => g.Key)
-                                //                       .ToList()
-                                //                       .First();
-
-                        //for (int i = 0; i < prpNames.Count; i++)
-                        //    if (prpNames[i] == distinctValue)
-                        //        ShowDistinctFilenames(prpTbks[i]);
-                        //break;
+                        case 2: // Same behaviour for 2 and 3 distinct filenames
                         case 3: foreach (TextBlock tbk in prpTbks) ShowDistinctFilenames(tbk); break;
                     }
                     break;
@@ -360,7 +329,7 @@ namespace DS_TextsMod_Helper
             SolidColorBrush softGreen = (SolidColorBrush)new BrushConverter().ConvertFrom("#c8eac8");
             tbk.Background = softGreen;
 
-            // Wonky but functional
+            // Rely on ToolTip's text, quite hacky
             int warningLength = WRN_DISTINCTS_FNAMES.Length;
             if (tbk.ToolTip.ToString().Substring(0, warningLength) == WRN_DISTINCTS_FNAMES)
                 tbk.ToolTip = tbk.ToolTip.ToString().Remove(0, warningLength);
@@ -370,10 +339,98 @@ namespace DS_TextsMod_Helper
         {
             tbk.Background = Brushes.PaleGoldenrod;
 
-            // Wonky but functional
+            // Rely on ToolTip's text, quite hacky
             int warningLength = WRN_DISTINCTS_FNAMES.Length;
             if (tbk.ToolTip.ToString().Substring(0, warningLength) != WRN_DISTINCTS_FNAMES)
                 tbk.ToolTip = WRN_DISTINCTS_FNAMES + tbk.ToolTip.ToString();
+        }
+
+        /// <summary>
+        /// Return FMG version to be used in output
+        /// </summary>
+        private string GetOutputFmgVersion()
+        {
+            List<string> versions = new List<string>()
+            {
+                Lbl_Prp_FmgVersion1.Content.ToString(),
+                Lbl_Prp_FmgVersion2.Content.ToString(),
+                Lbl_Prp_FmgVersion3.Content.ToString()
+            };
+            return versions.Distinct().ToList().Count > 1 ? SetOutputFileVersion(versions) : versions.First();
+        }
+
+
+        public string SetOutputFileVersion(List<string> versions)
+        {
+            Label lblMessage = new Label()
+            {
+                HorizontalAlignment = HorizontalAlignment.Center,
+                HorizontalContentAlignment = HorizontalAlignment.Center,
+                Background = Brushes.PaleGoldenrod,
+
+                Content = new System.Text.StringBuilder()
+                              .AppendLine("Submitted FMG input files belong to different Souls games.")
+                              .Append("Please select the appropriate format to use in output :")
+                              .ToString()
+            };
+
+            ListBox lbxChoices = new ListBox()
+            {
+                Margin = new Thickness(0, 8, 0, 8),
+                ItemsSource = versions.Distinct().ToList()
+            };
+
+            Button btnConfirm = new Button()
+            {
+                Margin = new Thickness(8),
+                Padding = new Thickness(6),
+                Width = 64,
+                Content = "Confirm"
+            };
+
+            StackPanel stkContainer = new StackPanel()
+            {
+                HorizontalAlignment = HorizontalAlignment.Center,
+                VerticalAlignment = VerticalAlignment.Center,
+                Orientation = Orientation.Vertical
+            };
+            stkContainer.Children.Add(lblMessage);
+            stkContainer.Children.Add(lbxChoices);
+            stkContainer.Children.Add(btnConfirm);
+
+            Window customDialog = new Window()
+            {
+                Content = stkContainer,
+                Width = 360,
+                Height = 220,
+                Title = "Select output FMG version",
+                ResizeMode = ResizeMode.NoResize,
+                WindowStartupLocation = WindowStartupLocation.CenterOwner
+            };
+
+            string outputValue = "";
+            btnConfirm.Click += (sender, e) =>
+            {
+                if (lbxChoices.SelectedItem is null)
+                {
+                    MessageBox.Show("Please select a FMG version");
+                    return;
+                }
+                outputValue = lbxChoices.SelectedItem.ToString();
+                customDialog.Close();
+            };
+
+            lbxChoices.MouseDoubleClick += (sender, e) =>
+            {
+                if (lbxChoices.SelectedItem is null)
+                    return;
+
+                outputValue = lbxChoices.SelectedItem.ToString();
+                customDialog.Close();
+            };
+
+            customDialog.ShowDialog();
+            return outputValue;
         }
 
         #endregion
@@ -381,8 +438,9 @@ namespace DS_TextsMod_Helper
 
         #region GUI Helpers : Misc.
 
-        private void Explore(Button btn)
+        private void Btn_Explore_Click(object sender, RoutedEventArgs e)
         {
+            Button btn = sender as Button;
             switch (btn.Name)
             {
                 case "Btn_Rd_ExploreFile1":
@@ -824,11 +882,16 @@ namespace DS_TextsMod_Helper
                     string textToReplace = Tbx_Prp_TextToReplace.Text;
                     string replacingText = Tbx_Prp_ReplacingText.Text;
 
+                    string outputVersion = GetOutputFmgVersion();
+                    if (string.IsNullOrEmpty(outputVersion))
+                        return;
+
                     PrepareMode p = new PrepareMode(prp_iFile1, prp_iFile2, prp_iFile3, textToReplace, replacingText);
                     p.ProcessFiles(false);
+                    p.SetOutputVersion(outputVersion);
                     p.ProduceOutput(prp_oFilename);
 
-                    MessageBox.Show($"[Prepare mode] File \"{p.OutputFilename}\" created");
+                    MessageBox.Show($"[Prepare mode] File \"{p.OutputFilename}\" created for \"{outputVersion}\"");
                     break;
             }
         }

@@ -11,6 +11,7 @@ namespace DS_TextsMod_Helper
         public string TextToReplace { get; set; }
         public string ReplacingText { get; set; }
         public string OutputFilename { get; set; }
+        public FMG.FMGVersion OutputVersion { get; set; }
         public List<Entry> Entries { get; set; }
 
 
@@ -104,12 +105,38 @@ namespace DS_TextsMod_Helper
         {
             OutputFilename = Tools.GetOutputFilepath(oFilename);
 
-            FMG output = new FMG { };
+            FMG output = new FMG { Version = OutputVersion };
             foreach (Entry pe in Entries)
                 output.Entries.Add(new FMG.Entry(pe.TextId, pe.Output));
 
             output.Write(OutputFilename);
         }
+
+        /// <summary>
+        /// Translate back FMG version from String to FMG.FMGVersion
+        /// </summary>
+        public void SetOutputVersion(string version)
+        {
+            switch (version)
+            {
+                case "Demon's Souls":
+                    OutputVersion = FMG.FMGVersion.DemonsSouls;
+                    break;
+
+                case "Dark Souls 1 / Dark Souls 2":
+                    OutputVersion = FMG.FMGVersion.DarkSouls1;
+                    break;
+
+                case "Dark Souls 3 / Bloodborne":
+                    OutputVersion = FMG.FMGVersion.DarkSouls3;
+                    break;
+
+                default:
+                    OutputVersion = FMG.FMGVersion.DarkSouls1;
+                    break;
+            }
+        }
+
 
 
         public class Entry
