@@ -51,9 +51,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="SoulsFormats">
-      <HintPath>..\..\..\..\Documents\Progjets\SoulsFormats-master\SoulsFormats\bin\Release\net46\SoulsFormats.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
@@ -130,6 +127,12 @@
       <ProductName>.NET Framework 3.5 SP1</ProductName>
       <Install>false</Install>
     </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\..\Documents\Progjets\SoulsFormats-master\SoulsFormats\SoulsFormats.csproj">
+      <Project>{a1542b4e-2259-41b9-a8a7-ac29627d858b}</Project>
+      <Name>SoulsFormats</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
