@@ -129,8 +129,8 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\Documents\Progjets\SoulsFormats-master\SoulsFormats\SoulsFormats.csproj">
-      <Project>{a1542b4e-2259-41b9-a8a7-ac29627d858b}</Project>
+    <ProjectReference Include="..\SoulsFormats-master-2021-11-21\SoulsFormats\SoulsFormats.csproj">
+      <Project>{c2184513-2445-4571-ab17-ed72a006c152}</Project>
       <Name>SoulsFormats</Name>
     </ProjectReference>
   </ItemGroup>
