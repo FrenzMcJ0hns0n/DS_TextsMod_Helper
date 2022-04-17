@@ -86,6 +86,8 @@
                             
                             <Label VerticalAlignment="Center" Content="File #1 :"
                                    ToolTip="Expected : Single FMG file to read"
+                                   ToolTipService.InitialShowDelay="50"
+                                   ToolTipService.ShowDuration="15000"
                                    />
                             <Border Grid.Column="1" Style="{StaticResource Brd_InputFmg}">
                                 <TextBlock x:Name="Tbk_Rd_iFile1" Style="{StaticResource Tbk_InputFmg}"/>
@@ -133,12 +135,20 @@
 
                             <!-- CSV output separator -->
                             <StackPanel Grid.Column="2" Orientation="Horizontal" HorizontalAlignment="Center">
-                                <Label HorizontalAlignment="Right" VerticalAlignment="Center" Content="CSV separator character :" />
+                                <Label HorizontalAlignment="Right" VerticalAlignment="Center"
+                                       Content="CSV separator character :"
+                                       ToolTip="Symbol used to separate values as CSV data"
+                                       ToolTipService.InitialShowDelay="50"
+                                       ToolTipService.ShowDuration="15000"
+                                       />
                                 <TextBox x:Name="Tbx_Rd_CsvSeparator"
                                          Width="22"
                                          VerticalAlignment="Center" VerticalContentAlignment="Center" Padding="0,2,0,4"
                                          TextAlignment="Center" Text="|"
                                          MaxLength="1"
+                                         ToolTip="Choose the symbol to separate values as CSV data"
+                                         ToolTipService.InitialShowDelay="50"
+                                         ToolTipService.ShowDuration="15000"
                                          GotFocus="Tbx_Rd_CsvSeparator_GotFocus"
                                          LostFocus="Tbx_Rd_CsvSeparator_LostFocus"
                                          />
@@ -151,6 +161,8 @@
                                       VerticalAlignment="Center"
                                       Content="Disable multi line format"
                                       ToolTip="Replace every line breaks by /n/"
+                                      ToolTipService.InitialShowDelay="50"
+                                      ToolTipService.ShowDuration="15000"
                                       />
                         </Grid>
                     </GroupBox>
@@ -180,6 +192,8 @@
                             
                             <Label VerticalAlignment="Center" Content="File #1 :"
                                    ToolTip="Expected : 1st FMG file to compare"
+                                   ToolTipService.InitialShowDelay="50"
+                                   ToolTipService.ShowDuration="15000"
                                    />
                             <Border Grid.Column="1" Style="{StaticResource Brd_InputFmg}">
                                 <TextBlock x:Name="Tbk_Cmp_iFile1" Style="{StaticResource Tbk_InputFmg}"/>
@@ -189,6 +203,8 @@
                             
                             <Label Grid.Row="1" VerticalAlignment="Center" Content="File #2 :"
                                    ToolTip="Expected : 2nd FMG file to compare"
+                                   ToolTipService.InitialShowDelay="50"
+                                   ToolTipService.ShowDuration="15000"
                                    />
                             <Border Grid.Column="1" Grid.Row="1" Style="{StaticResource Brd_InputFmg}">
                                 <TextBlock x:Name="Tbk_Cmp_iFile2" Style="{StaticResource Tbk_InputFmg}"/>
@@ -247,6 +263,8 @@
                                 <Label VerticalAlignment="Center"
                                        Content="Header #1 :" 
                                        ToolTip="Output header for File #1"
+                                       ToolTipService.InitialShowDelay="50"
+                                       ToolTipService.ShowDuration="15000"
                                        />
                                 <TextBox x:Name="Tbx_Cmp_oHeader1"
                                         HorizontalAlignment="Right" Width="240"
@@ -254,7 +272,9 @@
                                         TextAlignment="Right"
                                         Text="File #1"
                                         ToolTip="Enter output header for File #1"
-                                         GotFocus="Tbx_Cmp_oHeader1_GotFocus"
+                                        ToolTipService.InitialShowDelay="50"
+                                        ToolTipService.ShowDuration="15000"
+                                        GotFocus="Tbx_Cmp_oHeader1_GotFocus"
                                         LostFocus="Tbx_Cmp_oHeader1_LostFocus"
                                         />
                             </StackPanel>
@@ -262,6 +282,8 @@
                                 <Label VerticalAlignment="Center" 
                                        Content="Header #2 :"
                                        ToolTip="Output header for File #2"
+                                       ToolTipService.InitialShowDelay="50"
+                                       ToolTipService.ShowDuration="15000"
                                        />
                                 <TextBox x:Name="Tbx_Cmp_oHeader2"
                                          HorizontalAlignment="Right" Width="240"
@@ -269,6 +291,8 @@
                                          TextAlignment="Right"
                                          Text="File #2"
                                          ToolTip="Enter output header for File #2"
+                                         ToolTipService.InitialShowDelay="50"
+                                         ToolTipService.ShowDuration="15000"
                                          GotFocus="Tbx_Cmp_oHeader2_GotFocus"
                                          LostFocus="Tbx_Cmp_oHeader2_LostFocus"
                                          />
@@ -276,12 +300,20 @@
 
                             <!-- CSV output separator -->
                             <StackPanel Grid.Column="3" Orientation="Horizontal" HorizontalAlignment="Center">
-                                <Label HorizontalAlignment="Right" VerticalAlignment="Center" Content="CSV separator character :" />
+                                <Label HorizontalAlignment="Right" VerticalAlignment="Center"
+                                       Content="CSV separator character :"
+                                       ToolTip="Symbol used to separate values as CSV data"
+                                       ToolTipService.InitialShowDelay="50"
+                                       ToolTipService.ShowDuration="15000"
+                                       />
                                 <TextBox x:Name="Tbx_Cmp_CsvSeparator"
                                          Width="22"
                                          VerticalAlignment="Center" VerticalContentAlignment="Center" Padding="0,2,0,4"
                                          TextAlignment="Center" Text="|"
                                          MaxLength="1"
+                                         ToolTip="Choose the symbol to separate values as CSV data"
+                                         ToolTipService.InitialShowDelay="50"
+                                         ToolTipService.ShowDuration="15000"
                                          GotFocus="Tbx_Cmp_CsvSeparator_GotFocus"
                                          LostFocus="Tbx_Cmp_CsvSeparator_LostFocus"
                                          />
@@ -325,6 +357,8 @@
                             
                             <Label VerticalAlignment="Center" Content="File #1 :"
                                    ToolTip="Expected : a modded file, to serve as reference data"
+                                   ToolTipService.InitialShowDelay="50"
+                                   ToolTipService.ShowDuration="15000"
                                    />
                             <Border Grid.Column="1" Style="{StaticResource Brd_InputFmg}">
                                 <TextBlock x:Name="Tbk_Prp_iFile1" Style="{StaticResource Tbk_InputFmg}"/>
@@ -335,6 +369,8 @@
                             
                             <Label Grid.Row="1" VerticalAlignment="Center" Content="File #2 :"
                                    ToolTip="Expected : vanilla file in same language as modded file"
+                                   ToolTipService.InitialShowDelay="50"
+                                   ToolTipService.ShowDuration="15000"
                                    />
                             <Border Grid.Column="1" Grid.Row="1" Style="{StaticResource Brd_InputFmg}">
                                 <TextBlock x:Name="Tbk_Prp_iFile2" Style="{StaticResource Tbk_InputFmg}"/>
@@ -345,6 +381,8 @@
                             
                             <Label Grid.Row="2" VerticalAlignment="Center" Content="File #3 :"
                                    ToolTip="Expected : vanilla file in the new translation language"
+                                   ToolTipService.InitialShowDelay="50"
+                                   ToolTipService.ShowDuration="15000"
                                    />
                             <Border Grid.Column="1" Grid.Row="2" Style="{StaticResource Brd_InputFmg}">
                                 <TextBlock x:Name="Tbk_Prp_iFile3" Style="{StaticResource Tbk_InputFmg}"/>
@@ -405,6 +443,8 @@
                                 <Label VerticalAlignment="Center" 
                                        Content="String to replace :"
                                        ToolTip="Text to be replaced in entries"
+                                       ToolTipService.InitialShowDelay="50"
+                                       ToolTipService.ShowDuration="15000"
                                        />
                                 <TextBox x:Name="Tbx_Prp_TextToReplace"
                                          VerticalAlignment="Center"
@@ -412,6 +452,8 @@
                                          Width="120"
                                          TextAlignment="Right"
                                          ToolTip="Text to be replaced in entries"
+                                         ToolTipService.InitialShowDelay="50"
+                                         ToolTipService.ShowDuration="15000"
                                          GotFocus="Tbx_Prp_TextToReplace_GotFocus"
                                          />
                             </StackPanel>
@@ -419,6 +461,8 @@
                                 <Label VerticalAlignment="Center"
                                        Content="Remplacing text :"
                                        ToolTip="Replacing text in entries"
+                                       ToolTipService.InitialShowDelay="50"
+                                       ToolTipService.ShowDuration="15000"
                                        />
                                 <TextBox x:Name="Tbx_Prp_ReplacingText"
                                          VerticalAlignment="Center"
@@ -426,6 +470,8 @@
                                          Width="120"
                                          TextAlignment="Right"
                                          ToolTip="Replacing text in entries"
+                                         ToolTipService.InitialShowDelay="50"
+                                         ToolTipService.ShowDuration="15000"
                                          GotFocus="Tbx_Prp_ReplacingText_GotFocus"
                                          />
                             </StackPanel>
@@ -465,6 +511,8 @@
                           Margin="8,0,0,0" 
                           Content="Show all details"
                           ToolTip="Show all details about the processed data.&#x0a;Note that grey contents will not be written to output file."
+                          ToolTipService.InitialShowDelay="50"
+                          ToolTipService.ShowDuration="15000"
                           Checked="Cbx_PreviewAllDetails_Checked"
                           Unchecked="Cbx_PreviewAllDetails_Unchecked"/>
             </StackPanel>
