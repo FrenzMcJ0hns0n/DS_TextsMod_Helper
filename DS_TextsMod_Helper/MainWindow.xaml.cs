@@ -193,6 +193,8 @@ namespace DS_TextsMod_Helper
 
         private void Tbk_InputFmg_PreviewDragOver(object sender, DragEventArgs e)
         {
+            Activate();
+            Focus();
             e.Handled = true;
         }
 
