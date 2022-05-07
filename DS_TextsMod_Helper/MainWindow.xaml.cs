@@ -489,7 +489,7 @@ namespace DS_TextsMod_Helper
             {
                 case PROCESS_MODE.Read:
                     if ((sender is CheckBox && Tbk_Rd_iFile1.Text != DROP_FMG) ||
-                        (sender is TextBox && (Cbx_Rd_UseInputFilename.IsChecked ?? true)))
+                        (sender is TextBlock && (Cbx_Rd_UseInputFilename.IsChecked ?? true)))
                     {
                         Tbx_Rd_oFilename.Text = Tools.GetFileName(Tbk_Rd_iFile1.Text);
                         ValidateTbxValue(Tbx_Rd_oFilename);
