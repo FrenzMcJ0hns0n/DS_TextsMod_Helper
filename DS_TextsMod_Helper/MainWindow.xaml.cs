@@ -121,7 +121,18 @@ namespace DS_TextsMod_Helper
         #region GUI Read mode
 
         private void Tbx_Rd_oFilename_GotFocus(object sender, RoutedEventArgs e) { SelectTbxValue(sender); }
-        private void Tbx_Rd_oFilename_LostFocus(object sender, RoutedEventArgs e) { ValidateTbxValue(sender); }
+        private void Tbx_Rd_oFilename_LostFocus(object sender, RoutedEventArgs e)
+        {
+            if (!FilenameIsValid(Tbx_Rd_oFilename.Text))
+            {
+                MessageBox.Show("Filenames cannot contain the following characters:\n"
+                              + "\\ / : * ? \" < > |\n\n"
+                              + "Please try again");
+
+                Tbx_Rd_oFilename.Text = "";
+            }
+            ValidateTbxValue(sender);
+        }
         private void Cbx_Rd_UseInputFilename_Checked(object sender, RoutedEventArgs e) { SyncFilenames(sender); }
         private void Tbx_Rd_CsvSeparator_GotFocus(object sender, RoutedEventArgs e) { SelectTbxValue(sender); }
         private void Tbx_Rd_CsvSeparator_LostFocus(object sender, RoutedEventArgs e) { ValidateTbxValue(sender); }
@@ -132,7 +143,18 @@ namespace DS_TextsMod_Helper
         #region GUI Compare mode
 
         private void Tbx_Cmp_oFilename_GotFocus(object sender, RoutedEventArgs e) { SelectTbxValue(sender); }
-        private void Tbx_Cmp_oFilename_LostFocus(object sender, RoutedEventArgs e) { ValidateTbxValue(sender); }
+        private void Tbx_Cmp_oFilename_LostFocus(object sender, RoutedEventArgs e)
+        {
+            if (!FilenameIsValid(Tbx_Cmp_oFilename.Text))
+            {
+                MessageBox.Show("Filenames cannot contain the following characters:\n"
+                              + "\\ / : * ? \" < > |\n\n"
+                              + "Please try again");
+
+                Tbx_Cmp_oFilename.Text = "";
+            }
+            ValidateTbxValue(sender);
+        }
         private void Cbx_Cmp_UseInputFilename_Checked(object sender, RoutedEventArgs e)
         {
             Cmbx_Cmp_TargetInputFilename.IsEnabled = true;
@@ -157,7 +179,18 @@ namespace DS_TextsMod_Helper
         #region GUI Prepare mode
 
         private void Tbx_Prp_oFilename_GotFocus(object sender, RoutedEventArgs e) { SelectTbxValue(sender); }
-        private void Tbx_Prp_oFilename_LostFocus(object sender, RoutedEventArgs e) { ValidateTbxValue(sender); }
+        private void Tbx_Prp_oFilename_LostFocus(object sender, RoutedEventArgs e)
+        {
+            if (!FilenameIsValid(Tbx_Prp_oFilename.Text))
+            {
+                MessageBox.Show("Filenames cannot contain the following characters:\n"
+                              + "\\ / : * ? \" < > |\n\n"
+                              + "Please try again");
+
+                Tbx_Prp_oFilename.Text = "";
+            }
+            ValidateTbxValue(sender);
+        }
         private void Cbx_Prp_UseInputFilename_Checked(object sender, RoutedEventArgs e)
         {
             Cmbx_Prp_TargetInputFilename.IsEnabled = true;
@@ -481,6 +514,17 @@ namespace DS_TextsMod_Helper
                 tbx.BorderBrush = Brushes.Red;
             else
                 tbx.ClearValue(BorderBrushProperty);
+        }
+
+        private bool FilenameIsValid(string text)
+        {
+            List<char> invalidChars = new List<char>() { '\\', '/', ':', '*', '?', '"', '<', '>', '|' };
+
+            foreach (char c in invalidChars)
+                if (text.Contains(c))
+                    return false;
+
+            return true;
         }
 
         private void SyncFilenames(object sender)
