@@ -42,6 +42,10 @@ namespace DS_TextsMod_Helper
         private const string WRN_DISTINCTS_FNAMES = "Warning : inconsistent filename(s).\r\n"
                                                   + "Make sure to use the right input files\r\n\r\n";
 
+        private const string ERR_INVALID_FNAME = "Filenames cannot contain the following characters:\r\n"
+                                               + "\\ / : * ? \" < > |\r\n\r\n"
+                                               + "Please try again";
+
         private const string ERR_MISSING_IFILES = "Error : Missing input file(s)";
         private const string ERR_MISSING_OFNAME = "Error : Missing output filename";
         private const string ERR_MISSING_OHDRS = "Error : Missing output header(s)";
@@ -125,10 +129,7 @@ namespace DS_TextsMod_Helper
         {
             if (!FilenameIsValid(Tbx_Rd_oFilename.Text))
             {
-                MessageBox.Show("Filenames cannot contain the following characters:\n"
-                              + "\\ / : * ? \" < > |\n\n"
-                              + "Please try again");
-
+                MessageBox.Show(ERR_INVALID_FNAME);
                 Tbx_Rd_oFilename.Text = "";
             }
             ValidateTbxValue(sender);
@@ -147,10 +148,7 @@ namespace DS_TextsMod_Helper
         {
             if (!FilenameIsValid(Tbx_Cmp_oFilename.Text))
             {
-                MessageBox.Show("Filenames cannot contain the following characters:\n"
-                              + "\\ / : * ? \" < > |\n\n"
-                              + "Please try again");
-
+                MessageBox.Show(ERR_INVALID_FNAME);
                 Tbx_Cmp_oFilename.Text = "";
             }
             ValidateTbxValue(sender);
@@ -183,10 +181,7 @@ namespace DS_TextsMod_Helper
         {
             if (!FilenameIsValid(Tbx_Prp_oFilename.Text))
             {
-                MessageBox.Show("Filenames cannot contain the following characters:\n"
-                              + "\\ / : * ? \" < > |\n\n"
-                              + "Please try again");
-
+                MessageBox.Show(ERR_INVALID_FNAME);
                 Tbx_Prp_oFilename.Text = "";
             }
             ValidateTbxValue(sender);
