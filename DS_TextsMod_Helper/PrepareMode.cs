@@ -52,7 +52,7 @@ namespace DS_TextsMod_Helper
                                          .ToList();
 
             foreach (Entry e in involvedEntries)
-                result.Add($"Entry Id {e.TextId} : File #1 value = File #2 value but File #3 value was empty");
+                result.Add($"Entry Id {e.TextId} : File #1 and File #2 values are identical and not empty, but File #3 value was empty");
 
             return result;
         }
@@ -110,7 +110,7 @@ namespace DS_TextsMod_Helper
                 string val3 = prp.Value[2];
                 string output = val1 == val2 ? val3 : val1;
                 string source = val1 == val2 ? "File #3" : "File #1";
-                bool specialCase = val1 == val2 && val3 == "";
+                bool specialCase = val1 != "" && val1 == val2 && val3 == "";
 
                 Entries.Add(new Entry(index, textId, val1, val2, val3, output, source, specialCase));
             }
