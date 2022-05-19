@@ -42,6 +42,20 @@ namespace DS_TextsMod_Helper
             return value.Trim();
         }
 
+        public List<string> GetSpecialCases()
+        {
+            List<string> result = new List<string>();
+
+            List<Entry> involvedEntries = Entries
+                                         .Select(x => x)
+                                         .Where(x => x.SpecialCase)
+                                         .ToList();
+
+            foreach (Entry e in involvedEntries)
+                result.Add($"Entry Id {e.TextId} : File #1 value = File #2 value but File #3 value was empty");
+
+            return result;
+        }
 
         public void ProcessFiles(bool preview)
         {
@@ -96,8 +110,9 @@ namespace DS_TextsMod_Helper
                 string val3 = prp.Value[2];
                 string output = val1 == val2 ? val3 : val1;
                 string source = val1 == val2 ? "File #3" : "File #1";
+                bool specialCase = val1 == val2 && val3 == "";
 
-                Entries.Add(new Entry(index, textId, val1, val2, val3, output, source));
+                Entries.Add(new Entry(index, textId, val1, val2, val3, output, source, specialCase));
             }
         }
 
@@ -148,8 +163,9 @@ namespace DS_TextsMod_Helper
             public string Value3 { get; set; }
             public string Output { get; set; }
             public string Source { get; set; }
+            public bool SpecialCase { get; set; }
 
-            public Entry(int index, int textId, string value1, string value2, string value3, string output, string source)
+            public Entry(int index, int textId, string value1, string value2, string value3, string output, string source, bool specialCase)
             {
                 Index = index;
                 TextId = textId;
@@ -158,6 +174,7 @@ namespace DS_TextsMod_Helper
                 Value3 = value3;
                 Output = output;
                 Source = source;
+                SpecialCase = specialCase;
             }
         }
 

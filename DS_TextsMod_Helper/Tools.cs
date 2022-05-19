@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 using System.Windows;
@@ -83,6 +84,23 @@ namespace DS_TextsMod_Helper
         public static double GetColumnMaxWidth()
         {
             return SystemParameters.FullPrimaryScreenWidth >= 2500 ? 540 : 360;
+        }
+
+
+
+
+        public static void LogSpecialCases(string iFile1, string iFile2, string iFile3, string preparedFile, List<string> involvedEntries)
+        {
+            string specialCasesLogFile = Path.Combine(GetOutputDirPath(), "special cases.txt");
+            using (StreamWriter writer = new StreamWriter(specialCasesLogFile, true))
+            {
+                writer.WriteLine($"{DateTime.Now} - Special cases found while generating file \"{preparedFile}\" :");
+                writer.WriteLine($"File #1 = \"{iFile1}\"");
+                writer.WriteLine($"File #2 = \"{iFile2}\"");
+                writer.WriteLine($"File #3 = \"{iFile3}\"");
+                foreach (string ie in involvedEntries)
+                    writer.WriteLine($"\t{ie}");
+            }
         }
 
     }

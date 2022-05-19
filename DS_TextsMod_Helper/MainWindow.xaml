@@ -438,6 +438,18 @@
                                 </ComboBox>
                             </StackPanel>
 
+                            <!-- Warn on special cases -->
+                            <CheckBox Grid.Row="0" Grid.RowSpan="2" Grid.Column="2" x:Name="Cbx_Prp_WarnOnSpecialCases"
+                                      HorizontalAlignment="Center"
+                                      VerticalAlignment="Center"
+                                      Margin="-30,0,0,0"
+                                      Content="Warn on special cases"
+                                      IsChecked="True"
+                                      ToolTip="Warn on entries where File #3 value is unexpectedly empty"
+                                      ToolTipService.InitialShowDelay="50"
+                                      ToolTipService.ShowDuration="15000"
+                                      />
+
                             <!-- Replace values -->
                             <StackPanel Grid.Column="4" Orientation="Horizontal">
                                 <Label VerticalAlignment="Center" 

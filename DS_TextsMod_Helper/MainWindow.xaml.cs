@@ -930,6 +930,13 @@ namespace DS_TextsMod_Helper
                     p.SetOutputVersion(outputVersion);
                     p.ProduceOutput(prp_oFilename);
 
+                    if (Cbx_Prp_WarnOnSpecialCases.IsChecked ?? false)
+                    {
+                        List<string> specialCases = p.GetSpecialCases();
+                        Tools.LogSpecialCases(prp_iFile1, prp_iFile2, prp_iFile3, prp_oFilename, specialCases);
+                        MessageBox.Show("Warning : see details in file \"special cases.txt\"");
+                    }
+
                     MessageBox.Show($"[Prepare mode] File \"{p.OutputFilename}\" created for \"{outputVersion}\"");
                     break;
             }
