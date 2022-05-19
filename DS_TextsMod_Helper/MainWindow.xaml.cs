@@ -39,6 +39,10 @@ namespace DS_TextsMod_Helper
 
         private const string DROP_FMG = "Drop FMG file...";
 
+        private const string HDR_EXISTING_OFNAME = "Output file already exists";
+        private const string MSG_EXISTING_OFNAME = "Output file already exists.\r\n"
+                                                 + "Click OK to confirm overwriting";
+
         private const string WRN_DISTINCTS_FNAMES = "Warning : inconsistent filename(s).\r\n"
                                                   + "Make sure to use the right input files\r\n\r\n";
 
@@ -883,6 +887,13 @@ namespace DS_TextsMod_Helper
                     string rd_oFilename = Tbx_Rd_oFilename.Text + ".csv";
                     string rd_csvSepChar = Tbx_Rd_CsvSeparator.Text;
 
+                    if (File.Exists(Tools.GetOutputFilepath(rd_oFilename)))
+                    {
+                        MessageBoxResult result = MessageBox.Show(MSG_EXISTING_OFNAME, HDR_EXISTING_OFNAME, MessageBoxButton.OKCancel, MessageBoxImage.Information);
+                        if (result == MessageBoxResult.Cancel)
+                            return;
+                    }
+
                     ReadMode r = new ReadMode(rd_iFile1) { OneLinedValues = Cbx_Rd_OneLinedValues.IsChecked ?? false };
                     r.ProcessFiles(false);
                     r.ProduceOutput(rd_oFilename, rd_csvSepChar);
@@ -901,6 +912,13 @@ namespace DS_TextsMod_Helper
                     string oHdr1 = Tbx_Cmp_oHeader1.Text;
                     string oHdr2 = Tbx_Cmp_oHeader2.Text;
                     string cmp_csvSepChar = Tbx_Cmp_CsvSeparator.Text;
+
+                    if (File.Exists(Tools.GetOutputFilepath(cmp_oFilename)))
+                    {
+                        MessageBoxResult result = MessageBox.Show(MSG_EXISTING_OFNAME, HDR_EXISTING_OFNAME, MessageBoxButton.OKCancel, MessageBoxImage.Information);
+                        if (result == MessageBoxResult.Cancel)
+                            return;
+                    }
 
                     CompareMode c = new CompareMode(cmp_iFile1, cmp_iFile2) { OneLinedValues = Cbx_Cmp_OneLinedValues.IsChecked ?? false };
                     c.ProcessFiles(false);
@@ -924,6 +942,13 @@ namespace DS_TextsMod_Helper
                     string outputVersion = GetOutputFmgVersion();
                     if (string.IsNullOrEmpty(outputVersion))
                         return;
+
+                    if (File.Exists(Tools.GetOutputFilepath(prp_oFilename)))
+                    {
+                        MessageBoxResult result = MessageBox.Show(MSG_EXISTING_OFNAME, HDR_EXISTING_OFNAME, MessageBoxButton.OKCancel, MessageBoxImage.Information);
+                        if (result == MessageBoxResult.Cancel)
+                            return;
+                    }
 
                     PrepareMode p = new PrepareMode(prp_iFile1, prp_iFile2, prp_iFile3, textToReplace, replacingText);
                     p.ProcessFiles(false);
