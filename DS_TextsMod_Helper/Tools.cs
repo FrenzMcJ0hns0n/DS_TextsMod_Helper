@@ -107,7 +107,7 @@ namespace DS_TextsMod_Helper
 
 
 
-        public static void LogSpecialCases(string iFile1, string iFile2, string iFile3, string preparedFile, List<string> involvedEntries)
+        public static void LogSpecialCases(string iFile1, string iFile2, string iFile3, string preparedFile, List<string> specialCases)
         {
             string specialCasesLogFile = Path.Combine(GetOutputDirPath(), "special cases.txt");
             using (StreamWriter writer = new StreamWriter(specialCasesLogFile, true))
@@ -116,8 +116,8 @@ namespace DS_TextsMod_Helper
                 writer.WriteLine($"File #1 = \"{iFile1}\"");
                 writer.WriteLine($"File #2 = \"{iFile2}\"");
                 writer.WriteLine($"File #3 = \"{iFile3}\"");
-                foreach (string ie in involvedEntries)
-                    writer.WriteLine($"\t{ie}");
+                foreach (string sc in specialCases)
+                    writer.WriteLine($"\t{sc}");
             }
         }
 

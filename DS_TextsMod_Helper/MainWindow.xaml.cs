@@ -46,6 +46,9 @@ namespace DS_TextsMod_Helper
         private const string WRN_DISTINCTS_FNAMES = "Warning : inconsistent filename(s).\r\n"
                                                   + "Make sure to use the right input files\r\n\r\n";
 
+        private const string WRN_SPECIAL_CASES = "Warning : Found special cases whille processing files."
+                                               + "\r\nSee details in file \"special cases.txt\"";
+
         private const string ERR_INVALID_FNAME = "Filenames cannot contain the following characters:\r\n"
                                                + "\\ / : * ? \" < > |\r\n\r\n"
                                                + "Please try again";
@@ -960,8 +963,11 @@ namespace DS_TextsMod_Helper
                     if (Cbx_Prp_WarnOnSpecialCases.IsChecked ?? false)
                     {
                         List<string> specialCases = p.GetSpecialCases();
-                        Tools.LogSpecialCases(prp_iFile1, prp_iFile2, prp_iFile3, prp_oFilename, specialCases);
-                        MessageBox.Show("Warning : see details in file \"special cases.txt\"");
+                        if (specialCases.Count > 0)
+                        {
+                            Tools.LogSpecialCases(prp_iFile1, prp_iFile2, prp_iFile3, prp_oFilename, specialCases);
+                            MessageBox.Show(WRN_SPECIAL_CASES);
+                        }
                     }
 
                     MessageBox.Show($"[Prepare mode] File \"{p.OutputFilename}\" created for \"{outputVersion}\"");
