@@ -8,6 +8,20 @@ namespace DS_TextsMod_Helper
 {
     public class Tools
     {
+        public static string GetFormattedAppVersion()
+        {
+            AssemblyName assemblyName = Assembly.GetExecutingAssembly().GetName();
+
+            string major = assemblyName.Version.Major.ToString();
+            string minor = assemblyName.Version.Minor > 0 ? $".{assemblyName.Version.Minor}" : "";
+            string build = assemblyName.Version.Build > 0 ? $".{assemblyName.Version.Build}" : "";
+            string revision = assemblyName.Version.Revision > 0 ? $".{assemblyName.Version.Revision}" : "";
+
+            return $"DS Texts Mod Helper - v{major}{minor}{build}{revision}";
+        }
+
+
+
 
         public static string GetRootDirPath()
         {

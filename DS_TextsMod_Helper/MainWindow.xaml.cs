@@ -110,6 +110,8 @@ namespace DS_TextsMod_Helper
         {
             InitializeComponent();
 
+            Title = Tools.GetFormattedAppVersion();
+
             Directory.CreateDirectory(Tools.GetOutputDirPath());
 
             if (!File.Exists(Tools.GetSoulsFormatsDllPath()))
