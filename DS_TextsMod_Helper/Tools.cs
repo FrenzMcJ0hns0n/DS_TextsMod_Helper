@@ -12,12 +12,16 @@ namespace DS_TextsMod_Helper
         {
             AssemblyName assemblyName = Assembly.GetExecutingAssembly().GetName();
 
-            string major = assemblyName.Version.Major.ToString();
-            string minor = assemblyName.Version.Minor > 0 ? $".{assemblyName.Version.Minor}" : "";
-            string build = assemblyName.Version.Build > 0 ? $".{assemblyName.Version.Build}" : "";
-            string revision = assemblyName.Version.Revision > 0 ? $".{assemblyName.Version.Revision}" : "";
+            bool hasMinor = assemblyName.Version.Minor > 0;
+            bool hasBuild = assemblyName.Version.Build > 0;
+            bool hasRevis = assemblyName.Version.Revision > 0;
 
-            return $"DS Texts Mod Helper - v{major}{minor}{build}{revision}";
+            string major = assemblyName.Version.Major.ToString();
+            string minor = hasMinor || hasBuild || hasRevis ? $".{assemblyName.Version.Minor}" : "";
+            string build = hasBuild || hasRevis ? $".{assemblyName.Version.Build}" : "";
+            string revis = hasRevis ? $".{assemblyName.Version.Revision}" : "";
+
+            return $"DS Texts Mod Helper - v{major}{minor}{build}{revis}";
         }
 
 
