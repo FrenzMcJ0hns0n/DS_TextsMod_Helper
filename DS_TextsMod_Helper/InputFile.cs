@@ -50,7 +50,7 @@ namespace DS_TextsMod_Helper
                 FMG fmg = FMG.Read(filepath);
 
                 TotalEntries = fmg.Entries.Count;
-                NonNullEntries = ParseNonNullEntries(fmg);
+                NonNullEntries = fmg.Entries.Where(e => e.Text != null).Count();
                 Version = GetVersion(fmg.Version);
             }
             catch (Exception exception)
@@ -83,16 +83,6 @@ namespace DS_TextsMod_Helper
             }
 
             return sb.ToString();
-        }
-
-
-        private int ParseNonNullEntries(FMG fmg)
-        {
-            List<FMG.Entry> tranformedList = fmg.Entries
-                                             .Select(x => x)
-                                             .Where(x => x.Text != null)
-                                             .ToList();
-            return tranformedList.Count;
         }
 
 
