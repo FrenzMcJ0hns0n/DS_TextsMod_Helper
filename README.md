@@ -16,7 +16,7 @@ From top to bottom:
 5. Click the button "Generate output file"
 
 ## Version notes
-Last [Release v1.4](https://github.com/FrenzMcJ0hns0n/DS_TextsMod_Helper/releases/tag/v1.4) can read/write files for all Souls games supported by SoulsFormats :
+Last [Release v1.4.2](https://github.com/FrenzMcJ0hns0n/DS_TextsMod_Helper/releases/tag/v1.4.2) can read/write files for all Souls games supported by SoulsFormats :
 - Demon's Souls
 - Dark Souls Prepare To Die Edition
 - Dark Souls: Remastered
@@ -24,3 +24,4 @@ Last [Release v1.4](https://github.com/FrenzMcJ0hns0n/DS_TextsMod_Helper/release
 - Dark Souls 2 SotFS
 - Dark Souls 3
 - Bloodborne
+- Elden Ring (? Untested)
