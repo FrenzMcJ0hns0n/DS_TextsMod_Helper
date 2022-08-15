@@ -237,18 +237,23 @@ namespace DS_TextsMod_Helper
 
         private void Tbk_InputFmg_Drop(object sender, DragEventArgs e)
         {
-            List<InputFile> iFiles = CollectInputFiles(e);
+            // Only files are accepted
+            if (!e.Data.GetDataPresent(DataFormats.FileDrop))
+                return;
+
+            string[] droppedFiles = (string[])e.Data.GetData(DataFormats.FileDrop);
+
+            List<InputFile> iFiles = CollectInputFiles(droppedFiles);
             foreach (InputFile iFile in iFiles)
                 ValidateInputFile((TextBlock)sender, iFile);
 
             SyncFilenames(sender);
         }
 
-        private List<InputFile> CollectInputFiles(DragEventArgs e)
+        private List<InputFile> CollectInputFiles(string[] droppedFiles)
         {
             List<InputFile> iFiles = new List<InputFile>();
 
-            string[] droppedFiles = (string[])e.Data.GetData(DataFormats.FileDrop);
             foreach (string filepath in droppedFiles)
                 iFiles.Add(new InputFile(filepath));
 
