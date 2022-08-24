@@ -5,7 +5,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:DS_TextsMod_Helper"
         mc:Ignorable="d"
-        Width="1280" Height="800" ResizeMode="CanMinimize" Title="DS Texts Mod Helper">
+        
+        Height="600" Width="1200" ResizeMode="CanMinimize" Title="DS Texts Mod Helper">
 
     <Window.Resources>
         <Style x:Key="Brd_InputFmg" TargetType="{x:Type Border}">
@@ -55,86 +56,108 @@
             </Style>
         </Grid.Resources>
 
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="16"/>
+            <ColumnDefinition Width="1*"/>
+            <ColumnDefinition Width="16"/>
+        </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <RowDefinition Height="18*" />
-            <RowDefinition Height="3*" />
-            <RowDefinition Height="18*" />
-            <RowDefinition Height="2*" />
-            <RowDefinition Height="3*" />
+            <RowDefinition Height="16" />
+            <RowDefinition Height="92*" /> <!-- TabControl -->
+            <RowDefinition Height="16" />
+            <RowDefinition Height="8*" /> <!-- Buttons : preview & output file + output file options -->
+            <RowDefinition Height="16" />
         </Grid.RowDefinitions>
 
-        <TabControl x:Name="Tbc_Modes" Margin="16,16,16,8" AllowDrop="True">
+        <TabControl x:Name="Tbc_Modes" AllowDrop="True" Grid.Column="1" Grid.Row="1">
             <TabItem x:Name ="Tbi_Rd" Header="Read mode" DragOver="Tbi_Rd_DragOver">
                 <Grid Background="#EEE">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="8"/>
+                        <ColumnDefinition Width="1*"/>
+                        <ColumnDefinition Width="8"/>
+                    </Grid.ColumnDefinitions>
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="8*" />
-                        <RowDefinition Height="7*" />
+                        <RowDefinition Height="8"/>
+                        <RowDefinition Height="79*"/>
+                        <RowDefinition Height="8"/>
+                        <RowDefinition Height="21*"/>
+                        <RowDefinition Height="8"/>
                     </Grid.RowDefinitions>
 
                     <!-- Read mode : Input files -->
-                    <GroupBox Grid.ColumnSpan="2" Margin="8,8,8,4" Header="Input files" BorderBrush="DarkGray">
-                        <Grid Margin="8,16,8,16">
+                    <GroupBox Grid.Column="1" Grid.Row="1" Header="Input files" BorderBrush="DarkGray">
+                        <Grid>
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="1.8*"/>
-                                <ColumnDefinition Width="36*"/>
-                                <ColumnDefinition Width="1*"/>
+                                <ColumnDefinition Width="4"/>
+                                <ColumnDefinition Width="30*"/>
+                                <ColumnDefinition Width="3*"/>
+                                <ColumnDefinition Width="4"/>
+                                <ColumnDefinition Width="30*"/>
+                                <ColumnDefinition Width="3*"/>
+                                <ColumnDefinition Width="4"/>
+                                <ColumnDefinition Width="30*"/>
+                                <ColumnDefinition Width="3*"/>
+                                <ColumnDefinition Width="4"/>
                             </Grid.ColumnDefinitions>
                             <Grid.RowDefinitions>
-                                <RowDefinition Height="1*" />
+                                <RowDefinition Height="4"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="4"/>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="4"/>
                             </Grid.RowDefinitions>
 
-                            
-                            <Label VerticalAlignment="Center" Content="File #1 :"
+                            <!-- Idea for later: for each file in [set of files] do read/preview in dedicated tabItem in external window -->
+                            <Label Content="Set of files A" FontWeight="DemiBold" Grid.Column="1" Grid.ColumnSpan="2" Grid.Row="1" HorizontalAlignment="Center"
                                    ToolTip="Expected : Single FMG file to read"
                                    ToolTipService.InitialShowDelay="50"
                                    ToolTipService.ShowDuration="15000"
                                    />
-                            <Border Grid.Column="1" Style="{StaticResource Brd_InputFmg}">
-                                <TextBlock x:Name="Tbk_Rd_iFile1" Style="{StaticResource Tbk_InputFmg}"/>
+
+                            <Border Grid.Column="1" Grid.ColumnSpan="2" Grid.Row="3" BorderBrush="LightGray" BorderThickness="1" CornerRadius="3">
+                                <Grid>
+                                    <Label Content="Drop input files..." FontSize="18" Foreground="Gray"
+                                           HorizontalContentAlignment="Center" VerticalContentAlignment="Center"
+                                           />
+
+                                    <!-- + Add LoadingRow="Dtg_RdInputA_LoadingRow" for row headers -->
+                                    <DataGrid x:Name="Dtg_RdInputA" BorderThickness="0" FontSize="11" HorizontalGridLinesBrush="Gray" 
+                                              HeadersVisibility="All" IsReadOnly="True" VerticalGridLinesBrush="Gray" Visibility="Collapsed"
+                                              />
+
+                                </Grid>
                             </Border>
-                            <Button x:Name="Btn_Rd_ExploreFile1" Grid.Column="2" Style="{StaticResource Btn_Explore}"/>
-                            
-                            
+
                         </Grid>
                     </GroupBox>
 
                     <!-- Read mode : Options -->
-                    <GroupBox Grid.Row="1" Grid.ColumnSpan="2" Margin="8,4,8,8" Header="Options" BorderBrush="DarkGray">
-                        <Grid Margin="8,12,8,12">
+                    <GroupBox BorderBrush="DarkGray" Grid.Column="1" Grid.Row="3" Header="Options">
+                        <Grid>
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="14*"/>
+                                <ColumnDefinition Width="4"/>
                                 <ColumnDefinition Width="1*"/>
-                                <ColumnDefinition Width="12*"/>
-                                <ColumnDefinition Width="9*"/>
+                                <ColumnDefinition Width="4"/>
+                                <ColumnDefinition Width="1*"/>
+                                <ColumnDefinition Width="4"/>
+                                <ColumnDefinition Width="1*"/>
+                                <ColumnDefinition Width="4"/>
                             </Grid.ColumnDefinitions>
                             <Grid.RowDefinitions>
-                                <RowDefinition Height="1*" />
-                                <RowDefinition Height="1*" />
+                                <RowDefinition Height="4"/>
+                                <RowDefinition Height="1*"/>
+                                <RowDefinition Height="4"/>
+                                <RowDefinition Height="1*"/>
+                                <RowDefinition Height="4"/>
                             </Grid.RowDefinitions>
 
-                            <!-- Output filename -->
-                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
-                                <Label VerticalAlignment="Center" Content="Output filename :" />
-                                <TextBox x:Name="Tbx_Rd_oFilename" Width="308"
-                                         VerticalAlignment="Center"
-                                         TextAlignment="Right" 
-                                         Text="result"
-                                         GotFocus="Tbx_Rd_oFilename_GotFocus"
-                                         LostFocus="Tbx_Rd_oFilename_LostFocus"
-                                         />
-                                <Label VerticalAlignment="Center" Margin="-4,0,0,0" Content=".csv" />
-                            </StackPanel>
-                            <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center" Margin="-8,0,0,0">
-                                <CheckBox x:Name="Cbx_Rd_UseInputFilename"
-                                          HorizontalAlignment="Left"
-                                          VerticalAlignment="Center"
-                                          Content="Use same filename as input file"
-                                          Checked="Cbx_Rd_UseInputFilename_Checked"
-                                          />
-                            </StackPanel>
+                            <!-- Output filename = moved at app bottom -->
 
                             <!-- CSV output separator -->
-                            <StackPanel Grid.Column="2" Orientation="Horizontal" HorizontalAlignment="Center">
+                            <StackPanel Grid.Column="1" Grid.Row="1" Grid.RowSpan="3"
+                                        HorizontalAlignment="Center" Orientation="Horizontal" VerticalAlignment="Center"
+                                        >
                                 <Label HorizontalAlignment="Right" VerticalAlignment="Center"
                                        Content="CSV separator character :"
                                        ToolTip="Symbol used to separate values as CSV data"
@@ -153,10 +176,10 @@
                                          LostFocus="Tbx_Rd_CsvSeparator_LostFocus"
                                          />
                             </StackPanel>
-                            
+
                             <!-- One lined values -->
                             <CheckBox x:Name="Cbx_Rd_OneLinedValues" 
-                                      Grid.Column="2" Grid.Row="1"
+                                      Grid.Column="3" Grid.Row="1" Grid.RowSpan="3"
                                       HorizontalAlignment="Center"
                                       VerticalAlignment="Center"
                                       Content="Disable multi line format"
@@ -171,97 +194,116 @@
 
             <TabItem x:Name ="Tbi_Cmp" Header="Compare mode" DragOver="Tbi_Cmp_DragOver">
                 <Grid Background="#EEE">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="8"/>
+                        <ColumnDefinition Width="1*"/>
+                        <ColumnDefinition Width="8"/>
+                    </Grid.ColumnDefinitions>
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="8*" />
-                        <RowDefinition Height="7*" />
+                        <RowDefinition Height="8"/>
+                        <RowDefinition Height="79*"/>
+                        <RowDefinition Height="8"/>
+                        <RowDefinition Height="21*"/>
+                        <RowDefinition Height="8"/>
                     </Grid.RowDefinitions>
 
                     <!-- Compare mode : Input files -->
-                    <GroupBox Grid.ColumnSpan="2" Margin="8,8,8,4" Header="Input files" BorderBrush="DarkGray">
-                        <Grid Margin="8,16,8,16">
+                    <GroupBox Grid.Column="1" Grid.Row="1" Header="Input files" BorderBrush="DarkGray">
+                        <Grid>
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="1.8*"/>
-                                <ColumnDefinition Width="36*"/>
-                                <ColumnDefinition Width="1*"/>
+                                <ColumnDefinition Width="4"/>
+                                <ColumnDefinition Width="30*"/>
+                                <ColumnDefinition Width="3*"/>
+                                <ColumnDefinition Width="4"/>
+                                <ColumnDefinition Width="30*"/>
+                                <ColumnDefinition Width="3*"/>
+                                <ColumnDefinition Width="4"/>
+                                <ColumnDefinition Width="30*"/>
+                                <ColumnDefinition Width="3*"/>
+                                <ColumnDefinition Width="4"/>
                             </Grid.ColumnDefinitions>
                             <Grid.RowDefinitions>
-                                <RowDefinition Height="1*" />
-                                <RowDefinition Height="1*" />
+                                <RowDefinition Height="4"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="4"/>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="4"/>
                             </Grid.RowDefinitions>
 
+                            <!-- Files A -->
                             
-                            <Label VerticalAlignment="Center" Content="File #1 :"
-                                   ToolTip="Expected : 1st FMG file to compare"
+                            <!-- Idea for later: for each file in [set of files] do read/preview in dedicated tabItem in external window -->
+                            <Label Content="Set of files A" FontWeight="DemiBold" Grid.Column="1" Grid.ColumnSpan="2" Grid.Row="1" HorizontalAlignment="Center"
+                                   ToolTip="Expected : Single FMG file to read"
                                    ToolTipService.InitialShowDelay="50"
                                    ToolTipService.ShowDuration="15000"
                                    />
-                            <Border Grid.Column="1" Style="{StaticResource Brd_InputFmg}">
-                                <TextBlock x:Name="Tbk_Cmp_iFile1" Style="{StaticResource Tbk_InputFmg}"/>
-                            </Border>
-                            <Button x:Name="Btn_Cmp_ExploreFile1" Grid.Column="2" Style="{StaticResource Btn_Explore}"/>
 
-                            
-                            <Label Grid.Row="1" VerticalAlignment="Center" Content="File #2 :"
-                                   ToolTip="Expected : 2nd FMG file to compare"
+                            <Border Grid.Column="1" Grid.ColumnSpan="2" Grid.Row="3" BorderBrush="LightGray" BorderThickness="1" CornerRadius="3">
+                                <Grid>
+                                    <Label Content="Drop input files..." FontSize="18" Foreground="Gray"
+                                           HorizontalContentAlignment="Center" VerticalContentAlignment="Center"
+                                           />
+
+                                    <!-- + Add LoadingRow="Dtg_RdInputA_LoadingRow" for row headers -->
+                                    <DataGrid x:Name="Dtg_CmpInputA" BorderThickness="0" FontSize="11" HorizontalGridLinesBrush="Gray" 
+                                              HeadersVisibility="All" IsReadOnly="True" VerticalGridLinesBrush="Gray" Visibility="Collapsed"
+                                              />
+
+                                </Grid>
+                            </Border>
+
+                            <!-- Files B -->
+
+                            <Label Content="Set of files B" FontWeight="DemiBold" Grid.Column="4" Grid.ColumnSpan="2" Grid.Row="1" HorizontalAlignment="Center"
+                                   ToolTip="Expected : Single FMG file to read"
                                    ToolTipService.InitialShowDelay="50"
                                    ToolTipService.ShowDuration="15000"
                                    />
-                            <Border Grid.Column="1" Grid.Row="1" Style="{StaticResource Brd_InputFmg}">
-                                <TextBlock x:Name="Tbk_Cmp_iFile2" Style="{StaticResource Tbk_InputFmg}"/>
-                            </Border>
-                            <Button x:Name="Btn_Cmp_ExploreFile2" Grid.Column="2" Grid.Row="1" Style="{StaticResource Btn_Explore}"/>
 
+                            <Border Grid.Column="4" Grid.ColumnSpan="2" Grid.Row="3" BorderBrush="LightGray" BorderThickness="1" CornerRadius="3">
+                                <Grid>
+                                    <Label Content="Drop input files..." FontSize="18" Foreground="Gray"
+                                           HorizontalContentAlignment="Center" VerticalContentAlignment="Center"
+                                           />
+
+                                    <!-- + Add LoadingRow="Dtg_RdInputA_LoadingRow" for row headers -->
+                                    <DataGrid x:Name="Dtg_CmpInputB" BorderThickness="0" FontSize="11" HorizontalGridLinesBrush="Gray" 
+                                              HeadersVisibility="All" IsReadOnly="True" VerticalGridLinesBrush="Gray" Visibility="Collapsed"
+                                              />
+
+                                </Grid>
+                            </Border>
                             
+
+
                         </Grid>
                     </GroupBox>
 
                     <!-- Compare mode : Options -->
-                    <GroupBox Grid.Row="1" Grid.ColumnSpan="2" Margin="8,4,8,8" Header="Options" BorderBrush="DarkGray">
-                        <Grid Margin="8,12,8,12">
+                    <GroupBox BorderBrush="DarkGray" Grid.Column="1" Grid.Row="3" Header="Options">
+                        <Grid>
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="14*"/>
+                                <ColumnDefinition Width="4"/>
                                 <ColumnDefinition Width="1*"/>
-                                <ColumnDefinition Width="12*"/>
-                                <ColumnDefinition Width="9*"/>
+                                <ColumnDefinition Width="4"/>
+                                <ColumnDefinition Width="1*"/>
+                                <ColumnDefinition Width="4"/>
+                                <ColumnDefinition Width="1*"/>
+                                <ColumnDefinition Width="4"/>
                             </Grid.ColumnDefinitions>
                             <Grid.RowDefinitions>
-                                <RowDefinition Height="1*" />
-                                <RowDefinition Height="1*" />
+                                <RowDefinition Height="4"/>
+                                <RowDefinition Height="1*"/>
+                                <RowDefinition Height="4"/>
+                                <RowDefinition Height="1*"/>
+                                <RowDefinition Height="4"/>
                             </Grid.RowDefinitions>
 
-                            <!-- Output filename -->
-                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
-                                <Label VerticalAlignment="Center" Content="Output filename :" />
-                                <TextBox x:Name="Tbx_Cmp_oFilename" Width="308"
-                                         VerticalAlignment="Center"
-                                         TextAlignment="Right" 
-                                         Text="result"
-                                         GotFocus="Tbx_Cmp_oFilename_GotFocus"
-                                         LostFocus="Tbx_Cmp_oFilename_LostFocus"
-                                         />
-                                <Label VerticalAlignment="Center" Margin="-4,0,0,0" Content=".csv" />
-                            </StackPanel>
-                            <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center" Margin="-8,0,0,0">
-                                <CheckBox x:Name="Cbx_Cmp_UseInputFilename"
-                                          HorizontalAlignment="Left"
-                                          VerticalAlignment="Center"
-                                          Content="Use same filename as :"
-                                          Checked="Cbx_Cmp_UseInputFilename_Checked"
-                                          Unchecked="Cbx_Cmp_UseInputFilename_Unchecked"
-                                          />
-                                <ComboBox x:Name="Cmbx_Cmp_TargetInputFilename" 
-                                          VerticalAlignment="Center" Margin="8,0,0,0" Width="200"
-                                          IsEnabled="False"
-                                          SelectionChanged="Cmbx_Cmp_TargetInputFilename_SelectionChanged">
-                                    <ComboBoxItem>Input File #1</ComboBoxItem>
-                                    <ComboBoxItem>Input File #2</ComboBoxItem>
-                                </ComboBox>
-                            </StackPanel>
-
                             <!-- Output headers -->
-                            <StackPanel Grid.Column="2" Orientation="Horizontal" HorizontalAlignment="Center">
+                            <StackPanel Grid.Column="1" Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center">
                                 <Label VerticalAlignment="Center"
-                                       Content="Header #1 :" 
+                                       Content="Header A :" 
                                        ToolTip="Output header for File #1"
                                        ToolTipService.InitialShowDelay="50"
                                        ToolTipService.ShowDuration="15000"
@@ -270,17 +312,17 @@
                                         HorizontalAlignment="Right" Width="240"
                                         VerticalAlignment="Center"
                                         TextAlignment="Right"
-                                        Text="File #1"
-                                        ToolTip="Enter output header for File #1"
+                                        Text="File A"
+                                        ToolTip="Output header to write in column matching set of files A"
                                         ToolTipService.InitialShowDelay="50"
                                         ToolTipService.ShowDuration="15000"
                                         GotFocus="Tbx_Cmp_oHeader1_GotFocus"
                                         LostFocus="Tbx_Cmp_oHeader1_LostFocus"
                                         />
                             </StackPanel>
-                            <StackPanel Grid.Column="2" Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center">
+                            <StackPanel Grid.Column="1" Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Center">
                                 <Label VerticalAlignment="Center" 
-                                       Content="Header #2 :"
+                                       Content="Header B :"
                                        ToolTip="Output header for File #2"
                                        ToolTipService.InitialShowDelay="50"
                                        ToolTipService.ShowDuration="15000"
@@ -289,8 +331,8 @@
                                          HorizontalAlignment="Right" Width="240"
                                          VerticalAlignment="Center"
                                          TextAlignment="Right"
-                                         Text="File #2"
-                                         ToolTip="Enter output header for File #2"
+                                         Text="File B"
+                                         ToolTip="Output header to write in column matching set of files B"
                                          ToolTipService.InitialShowDelay="50"
                                          ToolTipService.ShowDuration="15000"
                                          GotFocus="Tbx_Cmp_oHeader2_GotFocus"
@@ -299,7 +341,7 @@
                             </StackPanel>
 
                             <!-- CSV output separator -->
-                            <StackPanel Grid.Column="3" Orientation="Horizontal" HorizontalAlignment="Center">
+                            <StackPanel Grid.Column="3" Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center">
                                 <Label HorizontalAlignment="Right" VerticalAlignment="Center"
                                        Content="CSV separator character :"
                                        ToolTip="Symbol used to separate values as CSV data"
@@ -321,7 +363,7 @@
 
                             <!-- One lined values -->
                             <CheckBox x:Name="Cbx_Cmp_OneLinedValues" 
-                                      Grid.Column="3" Grid.Row="1" 
+                                      Grid.Column="3" Grid.Row="3" 
                                       HorizontalAlignment="Center"
                                       VerticalAlignment="Center"
                                       Content="Disable multi line format"
@@ -354,7 +396,7 @@
                                 <RowDefinition Height="1*" />
                             </Grid.RowDefinitions>
 
-                            
+
                             <Label VerticalAlignment="Center" Content="File #1 :"
                                    ToolTip="Expected : a modded file, to serve as reference data"
                                    ToolTipService.InitialShowDelay="50"
@@ -366,7 +408,7 @@
                             <Label x:Name="Lbl_Prp_FmgVersion1" Visibility="Collapsed"/>
                             <Button x:Name="Btn_Prp_ExploreFile1" Grid.Column="2" Style="{StaticResource Btn_Explore}"/>
 
-                            
+
                             <Label Grid.Row="1" VerticalAlignment="Center" Content="File #2 :"
                                    ToolTip="Expected : vanilla file in same language as modded file"
                                    ToolTipService.InitialShowDelay="50"
@@ -377,8 +419,8 @@
                             </Border>
                             <Label x:Name="Lbl_Prp_FmgVersion2" Visibility="Collapsed"/>
                             <Button x:Name="Btn_Prp_ExploreFile2" Grid.Column="2" Grid.Row="1" Style="{StaticResource Btn_Explore}"/>
-                            
-                            
+
+
                             <Label Grid.Row="2" VerticalAlignment="Center" Content="File #3 :"
                                    ToolTip="Expected : vanilla file in the new translation language"
                                    ToolTipService.InitialShowDelay="50"
@@ -389,8 +431,8 @@
                             </Border>
                             <Label x:Name="Lbl_Prp_FmgVersion3" Visibility="Collapsed"/>
                             <Button x:Name="Btn_Prp_ExploreFile3" Grid.Column="2" Grid.Row="2" Style="{StaticResource Btn_Explore}"/>
-                            
-                            
+
+
                         </Grid>
                     </GroupBox>
 
@@ -494,16 +536,6 @@
             </TabItem>
         </TabControl>
 
-        <!-- Load/Reload preview -->
-        <Grid Grid.Row="1" Margin="17,8,17,8">
-            <Button x:Name="Btn_RefreshPreview" HorizontalAlignment="Stretch" Click="Btn_RefreshPreview_Click">
-                <StackPanel Orientation="Horizontal">
-                    <TextBlock Padding="6,4,3,2" FontSize="14">Load/Reload preview</TextBlock>
-                    <TextBlock Padding="3,1,6,2" FontSize="18">&#x21bb;</TextBlock>
-                </StackPanel>
-            </Button>
-        </Grid>
-
         <!-- Output preview -->
         <GroupBox Grid.Row="2" Margin="16,0,16,0" BorderBrush="DarkGray" Header="Output preview" Padding="8">
             <!-- Legacy preview, just in case -->
@@ -531,13 +563,32 @@
         </Grid>
 
         <!-- Generate output file -->
-        <Grid Grid.Row="4" Margin="17,0,17,16">
-            <Button x:Name="Btn_GenerateOutput" HorizontalAlignment="Stretch" Click="Btn_GenerateOutput_Click">
+
+        <Grid Grid.Column="1" Grid.Row="3">
+
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="50*"/>
+                <ColumnDefinition Width="16"/>
+                <ColumnDefinition Width="50*"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="1*"/>
+            </Grid.RowDefinitions>
+            
+            <Button x:Name="Btn_RefreshPreview" Click="Btn_RefreshPreview_Click" Grid.Column="0" Grid.Row="1">
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Padding="6,4,3,2" FontSize="14">Load/Reload preview</TextBlock>
+                    <TextBlock Padding="3,1,6,2" FontSize="18">&#x21bb;</TextBlock>
+                </StackPanel>
+            </Button>
+
+            <Button x:Name="Btn_GenerateOutput" Click="Btn_GenerateOutput_Click" Grid.Column="2" Grid.Row="1">
                 <StackPanel Orientation="Horizontal">
                     <TextBlock Padding="6,4,3,2" FontSize="14">Generate output file</TextBlock>
-                    <TextBlock Padding="3,1,6,2" FontSize="18">&#128462;</TextBlock>
+                    <TextBlock Padding="3,2,6,2" FontSize="18">&#128462;</TextBlock>
                 </StackPanel>
             </Button>
         </Grid>
+        
     </Grid>
 </Window>
