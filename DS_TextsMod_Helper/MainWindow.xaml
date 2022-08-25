@@ -231,7 +231,7 @@
                             </Grid.RowDefinitions>
 
                             <!-- Files A -->
-                            
+
                             <!-- Idea for later: for each file in [set of files] do read/preview in dedicated tabItem in external window -->
                             <Label Content="Set of files A" FontWeight="DemiBold" Grid.Column="1" Grid.ColumnSpan="2" Grid.Row="1" HorizontalAlignment="Center"
                                    ToolTip="Expected : Single FMG file to read"
@@ -274,7 +274,7 @@
 
                                 </Grid>
                             </Border>
-                            
+
 
 
                         </Grid>
@@ -303,13 +303,13 @@
                             <!-- Output headers -->
                             <StackPanel Grid.Column="1" Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center">
                                 <Label VerticalAlignment="Center"
-                                       Content="Header A :" 
+                                       Content="Header A :" Width="70"
                                        ToolTip="Output header for File #1"
                                        ToolTipService.InitialShowDelay="50"
                                        ToolTipService.ShowDuration="15000"
                                        />
                                 <TextBox x:Name="Tbx_Cmp_oHeader1"
-                                        HorizontalAlignment="Right" Width="240"
+                                        HorizontalAlignment="Right" Width="230"
                                         VerticalAlignment="Center"
                                         TextAlignment="Right"
                                         Text="File A"
@@ -322,13 +322,13 @@
                             </StackPanel>
                             <StackPanel Grid.Column="1" Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Center">
                                 <Label VerticalAlignment="Center" 
-                                       Content="Header B :"
+                                       Content="Header B :" Width="70"
                                        ToolTip="Output header for File #2"
                                        ToolTipService.InitialShowDelay="50"
                                        ToolTipService.ShowDuration="15000"
                                        />
                                 <TextBox x:Name="Tbx_Cmp_oHeader2"
-                                         HorizontalAlignment="Right" Width="240"
+                                         HorizontalAlignment="Right" Width="230"
                                          VerticalAlignment="Center"
                                          TextAlignment="Right"
                                          Text="File B"
@@ -340,8 +340,17 @@
                                          />
                             </StackPanel>
 
+                            <!-- One lined values -->
+                            <CheckBox x:Name="Cbx_Cmp_OneLinedValues" 
+                                      Grid.Column="3" Grid.Row="1" Grid.RowSpan="3"
+                                      HorizontalAlignment="Center"
+                                      VerticalAlignment="Center"
+                                      Content="Disable multi line format"
+                                      ToolTip="Replace every line breaks by /n/"
+                                      />
+
                             <!-- CSV output separator -->
-                            <StackPanel Grid.Column="3" Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center">
+                            <StackPanel Grid.Column="5" Grid.Row="1" Grid.RowSpan="3" Orientation="Horizontal" HorizontalAlignment="Center">
                                 <Label HorizontalAlignment="Right" VerticalAlignment="Center"
                                        Content="CSV separator character :"
                                        ToolTip="Symbol used to separate values as CSV data"
@@ -361,14 +370,6 @@
                                          />
                             </StackPanel>
 
-                            <!-- One lined values -->
-                            <CheckBox x:Name="Cbx_Cmp_OneLinedValues" 
-                                      Grid.Column="3" Grid.Row="3" 
-                                      HorizontalAlignment="Center"
-                                      VerticalAlignment="Center"
-                                      Content="Disable multi line format"
-                                      ToolTip="Replace every line breaks by /n/"
-                                      />
                         </Grid>
                     </GroupBox>
 
@@ -377,133 +378,147 @@
 
             <TabItem x:Name ="Tbi_Prp" Header="Prepare mode" DragOver="Tbi_Prp_DragOver">
                 <Grid Background="#EEE">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="8"/>
+                        <ColumnDefinition Width="1*"/>
+                        <ColumnDefinition Width="8"/>
+                    </Grid.ColumnDefinitions>
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="8*" />
-                        <RowDefinition Height="7*" />
+                        <RowDefinition Height="8"/>
+                        <RowDefinition Height="79*"/>
+                        <RowDefinition Height="8"/>
+                        <RowDefinition Height="21*"/>
+                        <RowDefinition Height="8"/>
                     </Grid.RowDefinitions>
 
                     <!-- Prepare mode : Input files -->
-                    <GroupBox Grid.ColumnSpan="2" Margin="8,8,8,4" Header="Input files" BorderBrush="DarkGray">
-                        <Grid Margin="8">
+                    <GroupBox Grid.Column="1" Grid.Row="1" Header="Input files" BorderBrush="DarkGray">
+                        <Grid>
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="1.8*"/>
-                                <ColumnDefinition Width="36*"/>
-                                <ColumnDefinition Width="1*"/>
+                                <ColumnDefinition Width="4"/>
+                                <ColumnDefinition Width="30*"/>
+                                <ColumnDefinition Width="3*"/>
+                                <ColumnDefinition Width="4"/>
+                                <ColumnDefinition Width="30*"/>
+                                <ColumnDefinition Width="3*"/>
+                                <ColumnDefinition Width="4"/>
+                                <ColumnDefinition Width="30*"/>
+                                <ColumnDefinition Width="3*"/>
+                                <ColumnDefinition Width="4"/>
                             </Grid.ColumnDefinitions>
                             <Grid.RowDefinitions>
-                                <RowDefinition Height="1*" />
-                                <RowDefinition Height="1*" />
-                                <RowDefinition Height="1*" />
+                                <RowDefinition Height="4"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="4"/>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="4"/>
                             </Grid.RowDefinitions>
 
 
-                            <Label VerticalAlignment="Center" Content="File #1 :"
-                                   ToolTip="Expected : a modded file, to serve as reference data"
+                            <!-- Files A -->
+
+                            <!-- Idea for later: for each file in [set of files] do read/preview in dedicated tabItem in external window -->
+                            <Label Content="Set of files A" FontWeight="DemiBold" Grid.Column="1" Grid.ColumnSpan="2" Grid.Row="1" HorizontalAlignment="Center"
+                                   ToolTip="Expected : Single FMG file to read"
                                    ToolTipService.InitialShowDelay="50"
                                    ToolTipService.ShowDuration="15000"
                                    />
-                            <Border Grid.Column="1" Style="{StaticResource Brd_InputFmg}">
-                                <TextBlock x:Name="Tbk_Prp_iFile1" Style="{StaticResource Tbk_InputFmg}"/>
+
+                            <Border Grid.Column="1" Grid.ColumnSpan="2" Grid.Row="3" BorderBrush="LightGray" BorderThickness="1" CornerRadius="3">
+                                <Grid>
+                                    <Label Content="Drop input files..." FontSize="18" Foreground="Gray"
+                                           HorizontalContentAlignment="Center" VerticalContentAlignment="Center"
+                                           />
+
+                                    <!-- + Add LoadingRow="Dtg_RdInputA_LoadingRow" for row headers -->
+                                    <DataGrid x:Name="Dtg_PrpInputA" BorderThickness="0" FontSize="11" HorizontalGridLinesBrush="Gray" 
+                                              HeadersVisibility="All" IsReadOnly="True" VerticalGridLinesBrush="Gray" Visibility="Collapsed"
+                                              />
+
+                                </Grid>
                             </Border>
-                            <Label x:Name="Lbl_Prp_FmgVersion1" Visibility="Collapsed"/>
-                            <Button x:Name="Btn_Prp_ExploreFile1" Grid.Column="2" Style="{StaticResource Btn_Explore}"/>
 
 
-                            <Label Grid.Row="1" VerticalAlignment="Center" Content="File #2 :"
-                                   ToolTip="Expected : vanilla file in same language as modded file"
+                            <!-- Files B -->
+
+                            <Label Content="Set of files B" FontWeight="DemiBold" Grid.Column="4" Grid.ColumnSpan="2" Grid.Row="1" HorizontalAlignment="Center"
+                                   ToolTip="Expected : Single FMG file to read"
                                    ToolTipService.InitialShowDelay="50"
                                    ToolTipService.ShowDuration="15000"
                                    />
-                            <Border Grid.Column="1" Grid.Row="1" Style="{StaticResource Brd_InputFmg}">
-                                <TextBlock x:Name="Tbk_Prp_iFile2" Style="{StaticResource Tbk_InputFmg}"/>
+
+                            <Border Grid.Column="4" Grid.ColumnSpan="2" Grid.Row="3" BorderBrush="LightGray" BorderThickness="1" CornerRadius="3">
+                                <Grid>
+                                    <Label Content="Drop input files..." FontSize="18" Foreground="Gray"
+                                           HorizontalContentAlignment="Center" VerticalContentAlignment="Center"
+                                           />
+
+                                    <!-- + Add LoadingRow="Dtg_RdInputA_LoadingRow" for row headers -->
+                                    <DataGrid x:Name="Dtg_PrpInputB" BorderThickness="0" FontSize="11" HorizontalGridLinesBrush="Gray" 
+                                              HeadersVisibility="All" IsReadOnly="True" VerticalGridLinesBrush="Gray" Visibility="Collapsed"
+                                              />
+
+                                </Grid>
                             </Border>
-                            <Label x:Name="Lbl_Prp_FmgVersion2" Visibility="Collapsed"/>
-                            <Button x:Name="Btn_Prp_ExploreFile2" Grid.Column="2" Grid.Row="1" Style="{StaticResource Btn_Explore}"/>
 
 
-                            <Label Grid.Row="2" VerticalAlignment="Center" Content="File #3 :"
-                                   ToolTip="Expected : vanilla file in the new translation language"
+                            <!-- Files C -->
+
+                            <Label Content="Set of files C" FontWeight="DemiBold" Grid.Column="7" Grid.ColumnSpan="2" Grid.Row="1" HorizontalAlignment="Center"
+                                   ToolTip="Expected : Single FMG file to read"
                                    ToolTipService.InitialShowDelay="50"
                                    ToolTipService.ShowDuration="15000"
                                    />
-                            <Border Grid.Column="1" Grid.Row="2" Style="{StaticResource Brd_InputFmg}">
-                                <TextBlock x:Name="Tbk_Prp_iFile3" Style="{StaticResource Tbk_InputFmg}"/>
+
+                            <Border Grid.Column="7" Grid.ColumnSpan="2" Grid.Row="3" BorderBrush="LightGray" BorderThickness="1" CornerRadius="3">
+                                <Grid>
+                                    <Label Content="Drop input files..." FontSize="18" Foreground="Gray"
+                                           HorizontalContentAlignment="Center" VerticalContentAlignment="Center"
+                                           />
+
+                                    <!-- + Add LoadingRow="Dtg_RdInputA_LoadingRow" for row headers -->
+                                    <DataGrid x:Name="Dtg_PrpInputC" BorderThickness="0" FontSize="11" HorizontalGridLinesBrush="Gray" 
+                                              HeadersVisibility="All" IsReadOnly="True" VerticalGridLinesBrush="Gray" Visibility="Collapsed"
+                                              />
+
+                                </Grid>
                             </Border>
-                            <Label x:Name="Lbl_Prp_FmgVersion3" Visibility="Collapsed"/>
-                            <Button x:Name="Btn_Prp_ExploreFile3" Grid.Column="2" Grid.Row="2" Style="{StaticResource Btn_Explore}"/>
+
 
 
                         </Grid>
                     </GroupBox>
 
                     <!-- Prepare mode : Options -->
-                    <GroupBox Grid.Row="1" Grid.ColumnSpan="2" Margin="8,4,8,8" Header="Options" BorderBrush="DarkGray">
-                        <Grid Margin="8,12,8,12">
+                    <GroupBox BorderBrush="DarkGray" Grid.Column="1" Grid.Row="3" Header="Options">
+                        <Grid>
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="14*"/>
+                                <ColumnDefinition Width="4"/>
                                 <ColumnDefinition Width="1*"/>
-                                <ColumnDefinition Width="12*"/>
-                                <ColumnDefinition Width="9*"/>
+                                <ColumnDefinition Width="4"/>
+                                <ColumnDefinition Width="1*"/>
+                                <ColumnDefinition Width="4"/>
+                                <ColumnDefinition Width="1*"/>
+                                <ColumnDefinition Width="4"/>
                             </Grid.ColumnDefinitions>
                             <Grid.RowDefinitions>
-                                <RowDefinition Height="1*" />
-                                <RowDefinition Height="1*" />
+                                <RowDefinition Height="4"/>
+                                <RowDefinition Height="1*"/>
+                                <RowDefinition Height="4"/>
+                                <RowDefinition Height="1*"/>
+                                <RowDefinition Height="4"/>
                             </Grid.RowDefinitions>
 
-                            <!-- Output filename -->
-                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
-                                <Label VerticalAlignment="Center" Content="Output filename :" />
-                                <TextBox x:Name="Tbx_Prp_oFilename" Width="308"
-                                         VerticalAlignment="Center"
-                                         TextAlignment="Right" 
-                                         Text="result"
-                                         GotFocus="Tbx_Prp_oFilename_GotFocus"
-                                         LostFocus="Tbx_Prp_oFilename_LostFocus"
-                                         />
-                                <Label VerticalAlignment="Center" Margin="-4,0,0,0" Content=".fmg" />
-                            </StackPanel>
-                            <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center" Margin="-8,0,0,0">
-                                <CheckBox x:Name="Cbx_Prp_UseInputFilename"
-                                          HorizontalAlignment="Left"
-                                          VerticalAlignment="Center"
-                                          Content="Use same filename as :"
-                                          Checked="Cbx_Prp_UseInputFilename_Checked"
-                                          Unchecked="Cbx_Prp_UseInputFilename_Unchecked"
-                                          />
-                                <ComboBox x:Name="Cmbx_Prp_TargetInputFilename"
-                                          VerticalAlignment="Center" Margin="8,0,0,0" Width="200"
-                                          IsEnabled="False"
-                                          SelectionChanged="Cmbx_Prp_TargetInputFilename_SelectionChanged">
-                                    <ComboBoxItem>Input File #1</ComboBoxItem>
-                                    <ComboBoxItem>Input File #2</ComboBoxItem>
-                                    <ComboBoxItem>Input File #3</ComboBoxItem>
-                                </ComboBox>
-                            </StackPanel>
-
-                            <!-- Warn on special cases -->
-                            <CheckBox Grid.Row="0" Grid.RowSpan="2" Grid.Column="2" x:Name="Cbx_Prp_WarnOnSpecialCases"
-                                      HorizontalAlignment="Center"
-                                      VerticalAlignment="Center"
-                                      Margin="-30,0,0,0"
-                                      Content="Warn on special cases"
-                                      IsChecked="True"
-                                      ToolTip="Warn on entries where File #3 value is unexpectedly empty"
-                                      ToolTipService.InitialShowDelay="50"
-                                      ToolTipService.ShowDuration="15000"
-                                      />
-
                             <!-- Replace values -->
-                            <StackPanel Grid.Column="4" Orientation="Horizontal">
-                                <Label VerticalAlignment="Center" 
-                                       Content="String to replace :"
+                            <StackPanel Grid.Column="1" Grid.Row="1" HorizontalAlignment="Center" Orientation="Horizontal">
+                                <Label Content="String to replace :" VerticalAlignment="Center" Width="110"
                                        ToolTip="Text to be replaced in entries"
                                        ToolTipService.InitialShowDelay="50"
                                        ToolTipService.ShowDuration="15000"
                                        />
                                 <TextBox x:Name="Tbx_Prp_TextToReplace"
                                          VerticalAlignment="Center"
-                                         Margin="7,0,0,0"
-                                         Width="120"
+                                         Width="190"
                                          TextAlignment="Right"
                                          ToolTip="Text to be replaced in entries"
                                          ToolTipService.InitialShowDelay="50"
@@ -511,17 +526,15 @@
                                          GotFocus="Tbx_Prp_TextToReplace_GotFocus"
                                          />
                             </StackPanel>
-                            <StackPanel Grid.Column="4" Grid.Row="1" Orientation="Horizontal">
-                                <Label VerticalAlignment="Center"
-                                       Content="Remplacing text :"
+                            <StackPanel Grid.Column="1" Grid.Row="3" HorizontalAlignment="Center" Orientation="Horizontal">
+                                <Label Content="Remplacing text :" VerticalAlignment="Center" Width="110"
                                        ToolTip="Replacing text in entries"
                                        ToolTipService.InitialShowDelay="50"
                                        ToolTipService.ShowDuration="15000"
                                        />
                                 <TextBox x:Name="Tbx_Prp_ReplacingText"
                                          VerticalAlignment="Center"
-                                         Margin="9,0,0,0"
-                                         Width="120"
+                                         Width="190"
                                          TextAlignment="Right"
                                          ToolTip="Replacing text in entries"
                                          ToolTipService.InitialShowDelay="50"
@@ -530,37 +543,20 @@
                                          />
                             </StackPanel>
 
+                            <!-- Warn on special cases -->
+                            <CheckBox x:Name="Cbx_Prp_WarnOnSpecialCases" Content="Warn on special cases" 
+                                      Grid.Column="3" Grid.Row="1" Grid.RowSpan="3" 
+                                      HorizontalAlignment="Center" IsChecked="True" VerticalAlignment="Center"
+                                      ToolTip="Warn on entries where File #3 value is unexpectedly empty"
+                                      ToolTipService.InitialShowDelay="50"
+                                      ToolTipService.ShowDuration="15000"
+                                      />
+
                         </Grid>
                     </GroupBox>
                 </Grid>
             </TabItem>
         </TabControl>
-
-        <!-- Output preview -->
-        <GroupBox Grid.Row="2" Margin="16,0,16,0" BorderBrush="DarkGray" Header="Output preview" Padding="8">
-            <!-- Legacy preview, just in case -->
-            <!--<Grid Background="White">
-                <ScrollViewer VerticalScrollBarVisibility="Hidden">
-                    <TextBlock x:Name="tbk_preview" Margin="6,6,6,6" />
-                </ScrollViewer>
-            </Grid>-->
-            <DataGrid x:Name="Dtg_Preview" HeadersVisibility="Column" Visibility="Hidden" AutoGenerateColumns="False" IsReadOnly="True" />
-        </GroupBox>
-        <Grid Grid.Row="3" Margin="19,0,17,8">
-            <StackPanel Orientation="Horizontal">
-                <Button x:Name="Btn_ClearPreview" Width="72" Margin="0,0,2,0" Click="Btn_ClearPreview_Click">Clear &#160;&#10005;</Button>
-                <Button x:Name="Btn_DetachPreview" Width="72" Margin="0,0,2,0" Click="Btn_DetachPreview_Click">Detach &#160;&#11111;</Button>
-                <CheckBox x:Name="Cbx_PreviewAllDetails"
-                          VerticalAlignment="Center" 
-                          Margin="8,0,0,0" 
-                          Content="Show all details"
-                          ToolTip="Show all details about the processed data.&#x0a;Note that grey contents will not be written to output file."
-                          ToolTipService.InitialShowDelay="50"
-                          ToolTipService.ShowDuration="15000"
-                          Checked="Cbx_PreviewAllDetails_Checked"
-                          Unchecked="Cbx_PreviewAllDetails_Unchecked"/>
-            </StackPanel>
-        </Grid>
 
         <!-- Generate output file -->
 
@@ -574,20 +570,21 @@
             <Grid.RowDefinitions>
                 <RowDefinition Height="1*"/>
             </Grid.RowDefinitions>
-            
-            <Button x:Name="Btn_RefreshPreview" Click="Btn_RefreshPreview_Click" Grid.Column="0" Grid.Row="1">
+
+            <Button x:Name="Btn_RefreshPreview" Background="PowderBlue" Click="Btn_RefreshPreview_Click" Grid.Column="0" Grid.Row="1">
                 <StackPanel Orientation="Horizontal">
-                    <TextBlock Padding="6,4,3,2" FontSize="14">Load/Reload preview</TextBlock>
+                    <TextBlock Padding="6,4,3,2" FontSize="14">Load/Reload preview(s)</TextBlock>
                     <TextBlock Padding="3,1,6,2" FontSize="18">&#x21bb;</TextBlock>
                 </StackPanel>
             </Button>
 
-            <Button x:Name="Btn_GenerateOutput" Click="Btn_GenerateOutput_Click" Grid.Column="2" Grid.Row="1">
+            <Button x:Name="Btn_GenerateOutput" Background="#c6ecc6" Click="Btn_GenerateOutput_Click" Grid.Column="2" Grid.Row="1">
                 <StackPanel Orientation="Horizontal">
-                    <TextBlock Padding="6,4,3,2" FontSize="14">Generate output file</TextBlock>
+                    <TextBlock Padding="6,4,3,2" FontSize="14">Generate output file(s)</TextBlock>
                     <TextBlock Padding="3,2,6,2" FontSize="18">&#128462;</TextBlock>
                 </StackPanel>
             </Button>
+            
         </Grid>
         
     </Grid>
