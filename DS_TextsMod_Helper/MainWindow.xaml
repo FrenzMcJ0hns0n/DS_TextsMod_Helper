@@ -90,14 +90,11 @@
                         <Grid>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="4"/>
-                                <ColumnDefinition Width="30*"/>
-                                <ColumnDefinition Width="3*"/>
+                                <ColumnDefinition Width="33*"/>
                                 <ColumnDefinition Width="4"/>
-                                <ColumnDefinition Width="30*"/>
-                                <ColumnDefinition Width="3*"/>
+                                <ColumnDefinition Width="33*"/>
                                 <ColumnDefinition Width="4"/>
-                                <ColumnDefinition Width="30*"/>
-                                <ColumnDefinition Width="3*"/>
+                                <ColumnDefinition Width="33*"/>
                                 <ColumnDefinition Width="4"/>
                             </Grid.ColumnDefinitions>
                             <Grid.RowDefinitions>
@@ -115,20 +112,33 @@
                                    ToolTipService.ShowDuration="15000"
                                    />
 
-                            <Border Grid.Column="1" Grid.ColumnSpan="2" Grid.Row="3" BorderBrush="LightGray" BorderThickness="1" CornerRadius="3">
+                            <Border AllowDrop="True" BorderBrush="LightGray" BorderThickness="1" CornerRadius="3" 
+                                    Grid.Column="1" Grid.Row="3" SnapsToDevicePixels="True"
+                                    Drop="Brd_RdModeFilesA_Drop">
                                 <Grid>
-                                    <Label Content="Drop input files..." FontSize="18" Foreground="Gray"
-                                           HorizontalContentAlignment="Center" VerticalContentAlignment="Center"
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="90*"/>
+                                        <ColumnDefinition Width="10*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <Label x:Name="Lbl_RdA_DropInputFiles" Content="Drop input files..." FontSize="18" Foreground="Gray" 
+                                           Grid.ColumnSpan="2" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"
                                            />
 
                                     <!-- + Add LoadingRow="Dtg_RdInputA_LoadingRow" for row headers -->
-                                    <DataGrid x:Name="Dtg_RdInputA" BorderThickness="0" FontSize="11" HorizontalGridLinesBrush="Gray" 
+                                    <DataGrid x:Name="Dtg_RdInputA" BorderThickness="0" FontSize="11" HorizontalGridLinesBrush="Gray"
                                               HeadersVisibility="All" IsReadOnly="True" VerticalGridLinesBrush="Gray" Visibility="Collapsed"
                                               />
+                                    <Border x:Name="Brd_InputA" BorderBrush="LightGray" BorderThickness="1" Grid.Column="1" Margin="-1"
+                                            SnapsToDevicePixels="True" Visibility="Collapsed">
+                                        <StackPanel  VerticalAlignment="Center">
+                                            <!-- Visibility="Collapsed" -->
+                                            <Button Content="⮝" Margin="0 2" ToolTip="Move file up"/>
+                                            <Button Content="⮟" Margin="0 2" ToolTip="Move file down"/>
+                                        </StackPanel>
+                                    </Border>
 
                                 </Grid>
                             </Border>
-
                         </Grid>
                     </GroupBox>
 
@@ -571,7 +581,7 @@
                 <RowDefinition Height="1*"/>
             </Grid.RowDefinitions>
 
-            <Button x:Name="Btn_RefreshPreview" Background="PowderBlue" Click="Btn_RefreshPreview_Click" Grid.Column="0" Grid.Row="1">
+            <Button x:Name="Btn_RefreshPreview" Background="PowderBlue" Grid.Column="0" Grid.Row="1"> <!-- Click="Btn_RefreshPreview_Click" -->
                 <StackPanel Orientation="Horizontal">
                     <TextBlock Padding="6,4,3,2" FontSize="14">Load/Reload preview(s)</TextBlock>
                     <TextBlock Padding="3,1,6,2" FontSize="18">&#x21bb;</TextBlock>
