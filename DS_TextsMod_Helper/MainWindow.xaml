@@ -9,6 +9,31 @@
         Height="600" Width="1200" ResizeMode="CanMinimize" Title="DS Texts Mod Helper">
 
     <Window.Resources>
+
+        <!-- ========== v1.5 styles ========== -->
+        
+        <!-- Input files -->
+        
+        <Style x:Key="Btn_MoveInputFileUp" TargetType="{x:Type Button}">
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Content" Value="⮝"/>
+            <Setter Property="ToolTip" Value="Move file up"/>
+            <Setter Property="ToolTipService.InitialShowDelay" Value="50"/>
+            <Setter Property="ToolTipService.ShowDuration" Value="15000"/>
+            <EventSetter Event="Click" Handler="Btn_MoveInputFileUp_Click"/>
+        </Style>
+        
+        <Style x:Key="Btn_MoveInputFileDown" TargetType="{x:Type Button}">
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Content" Value="⮟"/>
+            <Setter Property="ToolTip" Value="Move file down"/>
+            <Setter Property="ToolTipService.InitialShowDelay" Value="50"/>
+            <Setter Property="ToolTipService.ShowDuration" Value="15000"/>
+            <EventSetter Event="Click" Handler="Btn_MoveInputFileDown_Click"/>
+        </Style>
+
+        <!-- ========== OLD ========== -->
+
         <Style x:Key="Brd_InputFmg" TargetType="{x:Type Border}">
             <Setter Property="HorizontalAlignment" Value="Stretch"/>
             <Setter Property="VerticalAlignment" Value="Center"/>
@@ -125,11 +150,11 @@
                                            />
 
                                     <!-- + Add LoadingRow="Dtg_RdInputA_LoadingRow" for row headers -->
-                                    <DataGrid x:Name="Dtg_RdInputA" BorderThickness="0" HorizontalGridLinesBrush="Gray"
+                                    <DataGrid x:Name="Dtg_RdA" BorderThickness="0" HorizontalGridLinesBrush="Gray"
                                               HeadersVisibility="All" IsReadOnly="True" VerticalGridLinesBrush="Gray" Visibility="Collapsed"
                                               LoadingRow="Dtg_RdInputA_LoadingRow" SelectionMode="Single"
                                               />
-                                    <Border x:Name="Brd_RdInputA" BorderBrush="LightGray" BorderThickness="1" Grid.Column="1" Margin="-1"
+                                    <Border x:Name="Brd_RdA" BorderBrush="LightGray" BorderThickness="1" Grid.Column="1" Margin="-1"
                                             SnapsToDevicePixels="True" Visibility="Collapsed">
                                         <Grid>
                                             <StackPanel VerticalAlignment="Top">
@@ -137,10 +162,10 @@
                                             </StackPanel>
                                             <StackPanel VerticalAlignment="Center">
                                                 <Border BorderBrush="DarkGray" BorderThickness="1" Margin="0 2" CornerRadius="2">
-                                                    <Button BorderThickness="0" Content="⮝" ToolTip="Move file up" Click="Btn_RdAUp_Click"/>
+                                                    <Button Style="{StaticResource Btn_MoveInputFileUp}" Tag="RdA"/>
                                                 </Border>
                                                 <Border BorderBrush="DarkGray" BorderThickness="1" Margin="0 2" CornerRadius="2">
-                                                    <Button BorderThickness="0" Content="⮟" ToolTip="Move file down" Click="Btn_RdADown_Click"/>
+                                                    <Button Style="{StaticResource Btn_MoveInputFileDown}" Tag="RdA"/>
                                                 </Border>
                                             </StackPanel>
                                         </Grid>

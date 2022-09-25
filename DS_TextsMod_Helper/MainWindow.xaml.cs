@@ -114,8 +114,8 @@ namespace DS_TextsMod_Helper
                 return;
 
             Lbl_RdA_DropInputFiles.Visibility = Visibility.Collapsed;
-            Dtg_RdInputA.Visibility = Visibility.Visible;
-            Brd_RdInputA.Visibility = Visibility.Visible;
+            Dtg_RdA.Visibility = Visibility.Visible;
+            Brd_RdA.Visibility = Visibility.Visible;
 
             string[] droppedFiles = (string[])e.Data.GetData(DataFormats.FileDrop);
 
@@ -123,7 +123,7 @@ namespace DS_TextsMod_Helper
             ObservableCollection<InputFileDTO> iFilesDTO = new ObservableCollection<InputFileDTO>();
             iFiles.ToList().ForEach(iFile => iFilesDTO.Add(new InputFileDTO(iFile.Name, iFile.Version)));
 
-            Dtg_RdInputA.ItemsSource = iFilesDTO;
+            Dtg_RdA.ItemsSource = iFilesDTO;
         }
 
         private void Dtg_RdInputA_LoadingRow(object sender, DataGridRowEventArgs e)
@@ -133,17 +133,20 @@ namespace DS_TextsMod_Helper
 
         private void Btn_RdAClearFiles_Click(object sender, RoutedEventArgs e)
         {
-            Dtg_RdInputA.ItemsSource = null;
+            Dtg_RdA.ItemsSource = null;
 
-            Brd_RdInputA.Visibility = Visibility.Collapsed;
-            Dtg_RdInputA.Visibility = Visibility.Collapsed;
+            Brd_RdA.Visibility = Visibility.Collapsed;
+            Dtg_RdA.Visibility = Visibility.Collapsed;
             Lbl_RdA_DropInputFiles.Visibility = Visibility.Visible;
         }
 
-        private void Btn_RdAUp_Click(object sender, RoutedEventArgs e)
+        private void Btn_MoveInputFileUp_Click(object sender, RoutedEventArgs e)
         {
-            // TODO next: Point to the right Dtg depending on sender
-            int selectedCount = Dtg_RdInputA.SelectedItems.Count;
+            Button btn = sender as Button;
+            DataGrid dtg = (DataGrid)FindName("Dtg_" + btn.Tag);
+
+
+            int selectedCount = dtg.SelectedItems.Count;
             if (selectedCount == 0)
             {
                 MessageBox.Show("No selection to reorder", "Information", MessageBoxButton.OK, MessageBoxImage.Information);
@@ -155,14 +158,14 @@ namespace DS_TextsMod_Helper
             {
                 // InputFileDTO iFileDTO = (InputFileDTO)Dtg_RdInputA.SelectedItems[i];
                 // $"Filename '{iFileDTO.Filename}' as selected item # {i + 1} is at index # {position} in the DataGrid\n";
-                int position = Dtg_RdInputA.Items.IndexOf(Dtg_RdInputA.SelectedItems[i]);
+                int position = dtg.Items.IndexOf(dtg.SelectedItems[i]);
                 if (position == 0)
                     return;
                 else
                     positionsToMove.Add(position);
             }
 
-            ObservableCollection<InputFileDTO> iFilesDTO = (ObservableCollection<InputFileDTO>)Dtg_RdInputA.ItemsSource;
+            ObservableCollection<InputFileDTO> iFilesDTO = (ObservableCollection<InputFileDTO>)dtg.ItemsSource;
             for (int i = 0; i < iFilesDTO.Count; i++)
             {
                 if (positionsToMove.Contains(i)) // TODO(Multiple reordering): gather all necessary elements before using Insert/RemoveAt (or Build matching table as Dictionary or smthg?)
@@ -175,14 +178,17 @@ namespace DS_TextsMod_Helper
                 }
             }
 
-            Dtg_RdInputA.ItemsSource = iFilesDTO;
-            Dtg_RdInputA.SelectedIndex = positionsToMove.First() - 1; // Prevent losing the selected elements from altering elements order
+            dtg.ItemsSource = iFilesDTO;
+            dtg.SelectedIndex = positionsToMove.First() - 1; // Prevent losing the selected elements from altering elements order
         }
 
-        private void Btn_RdADown_Click(object sender, RoutedEventArgs e)
+        private void Btn_MoveInputFileDown_Click(object sender, RoutedEventArgs e)
         {
-            // TODO next: Point to the right Dtg depending on sender
-            int selectedCount = Dtg_RdInputA.SelectedItems.Count;
+            Button btn = sender as Button;
+            DataGrid dtg = (DataGrid)FindName("Dtg_" + btn.Tag);
+
+
+            int selectedCount = dtg.SelectedItems.Count;
             if (selectedCount == 0)
             {
                 MessageBox.Show("No selection to reorder", "Information", MessageBoxButton.OK, MessageBoxImage.Information);
@@ -194,14 +200,14 @@ namespace DS_TextsMod_Helper
             {
                 // InputFileDTO iFileDTO = (InputFileDTO)Dtg_RdInputA.SelectedItems[i];
                 // $"Filename '{iFileDTO.Filename}' as selected item # {i + 1} is at index # {position} in the DataGrid\n";
-                int position = Dtg_RdInputA.Items.IndexOf(Dtg_RdInputA.SelectedItems[i]);
-                if (position == Dtg_RdInputA.Items.Count - 1)
+                int position = dtg.Items.IndexOf(dtg.SelectedItems[i]);
+                if (position == dtg.Items.Count - 1)
                     return;
                 else
                     positionsToMove.Add(position);
             }
             
-            ObservableCollection<InputFileDTO> iFilesDTO = (ObservableCollection<InputFileDTO>)Dtg_RdInputA.ItemsSource;
+            ObservableCollection<InputFileDTO> iFilesDTO = (ObservableCollection<InputFileDTO>)dtg.ItemsSource;
             for (int i = 0; i < iFilesDTO.Count; i++)
             {
                 if (positionsToMove.Contains(i)) // TODO(Multiple reordering): gather all necessary elements before using Insert/RemoveAt (or Build matching table as Dictionary or smthg?)
@@ -214,8 +220,8 @@ namespace DS_TextsMod_Helper
                 }
             }
 
-            Dtg_RdInputA.ItemsSource = iFilesDTO;
-            Dtg_RdInputA.SelectedIndex = positionsToMove.First() + 1; // Prevent losing the selected elements from altering elements order
+            dtg.ItemsSource = iFilesDTO;
+            dtg.SelectedIndex = positionsToMove.First() + 1; // Prevent losing the selected elements from altering elements order
         }
 
         private void ReorderDataGrid(bool up)
