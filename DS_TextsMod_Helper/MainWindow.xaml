@@ -129,7 +129,7 @@
                                               HeadersVisibility="All" IsReadOnly="True" VerticalGridLinesBrush="Gray" Visibility="Collapsed"
                                               LoadingRow="Dtg_RdInputA_LoadingRow" SelectionMode="Single"
                                               />
-                                    <Border x:Name="Brd_InputA" BorderBrush="LightGray" BorderThickness="1" Grid.Column="1" Margin="-1"
+                                    <Border x:Name="Brd_RdInputA" BorderBrush="LightGray" BorderThickness="1" Grid.Column="1" Margin="-1"
                                             SnapsToDevicePixels="True" Visibility="Collapsed">
                                         <Grid>
                                             <StackPanel VerticalAlignment="Top">

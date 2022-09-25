@@ -115,14 +115,15 @@ namespace DS_TextsMod_Helper
 
             Lbl_RdA_DropInputFiles.Visibility = Visibility.Collapsed;
             Dtg_RdInputA.Visibility = Visibility.Visible;
-            Brd_InputA.Visibility = Visibility.Visible;
+            Brd_RdInputA.Visibility = Visibility.Visible;
 
             string[] droppedFiles = (string[])e.Data.GetData(DataFormats.FileDrop);
 
             ObservableCollection<InputFile> iFiles = RegisterInputFiles(droppedFiles);
-            ObservableCollection<InputFileDTO> iFiles2 = new ObservableCollection<InputFileDTO>(); // { iFiles.Select(f => f.Name) };
-            iFiles.ToList().ForEach(iFile => iFiles2.Add(new InputFileDTO(iFile.Name, iFile.Version))) ;
-            Dtg_RdInputA.ItemsSource = iFiles2; //.Select(x => x.Name).ToList(); // TODO: Display name only, clean please
+            ObservableCollection<InputFileDTO> iFilesDTO = new ObservableCollection<InputFileDTO>();
+            iFiles.ToList().ForEach(iFile => iFilesDTO.Add(new InputFileDTO(iFile.Name, iFile.Version)));
+
+            Dtg_RdInputA.ItemsSource = iFilesDTO;
         }
 
         private void Dtg_RdInputA_LoadingRow(object sender, DataGridRowEventArgs e)
@@ -134,14 +135,14 @@ namespace DS_TextsMod_Helper
         {
             Dtg_RdInputA.ItemsSource = null;
 
-            Brd_InputA.Visibility = Visibility.Collapsed;
+            Brd_RdInputA.Visibility = Visibility.Collapsed;
             Dtg_RdInputA.Visibility = Visibility.Collapsed;
             Lbl_RdA_DropInputFiles.Visibility = Visibility.Visible;
         }
 
-        // TODO: Implement boolean up = true/false;
         private void Btn_RdAUp_Click(object sender, RoutedEventArgs e)
         {
+            // TODO next: Point to the right Dtg depending on sender
             int selectedCount = Dtg_RdInputA.SelectedItems.Count;
             if (selectedCount == 0)
             {
@@ -149,38 +150,38 @@ namespace DS_TextsMod_Helper
                 return;
             }
 
-            Dictionary<int, InputFileDTO> inputFiles = new Dictionary<int, InputFileDTO>();
-            for (int i = 0; i < Dtg_RdInputA.Items.Count; i++)
-            {
-                inputFiles.Add(i, (InputFileDTO)Dtg_RdInputA.Items[i]);
-            }
-
             List<int> positionsToMove = new List<int>();
             for (int i = 0; i < selectedCount; i++)
             {
-                // InputFileDTO iFile2 = (InputFileDTO)Dtg_RdInputA.SelectedItems[i];
-                // $"Filename \"{iFile2.Filename}\" as selected item # {i + 1} is at index # {position} in the DataGrid\n";
+                // InputFileDTO iFileDTO = (InputFileDTO)Dtg_RdInputA.SelectedItems[i];
+                // $"Filename '{iFileDTO.Filename}' as selected item # {i + 1} is at index # {position} in the DataGrid\n";
                 int position = Dtg_RdInputA.Items.IndexOf(Dtg_RdInputA.SelectedItems[i]);
-                if (position > 0)
+                if (position == 0)
+                    return;
+                else
                     positionsToMove.Add(position);
             }
 
-            ObservableCollection<InputFileDTO> newCollection = new ObservableCollection<InputFileDTO>();
-            foreach (KeyValuePair<int, InputFileDTO> kvp in inputFiles)
+            ObservableCollection<InputFileDTO> iFilesDTO = (ObservableCollection<InputFileDTO>)Dtg_RdInputA.ItemsSource;
+            for (int i = 0; i < iFilesDTO.Count; i++)
             {
-                if (positionsToMove.Contains(kvp.Key))
-                    newCollection.Insert(kvp.Key - 1, kvp.Value);
-                else
-                    newCollection.Insert(kvp.Key, kvp.Value);
+                if (positionsToMove.Contains(i)) // TODO(Multiple reordering): gather all necessary elements before using Insert/RemoveAt (or Build matching table as Dictionary or smthg?)
+                {
+                    InputFileDTO toBeMovedDown = iFilesDTO[i - 1];
+                    iFilesDTO.Insert(i - 1, iFilesDTO[i]);
+                    iFilesDTO.RemoveAt(i);
+                    iFilesDTO.Insert(i, toBeMovedDown);
+                    iFilesDTO.RemoveAt(i + 1);
+                }
             }
 
-            Dtg_RdInputA.ItemsSource = newCollection;
+            Dtg_RdInputA.ItemsSource = iFilesDTO;
             Dtg_RdInputA.SelectedIndex = positionsToMove.First() - 1; // Prevent losing the selected elements from altering elements order
         }
 
         private void Btn_RdADown_Click(object sender, RoutedEventArgs e)
         {
-            // Point to right Dtg depending on sender
+            // TODO next: Point to the right Dtg depending on sender
             int selectedCount = Dtg_RdInputA.SelectedItems.Count;
             if (selectedCount == 0)
             {
@@ -191,24 +192,25 @@ namespace DS_TextsMod_Helper
             List<int> positionsToMove = new List<int>();
             for (int i = 0; i < selectedCount; i++)
             {
-                // InputFileDTO iFile2 = (InputFileDTO)Dtg_RdInputA.SelectedItems[i];
-                // $"Filename \"{iFile2.Filename}\" as selected item # {i + 1} is at index # {position} in the DataGrid\n";
+                // InputFileDTO iFileDTO = (InputFileDTO)Dtg_RdInputA.SelectedItems[i];
+                // $"Filename '{iFileDTO.Filename}' as selected item # {i + 1} is at index # {position} in the DataGrid\n";
                 int position = Dtg_RdInputA.Items.IndexOf(Dtg_RdInputA.SelectedItems[i]);
-                if (position < Dtg_RdInputA.Items.Count - 1)
+                if (position == Dtg_RdInputA.Items.Count - 1)
+                    return;
+                else
                     positionsToMove.Add(position);
             }
             
-            // Let's say Index #2 (pos = 3)
             ObservableCollection<InputFileDTO> iFilesDTO = (ObservableCollection<InputFileDTO>)Dtg_RdInputA.ItemsSource;
             for (int i = 0; i < iFilesDTO.Count; i++)
             {
-                if (positionsToMove.Contains(i))
+                if (positionsToMove.Contains(i)) // TODO(Multiple reordering): gather all necessary elements before using Insert/RemoveAt (or Build matching table as Dictionary or smthg?)
                 {
                     InputFileDTO toBeMovedDown = iFilesDTO[i];
                     iFilesDTO.Insert(i, iFilesDTO[i + 1]);
                     iFilesDTO.RemoveAt(i + 1);
                     iFilesDTO.Insert(i + 1, toBeMovedDown);
-                    iFilesDTO.RemoveAt(i + 2); // Remove item formerly at i (just pushed to i+1)
+                    iFilesDTO.RemoveAt(i + 2);
                 }
             }
 
