@@ -79,9 +79,9 @@
                     </Grid.ColumnDefinitions>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="8"/>
-                        <RowDefinition Height="79*"/>
+                        <RowDefinition Height="80*"/>
                         <RowDefinition Height="8"/>
-                        <RowDefinition Height="21*"/>
+                        <RowDefinition Height="20*"/>
                         <RowDefinition Height="8"/>
                     </Grid.RowDefinitions>
 
@@ -117,24 +117,34 @@
                                     Drop="Brd_RdModeFilesA_Drop">
                                 <Grid>
                                     <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="90*"/>
-                                        <ColumnDefinition Width="10*"/>
+                                        <ColumnDefinition Width="93*"/>
+                                        <ColumnDefinition Width="7*"/>
                                     </Grid.ColumnDefinitions>
                                     <Label x:Name="Lbl_RdA_DropInputFiles" Content="Drop input files..." FontSize="18" Foreground="Gray" 
                                            Grid.ColumnSpan="2" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"
                                            />
 
                                     <!-- + Add LoadingRow="Dtg_RdInputA_LoadingRow" for row headers -->
-                                    <DataGrid x:Name="Dtg_RdInputA" BorderThickness="0" FontSize="11" HorizontalGridLinesBrush="Gray"
+                                    <DataGrid x:Name="Dtg_RdInputA" BorderThickness="0" HorizontalGridLinesBrush="Gray"
                                               HeadersVisibility="All" IsReadOnly="True" VerticalGridLinesBrush="Gray" Visibility="Collapsed"
+                                              LoadingRow="Dtg_RdInputA_LoadingRow" SelectionMode="Single"
                                               />
                                     <Border x:Name="Brd_InputA" BorderBrush="LightGray" BorderThickness="1" Grid.Column="1" Margin="-1"
                                             SnapsToDevicePixels="True" Visibility="Collapsed">
-                                        <StackPanel  VerticalAlignment="Center">
-                                            <!-- Visibility="Collapsed" -->
-                                            <Button Content="⮝" Margin="0 2" ToolTip="Move file up"/>
-                                            <Button Content="⮟" Margin="0 2" ToolTip="Move file down"/>
-                                        </StackPanel>
+                                        <Grid>
+                                            <StackPanel VerticalAlignment="Top">
+                                                <Button Background="#ff9999" Content="&#10005;" ToolTip="Clear all files" Click="Btn_RdAClearFiles_Click"/>
+                                            </StackPanel>
+                                            <StackPanel VerticalAlignment="Center">
+                                                <Border BorderBrush="DarkGray" BorderThickness="1" Margin="0 2" CornerRadius="2">
+                                                    <Button BorderThickness="0" Content="⮝" ToolTip="Move file up" Click="Btn_RdAUp_Click"/>
+                                                </Border>
+                                                <Border BorderBrush="DarkGray" BorderThickness="1" Margin="0 2" CornerRadius="2">
+                                                    <Button BorderThickness="0" Content="⮟" ToolTip="Move file down" Click="Btn_RdADown_Click"/>
+                                                </Border>
+                                            </StackPanel>
+                                        </Grid>
+                                        
                                     </Border>
 
                                 </Grid>
@@ -211,9 +221,9 @@
                     </Grid.ColumnDefinitions>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="8"/>
-                        <RowDefinition Height="79*"/>
+                        <RowDefinition Height="80*"/>
                         <RowDefinition Height="8"/>
-                        <RowDefinition Height="21*"/>
+                        <RowDefinition Height="20*"/>
                         <RowDefinition Height="8"/>
                     </Grid.RowDefinitions>
 
@@ -305,7 +315,6 @@
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="4"/>
                                 <RowDefinition Height="1*"/>
-                                <RowDefinition Height="4"/>
                                 <RowDefinition Height="1*"/>
                                 <RowDefinition Height="4"/>
                             </Grid.RowDefinitions>
@@ -330,7 +339,7 @@
                                         LostFocus="Tbx_Cmp_oHeader1_LostFocus"
                                         />
                             </StackPanel>
-                            <StackPanel Grid.Column="1" Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Center">
+                            <StackPanel Grid.Column="1" Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center">
                                 <Label VerticalAlignment="Center" 
                                        Content="Header B :" Width="70"
                                        ToolTip="Output header for File #2"
@@ -352,7 +361,7 @@
 
                             <!-- One lined values -->
                             <CheckBox x:Name="Cbx_Cmp_OneLinedValues" 
-                                      Grid.Column="3" Grid.Row="1" Grid.RowSpan="3"
+                                      Grid.Column="3" Grid.Row="1" Grid.RowSpan="2"
                                       HorizontalAlignment="Center"
                                       VerticalAlignment="Center"
                                       Content="Disable multi line format"
@@ -360,7 +369,7 @@
                                       />
 
                             <!-- CSV output separator -->
-                            <StackPanel Grid.Column="5" Grid.Row="1" Grid.RowSpan="3" Orientation="Horizontal" HorizontalAlignment="Center">
+                            <StackPanel Grid.Column="5" Grid.Row="1" Grid.RowSpan="2" Orientation="Horizontal" HorizontalAlignment="Center">
                                 <Label HorizontalAlignment="Right" VerticalAlignment="Center"
                                        Content="CSV separator character :"
                                        ToolTip="Symbol used to separate values as CSV data"
@@ -395,9 +404,9 @@
                     </Grid.ColumnDefinitions>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="8"/>
-                        <RowDefinition Height="79*"/>
+                        <RowDefinition Height="80*"/>
                         <RowDefinition Height="8"/>
-                        <RowDefinition Height="21*"/>
+                        <RowDefinition Height="20*"/>
                         <RowDefinition Height="8"/>
                     </Grid.RowDefinitions>
 
@@ -514,7 +523,6 @@
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="4"/>
                                 <RowDefinition Height="1*"/>
-                                <RowDefinition Height="4"/>
                                 <RowDefinition Height="1*"/>
                                 <RowDefinition Height="4"/>
                             </Grid.RowDefinitions>
@@ -536,7 +544,7 @@
                                          GotFocus="Tbx_Prp_TextToReplace_GotFocus"
                                          />
                             </StackPanel>
-                            <StackPanel Grid.Column="1" Grid.Row="3" HorizontalAlignment="Center" Orientation="Horizontal">
+                            <StackPanel Grid.Column="1" Grid.Row="2" HorizontalAlignment="Center" Orientation="Horizontal">
                                 <Label Content="Remplacing text :" VerticalAlignment="Center" Width="110"
                                        ToolTip="Replacing text in entries"
                                        ToolTipService.InitialShowDelay="50"
@@ -555,7 +563,7 @@
 
                             <!-- Warn on special cases -->
                             <CheckBox x:Name="Cbx_Prp_WarnOnSpecialCases" Content="Warn on special cases" 
-                                      Grid.Column="3" Grid.Row="1" Grid.RowSpan="3" 
+                                      Grid.Column="3" Grid.Row="1" Grid.RowSpan="2" 
                                       HorizontalAlignment="Center" IsChecked="True" VerticalAlignment="Center"
                                       ToolTip="Warn on entries where File #3 value is unexpectedly empty"
                                       ToolTipService.InitialShowDelay="50"

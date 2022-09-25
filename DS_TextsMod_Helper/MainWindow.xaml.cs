@@ -120,7 +120,105 @@ namespace DS_TextsMod_Helper
             string[] droppedFiles = (string[])e.Data.GetData(DataFormats.FileDrop);
 
             ObservableCollection<InputFile> iFiles = RegisterInputFiles(droppedFiles);
-            Dtg_RdInputA.ItemsSource = iFiles; //.Select(x => x.Name).ToList(); // TODO: Display name only, clean please
+            ObservableCollection<InputFileDTO> iFiles2 = new ObservableCollection<InputFileDTO>(); // { iFiles.Select(f => f.Name) };
+            iFiles.ToList().ForEach(iFile => iFiles2.Add(new InputFileDTO(iFile.Name, iFile.Version))) ;
+            Dtg_RdInputA.ItemsSource = iFiles2; //.Select(x => x.Name).ToList(); // TODO: Display name only, clean please
+        }
+
+        private void Dtg_RdInputA_LoadingRow(object sender, DataGridRowEventArgs e)
+        {
+            e.Row.Header = (e.Row.GetIndex() + 1).ToString();
+        }
+
+        private void Btn_RdAClearFiles_Click(object sender, RoutedEventArgs e)
+        {
+            Dtg_RdInputA.ItemsSource = null;
+
+            Brd_InputA.Visibility = Visibility.Collapsed;
+            Dtg_RdInputA.Visibility = Visibility.Collapsed;
+            Lbl_RdA_DropInputFiles.Visibility = Visibility.Visible;
+        }
+
+        // TODO: Implement boolean up = true/false;
+        private void Btn_RdAUp_Click(object sender, RoutedEventArgs e)
+        {
+            int selectedCount = Dtg_RdInputA.SelectedItems.Count;
+            if (selectedCount == 0)
+            {
+                MessageBox.Show("No selection to reorder", "Information", MessageBoxButton.OK, MessageBoxImage.Information);
+                return;
+            }
+
+            Dictionary<int, InputFileDTO> inputFiles = new Dictionary<int, InputFileDTO>();
+            for (int i = 0; i < Dtg_RdInputA.Items.Count; i++)
+            {
+                inputFiles.Add(i, (InputFileDTO)Dtg_RdInputA.Items[i]);
+            }
+
+            List<int> positionsToMove = new List<int>();
+            for (int i = 0; i < selectedCount; i++)
+            {
+                // InputFileDTO iFile2 = (InputFileDTO)Dtg_RdInputA.SelectedItems[i];
+                // $"Filename \"{iFile2.Filename}\" as selected item # {i + 1} is at index # {position} in the DataGrid\n";
+                int position = Dtg_RdInputA.Items.IndexOf(Dtg_RdInputA.SelectedItems[i]);
+                if (position > 0)
+                    positionsToMove.Add(position);
+            }
+
+            ObservableCollection<InputFileDTO> newCollection = new ObservableCollection<InputFileDTO>();
+            foreach (KeyValuePair<int, InputFileDTO> kvp in inputFiles)
+            {
+                if (positionsToMove.Contains(kvp.Key))
+                    newCollection.Insert(kvp.Key - 1, kvp.Value);
+                else
+                    newCollection.Insert(kvp.Key, kvp.Value);
+            }
+
+            Dtg_RdInputA.ItemsSource = newCollection;
+            Dtg_RdInputA.SelectedIndex = positionsToMove.First() - 1; // Prevent losing the selected elements from altering elements order
+        }
+
+        private void Btn_RdADown_Click(object sender, RoutedEventArgs e)
+        {
+            // Point to right Dtg depending on sender
+            int selectedCount = Dtg_RdInputA.SelectedItems.Count;
+            if (selectedCount == 0)
+            {
+                MessageBox.Show("No selection to reorder", "Information", MessageBoxButton.OK, MessageBoxImage.Information);
+                return;
+            }
+
+            List<int> positionsToMove = new List<int>();
+            for (int i = 0; i < selectedCount; i++)
+            {
+                // InputFileDTO iFile2 = (InputFileDTO)Dtg_RdInputA.SelectedItems[i];
+                // $"Filename \"{iFile2.Filename}\" as selected item # {i + 1} is at index # {position} in the DataGrid\n";
+                int position = Dtg_RdInputA.Items.IndexOf(Dtg_RdInputA.SelectedItems[i]);
+                if (position < Dtg_RdInputA.Items.Count - 1)
+                    positionsToMove.Add(position);
+            }
+            
+            // Let's say Index #2 (pos = 3)
+            ObservableCollection<InputFileDTO> iFilesDTO = (ObservableCollection<InputFileDTO>)Dtg_RdInputA.ItemsSource;
+            for (int i = 0; i < iFilesDTO.Count; i++)
+            {
+                if (positionsToMove.Contains(i))
+                {
+                    InputFileDTO toBeMovedDown = iFilesDTO[i];
+                    iFilesDTO.Insert(i, iFilesDTO[i + 1]);
+                    iFilesDTO.RemoveAt(i + 1);
+                    iFilesDTO.Insert(i + 1, toBeMovedDown);
+                    iFilesDTO.RemoveAt(i + 2); // Remove item formerly at i (just pushed to i+1)
+                }
+            }
+
+            Dtg_RdInputA.ItemsSource = iFilesDTO;
+            Dtg_RdInputA.SelectedIndex = positionsToMove.First() + 1; // Prevent losing the selected elements from altering elements order
+        }
+
+        private void ReorderDataGrid(bool up)
+        {
+            // TODO? factorize
         }
 
         private void Tbx_Rd_CsvSeparator_GotFocus(object sender, RoutedEventArgs e) { SelectTbxValue(sender); }
