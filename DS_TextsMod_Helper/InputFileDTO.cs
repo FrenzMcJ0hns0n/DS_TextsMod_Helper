@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace DS_TextsMod_Helper
 {
-    class InputFileDTO
+    class InputFileDTO // Not used eventually...
     {
         public string Filename { get; set; }
         public string Type { get; set; }

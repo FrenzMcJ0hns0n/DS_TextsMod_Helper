@@ -13,7 +13,17 @@
         <!-- ========== v1.5 styles ========== -->
         
         <!-- Input files -->
-        
+
+        <Style x:Key="Btn_ClearFiles" TargetType="{x:Type Button}">
+            <Setter Property="Background" Value="#ff9999"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Content" Value="&#10005;"/>
+            <Setter Property="ToolTip" Value="Clear all files"/>
+            <Setter Property="ToolTipService.InitialShowDelay" Value="50"/>
+            <Setter Property="ToolTipService.ShowDuration" Value="15000"/>
+            <EventSetter Event="Click" Handler="Btn_ClearFiles_Click"/>
+        </Style>
+
         <Style x:Key="Btn_MoveInputFileUp" TargetType="{x:Type Button}">
             <Setter Property="BorderThickness" Value="0"/>
             <Setter Property="Content" Value="⮝"/>
@@ -137,28 +147,31 @@
                                    ToolTipService.ShowDuration="15000"
                                    />
 
-                            <Border AllowDrop="True" BorderBrush="LightGray" BorderThickness="1" CornerRadius="3" 
-                                    Grid.Column="1" Grid.Row="3" SnapsToDevicePixels="True"
+                            <Border AllowDrop="True" BorderBrush="LightGray" BorderThickness="1" CornerRadius="3" Grid.Column="1" Grid.Row="3" SnapsToDevicePixels="True"
                                     Drop="Brd_RdModeFilesA_Drop">
                                 <Grid>
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="93*"/>
                                         <ColumnDefinition Width="7*"/>
                                     </Grid.ColumnDefinitions>
-                                    <Label x:Name="Lbl_RdA_DropInputFiles" Content="Drop input files..." FontSize="18" Foreground="Gray" 
-                                           Grid.ColumnSpan="2" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"
-                                           />
+                                    <Label x:Name="Lbl_RdA" Content="Drop input files..." FontSize="18" Foreground="Gray" Grid.ColumnSpan="2" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
 
                                     <!-- + Add LoadingRow="Dtg_RdInputA_LoadingRow" for row headers -->
-                                    <DataGrid x:Name="Dtg_RdA" BorderThickness="0" HorizontalGridLinesBrush="Gray"
-                                              HeadersVisibility="All" IsReadOnly="True" VerticalGridLinesBrush="Gray" Visibility="Collapsed"
-                                              LoadingRow="Dtg_RdInputA_LoadingRow" SelectionMode="Single"
-                                              />
-                                    <Border x:Name="Brd_RdA" BorderBrush="LightGray" BorderThickness="1" Grid.Column="1" Margin="-1"
-                                            SnapsToDevicePixels="True" Visibility="Collapsed">
+                                    <DataGrid x:Name="Dtg_RdA" AutoGenerateColumns="False" BorderThickness="0" HorizontalGridLinesBrush="Gray" HeadersVisibility="All"
+                                              IsReadOnly="True" ItemsSource="{Binding}" SelectionMode="Single" VerticalGridLinesBrush="Gray" Visibility="Collapsed"
+                                              LoadingRow="Dtg_RdInputA_LoadingRow" 
+                                              >
+                                        <DataGrid.Columns>
+                                            <DataGridTextColumn Binding="{Binding NameExt}" Header="Filename"/>
+                                            <DataGridTextColumn Binding="{Binding VersionSm}" Header="Type"/>
+                                        </DataGrid.Columns>
+                                    </DataGrid>
+                                    <Border x:Name="Brd_RdA" BorderBrush="LightGray" BorderThickness="1" Grid.Column="1" Margin="-1" SnapsToDevicePixels="True" Visibility="Collapsed">
                                         <Grid>
                                             <StackPanel VerticalAlignment="Top">
-                                                <Button Background="#ff9999" Content="&#10005;" ToolTip="Clear all files" Click="Btn_RdAClearFiles_Click"/>
+                                                <Border BorderBrush="DarkGray" BorderThickness="1" CornerRadius="2">
+                                                    <Button Style="{StaticResource Btn_ClearFiles}" Tag="RdA"/>
+                                                </Border>
                                             </StackPanel>
                                             <StackPanel VerticalAlignment="Center">
                                                 <Border BorderBrush="DarkGray" BorderThickness="1" Margin="0 2" CornerRadius="2">
@@ -169,7 +182,6 @@
                                                 </Border>
                                             </StackPanel>
                                         </Grid>
-                                        
                                     </Border>
 
                                 </Grid>
@@ -232,6 +244,11 @@
                                       ToolTipService.InitialShowDelay="50"
                                       ToolTipService.ShowDuration="15000"
                                       />
+
+                            <Button x:Name="Btn_RdATest" Content="Test!" Grid.Column="5" Grid.Row="1" Grid.RowSpan="3"
+                                    HorizontalAlignment="Center" Padding="10 6"
+                                    VerticalAlignment="Center"
+                                    Click="Btn_RdATest_Click"/>
                         </Grid>
                     </GroupBox>
                 </Grid>

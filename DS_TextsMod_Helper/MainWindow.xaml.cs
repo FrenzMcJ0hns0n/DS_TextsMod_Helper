@@ -113,17 +113,45 @@ namespace DS_TextsMod_Helper
             if (!e.Data.GetDataPresent(DataFormats.FileDrop))
                 return;
 
-            Lbl_RdA_DropInputFiles.Visibility = Visibility.Collapsed;
+            Lbl_RdA.Visibility = Visibility.Collapsed;
             Dtg_RdA.Visibility = Visibility.Visible;
             Brd_RdA.Visibility = Visibility.Visible;
 
+
             string[] droppedFiles = (string[])e.Data.GetData(DataFormats.FileDrop);
-
             ObservableCollection<InputFile> iFiles = RegisterInputFiles(droppedFiles);
-            ObservableCollection<InputFileDTO> iFilesDTO = new ObservableCollection<InputFileDTO>();
-            iFiles.ToList().ForEach(iFile => iFilesDTO.Add(new InputFileDTO(iFile.Name, iFile.Version)));
 
-            Dtg_RdA.ItemsSource = iFilesDTO;
+            HandleFilesDrop(Dtg_RdA, iFiles);
+        }
+
+        private void HandleFilesDrop(DataGrid targetDtg, ObservableCollection<InputFile> newFiles)
+        {
+            if (targetDtg.ItemsSource is ObservableCollection<InputFile>)
+            {
+                ObservableCollection<InputFile> currentFiles = (ObservableCollection<InputFile>)Dtg_RdA.ItemsSource;
+                foreach (InputFile newFile in newFiles)
+                {
+                    // Ignore new file when same filename or different directory;
+                    if (currentFiles.Any(f => f.NameExt == newFile.NameExt) || currentFiles.Any(f => f.Directory != newFile.Directory))
+                        continue;
+                    currentFiles.Add(newFile);
+                }
+                Dtg_RdA.ItemsSource = currentFiles;
+            }
+            else
+                Dtg_RdA.ItemsSource = newFiles;
+        }
+
+        private void Btn_RdATest_Click(object sender, RoutedEventArgs e) // Preview files order
+        {
+            DataGrid dtg = Dtg_RdA;
+            List<string> test = new List<string>();
+
+            ObservableCollection<InputFile> iFiles = (ObservableCollection<InputFile>)dtg.ItemsSource;
+            for (int i = 0; i < iFiles.Count; i++)
+                test.Add($"{i + 1 } : {iFiles[i].NameExt}");
+
+            MessageBox.Show($"From directory\n{iFiles.First().Directory}\n\n" + string.Join("\n", test));
         }
 
         private void Dtg_RdInputA_LoadingRow(object sender, DataGridRowEventArgs e)
@@ -131,20 +159,24 @@ namespace DS_TextsMod_Helper
             e.Row.Header = (e.Row.GetIndex() + 1).ToString();
         }
 
-        private void Btn_RdAClearFiles_Click(object sender, RoutedEventArgs e)
+        private void Btn_ClearFiles_Click(object sender, RoutedEventArgs e)
         {
-            Dtg_RdA.ItemsSource = null;
+            Button btn = sender as Button;
+            Border brd = (Border)FindName("Brd_" + btn.Tag);
+            DataGrid dtg = (DataGrid)FindName("Dtg_" + btn.Tag);
+            Label lbl = (Label)FindName("Lbl_" + btn.Tag);
 
-            Brd_RdA.Visibility = Visibility.Collapsed;
-            Dtg_RdA.Visibility = Visibility.Collapsed;
-            Lbl_RdA_DropInputFiles.Visibility = Visibility.Visible;
+            dtg.ItemsSource = null;
+
+            brd.Visibility = Visibility.Collapsed;
+            dtg.Visibility = Visibility.Collapsed;
+            lbl.Visibility = Visibility.Visible;
         }
 
         private void Btn_MoveInputFileUp_Click(object sender, RoutedEventArgs e)
         {
             Button btn = sender as Button;
             DataGrid dtg = (DataGrid)FindName("Dtg_" + btn.Tag);
-
 
             int selectedCount = dtg.SelectedItems.Count;
             if (selectedCount == 0)
@@ -156,8 +188,7 @@ namespace DS_TextsMod_Helper
             List<int> positionsToMove = new List<int>();
             for (int i = 0; i < selectedCount; i++)
             {
-                // InputFileDTO iFileDTO = (InputFileDTO)Dtg_RdInputA.SelectedItems[i];
-                // $"Filename '{iFileDTO.Filename}' as selected item # {i + 1} is at index # {position} in the DataGrid\n";
+                // $"Filename '{((InputFile)dtg.SelectedItems[i]).NameExt}' as selected item # {i + 1} is at index # {position} in the DataGrid\n";
                 int position = dtg.Items.IndexOf(dtg.SelectedItems[i]);
                 if (position == 0)
                     return;
@@ -165,20 +196,20 @@ namespace DS_TextsMod_Helper
                     positionsToMove.Add(position);
             }
 
-            ObservableCollection<InputFileDTO> iFilesDTO = (ObservableCollection<InputFileDTO>)dtg.ItemsSource;
-            for (int i = 0; i < iFilesDTO.Count; i++)
+            ObservableCollection<InputFile> iFiles = (ObservableCollection<InputFile>)dtg.ItemsSource;
+            for (int i = 0; i < iFiles.Count; i++)
             {
                 if (positionsToMove.Contains(i)) // TODO(Multiple reordering): gather all necessary elements before using Insert/RemoveAt (or Build matching table as Dictionary or smthg?)
                 {
-                    InputFileDTO toBeMovedDown = iFilesDTO[i - 1];
-                    iFilesDTO.Insert(i - 1, iFilesDTO[i]);
-                    iFilesDTO.RemoveAt(i);
-                    iFilesDTO.Insert(i, toBeMovedDown);
-                    iFilesDTO.RemoveAt(i + 1);
+                    InputFile toBeMovedDown = iFiles[i - 1];
+                    iFiles.Insert(i - 1, iFiles[i]);
+                    iFiles.RemoveAt(i);
+                    iFiles.Insert(i, toBeMovedDown);
+                    iFiles.RemoveAt(i + 1);
                 }
             }
 
-            dtg.ItemsSource = iFilesDTO;
+            dtg.ItemsSource = iFiles;
             dtg.SelectedIndex = positionsToMove.First() - 1; // Prevent losing the selected elements from altering elements order
         }
 
@@ -187,7 +218,6 @@ namespace DS_TextsMod_Helper
             Button btn = sender as Button;
             DataGrid dtg = (DataGrid)FindName("Dtg_" + btn.Tag);
 
-
             int selectedCount = dtg.SelectedItems.Count;
             if (selectedCount == 0)
             {
@@ -198,8 +228,7 @@ namespace DS_TextsMod_Helper
             List<int> positionsToMove = new List<int>();
             for (int i = 0; i < selectedCount; i++)
             {
-                // InputFileDTO iFileDTO = (InputFileDTO)Dtg_RdInputA.SelectedItems[i];
-                // $"Filename '{iFileDTO.Filename}' as selected item # {i + 1} is at index # {position} in the DataGrid\n";
+                // $"Filename '{((InputFile)dtg.SelectedItems[i]).NameExt}' as selected item # {i + 1} is at index # {position} in the DataGrid\n";
                 int position = dtg.Items.IndexOf(dtg.SelectedItems[i]);
                 if (position == dtg.Items.Count - 1)
                     return;
@@ -207,20 +236,20 @@ namespace DS_TextsMod_Helper
                     positionsToMove.Add(position);
             }
             
-            ObservableCollection<InputFileDTO> iFilesDTO = (ObservableCollection<InputFileDTO>)dtg.ItemsSource;
-            for (int i = 0; i < iFilesDTO.Count; i++)
+            ObservableCollection<InputFile> iFiles = (ObservableCollection<InputFile>)dtg.ItemsSource;
+            for (int i = 0; i < iFiles.Count; i++)
             {
                 if (positionsToMove.Contains(i)) // TODO(Multiple reordering): gather all necessary elements before using Insert/RemoveAt (or Build matching table as Dictionary or smthg?)
                 {
-                    InputFileDTO toBeMovedDown = iFilesDTO[i];
-                    iFilesDTO.Insert(i, iFilesDTO[i + 1]);
-                    iFilesDTO.RemoveAt(i + 1);
-                    iFilesDTO.Insert(i + 1, toBeMovedDown);
-                    iFilesDTO.RemoveAt(i + 2);
+                    InputFile toBeMovedDown = iFiles[i];
+                    iFiles.Insert(i, iFiles[i + 1]);
+                    iFiles.RemoveAt(i + 1);
+                    iFiles.Insert(i + 1, toBeMovedDown);
+                    iFiles.RemoveAt(i + 2);
                 }
             }
 
-            dtg.ItemsSource = iFilesDTO;
+            dtg.ItemsSource = iFiles;
             dtg.SelectedIndex = positionsToMove.First() + 1; // Prevent losing the selected elements from altering elements order
         }
 
@@ -332,7 +361,7 @@ namespace DS_TextsMod_Helper
             if (SelectedMode() == PROCESS_MODE.Prepare)
             {
                 Label lbl = Match_Tbk_Lbl(tbk);
-                lbl.Content = iFile.Version;
+                lbl.Content = iFile.VersionLg;
             }
 
             _ = ConfirmValidation(tbk, isValid);

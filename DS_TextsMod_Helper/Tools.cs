@@ -50,13 +50,12 @@ namespace DS_TextsMod_Helper
 
 
 
-        public static string GetFileName(string path)
+        public static string GetFileName(string path, bool keepExtension)
         {
             FileInfo info = new FileInfo(path);
             string fileName = info.Name;
-            string fileExt = info.Extension;
 
-            return fileName.Replace(fileExt, "");
+            return keepExtension ? fileName : fileName.Replace(info.Extension, "");
         }
 
         public static long GetFileSize(string path)

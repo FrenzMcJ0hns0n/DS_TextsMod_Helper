@@ -13,6 +13,7 @@ namespace DS_TextsMod_Helper
         public string Path { get; set; }
         public string Directory { get; set; }
         public string Name { get; set; }
+        public string NameExt { get; set; }
         public long Size { get; set; }
         public string Edit { get; set; }
 
@@ -20,7 +21,8 @@ namespace DS_TextsMod_Helper
 
         public int TotalEntries { get; set; }
         public int NonNullEntries { get; set; }
-        public string Version { get; set; }
+        public string VersionSm { get; set; }
+        public string VersionLg { get; set; }
 
 
 
@@ -43,7 +45,8 @@ namespace DS_TextsMod_Helper
             try
             {
                 Directory = Tools.GetParentDirPath(filepath);
-                Name = Tools.GetFileName(filepath);
+                Name = Tools.GetFileName(filepath, false);
+                NameExt = Tools.GetFileName(filepath, true);
                 Size = Tools.GetFileSize(filepath);
                 Edit = Tools.GetTimeSinceLastEdit(filepath);
 
@@ -51,7 +54,8 @@ namespace DS_TextsMod_Helper
 
                 TotalEntries = fmg.Entries.Count;
                 NonNullEntries = fmg.Entries.Where(e => e.Text != null).Count();
-                Version = GetVersion(fmg.Version);
+                VersionSm = GetVersion(fmg.Version, true);
+                VersionLg = GetVersion(fmg.Version, false);
             }
             catch (Exception exception)
             {
@@ -72,7 +76,7 @@ namespace DS_TextsMod_Helper
                 sb.AppendLine($"Size = {Size} bytes");
                 sb.AppendLine();
                 sb.AppendLine("[FMG info]");
-                sb.AppendLine($"Version = {Version}");
+                sb.AppendLine($"Version = {VersionLg}");
                 sb.Append($"Total entries = {TotalEntries} ({NonNullEntries} non null)");
             }
             else
@@ -89,14 +93,14 @@ namespace DS_TextsMod_Helper
         /// <summary>
         /// Translate FMG version from FMG.FMGVersion to more readable and displayable String
         /// </summary>
-        private string GetVersion(FMG.FMGVersion version)
+        private string GetVersion(FMG.FMGVersion version, bool shortened)
         {
             switch (version)
             {
-                case FMG.FMGVersion.DemonsSouls: return "Demon's Souls";
-                case FMG.FMGVersion.DarkSouls1: return "Dark Souls 1 / Dark Souls 2";
-                case FMG.FMGVersion.DarkSouls3: return "Dark Souls 3 / Bloodborne";
-                default: return "Dark Souls 1 / Dark Souls 2";
+                case FMG.FMGVersion.DemonsSouls: return shortened ? "DeS" : "Demon's Souls";
+                case FMG.FMGVersion.DarkSouls1: return shortened ? "DS1 / DS2" : "Dark Souls 1 / Dark Souls 2";
+                case FMG.FMGVersion.DarkSouls3: return shortened ? "DS3 / BB" : "Dark Souls 3 / Bloodborne";
+                default: return shortened ? "DS1 / DS2" : "Dark Souls 1 / Dark Souls 2";
             }
         }
     }
