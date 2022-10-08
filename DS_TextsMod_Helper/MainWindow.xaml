@@ -158,7 +158,7 @@
 
                                     <DataGrid x:Name="Dtg_RdA" AutoGenerateColumns="False" BorderThickness="0" HorizontalGridLinesBrush="Gray" HeadersVisibility="All"
                                               IsReadOnly="True" ItemsSource="{Binding}" SelectionMode="Single" VerticalGridLinesBrush="Gray" Visibility="Collapsed"
-                                              LoadingRow="Dtg_RdA_LoadingRow" 
+                                              LoadingRow="Dtg_LoadingRow" 
                                               >
                                         <DataGrid.Columns>
                                             <DataGridTextColumn Binding="{Binding NameExt}" Header="Filename"/>
@@ -307,7 +307,7 @@
 
                                     <DataGrid x:Name="Dtg_CmpA" AutoGenerateColumns="False" BorderThickness="0" HorizontalGridLinesBrush="Gray" HeadersVisibility="All"
                                               IsReadOnly="True" ItemsSource="{Binding}" SelectionMode="Single" VerticalGridLinesBrush="Gray" Visibility="Collapsed"
-                                              LoadingRow="Dtg_CmpA_LoadingRow" 
+                                              LoadingRow="Dtg_LoadingRow" 
                                               >
                                         <DataGrid.Columns>
                                             <DataGridTextColumn Binding="{Binding NameExt}" Header="Filename"/>
@@ -354,7 +354,7 @@
 
                                     <DataGrid x:Name="Dtg_CmpB" AutoGenerateColumns="False" BorderThickness="0" HorizontalGridLinesBrush="Gray" HeadersVisibility="All"
                                               IsReadOnly="True" ItemsSource="{Binding}" SelectionMode="Single" VerticalGridLinesBrush="Gray" Visibility="Collapsed"
-                                              LoadingRow="Dtg_CmpB_LoadingRow" 
+                                              LoadingRow="Dtg_LoadingRow" 
                                               >
                                         <DataGrid.Columns>
                                             <DataGridTextColumn Binding="{Binding NameExt}" Header="Filename"/>
@@ -501,14 +501,11 @@
                         <Grid>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="4"/>
-                                <ColumnDefinition Width="30*"/>
-                                <ColumnDefinition Width="3*"/>
+                                <ColumnDefinition Width="33*"/>
                                 <ColumnDefinition Width="4"/>
-                                <ColumnDefinition Width="30*"/>
-                                <ColumnDefinition Width="3*"/>
+                                <ColumnDefinition Width="33*"/>
                                 <ColumnDefinition Width="4"/>
-                                <ColumnDefinition Width="30*"/>
-                                <ColumnDefinition Width="3*"/>
+                                <ColumnDefinition Width="33*"/>
                                 <ColumnDefinition Width="4"/>
                             </Grid.ColumnDefinitions>
                             <Grid.RowDefinitions>
@@ -522,23 +519,47 @@
 
                             <!-- Files A -->
 
-                            <!-- Idea for later: for each file in [set of files] do read/preview in dedicated tabItem in external window -->
-                            <Label Content="Set of files A" FontWeight="DemiBold" Grid.Column="1" Grid.ColumnSpan="2" Grid.Row="1" HorizontalAlignment="Center"
+                            <Label Content="Set of files A" FontWeight="DemiBold" Grid.Column="1" Grid.Row="1" HorizontalAlignment="Center"
                                    ToolTip="Expected : Single FMG file to read"
                                    ToolTipService.InitialShowDelay="50"
                                    ToolTipService.ShowDuration="15000"
                                    />
 
-                            <Border Grid.Column="1" Grid.ColumnSpan="2" Grid.Row="3" BorderBrush="LightGray" BorderThickness="1" CornerRadius="3">
+                            <Border AllowDrop="True" BorderBrush="LightGray" BorderThickness="1" CornerRadius="3" Grid.Column="1" Grid.Row="3" SnapsToDevicePixels="True" Tag="PrpA"
+                                    Drop="Brd_Drop">
                                 <Grid>
-                                    <Label Content="Drop input files..." FontSize="18" Foreground="Gray"
-                                           HorizontalContentAlignment="Center" VerticalContentAlignment="Center"
-                                           />
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="93*"/>
+                                        <ColumnDefinition Width="7*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <Label x:Name="Lbl_PrpA" Content="Drop input files..." FontSize="18" Foreground="Gray" Grid.ColumnSpan="2" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
 
-                                    <!-- + Add LoadingRow="Dtg_RdInputA_LoadingRow" for row headers -->
-                                    <DataGrid x:Name="Dtg_PrpInputA" BorderThickness="0" FontSize="11" HorizontalGridLinesBrush="Gray" 
-                                              HeadersVisibility="All" IsReadOnly="True" VerticalGridLinesBrush="Gray" Visibility="Collapsed"
-                                              />
+                                    <DataGrid x:Name="Dtg_PrpA" AutoGenerateColumns="False" BorderThickness="0" HorizontalGridLinesBrush="Gray" HeadersVisibility="All"
+                                              IsReadOnly="True" ItemsSource="{Binding}" SelectionMode="Single" VerticalGridLinesBrush="Gray" Visibility="Collapsed"
+                                              LoadingRow="Dtg_LoadingRow" 
+                                              >
+                                        <DataGrid.Columns>
+                                            <DataGridTextColumn Binding="{Binding NameExt}" Header="Filename"/>
+                                            <DataGridTextColumn Binding="{Binding VersionSm}" Header="Type"/>
+                                        </DataGrid.Columns>
+                                    </DataGrid>
+                                    <Border x:Name="Brd_PrpA" BorderBrush="LightGray" BorderThickness="1" Grid.Column="1" Margin="-1" SnapsToDevicePixels="True" Visibility="Collapsed">
+                                        <Grid>
+                                            <StackPanel VerticalAlignment="Top">
+                                                <Border BorderBrush="DarkGray" BorderThickness="1" CornerRadius="2">
+                                                    <Button Style="{StaticResource Btn_ClearFiles}" Tag="PrpA"/>
+                                                </Border>
+                                            </StackPanel>
+                                            <StackPanel VerticalAlignment="Center">
+                                                <Border BorderBrush="DarkGray" BorderThickness="1" Margin="0 2" CornerRadius="2">
+                                                    <Button Style="{StaticResource Btn_MoveInputFileUp}" Tag="PrpA"/>
+                                                </Border>
+                                                <Border BorderBrush="DarkGray" BorderThickness="1" Margin="0 2" CornerRadius="2">
+                                                    <Button Style="{StaticResource Btn_MoveInputFileDown}" Tag="PrpA"/>
+                                                </Border>
+                                            </StackPanel>
+                                        </Grid>
+                                    </Border>
 
                                 </Grid>
                             </Border>
@@ -546,22 +567,47 @@
 
                             <!-- Files B -->
 
-                            <Label Content="Set of files B" FontWeight="DemiBold" Grid.Column="4" Grid.ColumnSpan="2" Grid.Row="1" HorizontalAlignment="Center"
+                            <Label Content="Set of files B" FontWeight="DemiBold" Grid.Column="3" Grid.Row="1" HorizontalAlignment="Center"
                                    ToolTip="Expected : Single FMG file to read"
                                    ToolTipService.InitialShowDelay="50"
                                    ToolTipService.ShowDuration="15000"
                                    />
 
-                            <Border Grid.Column="4" Grid.ColumnSpan="2" Grid.Row="3" BorderBrush="LightGray" BorderThickness="1" CornerRadius="3">
+                            <Border AllowDrop="True" BorderBrush="LightGray" BorderThickness="1" CornerRadius="3" Grid.Column="3" Grid.Row="3" SnapsToDevicePixels="True" Tag="PrpB"
+                                    Drop="Brd_Drop">
                                 <Grid>
-                                    <Label Content="Drop input files..." FontSize="18" Foreground="Gray"
-                                           HorizontalContentAlignment="Center" VerticalContentAlignment="Center"
-                                           />
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="93*"/>
+                                        <ColumnDefinition Width="7*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <Label x:Name="Lbl_PrpB" Content="Drop input files..." FontSize="18" Foreground="Gray" Grid.ColumnSpan="2" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
 
-                                    <!-- + Add LoadingRow="Dtg_RdInputA_LoadingRow" for row headers -->
-                                    <DataGrid x:Name="Dtg_PrpInputB" BorderThickness="0" FontSize="11" HorizontalGridLinesBrush="Gray" 
-                                              HeadersVisibility="All" IsReadOnly="True" VerticalGridLinesBrush="Gray" Visibility="Collapsed"
-                                              />
+                                    <DataGrid x:Name="Dtg_PrpB" AutoGenerateColumns="False" BorderThickness="0" HorizontalGridLinesBrush="Gray" HeadersVisibility="All"
+                                              IsReadOnly="True" ItemsSource="{Binding}" SelectionMode="Single" VerticalGridLinesBrush="Gray" Visibility="Collapsed"
+                                              LoadingRow="Dtg_LoadingRow" 
+                                              >
+                                        <DataGrid.Columns>
+                                            <DataGridTextColumn Binding="{Binding NameExt}" Header="Filename"/>
+                                            <DataGridTextColumn Binding="{Binding VersionSm}" Header="Type"/>
+                                        </DataGrid.Columns>
+                                    </DataGrid>
+                                    <Border x:Name="Brd_PrpB" BorderBrush="LightGray" BorderThickness="1" Grid.Column="1" Margin="-1" SnapsToDevicePixels="True" Visibility="Collapsed">
+                                        <Grid>
+                                            <StackPanel VerticalAlignment="Top">
+                                                <Border BorderBrush="DarkGray" BorderThickness="1" CornerRadius="2">
+                                                    <Button Style="{StaticResource Btn_ClearFiles}" Tag="PrpB"/>
+                                                </Border>
+                                            </StackPanel>
+                                            <StackPanel VerticalAlignment="Center">
+                                                <Border BorderBrush="DarkGray" BorderThickness="1" Margin="0 2" CornerRadius="2">
+                                                    <Button Style="{StaticResource Btn_MoveInputFileUp}" Tag="PrpB"/>
+                                                </Border>
+                                                <Border BorderBrush="DarkGray" BorderThickness="1" Margin="0 2" CornerRadius="2">
+                                                    <Button Style="{StaticResource Btn_MoveInputFileDown}" Tag="PrpB"/>
+                                                </Border>
+                                            </StackPanel>
+                                        </Grid>
+                                    </Border>
 
                                 </Grid>
                             </Border>
@@ -569,22 +615,47 @@
 
                             <!-- Files C -->
 
-                            <Label Content="Set of files C" FontWeight="DemiBold" Grid.Column="7" Grid.ColumnSpan="2" Grid.Row="1" HorizontalAlignment="Center"
+                            <Label Content="Set of files C" FontWeight="DemiBold" Grid.Column="5" Grid.Row="1" HorizontalAlignment="Center"
                                    ToolTip="Expected : Single FMG file to read"
                                    ToolTipService.InitialShowDelay="50"
                                    ToolTipService.ShowDuration="15000"
                                    />
 
-                            <Border Grid.Column="7" Grid.ColumnSpan="2" Grid.Row="3" BorderBrush="LightGray" BorderThickness="1" CornerRadius="3">
+                            <Border AllowDrop="True" BorderBrush="LightGray" BorderThickness="1" CornerRadius="3" Grid.Column="5" Grid.Row="3" SnapsToDevicePixels="True" Tag="PrpC"
+                                    Drop="Brd_Drop">
                                 <Grid>
-                                    <Label Content="Drop input files..." FontSize="18" Foreground="Gray"
-                                           HorizontalContentAlignment="Center" VerticalContentAlignment="Center"
-                                           />
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="93*"/>
+                                        <ColumnDefinition Width="7*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <Label x:Name="Lbl_PrpC" Content="Drop input files..." FontSize="18" Foreground="Gray" Grid.ColumnSpan="2" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
 
-                                    <!-- + Add LoadingRow="Dtg_RdInputA_LoadingRow" for row headers -->
-                                    <DataGrid x:Name="Dtg_PrpInputC" BorderThickness="0" FontSize="11" HorizontalGridLinesBrush="Gray" 
-                                              HeadersVisibility="All" IsReadOnly="True" VerticalGridLinesBrush="Gray" Visibility="Collapsed"
-                                              />
+                                    <DataGrid x:Name="Dtg_PrpC" AutoGenerateColumns="False" BorderThickness="0" HorizontalGridLinesBrush="Gray" HeadersVisibility="All"
+                                              IsReadOnly="True" ItemsSource="{Binding}" SelectionMode="Single" VerticalGridLinesBrush="Gray" Visibility="Collapsed"
+                                              LoadingRow="Dtg_LoadingRow" 
+                                              >
+                                        <DataGrid.Columns>
+                                            <DataGridTextColumn Binding="{Binding NameExt}" Header="Filename"/>
+                                            <DataGridTextColumn Binding="{Binding VersionSm}" Header="Type"/>
+                                        </DataGrid.Columns>
+                                    </DataGrid>
+                                    <Border x:Name="Brd_PrpC" BorderBrush="LightGray" BorderThickness="1" Grid.Column="1" Margin="-1" SnapsToDevicePixels="True" Visibility="Collapsed">
+                                        <Grid>
+                                            <StackPanel VerticalAlignment="Top">
+                                                <Border BorderBrush="DarkGray" BorderThickness="1" CornerRadius="2">
+                                                    <Button Style="{StaticResource Btn_ClearFiles}" Tag="PrpC"/>
+                                                </Border>
+                                            </StackPanel>
+                                            <StackPanel VerticalAlignment="Center">
+                                                <Border BorderBrush="DarkGray" BorderThickness="1" Margin="0 2" CornerRadius="2">
+                                                    <Button Style="{StaticResource Btn_MoveInputFileUp}" Tag="PrpC"/>
+                                                </Border>
+                                                <Border BorderBrush="DarkGray" BorderThickness="1" Margin="0 2" CornerRadius="2">
+                                                    <Button Style="{StaticResource Btn_MoveInputFileDown}" Tag="PrpC"/>
+                                                </Border>
+                                            </StackPanel>
+                                        </Grid>
+                                    </Border>
 
                                 </Grid>
                             </Border>

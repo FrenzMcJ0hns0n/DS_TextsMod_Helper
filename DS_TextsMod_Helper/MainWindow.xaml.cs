@@ -105,7 +105,7 @@ namespace DS_TextsMod_Helper
         }
 
 
-        #region GUI Read mode
+        #region GUI Common
 
         private void Brd_Drop(object sender, DragEventArgs e)
         {
@@ -131,41 +131,6 @@ namespace DS_TextsMod_Helper
             brd.Visibility = Visibility.Visible;
 
             HandleFilesDrop(dtg, iFiles);
-        }
-
-        private void HandleFilesDrop(DataGrid targetDtg, ObservableCollection<InputFile> newFiles)
-        {
-            if (targetDtg.ItemsSource is ObservableCollection<InputFile>)
-            {
-                ObservableCollection<InputFile> currentFiles = (ObservableCollection<InputFile>)targetDtg.ItemsSource;
-                foreach (InputFile newFile in newFiles)
-                {
-                    // Ignore new file when same filename or different directory;
-                    if (currentFiles.Any(f => f.NameExt == newFile.NameExt) || currentFiles.Any(f => f.Directory != newFile.Directory))
-                        continue;
-                    currentFiles.Add(newFile);
-                }
-                targetDtg.ItemsSource = currentFiles;
-            }
-            else
-                targetDtg.ItemsSource = newFiles;
-        }
-
-        private void Btn_RdATest_Click(object sender, RoutedEventArgs e) // Preview files order
-        {
-            DataGrid dtg = Dtg_RdA;
-            List<string> test = new List<string>();
-
-            ObservableCollection<InputFile> iFiles = (ObservableCollection<InputFile>)dtg.ItemsSource;
-            for (int i = 0; i < iFiles.Count; i++)
-                test.Add($"{i + 1 } : {iFiles[i].NameExt}");
-
-            MessageBox.Show($"From directory\n{iFiles.First().Directory}\n\n" + string.Join("\n", test));
-        }
-
-        private void Dtg_RdA_LoadingRow(object sender, DataGridRowEventArgs e)
-        {
-            e.Row.Header = (e.Row.GetIndex() + 1).ToString();
         }
 
         private void Btn_ClearFiles_Click(object sender, RoutedEventArgs e)
@@ -244,7 +209,7 @@ namespace DS_TextsMod_Helper
                 else
                     positionsToMove.Add(position);
             }
-            
+
             ObservableCollection<InputFile> iFiles = (ObservableCollection<InputFile>)dtg.ItemsSource;
             for (int i = 0; i < iFiles.Count; i++)
             {
@@ -262,9 +227,43 @@ namespace DS_TextsMod_Helper
             dtg.SelectedIndex = positionsToMove.First() + 1; // Prevent losing the selected elements from altering elements order
         }
 
-        private void ReorderDataGrid(bool up)
+        private void Dtg_LoadingRow(object sender, DataGridRowEventArgs e)
         {
-            // TODO? factorize
+            e.Row.Header = (e.Row.GetIndex() + 1).ToString();
+        }
+
+        private void HandleFilesDrop(DataGrid targetDtg, ObservableCollection<InputFile> newFiles)
+        {
+            if (targetDtg.ItemsSource is ObservableCollection<InputFile>)
+            {
+                ObservableCollection<InputFile> currentFiles = (ObservableCollection<InputFile>)targetDtg.ItemsSource;
+                foreach (InputFile newFile in newFiles)
+                {
+                    // Ignore new file when same filename or different directory;
+                    if (currentFiles.Any(f => f.NameExt == newFile.NameExt) || currentFiles.Any(f => f.Directory != newFile.Directory))
+                        continue;
+                    currentFiles.Add(newFile);
+                }
+                targetDtg.ItemsSource = currentFiles;
+            }
+            else
+                targetDtg.ItemsSource = newFiles;
+        }
+
+        #endregion
+
+        #region GUI Read mode
+
+        private void Btn_RdATest_Click(object sender, RoutedEventArgs e) // Preview files order
+        {
+            DataGrid dtg = Dtg_RdA;
+            List<string> test = new List<string>();
+
+            ObservableCollection<InputFile> iFiles = (ObservableCollection<InputFile>)dtg.ItemsSource;
+            for (int i = 0; i < iFiles.Count; i++)
+                test.Add($"{i + 1 } : {iFiles[i].NameExt}");
+
+            MessageBox.Show($"From directory\n{iFiles.First().Directory}\n\n" + string.Join("\n", test));
         }
 
         private void Tbx_Rd_CsvSeparator_GotFocus(object sender, RoutedEventArgs e) { SelectTbxValue(sender); }
@@ -274,15 +273,6 @@ namespace DS_TextsMod_Helper
 
 
         #region GUI Compare mode
-
-        private void Dtg_CmpA_LoadingRow(object sender, DataGridRowEventArgs e)
-        {
-            e.Row.Header = (e.Row.GetIndex() + 1).ToString();
-        }
-        private void Dtg_CmpB_LoadingRow(object sender, DataGridRowEventArgs e)
-        {
-            e.Row.Header = (e.Row.GetIndex() + 1).ToString();
-        }
 
         private void Tbx_Cmp_oHeader1_GotFocus(object sender, RoutedEventArgs e) { SelectTbxValue(sender); }
         private void Tbx_Cmp_oHeader1_LostFocus(object sender, RoutedEventArgs e) { ValidateTbxValue(sender); }
