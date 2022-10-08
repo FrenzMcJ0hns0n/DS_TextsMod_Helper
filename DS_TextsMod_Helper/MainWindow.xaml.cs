@@ -232,6 +232,56 @@ namespace DS_TextsMod_Helper
             e.Row.Header = (e.Row.GetIndex() + 1).ToString();
         }
 
+        private void CompareInputFiles()
+        {
+            switch (SelectedMode())
+            {
+
+
+                case PROCESS_MODE.Compare:
+                    if (Dtg_CmpA.ItemsSource is null || Dtg_CmpB.ItemsSource is null) return;
+
+                    ObservableCollection<InputFile> iFilesCmpA = (ObservableCollection<InputFile>)Dtg_CmpA.ItemsSource;
+                    ObservableCollection<InputFile> iFilesCmpB = (ObservableCollection<InputFile>)Dtg_CmpB.ItemsSource;
+                    for (int i = 0; i < iFilesCmpA.Count; i++)
+                    {
+                        if (iFilesCmpA[i].NameExt == iFilesCmpB[i].NameExt)
+                        {
+                            // all good
+                        }
+                        else
+                        {
+                            // warning : filenames are different
+                        }
+                    }
+                    break;
+
+
+                case PROCESS_MODE.Prepare:
+                    if (Dtg_PrpA.ItemsSource is null || Dtg_PrpB.ItemsSource is null || Dtg_PrpC.ItemsSource is null) return;
+
+                    ObservableCollection<InputFile> iFilesPrpA = (ObservableCollection<InputFile>)Dtg_PrpA.ItemsSource;
+                    ObservableCollection<InputFile> iFilesPrpB = (ObservableCollection<InputFile>)Dtg_PrpB.ItemsSource;
+                    ObservableCollection<InputFile> iFilesPrpC = (ObservableCollection<InputFile>)Dtg_PrpC.ItemsSource;
+                    for (int i = 0; i < iFilesPrpA.Count; i++)
+                    {
+                        if ((iFilesPrpA[i].NameExt == iFilesPrpB[i].NameExt) && (iFilesPrpB[i].NameExt == iFilesPrpC[i].NameExt))
+                        {
+                            // all good
+                        }
+                        else
+                        {
+                            // warning : filenames are different
+                        }
+                    }
+                    break;
+
+
+                default:
+                    return;
+            }
+        }
+
         private void HandleFilesDrop(DataGrid targetDtg, ObservableCollection<InputFile> newFiles)
         {
             if (targetDtg.ItemsSource is ObservableCollection<InputFile>)
@@ -249,6 +299,8 @@ namespace DS_TextsMod_Helper
             else
                 targetDtg.ItemsSource = newFiles;
         }
+
+
 
         #endregion
 
