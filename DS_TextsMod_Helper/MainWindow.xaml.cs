@@ -107,28 +107,37 @@ namespace DS_TextsMod_Helper
 
         #region GUI Read mode
 
-        private void Brd_RdModeFilesA_Drop(object sender, DragEventArgs e)
+        private void Brd_Drop(object sender, DragEventArgs e)
         {
             // Only files are accepted
             if (!e.Data.GetDataPresent(DataFormats.FileDrop))
                 return;
 
-            Lbl_RdA.Visibility = Visibility.Collapsed;
-            Dtg_RdA.Visibility = Visibility.Visible;
-            Brd_RdA.Visibility = Visibility.Visible;
-
-
             string[] droppedFiles = (string[])e.Data.GetData(DataFormats.FileDrop);
             ObservableCollection<InputFile> iFiles = RegisterInputFiles(droppedFiles);
+            int validFilesCount = iFiles.Where(f => string.IsNullOrEmpty(f.Error)).ToList().Count();
 
-            HandleFilesDrop(Dtg_RdA, iFiles);
+            // Valid files are required
+            if (validFilesCount == 0)
+                return;
+
+            Border brdSource = sender as Border;
+            Label lbl = (Label)FindName("Lbl_" + brdSource.Tag);
+            DataGrid dtg = (DataGrid)FindName("Dtg_" + brdSource.Tag);
+            Border brd = (Border)FindName("Brd_" + brdSource.Tag);
+
+            lbl.Visibility = Visibility.Collapsed;
+            dtg.Visibility = Visibility.Visible;
+            brd.Visibility = Visibility.Visible;
+
+            HandleFilesDrop(dtg, iFiles);
         }
 
         private void HandleFilesDrop(DataGrid targetDtg, ObservableCollection<InputFile> newFiles)
         {
             if (targetDtg.ItemsSource is ObservableCollection<InputFile>)
             {
-                ObservableCollection<InputFile> currentFiles = (ObservableCollection<InputFile>)Dtg_RdA.ItemsSource;
+                ObservableCollection<InputFile> currentFiles = (ObservableCollection<InputFile>)targetDtg.ItemsSource;
                 foreach (InputFile newFile in newFiles)
                 {
                     // Ignore new file when same filename or different directory;
@@ -136,10 +145,10 @@ namespace DS_TextsMod_Helper
                         continue;
                     currentFiles.Add(newFile);
                 }
-                Dtg_RdA.ItemsSource = currentFiles;
+                targetDtg.ItemsSource = currentFiles;
             }
             else
-                Dtg_RdA.ItemsSource = newFiles;
+                targetDtg.ItemsSource = newFiles;
         }
 
         private void Btn_RdATest_Click(object sender, RoutedEventArgs e) // Preview files order
@@ -154,7 +163,7 @@ namespace DS_TextsMod_Helper
             MessageBox.Show($"From directory\n{iFiles.First().Directory}\n\n" + string.Join("\n", test));
         }
 
-        private void Dtg_RdInputA_LoadingRow(object sender, DataGridRowEventArgs e)
+        private void Dtg_RdA_LoadingRow(object sender, DataGridRowEventArgs e)
         {
             e.Row.Header = (e.Row.GetIndex() + 1).ToString();
         }
@@ -265,6 +274,15 @@ namespace DS_TextsMod_Helper
 
 
         #region GUI Compare mode
+
+        private void Dtg_CmpA_LoadingRow(object sender, DataGridRowEventArgs e)
+        {
+            e.Row.Header = (e.Row.GetIndex() + 1).ToString();
+        }
+        private void Dtg_CmpB_LoadingRow(object sender, DataGridRowEventArgs e)
+        {
+            e.Row.Header = (e.Row.GetIndex() + 1).ToString();
+        }
 
         private void Tbx_Cmp_oHeader1_GotFocus(object sender, RoutedEventArgs e) { SelectTbxValue(sender); }
         private void Tbx_Cmp_oHeader1_LostFocus(object sender, RoutedEventArgs e) { ValidateTbxValue(sender); }
