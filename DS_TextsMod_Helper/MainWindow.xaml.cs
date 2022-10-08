@@ -840,6 +840,42 @@ namespace DS_TextsMod_Helper
 
         private void Btn_GenerateOutput_Click(object sender, RoutedEventArgs e)
         {
+            int processedFilesCount = 0;
+
+            switch (SelectedMode())
+            {
+                case PROCESS_MODE.Read: //TODO? Perform extra input checks
+                    DataGrid dtg = Dtg_RdA;
+
+                    if (dtg.ItemsSource is null)
+                        return;
+
+                    ObservableCollection<InputFile> iFilesToProcess = (ObservableCollection<InputFile>)dtg.ItemsSource;
+                    string parentDirectoryPath = iFilesToProcess.First().Directory;
+                    foreach (InputFile iFile in iFilesToProcess)
+                    {
+                        string filePath = Path.Combine(parentDirectoryPath, iFile.NameExt);
+                        string rd_csvSepChar = Tbx_Rd_CsvSeparator.Text;
+                        ReadMode r = new ReadMode(filePath) { OneLinedValues = Cbx_Rd_OneLinedValues.IsChecked ?? false };
+                        r.ProcessFiles(false);
+                        r.ProduceOutput(iFile.Name + ".csv", rd_csvSepChar);
+                        processedFilesCount += 1;
+                    }
+                    MessageBox.Show($"[Read mode] Done: {processedFilesCount} output files have been created.");
+                    break;
+
+
+
+                case PROCESS_MODE.Compare:
+                    break;
+
+
+
+                case PROCESS_MODE.Prepare:
+                    break;
+            }
+
+
             // Commented as building 1.5
             //switch (SelectedMode())
             //{
