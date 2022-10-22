@@ -878,27 +878,30 @@ namespace DS_TextsMod_Helper
 
         #region Output
 
-        private void Btn_GenerateOutput_Click(object sender, RoutedEventArgs e)
+        private void Btn_GenerateOutput_Click(object sender, RoutedEventArgs e) // TODO: Create dedicated function for each processing mode
         {
             int processedFilesCount = 0;
+            string parentDirPathA;
+            string parentDirPathB;
+            string parentDirPathC;
+            string csvSepChar;
 
             switch (SelectedMode())
             {
                 case PROCESS_MODE.Read: //TODO? Perform extra input checks
-                    DataGrid dtg = Dtg_RdA;
 
-                    if (dtg.ItemsSource is null)
+                    if (Dtg_RdA.ItemsSource is null)
                         return;
 
-                    ObservableCollection<InputFile> iFilesToProcess = (ObservableCollection<InputFile>)dtg.ItemsSource;
-                    string parentDirectoryPath = iFilesToProcess.First().Directory;
-                    foreach (InputFile iFile in iFilesToProcess)
+                    ObservableCollection<InputFile> iFilesRd = (ObservableCollection<InputFile>)Dtg_RdA.ItemsSource;
+                    parentDirPathA = iFilesRd.First().Directory;
+                    foreach (InputFile iFile in iFilesRd)
                     {
-                        string filePath = Path.Combine(parentDirectoryPath, iFile.NameExt);
-                        string rd_csvSepChar = Tbx_Rd_CsvSeparator.Text;
+                        string filePath = Path.Combine(parentDirPathA, iFile.NameExt);
+                        csvSepChar = Tbx_Rd_CsvSeparator.Text;
                         ReadMode r = new ReadMode(filePath) { OneLinedValues = Cbx_Rd_OneLinedValues.IsChecked ?? false };
                         r.ProcessFiles(false);
-                        r.ProduceOutput(iFile.Name + ".csv", rd_csvSepChar);
+                        r.ProduceOutput(iFile.Name + ".csv", csvSepChar);
                         processedFilesCount += 1;
                     }
                     MessageBox.Show($"[Read mode] Done: {processedFilesCount} output files have been created.");
@@ -907,6 +910,31 @@ namespace DS_TextsMod_Helper
 
 
                 case PROCESS_MODE.Compare:
+
+                    if (Dtg_CmpA.ItemsSource is null || Dtg_CmpB.ItemsSource is null)
+                        return;
+
+                    ObservableCollection<InputFile> iFilesCmpA = (ObservableCollection<InputFile>)Dtg_CmpA.ItemsSource;
+                    ObservableCollection<InputFile> iFilesCmpB = (ObservableCollection<InputFile>)Dtg_CmpB.ItemsSource;
+                    if (iFilesCmpA.Count != iFilesCmpB.Count)
+                        return; // TODO: Display error message: wrong files count
+
+                    parentDirPathA = iFilesCmpA.First().Directory;
+                    parentDirPathB = iFilesCmpB.First().Directory;
+                    if (parentDirPathA == parentDirPathB)
+                        return; // TODO: Display error message: same directory
+
+                    for (int i = 0; i < iFilesCmpA.Count; i++)
+                    {
+                        string filePathA = Path.Combine(parentDirPathA, iFilesCmpA[i].NameExt);
+                        string filePathB = Path.Combine(parentDirPathB, iFilesCmpB[i].NameExt);
+                        csvSepChar = Tbx_Cmp_CsvSeparator.Text;
+                        CompareMode c = new CompareMode(filePathA, filePathB) { OneLinedValues = Cbx_Cmp_OneLinedValues.IsChecked ?? false };
+                        c.ProcessFiles(false);
+                        c.ProduceOutput(iFilesCmpA[i].Name + ".csv", Tbx_Cmp_oHeader1.Text, Tbx_Cmp_oHeader2.Text, csvSepChar);
+                        processedFilesCount += 1;
+                    }
+                    MessageBox.Show($"[Compare mode] Done: {processedFilesCount} output files have been created.");
                     break;
 
 
