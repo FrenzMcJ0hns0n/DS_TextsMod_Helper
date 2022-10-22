@@ -8,14 +8,13 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Documents;
+using System.Windows.Input;
 using System.Windows.Media;
 
 namespace DS_TextsMod_Helper
 {
     public partial class MainWindow : Window
     {
-
-
 
         #region CONSTANTS
 
@@ -106,6 +105,11 @@ namespace DS_TextsMod_Helper
 
 
         #region GUI Common
+
+        private void Window_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            Keyboard.ClearFocus();
+        }
 
         private void Brd_Drop(object sender, DragEventArgs e)
         {
@@ -303,6 +307,7 @@ namespace DS_TextsMod_Helper
 
 
         #endregion
+
 
         #region GUI Read mode
 

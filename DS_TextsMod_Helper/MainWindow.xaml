@@ -6,7 +6,9 @@
         xmlns:local="clr-namespace:DS_TextsMod_Helper"
         mc:Ignorable="d"
         
-        Height="600" Width="1200" ResizeMode="CanMinimize" Title="DS Texts Mod Helper">
+        Height="600" Width="1200" ResizeMode="CanMinimize"
+        MouseDown="Window_MouseDown"
+        >
 
     <Window.Resources>
 
