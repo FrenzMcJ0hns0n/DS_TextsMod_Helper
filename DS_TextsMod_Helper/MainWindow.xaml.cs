@@ -878,68 +878,146 @@ namespace DS_TextsMod_Helper
 
         #region Output
 
-        private void Btn_GenerateOutput_Click(object sender, RoutedEventArgs e) // TODO: Create dedicated function for each processing mode
+        private void Btn_GenerateOutput_Click(object sender, RoutedEventArgs e)
         {
             int processedFilesCount = 0;
             string parentDirPathA;
             string parentDirPathB;
             string parentDirPathC;
+            string fileFmgVersionA;
+            string fileFmgVersionB;
+            string fileFmgVersionC;
+            string filePathA;
+            string filePathB;
+            string filePathC;
             string csvSepChar;
 
             switch (SelectedMode())
             {
-                case PROCESS_MODE.Read: //TODO? Perform extra input checks
-
+                case PROCESS_MODE.Read:
                     if (Dtg_RdA.ItemsSource is null)
+                    {
+                        MessageBox.Show("Error"); // Title="Error: Missing input files",Message="Ensure that the input A is holding files to process" TODO: Use constant
                         return;
-
+                    }
                     ObservableCollection<InputFile> iFilesRd = (ObservableCollection<InputFile>)Dtg_RdA.ItemsSource;
                     parentDirPathA = iFilesRd.First().Directory;
+                    // TODO: Get filenames from iFilesRd to look for already existing output files
                     foreach (InputFile iFile in iFilesRd)
                     {
-                        string filePath = Path.Combine(parentDirPathA, iFile.NameExt);
+                        filePathA = Path.Combine(parentDirPathA, iFile.NameExt);
                         csvSepChar = Tbx_Rd_CsvSeparator.Text;
-                        ReadMode r = new ReadMode(filePath) { OneLinedValues = Cbx_Rd_OneLinedValues.IsChecked ?? false };
+                        ReadMode r = new ReadMode(filePathA) { OneLinedValues = Cbx_Rd_OneLinedValues.IsChecked ?? false };
                         r.ProcessFiles(false);
                         r.ProduceOutput(iFile.Name + ".csv", csvSepChar);
                         processedFilesCount += 1;
                     }
-                    MessageBox.Show($"[Read mode] Done: {processedFilesCount} output files have been created.");
+                    MessageBox.Show($"[Read mode] Done: {processedFilesCount} output files have been created");
                     break;
 
 
-
                 case PROCESS_MODE.Compare:
-
                     if (Dtg_CmpA.ItemsSource is null || Dtg_CmpB.ItemsSource is null)
+                    {
+                        MessageBox.Show("Error"); // Title="Error: Missing input files",Message="Ensure that the inputs A and B are holding files to process" TODO: Use constant
                         return;
-
+                    }
                     ObservableCollection<InputFile> iFilesCmpA = (ObservableCollection<InputFile>)Dtg_CmpA.ItemsSource;
                     ObservableCollection<InputFile> iFilesCmpB = (ObservableCollection<InputFile>)Dtg_CmpB.ItemsSource;
                     if (iFilesCmpA.Count != iFilesCmpB.Count)
-                        return; // TODO: Display error message: wrong files count
-
+                    {
+                        MessageBox.Show("Error"); // Title="Error: Wrong files count",Message="Inputs A and B must contain the same files count" TODO: Use constant
+                        return;
+                    }
                     parentDirPathA = iFilesCmpA.First().Directory;
                     parentDirPathB = iFilesCmpB.First().Directory;
                     if (parentDirPathA == parentDirPathB)
-                        return; // TODO: Display error message: same directory
-
+                    {
+                        MessageBox.Show("Error"); // Title="Error: Same directory",Message="Inputs A and B cannot share the same directory" TODO: Use constant
+                        return;
+                    }
+                    fileFmgVersionA = iFilesCmpA.First().VersionLg;
+                    fileFmgVersionB = iFilesCmpB.First().VersionLg;
+                    if (fileFmgVersionA != fileFmgVersionB)
+                    {
+                        MessageBox.Show("Error"); // Title="Error: Distinct FMG versions",Message="Ensure that the input files are compatible with each other" TODO: Use constant
+                        return;
+                    }
+                    // TODO: Get filenames from iFilesCmpA to look for already existing output files
                     for (int i = 0; i < iFilesCmpA.Count; i++)
                     {
-                        string filePathA = Path.Combine(parentDirPathA, iFilesCmpA[i].NameExt);
-                        string filePathB = Path.Combine(parentDirPathB, iFilesCmpB[i].NameExt);
+                        filePathA = Path.Combine(parentDirPathA, iFilesCmpA[i].NameExt);
+                        filePathB = Path.Combine(parentDirPathB, iFilesCmpB[i].NameExt);
                         csvSepChar = Tbx_Cmp_CsvSeparator.Text;
                         CompareMode c = new CompareMode(filePathA, filePathB) { OneLinedValues = Cbx_Cmp_OneLinedValues.IsChecked ?? false };
                         c.ProcessFiles(false);
                         c.ProduceOutput(iFilesCmpA[i].Name + ".csv", Tbx_Cmp_oHeader1.Text, Tbx_Cmp_oHeader2.Text, csvSepChar);
                         processedFilesCount += 1;
                     }
-                    MessageBox.Show($"[Compare mode] Done: {processedFilesCount} output files have been created.");
+                    MessageBox.Show($"[Compare mode] Done: {processedFilesCount} output files have been created");
                     break;
 
 
-
                 case PROCESS_MODE.Prepare:
+                    if (Dtg_PrpA.ItemsSource is null || Dtg_PrpB.ItemsSource is null || Dtg_PrpC.ItemsSource is null)
+                    {
+                        MessageBox.Show("Error"); // Title="Error: Missing input files",Message="Ensure that the inputs A, B, C are holding files to process" TODO: Use constant
+                        return;
+                    }
+                    ObservableCollection<InputFile> iFilesPrpA = (ObservableCollection<InputFile>)Dtg_PrpA.ItemsSource;
+                    ObservableCollection<InputFile> iFilesPrpB = (ObservableCollection<InputFile>)Dtg_PrpB.ItemsSource;
+                    ObservableCollection<InputFile> iFilesPrpC = (ObservableCollection<InputFile>)Dtg_PrpC.ItemsSource;
+                    if (iFilesPrpA.Count != iFilesPrpB.Count || iFilesPrpA.Count != iFilesPrpC.Count)
+                    {
+                        MessageBox.Show("Error"); // // Title="Error: Wrong files count",Message="Inputs A, B, C must contain the same files count" TODO: Use constant
+                        return;
+                    }
+                    parentDirPathA = iFilesPrpA.First().Directory;
+                    parentDirPathB = iFilesPrpB.First().Directory;
+                    parentDirPathC = iFilesPrpC.First().Directory;
+                    if (parentDirPathA == parentDirPathB || parentDirPathA == parentDirPathC)
+                    {
+                        MessageBox.Show("Error"); // Title="Error: Same directory",Message="Inputs A, B, C cannot share the same directory" TODO: Use constant
+                        return;
+                    }
+                    fileFmgVersionA = iFilesPrpA.First().VersionLg;
+                    fileFmgVersionB = iFilesPrpB.First().VersionLg;
+                    fileFmgVersionC = iFilesPrpC.First().VersionLg;
+                    if (fileFmgVersionA != fileFmgVersionB || fileFmgVersionA != fileFmgVersionC)
+                    {
+                        MessageBox.Show("Error"); // Title="Error: Distinct FMG versions",Message="Ensure that the input files are compatible with each other" TODO: Use constant
+                        return;
+                    }
+
+                    // (WiP): Get filenames from iFilesPrpA to look for already existing output files
+                    DirectoryInfo di = new DirectoryInfo(Tools.GetOutputDirPath());
+                    List<string> oFilenames = di.GetFiles().Select(fi => fi.Name).ToList();
+                    List<string> iFilenamesPrpA = iFilesPrpA.Select(iFile => iFile.NameExt).ToList();
+                    List<string> alreadyExisting = iFilenamesPrpA.Where(iFile => oFilenames.Contains(iFile)).ToList();
+
+                    bool haveSpecialCases = false;
+                    for (int i = 0; i < iFilesPrpA.Count; i++)
+                    {
+                        filePathA = Path.Combine(parentDirPathA, iFilesPrpA[i].NameExt);
+                        filePathB = Path.Combine(parentDirPathB, iFilesPrpB[i].NameExt);
+                        filePathC = Path.Combine(parentDirPathB, iFilesPrpC[i].NameExt);
+                        PrepareMode p = new PrepareMode(filePathA, filePathB, filePathC, Tbx_Prp_TextToReplace.Text, Tbx_Prp_ReplacingText.Text);
+                        p.ProcessFiles(false);
+                        p.SetOutputVersion(fileFmgVersionA);
+                        p.ProduceOutput(iFilesPrpA[i].NameExt);
+
+                        if (Cbx_Prp_WarnOnSpecialCases.IsChecked ?? false)
+                        {
+                            List<string> specialCases = p.GetSpecialCases();
+                            if (specialCases.Count > 0)
+                            {
+                                Tools.LogSpecialCases(filePathA, filePathB, filePathC, iFilesPrpA[i].NameExt, specialCases);
+                                haveSpecialCases = true;
+                            }
+                        }
+                    }
+                    string special = haveSpecialCases ? $"\n\n{WRN_SPECIAL_CASES}" : string.Empty;
+                    MessageBox.Show($"[Prepare mode] Done: {processedFilesCount} output files have been created{special}");
                     break;
             }
 
