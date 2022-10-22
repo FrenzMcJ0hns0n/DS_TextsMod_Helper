@@ -14,8 +14,6 @@
         
         <!-- Input files presentation -->
 
-        <!-- <Label Content="Set of files A" Grid.Column="1" Style={StaticResource Lbl_SetOfFiles} ToolTip="Expected : Single FMG file to read"/> -->
-
         <Style x:Key="Lbl_SetOfFiles" TargetType="{x:Type Label}">
             <Setter Property="FontWeight" Value="DemiBold"/>
             <Setter Property="Grid.Row" Value="1"/>
@@ -49,8 +47,8 @@
             <Setter Property="HeadersVisibility" Value="All"/>
             <Setter Property="IsReadOnly" Value="True"/>
             <Setter Property="ItemsSource" Value="{Binding}"/>
-            <Setter Property="SelectionMode" Value="Single"/>
-            <Setter Property="VerticalGridLinesBrush" Value="Gray"/> <!-- TODO: Upgrade to "Multiple" later -->
+            <Setter Property="SelectionMode" Value="Single"/> <!-- TODO: Upgrade to "Multiple" later -->
+            <Setter Property="VerticalGridLinesBrush" Value="Gray"/>
             <Setter Property="Visibility" Value="Collapsed"/>
             <!-- This does not work, for some reasons... -->
             <!--<EventSetter Event="LoadingRow" Handler="Dtg_LoadingRow"/>-->
@@ -152,7 +150,7 @@
             <RowDefinition Height="16" />
             <RowDefinition Height="92*" /> <!-- TabControl -->
             <RowDefinition Height="16" />
-            <RowDefinition Height="8*" /> <!-- Buttons : preview & output file + output file options -->
+            <RowDefinition Height="8*" /> <!-- Buttons -->
             <RowDefinition Height="16" />
         </Grid.RowDefinitions>
 
@@ -258,9 +256,7 @@
                                 <RowDefinition Height="4"/>
                             </Grid.RowDefinitions>
 
-                            <!-- Output filename = moved at app bottom -->
-
-                            <!-- CSV output separator -->
+                            <!-- Read mode : CSV output separator -->
                             <StackPanel Grid.Column="1" Grid.Row="1" Grid.RowSpan="3"
                                         HorizontalAlignment="Center" Orientation="Horizontal" VerticalAlignment="Center"
                                         >
@@ -278,12 +274,10 @@
                                          ToolTip="Choose the symbol to separate values as CSV data"
                                          ToolTipService.InitialShowDelay="50"
                                          ToolTipService.ShowDuration="15000"
-                                         GotFocus="Tbx_Rd_CsvSeparator_GotFocus"
-                                         LostFocus="Tbx_Rd_CsvSeparator_LostFocus"
                                          />
                             </StackPanel>
 
-                            <!-- One lined values -->
+                            <!-- Read mode : One lined values -->
                             <CheckBox x:Name="Cbx_Rd_OneLinedValues" 
                                       Grid.Column="3" Grid.Row="1" Grid.RowSpan="3"
                                       HorizontalAlignment="Center"
@@ -338,8 +332,7 @@
                                 <RowDefinition Height="4"/>
                             </Grid.RowDefinitions>
 
-                            <!-- Files A -->
-                            
+                            <!-- Compare mode : Files A -->
                             <Label Content="Set of files A" Grid.Column="1" Style="{StaticResource Lbl_SetOfFiles}" ToolTip="Expected : FMG files to compare"/>
                             <Border Grid.Column="1" Grid.Row="3" Style="{StaticResource Brd_MainContainer}" Tag="CmpA">
                                 <Grid>
@@ -382,8 +375,7 @@
                                 </Grid>
                             </Border>
 
-                            <!-- Files B -->
-
+                            <!-- Compare mode : Files B -->
                             <Label Content="Set of files B" Grid.Column="3" Style="{StaticResource Lbl_SetOfFiles}" ToolTip="Expected : FMG files to compare"/>
                             <Border Grid.Column="3" Grid.Row="3" Style="{StaticResource Brd_MainContainer}" Tag="CmpB">
                                 <Grid>
@@ -447,11 +439,11 @@
                                 <RowDefinition Height="4"/>
                             </Grid.RowDefinitions>
 
-                            <!-- Output headers -->
+                            <!-- Compare mode : Output headers -->
                             <StackPanel Grid.Column="1" Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center">
                                 <Label VerticalAlignment="Center"
                                        Content="Header A :" Width="70"
-                                       ToolTip="Output header for File #1"
+                                       ToolTip="Output column header for File A"
                                        ToolTipService.InitialShowDelay="50"
                                        ToolTipService.ShowDuration="15000"
                                        />
@@ -460,17 +452,15 @@
                                         VerticalAlignment="Center"
                                         TextAlignment="Right"
                                         Text="File A"
-                                        ToolTip="Output header to write in column matching set of files A"
+                                        ToolTip="Output column header for File A"
                                         ToolTipService.InitialShowDelay="50"
                                         ToolTipService.ShowDuration="15000"
-                                        GotFocus="Tbx_Cmp_oHeader1_GotFocus"
-                                        LostFocus="Tbx_Cmp_oHeader1_LostFocus"
                                         />
                             </StackPanel>
                             <StackPanel Grid.Column="1" Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center">
                                 <Label VerticalAlignment="Center" 
                                        Content="Header B :" Width="70"
-                                       ToolTip="Output header for File #2"
+                                       ToolTip="Output column header for File B"
                                        ToolTipService.InitialShowDelay="50"
                                        ToolTipService.ShowDuration="15000"
                                        />
@@ -479,15 +469,13 @@
                                          VerticalAlignment="Center"
                                          TextAlignment="Right"
                                          Text="File B"
-                                         ToolTip="Output header to write in column matching set of files B"
+                                         ToolTip="Output column header for File B"
                                          ToolTipService.InitialShowDelay="50"
                                          ToolTipService.ShowDuration="15000"
-                                         GotFocus="Tbx_Cmp_oHeader2_GotFocus"
-                                         LostFocus="Tbx_Cmp_oHeader2_LostFocus"
                                          />
                             </StackPanel>
 
-                            <!-- One lined values -->
+                            <!-- Compare mode : One lined values -->
                             <CheckBox x:Name="Cbx_Cmp_OneLinedValues" 
                                       Grid.Column="3" Grid.Row="1" Grid.RowSpan="2"
                                       HorizontalAlignment="Center"
@@ -496,7 +484,7 @@
                                       ToolTip="Replace every line breaks by /n/"
                                       />
 
-                            <!-- CSV output separator -->
+                            <!-- Compare mode : CSV output separator -->
                             <StackPanel Grid.Column="5" Grid.Row="1" Grid.RowSpan="2" Orientation="Horizontal" HorizontalAlignment="Center">
                                 <Label HorizontalAlignment="Right" VerticalAlignment="Center"
                                        Content="CSV separator character :"
@@ -512,8 +500,6 @@
                                          ToolTip="Choose the symbol to separate values as CSV data"
                                          ToolTipService.InitialShowDelay="50"
                                          ToolTipService.ShowDuration="15000"
-                                         GotFocus="Tbx_Cmp_CsvSeparator_GotFocus"
-                                         LostFocus="Tbx_Cmp_CsvSeparator_LostFocus"
                                          />
                             </StackPanel>
 
@@ -559,8 +545,7 @@
                             </Grid.RowDefinitions>
 
 
-                            <!-- Files A -->
-
+                            <!-- Prepare mode : Files A -->
                             <Label Content="Set of files A" Grid.Column="1" Style="{StaticResource Lbl_SetOfFiles}" ToolTip="Expected : FMG files to prepare"/>
                             <Border Grid.Column="1" Grid.Row="3" Style="{StaticResource Brd_MainContainer}" Tag="PrpA">
                                 <Grid>
@@ -603,8 +588,7 @@
                                 </Grid>
                             </Border>
 
-                            <!-- Files B -->
-
+                            <!-- Prepare mode : Files B -->
                             <Label Content="Set of files B" Grid.Column="3" Style="{StaticResource Lbl_SetOfFiles}" ToolTip="Expected : FMG files to prepare"/>
                             <Border Grid.Column="3" Grid.Row="3" Style="{StaticResource Brd_MainContainer}" Tag="PrpB">
                                 <Grid>
@@ -646,9 +630,8 @@
 
                                 </Grid>
                             </Border>
-                            
-                            <!-- Files C -->
 
+                            <!-- Prepare mode : Files C -->
                             <Label Content="Set of files C" Grid.Column="5" Style="{StaticResource Lbl_SetOfFiles}" ToolTip="Expected : FMG files to prepare"/>
                             <Border Grid.Column="5" Grid.Row="3" Style="{StaticResource Brd_MainContainer}" Tag="PrpC">
                                 <Grid>
@@ -712,7 +695,7 @@
                                 <RowDefinition Height="4"/>
                             </Grid.RowDefinitions>
 
-                            <!-- Replace values -->
+                            <!-- Prepare mode : Replace values -->
                             <StackPanel Grid.Column="1" Grid.Row="1" HorizontalAlignment="Center" Orientation="Horizontal">
                                 <Label Content="String to replace :" VerticalAlignment="Center" Width="110"
                                        ToolTip="Text to be replaced in entries"
@@ -726,7 +709,6 @@
                                          ToolTip="Text to be replaced in entries"
                                          ToolTipService.InitialShowDelay="50"
                                          ToolTipService.ShowDuration="15000"
-                                         GotFocus="Tbx_Prp_TextToReplace_GotFocus"
                                          />
                             </StackPanel>
                             <StackPanel Grid.Column="1" Grid.Row="2" HorizontalAlignment="Center" Orientation="Horizontal">
@@ -742,11 +724,10 @@
                                          ToolTip="Replacing text in entries"
                                          ToolTipService.InitialShowDelay="50"
                                          ToolTipService.ShowDuration="15000"
-                                         GotFocus="Tbx_Prp_ReplacingText_GotFocus"
                                          />
                             </StackPanel>
 
-                            <!-- Warn on special cases -->
+                            <!-- Prepare mode : Warn on special cases -->
                             <CheckBox x:Name="Cbx_Prp_WarnOnSpecialCases" Content="Warn on special cases" 
                                       Grid.Column="3" Grid.Row="1" Grid.RowSpan="2" 
                                       HorizontalAlignment="Center" IsChecked="True" VerticalAlignment="Center"
@@ -761,8 +742,7 @@
             </TabItem>
         </TabControl>
 
-        <!-- Generate output file -->
-
+        <!-- Buttons : Load preview / Generate output -->
         <Grid Grid.Column="1" Grid.Row="3">
 
             <Grid.ColumnDefinitions>

@@ -318,28 +318,19 @@ namespace DS_TextsMod_Helper
             MessageBox.Show($"From directory\n{iFiles.First().Directory}\n\n" + string.Join("\n", test));
         }
 
-        private void Tbx_Rd_CsvSeparator_GotFocus(object sender, RoutedEventArgs e) { SelectTbxValue(sender); }
-        private void Tbx_Rd_CsvSeparator_LostFocus(object sender, RoutedEventArgs e) { ValidateTbxValue(sender); }
-
         #endregion
 
 
         #region GUI Compare mode
 
-        private void Tbx_Cmp_oHeader1_GotFocus(object sender, RoutedEventArgs e) { SelectTbxValue(sender); }
-        private void Tbx_Cmp_oHeader1_LostFocus(object sender, RoutedEventArgs e) { ValidateTbxValue(sender); }
-        private void Tbx_Cmp_oHeader2_GotFocus(object sender, RoutedEventArgs e) { SelectTbxValue(sender); }
-        private void Tbx_Cmp_oHeader2_LostFocus(object sender, RoutedEventArgs e) { ValidateTbxValue(sender); }
-        private void Tbx_Cmp_CsvSeparator_GotFocus(object sender, RoutedEventArgs e) { SelectTbxValue(sender); }
-        private void Tbx_Cmp_CsvSeparator_LostFocus(object sender, RoutedEventArgs e) { ValidateTbxValue(sender); }
+        // Something here ?
 
         #endregion
 
 
         #region GUI Prepare mode
 
-        private void Tbx_Prp_TextToReplace_GotFocus(object sender, RoutedEventArgs e) { SelectTbxValue(sender); }
-        private void Tbx_Prp_ReplacingText_GotFocus(object sender, RoutedEventArgs e) { SelectTbxValue(sender); }
+        // Something here ?
 
         #endregion
 
@@ -645,22 +636,6 @@ namespace DS_TextsMod_Helper
             //        Process.Start(Tools.GetRootDirPath());
             //        break;
             //}
-        }
-
-        private void SelectTbxValue(object sender)
-        {
-            TextBox tbx = sender as TextBox;
-            tbx.SelectAll();
-        }
-
-        private void ValidateTbxValue(object sender)
-        {
-            TextBox tbx = sender as TextBox;
-
-            if (tbx.Text == "")
-                tbx.BorderBrush = Brushes.Red;
-            else
-                tbx.ClearValue(BorderBrushProperty);
         }
 
         private bool FilenameIsValid(string text)
