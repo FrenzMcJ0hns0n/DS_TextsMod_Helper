@@ -1038,12 +1038,11 @@ namespace DS_TextsMod_Helper
                     {
                         filePathA = Path.Combine(parentDirPathA, iFilesPrpA[i].NameExt);
                         filePathB = Path.Combine(parentDirPathB, iFilesPrpB[i].NameExt);
-                        filePathC = Path.Combine(parentDirPathB, iFilesPrpC[i].NameExt);
+                        filePathC = Path.Combine(parentDirPathC, iFilesPrpC[i].NameExt);
                         PrepareMode p = new PrepareMode(filePathA, filePathB, filePathC, Tbx_Prp_TextToReplace.Text, Tbx_Prp_ReplacingText.Text);
                         p.ProcessFiles(false);
                         p.SetOutputVersion(fileFmgVersionA);
                         p.ProduceOutput(iFilesPrpA[i].NameExt);
-
                         if (Cbx_Prp_WarnOnSpecialCases.IsChecked ?? false)
                         {
                             List<string> specialCases = p.GetSpecialCases();
@@ -1053,6 +1052,7 @@ namespace DS_TextsMod_Helper
                                 haveSpecialCases = true;
                             }
                         }
+                        processedFilesCount += 1;
                     }
                     string special = haveSpecialCases ? $"\n\n{WRN_SPECIAL_CASES}" : string.Empty;
                     MessageBox.Show($"[Prepare mode] Done: {processedFilesCount} output files have been created{special}");
