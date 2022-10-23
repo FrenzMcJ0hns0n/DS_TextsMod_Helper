@@ -67,13 +67,24 @@
         <!-- Input files : right border controls -->
 
         <Style x:Key="Btn_ClearFiles" TargetType="{x:Type Button}">
-            <Setter Property="Background" Value="#ff9999"/>
+            <Setter Property="Background" Value="#faa"/>
             <Setter Property="BorderThickness" Value="0"/>
             <Setter Property="Content" Value="&#10005;"/>
+            <Setter Property="FontSize" Value="14"/>
             <Setter Property="ToolTip" Value="Clear all files"/>
             <Setter Property="ToolTipService.InitialShowDelay" Value="50"/>
             <Setter Property="ToolTipService.ShowDuration" Value="15000"/>
             <EventSetter Event="Click" Handler="Btn_ClearFiles_Click"/>
+        </Style>
+
+        <Style x:Key="Btn_OpenParentDir" TargetType="{x:Type Button}">
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Content" Value="&#128193;"/>
+            <Setter Property="FontSize" Value="15"/>
+            <Setter Property="ToolTip" Value="Open parent directory"/>
+            <Setter Property="ToolTipService.InitialShowDelay" Value="50"/>
+            <Setter Property="ToolTipService.ShowDuration" Value="15000"/>
+            <EventSetter Event="Click" Handler="Btn_OpenParentDir_Click"/>
         </Style>
 
         <Style x:Key="Btn_MoveInputFileUp" TargetType="{x:Type Button}">
@@ -84,7 +95,7 @@
             <Setter Property="ToolTipService.ShowDuration" Value="15000"/>
             <EventSetter Event="Click" Handler="Btn_MoveInputFileUp_Click"/>
         </Style>
-        
+
         <Style x:Key="Btn_MoveInputFileDown" TargetType="{x:Type Button}">
             <Setter Property="BorderThickness" Value="0"/>
             <Setter Property="Content" Value="⮟"/>
@@ -135,7 +146,7 @@
         </Style>
     </Window.Resources>
 
-    <Grid x:Name="Grid_Main" Background="#EEE">
+    <Grid x:Name="Grid_Main" Background="WhiteSmoke">
         <Grid.Resources>
             <!-- Custom style for extra headers displayed with option "Show all details" -->
             <Style x:Key="HeaderOff" TargetType="{x:Type DataGridColumnHeader}">
@@ -158,7 +169,7 @@
 
         <TabControl x:Name="Tbc_Modes" AllowDrop="True" Grid.Column="1" Grid.Row="1">
             <TabItem x:Name ="Tbi_Rd" Header="Read mode" DragOver="Tbi_Rd_DragOver">
-                <Grid Background="#EEE">
+                <Grid Background="WhiteSmoke">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="8"/>
                         <ColumnDefinition Width="1*"/>
@@ -187,7 +198,6 @@
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="4"/>
                                 <RowDefinition Height="Auto"/>
-                                <RowDefinition Height="4"/>
                                 <RowDefinition Height="*"/>
                                 <RowDefinition Height="4"/>
                             </Grid.RowDefinitions>
@@ -195,7 +205,7 @@
                             <!-- Idea for later: for each file in [set of files] do read/preview in dedicated tabItem in external window -->
                             <Label Content="Set of files A" Grid.Column="1" Style="{StaticResource Lbl_SetOfFiles}" ToolTip="Expected : Single FMG files to read"/>
 
-                            <Border Grid.Column="1" Grid.Row="3" Style="{StaticResource Brd_MainContainer}" Tag="RdA">
+                            <Border Grid.Column="1" Grid.Row="2" Style="{StaticResource Brd_MainContainer}" Tag="RdA">
                                 <Grid>
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="93*"/>
@@ -219,6 +229,9 @@
                                             <StackPanel VerticalAlignment="Top">
                                                 <Border BorderBrush="DarkGray" BorderThickness="1" CornerRadius="2">
                                                     <Button Style="{StaticResource Btn_ClearFiles}" Tag="RdA"/>
+                                                </Border>
+                                                <Border BorderBrush="DarkGray" BorderThickness="1" CornerRadius="2">
+                                                    <Button Style="{StaticResource Btn_OpenParentDir}" Tag="RdA"/>
                                                 </Border>
                                             </StackPanel>
                                             <StackPanel VerticalAlignment="Center">
@@ -300,7 +313,7 @@
             </TabItem>
 
             <TabItem x:Name ="Tbi_Cmp" Header="Compare mode" DragOver="Tbi_Cmp_DragOver">
-                <Grid Background="#EEE">
+                <Grid Background="WhiteSmoke">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="8"/>
                         <ColumnDefinition Width="1*"/>
@@ -329,14 +342,13 @@
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="4"/>
                                 <RowDefinition Height="Auto"/>
-                                <RowDefinition Height="4"/>
                                 <RowDefinition Height="*"/>
                                 <RowDefinition Height="4"/>
                             </Grid.RowDefinitions>
 
                             <!-- Compare mode : Files A -->
                             <Label Content="Set of files A" Grid.Column="1" Style="{StaticResource Lbl_SetOfFiles}" ToolTip="Expected : FMG files to compare"/>
-                            <Border Grid.Column="1" Grid.Row="3" Style="{StaticResource Brd_MainContainer}" Tag="CmpA">
+                            <Border Grid.Column="1" Grid.Row="2" Style="{StaticResource Brd_MainContainer}" Tag="CmpA">
                                 <Grid>
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="93*"/>
@@ -361,6 +373,9 @@
                                                 <Border BorderBrush="DarkGray" BorderThickness="1" CornerRadius="2">
                                                     <Button Style="{StaticResource Btn_ClearFiles}" Tag="CmpA"/>
                                                 </Border>
+                                                <Border BorderBrush="DarkGray" BorderThickness="1" CornerRadius="2">
+                                                    <Button Style="{StaticResource Btn_OpenParentDir}" Tag="CmpA"/>
+                                                </Border>
                                             </StackPanel>
                                             <StackPanel VerticalAlignment="Center">
                                                 <Border BorderBrush="DarkGray" BorderThickness="1" Margin="0 2" CornerRadius="2">
@@ -379,7 +394,7 @@
 
                             <!-- Compare mode : Files B -->
                             <Label Content="Set of files B" Grid.Column="3" Style="{StaticResource Lbl_SetOfFiles}" ToolTip="Expected : FMG files to compare"/>
-                            <Border Grid.Column="3" Grid.Row="3" Style="{StaticResource Brd_MainContainer}" Tag="CmpB">
+                            <Border Grid.Column="3" Grid.Row="2" Style="{StaticResource Brd_MainContainer}" Tag="CmpB">
                                 <Grid>
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="93*"/>
@@ -403,6 +418,9 @@
                                             <StackPanel VerticalAlignment="Top">
                                                 <Border BorderBrush="DarkGray" BorderThickness="1" CornerRadius="2">
                                                     <Button Style="{StaticResource Btn_ClearFiles}" Tag="CmpB"/>
+                                                </Border>
+                                                <Border BorderBrush="DarkGray" BorderThickness="1" CornerRadius="2">
+                                                    <Button Style="{StaticResource Btn_OpenParentDir}" Tag="CmpB"/>
                                                 </Border>
                                             </StackPanel>
                                             <StackPanel VerticalAlignment="Center">
@@ -512,7 +530,7 @@
             </TabItem>
 
             <TabItem x:Name ="Tbi_Prp" Header="Prepare mode" DragOver="Tbi_Prp_DragOver">
-                <Grid Background="#EEE">
+                <Grid Background="WhiteSmoke">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="8"/>
                         <ColumnDefinition Width="1*"/>
@@ -541,7 +559,6 @@
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="4"/>
                                 <RowDefinition Height="Auto"/>
-                                <RowDefinition Height="4"/>
                                 <RowDefinition Height="*"/>
                                 <RowDefinition Height="4"/>
                             </Grid.RowDefinitions>
@@ -549,7 +566,7 @@
 
                             <!-- Prepare mode : Files A -->
                             <Label Content="Set of files A" Grid.Column="1" Style="{StaticResource Lbl_SetOfFiles}" ToolTip="Expected : FMG files to prepare"/>
-                            <Border Grid.Column="1" Grid.Row="3" Style="{StaticResource Brd_MainContainer}" Tag="PrpA">
+                            <Border Grid.Column="1" Grid.Row="2" Style="{StaticResource Brd_MainContainer}" Tag="PrpA">
                                 <Grid>
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="93*"/>
@@ -574,6 +591,9 @@
                                                 <Border BorderBrush="DarkGray" BorderThickness="1" CornerRadius="2">
                                                     <Button Style="{StaticResource Btn_ClearFiles}" Tag="PrpA"/>
                                                 </Border>
+                                                <Border BorderBrush="DarkGray" BorderThickness="1" CornerRadius="2">
+                                                    <Button Style="{StaticResource Btn_OpenParentDir}" Tag="PrpA"/>
+                                                </Border>
                                             </StackPanel>
                                             <StackPanel VerticalAlignment="Center">
                                                 <Border BorderBrush="DarkGray" BorderThickness="1" Margin="0 2" CornerRadius="2">
@@ -592,7 +612,7 @@
 
                             <!-- Prepare mode : Files B -->
                             <Label Content="Set of files B" Grid.Column="3" Style="{StaticResource Lbl_SetOfFiles}" ToolTip="Expected : FMG files to prepare"/>
-                            <Border Grid.Column="3" Grid.Row="3" Style="{StaticResource Brd_MainContainer}" Tag="PrpB">
+                            <Border Grid.Column="3" Grid.Row="2" Style="{StaticResource Brd_MainContainer}" Tag="PrpB">
                                 <Grid>
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="93*"/>
@@ -617,6 +637,9 @@
                                                 <Border BorderBrush="DarkGray" BorderThickness="1" CornerRadius="2">
                                                     <Button Style="{StaticResource Btn_ClearFiles}" Tag="PrpB"/>
                                                 </Border>
+                                                <Border BorderBrush="DarkGray" BorderThickness="1" CornerRadius="2">
+                                                    <Button Style="{StaticResource Btn_OpenParentDir}" Tag="PrpB"/>
+                                                </Border>
                                             </StackPanel>
                                             <StackPanel VerticalAlignment="Center">
                                                 <Border BorderBrush="DarkGray" BorderThickness="1" Margin="0 2" CornerRadius="2">
@@ -635,7 +658,7 @@
 
                             <!-- Prepare mode : Files C -->
                             <Label Content="Set of files C" Grid.Column="5" Style="{StaticResource Lbl_SetOfFiles}" ToolTip="Expected : FMG files to prepare"/>
-                            <Border Grid.Column="5" Grid.Row="3" Style="{StaticResource Brd_MainContainer}" Tag="PrpC">
+                            <Border Grid.Column="5" Grid.Row="2" Style="{StaticResource Brd_MainContainer}" Tag="PrpC">
                                 <Grid>
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="93*"/>
@@ -659,6 +682,9 @@
                                             <StackPanel VerticalAlignment="Top">
                                                 <Border BorderBrush="DarkGray" BorderThickness="1" CornerRadius="2">
                                                     <Button Style="{StaticResource Btn_ClearFiles}" Tag="PrpC"/>
+                                                </Border>
+                                                <Border BorderBrush="DarkGray" BorderThickness="1" CornerRadius="2">
+                                                    <Button Style="{StaticResource Btn_OpenParentDir}" Tag="PrpC"/>
                                                 </Border>
                                             </StackPanel>
                                             <StackPanel VerticalAlignment="Center">
@@ -756,7 +782,7 @@
                 <RowDefinition Height="1*"/>
             </Grid.RowDefinitions>
 
-            <Button x:Name="Btn_RefreshPreview" Background="PowderBlue" Grid.Column="0" Grid.Row="1"> <!-- Click="Btn_RefreshPreview_Click" -->
+            <Button x:Name="Btn_RefreshPreview" Grid.Column="0" Grid.Row="1"> <!-- Click="Btn_RefreshPreview_Click" -->
                 <StackPanel Orientation="Horizontal">
                     <TextBlock Padding="6,4,3,2" FontSize="14">Load/Reload preview(s)</TextBlock>
                     <TextBlock Padding="3,1,6,2" FontSize="18">&#x21bb;</TextBlock>

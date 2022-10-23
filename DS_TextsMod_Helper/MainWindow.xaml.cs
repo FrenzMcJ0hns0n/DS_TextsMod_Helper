@@ -21,7 +21,7 @@ namespace DS_TextsMod_Helper
         private const string DROP_FMG = "Drop FMG file...";
 
         private const string HDR_MISSING_IFILES = "Missing input files";
-        private const string MSG_MISSING_IFILES = "Ensure that the input areas are holding files to process";
+        private const string MSG_MISSING_IFILES = "Ensure that all the input areas are holding files to process";
 
         private const string HDR_WRONG_IF_COUNT = "Wrong files count";
         private const string MSG_WRONG_IF_COUNT = "Input areas must share the same files count";
@@ -161,6 +161,15 @@ namespace DS_TextsMod_Helper
             brd.Visibility = Visibility.Collapsed;
             dtg.Visibility = Visibility.Collapsed;
             lbl.Visibility = Visibility.Visible;
+        }
+
+        private void Btn_OpenParentDir_Click(object sender, RoutedEventArgs e)
+        {
+            Button btnSource = sender as Button;
+            DataGrid dtg = (DataGrid)FindName("Dtg_" + btnSource.Tag);
+            ObservableCollection<InputFile> iFiles = (ObservableCollection<InputFile>)dtg.ItemsSource;
+
+            Process.Start(iFiles.First().Directory);
         }
 
         private void Btn_MoveInputFileUp_Click(object sender, RoutedEventArgs e)
