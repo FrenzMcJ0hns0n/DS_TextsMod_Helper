@@ -52,7 +52,7 @@ namespace DS_TextsMod_Helper
                                          .ToList();
 
             foreach (Entry e in involvedEntries)
-                result.Add($"Entry Id {e.TextId} : File #1 and File #2 values are identical and not empty, but File #3 value was empty");
+                result.Add($"Entry Id {e.TextId} : Values of files A and B are identical and not empty, but value of file C was empty");
 
             return result;
         }

@@ -39,7 +39,7 @@ namespace DS_TextsMod_Helper
         private const string WRN_DISTINCTS_FNAMES = "Warning : inconsistent filename(s).\r\n"
                                                   + "Make sure to use the right input files\r\n\r\n";
 
-        private const string WRN_SPECIAL_CASES = "Warning : Found special cases whille processing files."
+        private const string WRN_SPECIAL_CASES = "Warning : Found special cases while processing files."
                                                + "\r\nSee details in file \"special cases.txt\"";
 
         private const string ERR_INVALID_FNAME = "Filenames cannot contain the following characters:\r\n"

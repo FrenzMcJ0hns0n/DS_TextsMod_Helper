@@ -123,15 +123,15 @@ namespace DS_TextsMod_Helper
             return iFilenames.Where(iFile => oFilenames.Contains(iFile)).ToList();
         }
 
-        public static void LogSpecialCases(string iFile1, string iFile2, string iFile3, string preparedFile, List<string> specialCases)
+        public static void LogSpecialCases(string iFileA, string iFileB, string iFileC, string preparedFile, List<string> specialCases)
         {
             string specialCasesLogFile = Path.Combine(GetOutputDirPath(), "special cases.txt");
             using (StreamWriter writer = new StreamWriter(specialCasesLogFile, true))
             {
                 writer.WriteLine($"{DateTime.Now} - Special cases found while generating file \"{preparedFile}\" :");
-                writer.WriteLine($"File #1 = \"{iFile1}\"");
-                writer.WriteLine($"File #2 = \"{iFile2}\"");
-                writer.WriteLine($"File #3 = \"{iFile3}\"");
+                writer.WriteLine($"File A = \"{iFileA}\"");
+                writer.WriteLine($"File B = \"{iFileB}\"");
+                writer.WriteLine($"File C = \"{iFileC}\"");
                 foreach (string sc in specialCases)
                     writer.WriteLine($"\t{sc}");
             }

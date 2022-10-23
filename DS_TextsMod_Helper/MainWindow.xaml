@@ -161,9 +161,9 @@
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="16" />
-            <RowDefinition Height="92*" /> <!-- TabControl -->
+            <RowDefinition Height="94*" /> <!-- TabControl -->
             <RowDefinition Height="16" />
-            <RowDefinition Height="8*" /> <!-- Buttons -->
+            <RowDefinition Height="6*" /> <!-- Buttons -->
             <RowDefinition Height="16" />
         </Grid.RowDefinitions>
 
@@ -774,9 +774,11 @@
         <Grid Grid.Column="1" Grid.Row="3">
 
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="50*"/>
+                <ColumnDefinition Width="33*"/>
                 <ColumnDefinition Width="16"/>
-                <ColumnDefinition Width="50*"/>
+                <ColumnDefinition Width="33*"/>
+                <ColumnDefinition Width="16"/>
+                <ColumnDefinition Width="33*"/>
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
                 <RowDefinition Height="1*"/>
@@ -784,15 +786,22 @@
 
             <Button x:Name="Btn_RefreshPreview" Grid.Column="0" Grid.Row="1"> <!-- Click="Btn_RefreshPreview_Click" -->
                 <StackPanel Orientation="Horizontal">
-                    <TextBlock Padding="6,4,3,2" FontSize="14">Load/Reload preview(s)</TextBlock>
-                    <TextBlock Padding="3,1,6,2" FontSize="18">&#x21bb;</TextBlock>
+                    <TextBlock Padding="6,4,3,2" FontSize="13">Load/Reload preview(s)</TextBlock>
+                    <TextBlock Padding="3,1,6,2" FontSize="16">&#x21bb;</TextBlock>
                 </StackPanel>
             </Button>
 
-            <Button x:Name="Btn_GenerateOutput" Background="#c6ecc6" Click="Btn_GenerateOutput_Click" Grid.Column="2" Grid.Row="1">
+            <Button x:Name="Btn_OpenProgramDir" Grid.Column="2" Grid.Row="1"> <!-- Click="Btn_OpenProgramDir_Click" -->
                 <StackPanel Orientation="Horizontal">
-                    <TextBlock Padding="6,4,3,2" FontSize="14">Generate output file(s)</TextBlock>
-                    <TextBlock Padding="3,2,6,2" FontSize="18">&#128462;</TextBlock>
+                    <TextBlock Padding="6,4,3,2" FontSize="13">Open program directory</TextBlock>
+                    <TextBlock Padding="3,2,6,2" FontSize="16">&#128193;</TextBlock>
+                </StackPanel>
+            </Button>
+
+            <Button x:Name="Btn_GenerateOutput" Background="#c6ecc6" Click="Btn_GenerateOutput_Click" Grid.Column="4" Grid.Row="1">
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Padding="6,4,3,2" FontSize="13">Generate output file(s)</TextBlock>
+                    <TextBlock Padding="3,2,6,2" FontSize="16">&#128462;</TextBlock>
                 </StackPanel>
             </Button>
             
