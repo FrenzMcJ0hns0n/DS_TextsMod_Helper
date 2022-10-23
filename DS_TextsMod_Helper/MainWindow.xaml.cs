@@ -20,9 +20,21 @@ namespace DS_TextsMod_Helper
 
         private const string DROP_FMG = "Drop FMG file...";
 
-        private const string HDR_EXISTING_OFNAME = "Output file already exists";
-        private const string MSG_EXISTING_OFNAME = "Output file already exists.\r\n"
-                                                 + "Click OK to confirm overwriting";
+        private const string HDR_MISSING_IFILES = "Missing input files";
+        private const string MSG_MISSING_IFILES = "Ensure that the input areas are holding files to process";
+
+        private const string HDR_WRONG_IF_COUNT = "Wrong files count";
+        private const string MSG_WRONG_IF_COUNT = "Input areas must share the same files count";
+
+        private const string HDR_SAME_DIRECTORY = "Same directory";
+        private const string MSG_SAME_DIRECTORY = "Files from distinct input areas cannot have the same directory";
+
+        private const string HDR_INCONS_FMG_VER = "Inconsistent FMG versions";
+        private const string MSG_INCONS_FMG_VER = "Ensure that the input files are compatible with each other";
+
+        private const string HDR_OVERW_EXIST_OF = "Overwrite existing files";
+        private const string MSG_OVERW_EXIST_OF = "The following output files already exist.\r\n"
+                                                + "Continue to overwrite?";
 
         private const string WRN_DISTINCTS_FNAMES = "Warning : inconsistent filename(s).\r\n"
                                                   + "Make sure to use the right input files\r\n\r\n";
@@ -881,6 +893,8 @@ namespace DS_TextsMod_Helper
         private void Btn_GenerateOutput_Click(object sender, RoutedEventArgs e)
         {
             int processedFilesCount = 0;
+            List<string> iFilenames;
+            List<string> alreadyExisting;
             string parentDirPathA;
             string parentDirPathB;
             string parentDirPathC;
@@ -896,13 +910,23 @@ namespace DS_TextsMod_Helper
             {
                 case PROCESS_MODE.Read:
                     if (Dtg_RdA.ItemsSource is null)
-                    {
-                        MessageBox.Show("Error"); // Title="Error: Missing input files",Message="Ensure that the input A is holding files to process" TODO: Use constant
+                    {   // Early return on error "Missing input files"
+                        MessageBox.Show(MSG_MISSING_IFILES, HDR_MISSING_IFILES, MessageBoxButton.OK, MessageBoxImage.Error);
                         return;
                     }
                     ObservableCollection<InputFile> iFilesRd = (ObservableCollection<InputFile>)Dtg_RdA.ItemsSource;
                     parentDirPathA = iFilesRd.First().Directory;
-                    // TODO: Get filenames from iFilesRd to look for already existing output files
+
+                    iFilenames = iFilesRd.Select(iFile => iFile.Name + ".csv").ToList();
+                    alreadyExisting = Tools.GetAlreadyExistingFilenames(iFilenames);
+                    if (alreadyExisting.Count > 0)
+                    {
+                        string fnames = string.Join("\r\n - ", alreadyExisting);
+                        MessageBoxResult mbr = MessageBox.Show(MSG_OVERW_EXIST_OF + $"\r\n\r\n{fnames}", HDR_OVERW_EXIST_OF, MessageBoxButton.OKCancel, MessageBoxImage.Information);
+                        if (mbr == MessageBoxResult.Cancel)
+                            return;
+                    }
+
                     foreach (InputFile iFile in iFilesRd)
                     {
                         filePathA = Path.Combine(parentDirPathA, iFile.NameExt);
@@ -918,32 +942,42 @@ namespace DS_TextsMod_Helper
 
                 case PROCESS_MODE.Compare:
                     if (Dtg_CmpA.ItemsSource is null || Dtg_CmpB.ItemsSource is null)
-                    {
-                        MessageBox.Show("Error"); // Title="Error: Missing input files",Message="Ensure that the inputs A and B are holding files to process" TODO: Use constant
+                    {   // Early return on error "Missing input files"
+                        MessageBox.Show(MSG_MISSING_IFILES, HDR_MISSING_IFILES, MessageBoxButton.OK, MessageBoxImage.Error);
                         return;
                     }
                     ObservableCollection<InputFile> iFilesCmpA = (ObservableCollection<InputFile>)Dtg_CmpA.ItemsSource;
                     ObservableCollection<InputFile> iFilesCmpB = (ObservableCollection<InputFile>)Dtg_CmpB.ItemsSource;
                     if (iFilesCmpA.Count != iFilesCmpB.Count)
-                    {
-                        MessageBox.Show("Error"); // Title="Error: Wrong files count",Message="Inputs A and B must contain the same files count" TODO: Use constant
+                    {   // Early return on error "Wrong input files count"
+                        MessageBox.Show(MSG_WRONG_IF_COUNT, HDR_WRONG_IF_COUNT, MessageBoxButton.OK, MessageBoxImage.Error);
                         return;
                     }
                     parentDirPathA = iFilesCmpA.First().Directory;
                     parentDirPathB = iFilesCmpB.First().Directory;
                     if (parentDirPathA == parentDirPathB)
-                    {
-                        MessageBox.Show("Error"); // Title="Error: Same directory",Message="Inputs A and B cannot share the same directory" TODO: Use constant
+                    {   // Early return on error "Same directory"
+                        MessageBox.Show(MSG_SAME_DIRECTORY, HDR_SAME_DIRECTORY, MessageBoxButton.OK, MessageBoxImage.Error);
                         return;
                     }
                     fileFmgVersionA = iFilesCmpA.First().VersionLg;
                     fileFmgVersionB = iFilesCmpB.First().VersionLg;
                     if (fileFmgVersionA != fileFmgVersionB)
-                    {
-                        MessageBox.Show("Error"); // Title="Error: Distinct FMG versions",Message="Ensure that the input files are compatible with each other" TODO: Use constant
+                    {   // Early return on error "Inconsistent FMG versions"
+                        MessageBox.Show(MSG_INCONS_FMG_VER, HDR_INCONS_FMG_VER, MessageBoxButton.OK, MessageBoxImage.Error);
                         return;
                     }
-                    // TODO: Get filenames from iFilesCmpA to look for already existing output files
+
+                    iFilenames = iFilesCmpA.Select(iFile => iFile.Name + ".csv").ToList();
+                    alreadyExisting = Tools.GetAlreadyExistingFilenames(iFilenames);
+                    if (alreadyExisting.Count > 0)
+                    {
+                        string fnames = string.Join("\r\n - ", alreadyExisting);
+                        MessageBoxResult mbr = MessageBox.Show(MSG_OVERW_EXIST_OF + $"\r\n\r\n{fnames}", HDR_OVERW_EXIST_OF, MessageBoxButton.OKCancel, MessageBoxImage.Information);
+                        if (mbr == MessageBoxResult.Cancel)
+                            return;
+                    }
+
                     for (int i = 0; i < iFilesCmpA.Count; i++)
                     {
                         filePathA = Path.Combine(parentDirPathA, iFilesCmpA[i].NameExt);
@@ -960,40 +994,44 @@ namespace DS_TextsMod_Helper
 
                 case PROCESS_MODE.Prepare:
                     if (Dtg_PrpA.ItemsSource is null || Dtg_PrpB.ItemsSource is null || Dtg_PrpC.ItemsSource is null)
-                    {
-                        MessageBox.Show("Error"); // Title="Error: Missing input files",Message="Ensure that the inputs A, B, C are holding files to process" TODO: Use constant
+                    {   // Early return on error "Missing input files"
+                        MessageBox.Show(MSG_MISSING_IFILES, HDR_MISSING_IFILES, MessageBoxButton.OK, MessageBoxImage.Error);
                         return;
                     }
                     ObservableCollection<InputFile> iFilesPrpA = (ObservableCollection<InputFile>)Dtg_PrpA.ItemsSource;
                     ObservableCollection<InputFile> iFilesPrpB = (ObservableCollection<InputFile>)Dtg_PrpB.ItemsSource;
                     ObservableCollection<InputFile> iFilesPrpC = (ObservableCollection<InputFile>)Dtg_PrpC.ItemsSource;
                     if (iFilesPrpA.Count != iFilesPrpB.Count || iFilesPrpA.Count != iFilesPrpC.Count)
-                    {
-                        MessageBox.Show("Error"); // // Title="Error: Wrong files count",Message="Inputs A, B, C must contain the same files count" TODO: Use constant
+                    {   // Early return on error "Wrong input files count"
+                        MessageBox.Show(MSG_WRONG_IF_COUNT, HDR_WRONG_IF_COUNT, MessageBoxButton.OK, MessageBoxImage.Error);
                         return;
                     }
                     parentDirPathA = iFilesPrpA.First().Directory;
                     parentDirPathB = iFilesPrpB.First().Directory;
                     parentDirPathC = iFilesPrpC.First().Directory;
                     if (parentDirPathA == parentDirPathB || parentDirPathA == parentDirPathC)
-                    {
-                        MessageBox.Show("Error"); // Title="Error: Same directory",Message="Inputs A, B, C cannot share the same directory" TODO: Use constant
+                    {   // Early return on error "Same directory"
+                        MessageBox.Show(MSG_SAME_DIRECTORY, HDR_SAME_DIRECTORY, MessageBoxButton.OK, MessageBoxImage.Error);
                         return;
                     }
                     fileFmgVersionA = iFilesPrpA.First().VersionLg;
                     fileFmgVersionB = iFilesPrpB.First().VersionLg;
                     fileFmgVersionC = iFilesPrpC.First().VersionLg;
                     if (fileFmgVersionA != fileFmgVersionB || fileFmgVersionA != fileFmgVersionC)
-                    {
-                        MessageBox.Show("Error"); // Title="Error: Distinct FMG versions",Message="Ensure that the input files are compatible with each other" TODO: Use constant
+                    {   // Early return on error "Inconsistent FMG versions"
+                        MessageBox.Show(MSG_INCONS_FMG_VER, HDR_INCONS_FMG_VER, MessageBoxButton.OK, MessageBoxImage.Error);
                         return;
                     }
 
-                    // (WiP): Get filenames from iFilesPrpA to look for already existing output files
-                    DirectoryInfo di = new DirectoryInfo(Tools.GetOutputDirPath());
-                    List<string> oFilenames = di.GetFiles().Select(fi => fi.Name).ToList();
-                    List<string> iFilenamesPrpA = iFilesPrpA.Select(iFile => iFile.NameExt).ToList();
-                    List<string> alreadyExisting = iFilenamesPrpA.Where(iFile => oFilenames.Contains(iFile)).ToList();
+                    iFilenames = iFilesPrpA.Select(iFile => iFile.NameExt).ToList();
+                    alreadyExisting = Tools.GetAlreadyExistingFilenames(iFilenames);
+                    if (alreadyExisting.Count > 0)
+                    {
+                        string fnames = string.Join("\r\n", alreadyExisting);
+                        MessageBoxResult mbr = MessageBox.Show(MSG_OVERW_EXIST_OF + $"\r\n\r\n{fnames}", HDR_OVERW_EXIST_OF, MessageBoxButton.OKCancel, MessageBoxImage.Information);
+                        if (mbr == MessageBoxResult.Cancel)
+                            return;
+                    }
 
                     bool haveSpecialCases = false;
                     for (int i = 0; i < iFilesPrpA.Count; i++)

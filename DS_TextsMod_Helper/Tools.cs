@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using System.Windows;
 
@@ -8,6 +9,9 @@ namespace DS_TextsMod_Helper
 {
     public class Tools
     {
+
+        #region System
+
         public static string GetFormattedAppVersion()
         {
             AssemblyName assemblyName = Assembly.GetExecutingAssembly().GetName();
@@ -24,8 +28,10 @@ namespace DS_TextsMod_Helper
             return $"DS Texts Mod Helper - v{major}{minor}{build}{revis}";
         }
 
+        #endregion
 
 
+        #region IO shortcuts
 
         public static string GetRootDirPath()
         {
@@ -47,8 +53,10 @@ namespace DS_TextsMod_Helper
             return Path.Combine(GetRootDirPath(), "SoulsFormats.dll");
         }
 
+        #endregion
 
 
+        #region Input files properties
 
         public static string GetFileName(string path, bool keepExtension)
         {
@@ -71,8 +79,13 @@ namespace DS_TextsMod_Helper
             return parentFolder;
         }
 
+        private static int GetSecondsSinceLastEdit(string path)
+        {
+            DateTime lastWriteTime = new FileInfo(path).LastWriteTime;
+            DateTime loadedNow = DateTime.Now;
 
-
+            return (int)(loadedNow - lastWriteTime).TotalSeconds;
+        }
 
         public static string GetTimeSinceLastEdit(string path)
         {
@@ -87,24 +100,28 @@ namespace DS_TextsMod_Helper
             else return $"{seconds / 60} minute(s)";
         }
 
-        private static int GetSecondsSinceLastEdit(string path)
-        {
-            DateTime lastWriteTime = new FileInfo(path).LastWriteTime;
-            DateTime loadedNow = DateTime.Now;
-
-            return (int)(loadedNow - lastWriteTime).TotalSeconds;
-        }
+        #endregion
 
 
-
+        #region Output preview style
 
         public static double GetColumnMaxWidth()
         {
             return SystemParameters.FullPrimaryScreenWidth >= 2500 ? 540 : 360;
         }
 
+        #endregion
 
 
+        #region Misc. generate output operations
+
+        public static List<string> GetAlreadyExistingFilenames(List<string> iFilenames)
+        {
+            DirectoryInfo di = new DirectoryInfo(GetOutputDirPath());
+            List<string> oFilenames = di.GetFiles().Select(fi => fi.Name).ToList();
+
+            return iFilenames.Where(iFile => oFilenames.Contains(iFile)).ToList();
+        }
 
         public static void LogSpecialCases(string iFile1, string iFile2, string iFile3, string preparedFile, List<string> specialCases)
         {
@@ -119,6 +136,8 @@ namespace DS_TextsMod_Helper
                     writer.WriteLine($"\t{sc}");
             }
         }
+
+        #endregion
 
     }
 }
