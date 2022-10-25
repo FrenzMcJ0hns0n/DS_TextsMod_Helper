@@ -104,46 +104,7 @@
             <Setter Property="ToolTipService.ShowDuration" Value="15000"/>
             <EventSetter Event="Click" Handler="Btn_MoveInputFileDown_Click"/>
         </Style>
-
-        <!-- ========== OLD ========== -->
-
-        <Style x:Key="Brd_InputFmg" TargetType="{x:Type Border}">
-            <Setter Property="HorizontalAlignment" Value="Stretch"/>
-            <Setter Property="VerticalAlignment" Value="Center"/>
-            <Setter Property="BorderThickness" Value="1"/>
-            <Setter Property="BorderBrush" Value="DarkGray"/>
-            <Setter Property="SnapsToDevicePixels" Value="True"/>
-        </Style>
-
-        <Style x:Key="Tbk_InputFmg" TargetType="{x:Type TextBlock}">
-            <Setter Property="TextWrapping" Value="NoWrap"/>
-            <Setter Property="Padding" Value="2,0,0,0"/>
-            <Setter Property="Background" Value="White"/>
-            <Setter Property="Foreground" Value="Gray"/>
-            <Setter Property="FontStyle" Value="Italic"/>
-            <Setter Property="Text" Value="Drop FMG file..."/>
-            <Setter Property="AllowDrop" Value="True"/>
-            <Setter Property="ToolTipService.InitialShowDelay" Value="50"/>
-            <Setter Property="ToolTipService.ShowDuration" Value="15000"/>
-
-            <EventSetter Event="PreviewDragOver" Handler="Tbk_InputFmg_PreviewDragOver"/>
-            <EventSetter Event="Drop" Handler="Tbk_InputFmg_Drop"/>
-        </Style>
-
-        <Style x:Key="Btn_Explore" TargetType="{x:Type Button}">
-            <Setter Property="HorizontalAlignment" Value="Left"/>
-            <Setter Property="VerticalAlignment" Value="Center"/>
-            <Setter Property="Margin" Value="2,0,0,0"/>
-            <Setter Property="Padding" Value="0,0,0,1"/>
-            <Setter Property="Width" Value="24"/>
-            <Setter Property="Height" Value="17"/>
-            <Setter Property="Content" Value="&#8901;&#8901;&#8901;"/>
-            <Setter Property="ToolTip" Value="Open parent folder of the submitted file if any, else the root folder of DSTMH"/>
-            <Setter Property="ToolTipService.InitialShowDelay" Value="50"/>
-            <Setter Property="ToolTipService.ShowDuration" Value="15000"/>
-            
-            <EventSetter Event="Click" Handler="Btn_Explore_Click"/>
-        </Style>
+        
     </Window.Resources>
 
     <Grid x:Name="Grid_Main" Background="WhiteSmoke">
@@ -302,11 +263,6 @@
                                       ToolTipService.InitialShowDelay="50"
                                       ToolTipService.ShowDuration="15000"
                                       />
-
-                            <Button x:Name="Btn_RdATest" Content="Test!" Grid.Column="5" Grid.Row="1" Grid.RowSpan="3"
-                                    HorizontalAlignment="Center" Padding="10 6"
-                                    VerticalAlignment="Center"
-                                    Click="Btn_RdATest_Click"/>
                         </Grid>
                     </GroupBox>
                 </Grid>

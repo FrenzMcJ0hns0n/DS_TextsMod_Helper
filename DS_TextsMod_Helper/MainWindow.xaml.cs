@@ -332,17 +332,7 @@ namespace DS_TextsMod_Helper
 
         #region GUI Read mode
 
-        private void Btn_RdATest_Click(object sender, RoutedEventArgs e) // Preview files order
-        {
-            DataGrid dtg = Dtg_RdA;
-            List<string> test = new List<string>();
-
-            ObservableCollection<InputFile> iFiles = (ObservableCollection<InputFile>)dtg.ItemsSource;
-            for (int i = 0; i < iFiles.Count; i++)
-                test.Add($"{i + 1 } : {iFiles[i].NameExt}");
-
-            MessageBox.Show($"From directory\n{iFiles.First().Directory}\n\n" + string.Join("\n", test));
-        }
+        // Something here ?
 
         #endregion
 
@@ -634,45 +624,9 @@ namespace DS_TextsMod_Helper
 
         #region GUI Helpers : Misc.
 
-        private void Btn_Explore_Click(object sender, RoutedEventArgs e)
+        private void Btn_OpenProgramDir_Click(object sender, RoutedEventArgs e)
         {
-            // Commented as building 1.5
-            //Button btn = sender as Button;
-            //switch (btn.Name)
-            //{
-            //    case "Btn_Rd_ExploreFile1":
-            //        Process.Start(Tbk_Rd_iFile1.Text != DROP_FMG ? Tools.GetParentDirPath(Tbk_Rd_iFile1.Text) : Tools.GetRootDirPath());
-            //        break;
-            //    case "Btn_Cmp_ExploreFile1":
-            //        Process.Start(Tbk_Cmp_iFile1.Text != DROP_FMG ? Tools.GetParentDirPath(Tbk_Cmp_iFile1.Text) : Tools.GetRootDirPath());
-            //        break;
-            //    case "Btn_Cmp_ExploreFile2":
-            //        Process.Start(Tbk_Cmp_iFile2.Text != DROP_FMG ? Tools.GetParentDirPath(Tbk_Cmp_iFile2.Text) : Tools.GetRootDirPath());
-            //        break;
-            //    case "Btn_Prp_ExploreFile1":
-            //        Process.Start(Tbk_Prp_iFile1.Text != DROP_FMG ? Tools.GetParentDirPath(Tbk_Prp_iFile1.Text) : Tools.GetRootDirPath());
-            //        break;
-            //    case "Btn_Prp_ExploreFile2":
-            //        Process.Start(Tbk_Prp_iFile2.Text != DROP_FMG ? Tools.GetParentDirPath(Tbk_Prp_iFile2.Text) : Tools.GetRootDirPath());
-            //        break;
-            //    case "Btn_Prp_ExploreFile3":
-            //        Process.Start(Tbk_Prp_iFile3.Text != DROP_FMG ? Tools.GetParentDirPath(Tbk_Prp_iFile3.Text) : Tools.GetRootDirPath());
-            //        break;
-            //    default:
-            //        Process.Start(Tools.GetRootDirPath());
-            //        break;
-            //}
-        }
-
-        private bool FilenameIsValid(string text)
-        {
-            List<char> invalidChars = new List<char>() { '\\', '/', ':', '*', '?', '"', '<', '>', '|' };
-
-            foreach (char c in invalidChars)
-                if (text.Contains(c))
-                    return false;
-
-            return true;
+            // TODO
         }
 
         #endregion
