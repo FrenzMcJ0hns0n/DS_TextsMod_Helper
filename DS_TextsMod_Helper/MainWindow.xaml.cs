@@ -626,7 +626,7 @@ namespace DS_TextsMod_Helper
 
         private void Btn_OpenProgramDir_Click(object sender, RoutedEventArgs e)
         {
-            // TODO
+            Process.Start(Tools.GetRootDirPath());
         }
 
         #endregion

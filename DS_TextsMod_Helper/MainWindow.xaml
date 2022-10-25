@@ -740,6 +740,13 @@
                 <RowDefinition Height="1*"/>
             </Grid.RowDefinitions>
 
+            <!--
+            TODO? Update section : 
+            1. Open program directory (directory icon)
+            2. Show output preview (eye icon)
+            3. Generate output files (play icon)
+            -->
+            
             <Button x:Name="Btn_RefreshPreview" Grid.Column="0" Grid.Row="1"> <!-- Click="Btn_RefreshPreview_Click" -->
                 <StackPanel Orientation="Horizontal">
                     <TextBlock Padding="6,4,3,2" FontSize="13">Load/Reload preview(s)</TextBlock>
@@ -747,7 +754,7 @@
                 </StackPanel>
             </Button>
 
-            <Button x:Name="Btn_OpenProgramDir" Grid.Column="2" Grid.Row="1"> <!-- Click="Btn_OpenProgramDir_Click" -->
+            <Button x:Name="Btn_OpenProgramDir" Grid.Column="2" Grid.Row="1" Click="Btn_OpenProgramDir_Click">
                 <StackPanel Orientation="Horizontal">
                     <TextBlock Padding="6,4,3,2" FontSize="13">Open program directory</TextBlock>
                     <TextBlock Padding="3,2,6,2" FontSize="16">&#128193;</TextBlock>
