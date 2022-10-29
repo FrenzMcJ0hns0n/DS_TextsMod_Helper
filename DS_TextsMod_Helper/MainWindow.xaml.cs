@@ -634,142 +634,187 @@ namespace DS_TextsMod_Helper
 
         #region Preview
 
-        // Commented as building 1.5
-        //private void Btn_RefreshPreview_Click(object sender, RoutedEventArgs e)
-        //{
-        //    switch (SelectedMode())
-        //    {
-        //        case PROCESS_MODE.Read: PreviewRead(); break;
-        //        case PROCESS_MODE.Compare: PreviewCompare(); break;
-        //        case PROCESS_MODE.Prepare: PreviewPrepare(); break;
-        //    }
-        //}
+        private void Btn_ShowOutputPreview_Click(object sender, RoutedEventArgs e)
+        {
+            switch (SelectedMode())
+            {
+                case PROCESS_MODE.Read:
+                    if (Dtg_RdA.ItemsSource is null)
+                    {   // Early return on error "Missing input files"
+                        MessageBox.Show(MSG_MISSING_IFILES, HDR_MISSING_IFILES, MessageBoxButton.OK, MessageBoxImage.Error);
+                        return;
+                    }
+                    ObservableCollection<InputFile> iFilesRd = (ObservableCollection<InputFile>)Dtg_RdA.ItemsSource;
+                    string parentDirPathA = iFilesRd.First().Directory;
 
-        // Commented as building 1.5
-        //private void Cbx_PreviewAllDetails_Checked(object sender, RoutedEventArgs e)
-        //{
-        //    switch (LoadedMode())
-        //    {
-        //        case PROCESS_MODE.None: return;
-        //        case PROCESS_MODE.Read: PreviewRead((List<ReadMode.Entry>)Dtg_Preview.ItemsSource); break;
-        //        case PROCESS_MODE.Compare: PreviewCompare((List<CompareMode.Entry>)Dtg_Preview.ItemsSource); break;
-        //        case PROCESS_MODE.Prepare: PreviewPrepare((List<PrepareMode.Entry>)Dtg_Preview.ItemsSource); break;
-        //    }
-        //}
+                    string filePathA;
+                    string csvSepChar;
+                    int fileCount = 0;
+                    List<ReadMode> readSuperlist = new List<ReadMode>();
+                    foreach (InputFile iFile in iFilesRd)
+                    {
+                        filePathA = Path.Combine(parentDirPathA, iFile.NameExt);
+                        csvSepChar = Tbx_Rd_CsvSeparator.Text;
+                        ReadMode r = new ReadMode(filePathA)
+                        {
+                            Title = $"{fileCount + 1}) {iFile.Name}",
+                            OneLinedValues = Cbx_Rd_OneLinedValues.IsChecked ?? false
+                        };
+                        r.ProcessFiles(true);
+                        readSuperlist.Add(r);
+                        fileCount += 1;
+                    }
+                    ProcessingMode pm = new ProcessingMode() { AllReadModeEntries = readSuperlist };
+                    OutputPreview outputPreview = new OutputPreview(pm);
+                    outputPreview.ShowDialog();
+                    break;
 
-        // Commented as building 1.5
-        //private void Cbx_PreviewAllDetails_Unchecked(object sender, RoutedEventArgs e)
-        //{
-        //    switch (LoadedMode())
-        //    {
-        //        case PROCESS_MODE.None: return;
-        //        case PROCESS_MODE.Read: PreviewRead((List<ReadMode.Entry>)Dtg_Preview.ItemsSource); break;
-        //        case PROCESS_MODE.Compare: PreviewCompare((List<CompareMode.Entry>)Dtg_Preview.ItemsSource); break;
-        //        case PROCESS_MODE.Prepare: PreviewPrepare((List<PrepareMode.Entry>)Dtg_Preview.ItemsSource); break;
-        //    }
-        //}
 
-        // Commented as building 1.5
-        //private void PreviewRead(List<ReadMode.Entry> r_entries = null)
-        //{
-        //    if (r_entries is null)
-        //    {
-        //        string iFile1 = Tbk_Rd_iFile1.Text;
+                case PROCESS_MODE.Compare:
+                    break;
 
-        //        if (iFile1 == DROP_FMG)
-        //        {
-        //            MessageBox.Show("[Read mode] " + ERR_MISSING_IFILES);
-        //            return;
-        //        }
 
-        //        ReadMode r = new ReadMode(iFile1) { OneLinedValues = Cbx_Rd_OneLinedValues.IsChecked ?? false };
-        //        r.ProcessFiles(true);
-        //        r_entries = r.Entries;
-        //    }
+                case PROCESS_MODE.Prepare:
+                    break;
+            }
+        }
 
-        //    Dtg_Preview.Visibility = Visibility.Visible;
-        //    Dtg_Preview.Columns.Clear();
+            // Commented as building 1.5
+            //private void Btn_RefreshPreview_Click(object sender, RoutedEventArgs e)
+            //{
+            //    switch (SelectedMode())
+            //    {
+            //        case PROCESS_MODE.Read: PreviewRead(); break;
+            //        case PROCESS_MODE.Compare: PreviewCompare(); break;
+            //        case PROCESS_MODE.Prepare: PreviewPrepare(); break;
+            //    }
+            //}
 
-        //    bool allDetails = Cbx_PreviewAllDetails.IsChecked ?? false;
-        //    bool detached = false;
+            // Commented as building 1.5
+            //private void Cbx_PreviewAllDetails_Checked(object sender, RoutedEventArgs e)
+            //{
+            //    switch (LoadedMode())
+            //    {
+            //        case PROCESS_MODE.None: return;
+            //        case PROCESS_MODE.Read: PreviewRead((List<ReadMode.Entry>)Dtg_Preview.ItemsSource); break;
+            //        case PROCESS_MODE.Compare: PreviewCompare((List<CompareMode.Entry>)Dtg_Preview.ItemsSource); break;
+            //        case PROCESS_MODE.Prepare: PreviewPrepare((List<PrepareMode.Entry>)Dtg_Preview.ItemsSource); break;
+            //    }
+            //}
 
-        //    List<DataGridTextColumn> columns = GetReadColumns(allDetails, detached);
-        //    foreach (DataGridTextColumn col in columns)
-        //        Dtg_Preview.Columns.Add(col);
+            // Commented as building 1.5
+            //private void Cbx_PreviewAllDetails_Unchecked(object sender, RoutedEventArgs e)
+            //{
+            //    switch (LoadedMode())
+            //    {
+            //        case PROCESS_MODE.None: return;
+            //        case PROCESS_MODE.Read: PreviewRead((List<ReadMode.Entry>)Dtg_Preview.ItemsSource); break;
+            //        case PROCESS_MODE.Compare: PreviewCompare((List<CompareMode.Entry>)Dtg_Preview.ItemsSource); break;
+            //        case PROCESS_MODE.Prepare: PreviewPrepare((List<PrepareMode.Entry>)Dtg_Preview.ItemsSource); break;
+            //    }
+            //}
 
-        //    Dtg_Preview.ItemsSource = r_entries;
+            // Commented as building 1.5
+            //private void PreviewRead(List<ReadMode.Entry> r_entries = null)
+            //{
+            //    if (r_entries is null)
+            //    {
+            //        string iFile1 = Tbk_Rd_iFile1.Text;
 
-        //}
+            //        if (iFile1 == DROP_FMG)
+            //        {
+            //            MessageBox.Show("[Read mode] " + ERR_MISSING_IFILES);
+            //            return;
+            //        }
 
-        // Commented as building 1.5
-        //private void PreviewCompare(List<CompareMode.Entry> c_entries = null)
-        //{
-        //    if (c_entries is null)
-        //    {
-        //        string iFile1 = Tbk_Cmp_iFile1.Text;
-        //        string iFile2 = Tbk_Cmp_iFile2.Text;
+            //        ReadMode r = new ReadMode(iFile1) { OneLinedValues = Cbx_Rd_OneLinedValues.IsChecked ?? false };
+            //        r.ProcessFiles(true);
+            //        r_entries = r.Entries;
+            //    }
 
-        //        if (iFile1 == DROP_FMG || iFile2 == DROP_FMG)
-        //        {
-        //            MessageBox.Show("[Compare mode] " + ERR_MISSING_IFILES);
-        //            return;
-        //        }
+            //    Dtg_Preview.Visibility = Visibility.Visible;
+            //    Dtg_Preview.Columns.Clear();
 
-        //        CompareMode c = new CompareMode(iFile1, iFile2) { OneLinedValues = Cbx_Cmp_OneLinedValues.IsChecked ?? false };
-        //        c.ProcessFiles(true);
-        //        c_entries = c.Entries;
-        //    }
+            //    bool allDetails = Cbx_PreviewAllDetails.IsChecked ?? false;
+            //    bool detached = false;
 
-        //    Dtg_Preview.Visibility = Visibility.Visible;
-        //    Dtg_Preview.Columns.Clear();
+            //    List<DataGridTextColumn> columns = GetReadColumns(allDetails, detached);
+            //    foreach (DataGridTextColumn col in columns)
+            //        Dtg_Preview.Columns.Add(col);
 
-        //    bool allDetails = Cbx_PreviewAllDetails.IsChecked ?? false;
-        //    bool detached = false;
+            //    Dtg_Preview.ItemsSource = r_entries;
 
-        //    List<DataGridTextColumn> columns = GetCompareColumns(allDetails, detached);
-        //    foreach (DataGridTextColumn col in columns)
-        //        Dtg_Preview.Columns.Add(col);
+            //}
 
-        //    Dtg_Preview.ItemsSource = c_entries;
-        //}
+            // Commented as building 1.5
+            //private void PreviewCompare(List<CompareMode.Entry> c_entries = null)
+            //{
+            //    if (c_entries is null)
+            //    {
+            //        string iFile1 = Tbk_Cmp_iFile1.Text;
+            //        string iFile2 = Tbk_Cmp_iFile2.Text;
 
-        // Commented as building 1.5
-        //private void PreviewPrepare(List<PrepareMode.Entry> p_entries = null)
-        //{
-        //    if (p_entries is null)
-        //    {
-        //        string iFile1 = Tbk_Prp_iFile1.Text;
-        //        string iFile2 = Tbk_Prp_iFile2.Text;
-        //        string iFile3 = Tbk_Prp_iFile3.Text;
-        //        string textToReplace = Tbx_Prp_TextToReplace.Text;
-        //        string replacingText = Tbx_Prp_ReplacingText.Text;
+            //        if (iFile1 == DROP_FMG || iFile2 == DROP_FMG)
+            //        {
+            //            MessageBox.Show("[Compare mode] " + ERR_MISSING_IFILES);
+            //            return;
+            //        }
 
-        //        if (iFile1 == DROP_FMG || iFile2 == DROP_FMG || iFile3 == DROP_FMG)
-        //        {
-        //            MessageBox.Show("[Prepare mode] " + ERR_MISSING_IFILES);
-        //            Cbx_PreviewAllDetails.IsChecked = false;
-        //            return;
-        //        }
+            //        CompareMode c = new CompareMode(iFile1, iFile2) { OneLinedValues = Cbx_Cmp_OneLinedValues.IsChecked ?? false };
+            //        c.ProcessFiles(true);
+            //        c_entries = c.Entries;
+            //    }
 
-        //        PrepareMode p = new PrepareMode(iFile1, iFile2, iFile3, textToReplace, replacingText);
-        //        p.ProcessFiles(true);
-        //        p_entries = p.Entries;
-        //    }
+            //    Dtg_Preview.Visibility = Visibility.Visible;
+            //    Dtg_Preview.Columns.Clear();
 
-        //    Dtg_Preview.Visibility = Visibility.Visible;
-        //    Dtg_Preview.Columns.Clear();
+            //    bool allDetails = Cbx_PreviewAllDetails.IsChecked ?? false;
+            //    bool detached = false;
 
-        //    bool allDetails = Cbx_PreviewAllDetails.IsChecked ?? false;
-        //    bool detached = false;
+            //    List<DataGridTextColumn> columns = GetCompareColumns(allDetails, detached);
+            //    foreach (DataGridTextColumn col in columns)
+            //        Dtg_Preview.Columns.Add(col);
 
-        //    List<DataGridTextColumn> columns = GetPrepareColumns(allDetails, detached);
-        //    foreach (DataGridTextColumn col in columns)
-        //        Dtg_Preview.Columns.Add(col);
+            //    Dtg_Preview.ItemsSource = c_entries;
+            //}
 
-        //    Dtg_Preview.ItemsSource = p_entries;
-        //}
+            // Commented as building 1.5
+            //private void PreviewPrepare(List<PrepareMode.Entry> p_entries = null)
+            //{
+            //    if (p_entries is null)
+            //    {
+            //        string iFile1 = Tbk_Prp_iFile1.Text;
+            //        string iFile2 = Tbk_Prp_iFile2.Text;
+            //        string iFile3 = Tbk_Prp_iFile3.Text;
+            //        string textToReplace = Tbx_Prp_TextToReplace.Text;
+            //        string replacingText = Tbx_Prp_ReplacingText.Text;
 
-        private List<DataGridTextColumn> GetReadColumns(bool allDetails, bool detached)
+            //        if (iFile1 == DROP_FMG || iFile2 == DROP_FMG || iFile3 == DROP_FMG)
+            //        {
+            //            MessageBox.Show("[Prepare mode] " + ERR_MISSING_IFILES);
+            //            Cbx_PreviewAllDetails.IsChecked = false;
+            //            return;
+            //        }
+
+            //        PrepareMode p = new PrepareMode(iFile1, iFile2, iFile3, textToReplace, replacingText);
+            //        p.ProcessFiles(true);
+            //        p_entries = p.Entries;
+            //    }
+
+            //    Dtg_Preview.Visibility = Visibility.Visible;
+            //    Dtg_Preview.Columns.Clear();
+
+            //    bool allDetails = Cbx_PreviewAllDetails.IsChecked ?? false;
+            //    bool detached = false;
+
+            //    List<DataGridTextColumn> columns = GetPrepareColumns(allDetails, detached);
+            //    foreach (DataGridTextColumn col in columns)
+            //        Dtg_Preview.Columns.Add(col);
+
+            //    Dtg_Preview.ItemsSource = p_entries;
+            //}
+
+            private List<DataGridTextColumn> GetReadColumns(bool allDetails, bool detached)
         {
             List<DataGridTextColumn> columns = new List<DataGridTextColumn>();
 

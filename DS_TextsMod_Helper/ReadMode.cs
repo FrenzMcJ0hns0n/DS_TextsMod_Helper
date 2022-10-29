@@ -6,19 +6,20 @@ using SoulsFormats;
 
 namespace DS_TextsMod_Helper
 {
-    class ReadMode : IProcessingModes
+    public class ReadMode
     {
+        public string Title { get; set; }
         public string InputFile { get; set; }
         public bool OneLinedValues { get; set; }
         public string OutputFilename { get; set; }
         public char Sep { get; set; }
-        public List<Entry> Entries { get; set; }
+        public List<ReadEntry> Entries { get; set; }
 
 
         public ReadMode(string iFile1)
         {
             InputFile = iFile1;
-            Entries = new List<Entry>();
+            Entries = new List<ReadEntry>();
         }
 
 
@@ -57,7 +58,7 @@ namespace DS_TextsMod_Helper
                 int textId = rd.Key;
                 string val = rd.Value;
 
-                Entries.Add(new Entry(index, textId, val));
+                Entries.Add(new ReadEntry(index, textId, val));
 
                 if (preview && index == 50) // TODO? v1.4: Give choice about max results
                     break;
@@ -74,7 +75,7 @@ namespace DS_TextsMod_Helper
             {
                 writer.WriteLine($"Text ID{Sep}Value");
 
-                foreach (Entry re in Entries)
+                foreach (ReadEntry re in Entries)
                 {
                     if (re.Value != null)
                         re.Value = re.Value.Replace("\"", "\"\"");
@@ -84,21 +85,21 @@ namespace DS_TextsMod_Helper
                 }
             }
         }
-
-
-        public class Entry
-        {
-            public int Index { get; set; }
-            public int TextId { get; set; }
-            public string Value { get; set; }
-
-            public Entry(int index, int textId, string value)
-            {
-                Index = index;
-                TextId = textId;
-                Value = value;
-            }
-        }
-
     }
+
+
+    public class ReadEntry
+    {
+        public int Index { get; set; }
+        public int TextId { get; set; }
+        public string Value { get; set; }
+
+        public ReadEntry(int index, int textId, string value)
+        {
+            Index = index;
+            TextId = textId;
+            Value = value;
+        }
+    }
+
 }

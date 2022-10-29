@@ -746,8 +746,8 @@
             2. Show output preview (eye icon)
             3. Generate output files (play icon)
             -->
-            
-            <Button x:Name="Btn_RefreshPreview" Grid.Column="0" Grid.Row="1"> <!-- Click="Btn_RefreshPreview_Click" -->
+
+            <Button x:Name="Btn_ShowOutputPreview" Grid.Column="0" Grid.Row="1" Click="Btn_ShowOutputPreview_Click">
                 <StackPanel Orientation="Horizontal">
                     <TextBlock Padding="6,4,3,2" FontSize="13">Load/Reload preview(s)</TextBlock>
                     <TextBlock Padding="3,1,6,2" FontSize="16">&#x21bb;</TextBlock>

@@ -5,7 +5,7 @@ using SoulsFormats;
 
 namespace DS_TextsMod_Helper
 {
-    internal class CompareMode : IProcessingModes
+    public class CompareMode : IProcessingModes
     {
         public List<string> InputFiles { get; set; }
         public bool OneLinedValues { get; set; }

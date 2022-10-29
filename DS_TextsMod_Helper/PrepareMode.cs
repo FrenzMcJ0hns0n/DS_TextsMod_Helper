@@ -5,7 +5,7 @@ using SoulsFormats;
 
 namespace DS_TextsMod_Helper
 {
-    internal class PrepareMode : IProcessingModes
+    public class PrepareMode : IProcessingModes
     {
         public List<string> InputFiles { get; set; }
         public string TextToReplace { get; set; }
