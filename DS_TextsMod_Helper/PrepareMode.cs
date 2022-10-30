@@ -5,14 +5,15 @@ using SoulsFormats;
 
 namespace DS_TextsMod_Helper
 {
-    public class PrepareMode : IProcessingModes
+    public class PrepareMode
     {
+        public string Title { get; set; }
         public List<string> InputFiles { get; set; }
         public string TextToReplace { get; set; }
         public string ReplacingText { get; set; }
         public string OutputFilename { get; set; }
         public FMG.FMGVersion OutputVersion { get; set; }
-        public List<Entry> Entries { get; set; }
+        public List<PrepareEntry> Entries { get; set; }
 
 
         public PrepareMode(string iFile1, string iFile2, string iFile3, string textToReplace, string replacingText)
@@ -20,7 +21,7 @@ namespace DS_TextsMod_Helper
             InputFiles = new List<string>() { iFile1, iFile2, iFile3 };
             TextToReplace = textToReplace;
             ReplacingText = replacingText;
-            Entries = new List<Entry>();
+            Entries = new List<PrepareEntry>();
         }
 
 
@@ -46,12 +47,12 @@ namespace DS_TextsMod_Helper
         {
             List<string> result = new List<string>();
 
-            List<Entry> involvedEntries = Entries
+            List<PrepareEntry> involvedEntries = Entries
                                          .Select(x => x)
                                          .Where(x => x.SpecialCase)
                                          .ToList();
 
-            foreach (Entry e in involvedEntries)
+            foreach (PrepareEntry e in involvedEntries)
                 result.Add($"Entry Id {e.TextId} : Values of files A and B are identical and not empty, but value of file C was empty");
 
             return result;
@@ -112,7 +113,7 @@ namespace DS_TextsMod_Helper
                 string source = val1 == val2 ? "File #3" : "File #1";
                 bool specialCase = val1 != "" && val1 == val2 && val3 == "";
 
-                Entries.Add(new Entry(index, textId, val1, val2, val3, output, source, specialCase));
+                Entries.Add(new PrepareEntry(index, textId, val1, val2, val3, output, source, specialCase));
             }
         }
 
@@ -121,7 +122,7 @@ namespace DS_TextsMod_Helper
             OutputFilename = Tools.GetOutputFilepath(oFilename);
 
             FMG output = new FMG { Version = OutputVersion };
-            foreach (Entry pe in Entries)
+            foreach (PrepareEntry pe in Entries)
                 output.Entries.Add(new FMG.Entry(pe.TextId, pe.Output));
 
             output.Write(OutputFilename);
@@ -151,32 +152,30 @@ namespace DS_TextsMod_Helper
                     break;
             }
         }
-
-
-
-        public class Entry
-        {
-            public int Index { get; set; }
-            public int TextId { get; set; }
-            public string Value1 { get; set; }
-            public string Value2 { get; set; }
-            public string Value3 { get; set; }
-            public string Output { get; set; }
-            public string Source { get; set; }
-            public bool SpecialCase { get; set; }
-
-            public Entry(int index, int textId, string value1, string value2, string value3, string output, string source, bool specialCase)
-            {
-                Index = index;
-                TextId = textId;
-                Value1 = value1;
-                Value2 = value2;
-                Value3 = value3;
-                Output = output;
-                Source = source;
-                SpecialCase = specialCase;
-            }
-        }
-
     }
+
+    public class PrepareEntry
+    {
+        public int Index { get; set; }
+        public int TextId { get; set; }
+        public string Value1 { get; set; }
+        public string Value2 { get; set; }
+        public string Value3 { get; set; }
+        public string Output { get; set; }
+        public string Source { get; set; }
+        public bool SpecialCase { get; set; }
+
+        public PrepareEntry(int index, int textId, string value1, string value2, string value3, string output, string source, bool specialCase)
+        {
+            Index = index;
+            TextId = textId;
+            Value1 = value1;
+            Value2 = value2;
+            Value3 = value3;
+            Output = output;
+            Source = source;
+            SpecialCase = specialCase;
+        }
+    }
+
 }

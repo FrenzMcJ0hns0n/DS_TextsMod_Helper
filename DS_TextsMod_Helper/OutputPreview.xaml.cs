@@ -1,22 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 
 namespace DS_TextsMod_Helper
 {
-    /// <summary>
-    /// Logique d'interaction pour OutputPreview.xaml
-    /// </summary>
     public partial class OutputPreview : Window
     {
         public OutputPreview(ProcessingMode processingMode)
@@ -28,11 +14,21 @@ namespace DS_TextsMod_Helper
                 Tbc_Preview_Read.Visibility = Visibility.Visible;
                 Tbc_Preview_Read.ItemsSource = processingMode.AllReadModeEntries;
             }
+            if (!(processingMode.AllCompareModeEntries is null))
+            {
+                Tbc_Preview_Compare.Visibility = Visibility.Visible;
+                Tbc_Preview_Compare.ItemsSource = processingMode.AllCompareModeEntries;
+            }
+            if (!(processingMode.AllPrepareModeEntries is null))
+            {
+                Tbc_Preview_Prepare.Visibility = Visibility.Visible;
+                Tbc_Preview_Prepare.ItemsSource = processingMode.AllPrepareModeEntries;
+            }
+        }
 
-            // if (!(processingMode.AllCompareEntries is null)) // Handle preview of CompareMode.Entry
-
-            // if (!(processingMode.AllPrepareEntries is null)) // Handle preview of PrepareMode.Entry
-
+        private void Dtg_LoadingRow(object sender, DataGridRowEventArgs e)
+        {
+            e.Row.Header = (e.Row.GetIndex() + 1).ToString();
         }
     }
 }

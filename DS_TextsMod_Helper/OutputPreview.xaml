@@ -5,18 +5,55 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:DS_TextsMod_Helper"
         mc:Ignorable="d"
-        Title="OutputPreview"
+        Title="Output preview"
         Height="600" MinHeight="200" Width="1200" MinWidth="600">
 
     <Window.Resources>
-        <!-- Custom style for extra headers displayed with option "Show all details" -->
-        <Style x:Key="HeaderOff" TargetType="{x:Type DataGridColumnHeader}">
-            <Setter Property="Foreground" Value="LightGray"/>
+        <!-- Custom style for extra headers displayed with option "Show all details"
+        <Style x:Key="Dtg_HeaderOff" TargetType="{x:Type DataGridColumnHeader}">
+            <Setter Property="Foreground" Value="DarkGray"/>
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding IsChecked,ElementName=Cbx_AllDetails}" Value="True">
+                    <Setter Property="Visibility" Value="Visible"/>
+                    <Setter Property="Width" Value="0"/>
+                </DataTrigger>
+            </Style.Triggers>
         </Style>
-        <Style x:Key="CellOff" TargetType="{x:Type DataGridCell}">
-            <Setter Property="Foreground" Value="LightGray"/>
+        <Style x:Key="Dtg_CellOff" TargetType="{x:Type DataGridCell}">
+            <Setter Property="Foreground" Value="DarkGray"/>
         </Style>
+
+        <Style x:Key="Tbk_Try" TargetType="{x:Type TextBlock}">
+
+            <Setter Property="Visibility" Value="Collapsed"/>
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding IsChecked,ElementName=Cbx_AllDetails}" Value="True">
+                    <Setter Property="Visibility" Value="Visible"/>
+                    <Setter Property="Width" Value="0"/>
+                </DataTrigger>
+            </Style.Triggers>
+
+        </Style>-->
+
+        <Style x:Key="Dtg_Common" TargetType="{x:Type DataGrid}">
+            <Setter Property="AutoGenerateColumns" Value="False"/>
+            <Setter Property="HorizontalGridLinesBrush" Value="LightGray"/>
+            <Setter Property="IsReadOnly" Value="True"/>
+            <Setter Property="VerticalGridLinesBrush" Value="LightGray"/>
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding IsChecked,ElementName=Cbx_DisplayLinesNo}" Value="False">
+                    <Setter Property="HeadersVisibility" Value="Column"/>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+
+        <Style x:Key="Dtg_RowHeader" TargetType="{x:Type DataGridRowHeader}">
+            <Setter Property="FontSize" Value="11"/>
+            <Setter Property="Padding" Value="2"/>
+        </Style>
+               
     </Window.Resources>
+    
     
     <Grid>
         <Grid.ColumnDefinitions>
@@ -28,8 +65,13 @@
             <RowDefinition Height="16"/>
             <RowDefinition Height="1*"/>
             <RowDefinition Height="16"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="16"/>
         </Grid.RowDefinitions>
 
+        
+        <!-- READ MODE -->
+        
         <TabControl x:Name="Tbc_Preview_Read" Grid.Column="1" Grid.Row="1" ItemsSource="{Binding}" Visibility="Collapsed">
             <!-- TabItem head -->
             <TabControl.ItemTemplate>
@@ -41,51 +83,167 @@
             <!-- TabItem body -->
             <TabControl.ContentTemplate>
                 <DataTemplate DataType="{x:Type local:ReadMode}">
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="8"/>
-                            <ColumnDefinition Width="1*"/>
-                            <ColumnDefinition Width="8"/>
-                        </Grid.ColumnDefinitions>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="8" />
-                            <RowDefinition Height="1*" />
-                            <RowDefinition Height="8" />
-                        </Grid.RowDefinitions>
+                    <DataGrid Grid.Column="1" Grid.Row="1" ItemsSource="{Binding Entries}" RowHeaderStyle="{StaticResource Dtg_RowHeader}" Style="{StaticResource Dtg_Common}" LoadingRow="Dtg_LoadingRow">
+                        <DataGrid.Columns>
 
-                        <!-- TODO? Use DataGrid_LoadingRow event instead of Index property from model -->
-                        <!-- AutoGenerateColumns="False" HeadersVisibility="Column" -->
-                        <DataGrid x:Name="Dtg_Preview" AutoGenerateColumns="False" Grid.Column="1" Grid.Row="1" HeadersVisibility="Column" HorizontalGridLinesBrush="LightGray" IsReadOnly="True" ItemsSource="{Binding Entries}" VerticalGridLinesBrush="LightGray">
-                            <DataGrid.Columns>
-                                <DataGridTemplateColumn Header="#" HeaderStyle="{StaticResource HeaderOff}" CellStyle="{StaticResource CellOff}" MaxWidth="40">
-                                    <DataGridTemplateColumn.CellTemplate>
-                                        <DataTemplate DataType="{x:Type local:ReadEntry}">
-                                            <TextBlock Text="{Binding Index}"/>
-                                        </DataTemplate>
-                                    </DataGridTemplateColumn.CellTemplate>
-                                </DataGridTemplateColumn>
-                                <DataGridTemplateColumn Header="Text ID" MinWidth="50" MaxWidth="100">
-                                    <DataGridTemplateColumn.CellTemplate>
-                                        <DataTemplate DataType="{x:Type local:ReadEntry}">
-                                            <TextBlock Text="{Binding TextId}"/>
-                                        </DataTemplate>
-                                    </DataGridTemplateColumn.CellTemplate>
-                                </DataGridTemplateColumn>
-                                <DataGridTemplateColumn Header="Value" MaxWidth="1000">
-                                    <DataGridTemplateColumn.CellTemplate>
-                                        <DataTemplate DataType="{x:Type local:ReadEntry}">
-                                            <TextBlock Text="{Binding Value}"/>
-                                        </DataTemplate>
-                                    </DataGridTemplateColumn.CellTemplate>
-                                </DataGridTemplateColumn>
-                            </DataGrid.Columns>
-                        </DataGrid>
+                            <DataGridTemplateColumn Header="Text ID" MinWidth="50" MaxWidth="100">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate DataType="{x:Type local:ReadEntry}">
+                                        <TextBlock Text="{Binding TextId}"/>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
 
-                    </Grid>
+                            <DataGridTemplateColumn Header="Value" MaxWidth="800">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate DataType="{x:Type local:ReadEntry}">
+                                        <TextBlock Text="{Binding Value}"/>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+
+                        </DataGrid.Columns>
+                    </DataGrid>
                 </DataTemplate>
             </TabControl.ContentTemplate>
         </TabControl>
 
 
+        <!-- COMPARE MODE -->
+        
+        <TabControl x:Name="Tbc_Preview_Compare" Grid.Column="1" Grid.Row="1" ItemsSource="{Binding}" Visibility="Collapsed">
+            <!-- TabItem head -->
+            <TabControl.ItemTemplate>
+                <DataTemplate DataType="{x:Type local:CompareMode}">
+                    <TextBlock Text="{Binding Title}"/>
+                </DataTemplate>
+            </TabControl.ItemTemplate>
+
+            <!-- TabItem body -->
+            <TabControl.ContentTemplate>
+                <DataTemplate x:Name="Dtt_CompareMode" DataType="{x:Type local:CompareMode}">
+                    <DataGrid Grid.Column="1" Grid.Row="1" ItemsSource="{Binding Entries}" RowHeaderStyle="{StaticResource Dtg_RowHeader}" Style="{StaticResource Dtg_Common}" LoadingRow="Dtg_LoadingRow">
+                        <DataGrid.Columns>
+
+                            <DataGridTemplateColumn Header="Text ID" MinWidth="50" MaxWidth="100">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate DataType="{x:Type local:CompareEntry}">
+                                        <TextBlock Text="{Binding TextId}"/>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+
+                            <!-- TODO: Manage to get OutputHeaderA -->
+                            <DataGridTemplateColumn Header="File A" MaxWidth="800">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate DataType="{x:Type local:CompareEntry}">
+                                        <TextBlock Text="{Binding Value1}"/>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+
+                            <!-- TODO: Manage to get OutputHeaderB -->
+                            <DataGridTemplateColumn Header="File B" MaxWidth="800">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate DataType="{x:Type local:CompareEntry}">
+                                        <TextBlock Text="{Binding Value2}"/>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+
+                            <DataGridTemplateColumn Header="Same?" MaxWidth="80">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate DataType="{x:Type local:CompareEntry}">
+                                        <TextBlock Text="{Binding Same}"/>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </DataTemplate>
+            </TabControl.ContentTemplate>
+        </TabControl>
+
+
+        <!-- PREPARE MODE -->
+
+        <TabControl x:Name="Tbc_Preview_Prepare" Grid.Column="1" Grid.Row="1" ItemsSource="{Binding}" Visibility="Collapsed">
+            <!-- TabItem head -->
+            <TabControl.ItemTemplate>
+                <DataTemplate DataType="{x:Type local:PrepareMode}">
+                    <TextBlock Text="{Binding Title}"/>
+                </DataTemplate>
+            </TabControl.ItemTemplate>
+
+            <!-- TabItem body -->
+            <TabControl.ContentTemplate>
+                <DataTemplate DataType="{x:Type local:PrepareMode}">
+                    <DataGrid Grid.Column="1" Grid.Row="1" ItemsSource="{Binding Entries}" RowHeaderStyle="{StaticResource Dtg_RowHeader}" Style="{StaticResource Dtg_Common}" LoadingRow="Dtg_LoadingRow">
+                        <DataGrid.Columns>
+
+                            <DataGridTemplateColumn Header="Text ID" MinWidth="50" MaxWidth="100">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate DataType="{x:Type local:PrepareEntry}">
+                                        <TextBlock Text="{Binding TextId}"/>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+
+                            <DataGridTemplateColumn Header="Output" MaxWidth="800">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate DataType="{x:Type local:PrepareEntry}">
+                                        <TextBlock Text="{Binding Output}"/>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+
+                            <DataGridTemplateColumn Header="Value 1" MaxWidth="500">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate DataType="{x:Type local:PrepareEntry}">
+                                        <TextBlock Text="{Binding Value1}"/>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+
+                            <DataGridTemplateColumn Header="Value 2" MaxWidth="500">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate DataType="{x:Type local:PrepareEntry}">
+                                        <TextBlock Text="{Binding Value2}"/>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+
+                            <DataGridTemplateColumn Header="Value 3" MaxWidth="500">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate DataType="{x:Type local:PrepareEntry}">
+                                        <TextBlock Text="{Binding Value3}"/>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+
+                            <DataGridTemplateColumn Header="From?" MaxWidth="80">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate DataType="{x:Type local:PrepareEntry}">
+                                        <TextBlock Text="{Binding Source}"/>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </DataTemplate>
+            </TabControl.ContentTemplate>
+        </TabControl>
+
+        
+        
+        <!-- TODO? -->
+        <StackPanel Orientation="Horizontal" Grid.Column="1" Grid.Row="3">
+            <CheckBox x:Name="Cbx_ShowAllDetails" Content="Show all details?" Margin="0 0 32 0"/>
+            <CheckBox x:Name="Cbx_DisplayLinesNo" Content="Display lines no?" Margin="0 0 32 0" IsChecked="True"/>
+            <CheckBox x:Name="Cbx_PlaceholderNb3" Content="Extra setting 3" Margin="0 0 32 0"/>
+        </StackPanel>
+        
     </Grid>
 </Window>

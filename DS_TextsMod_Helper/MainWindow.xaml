@@ -52,8 +52,10 @@
             <Setter Property="SelectionMode" Value="Single"/> <!-- TODO: Upgrade to "Multiple" later -->
             <Setter Property="VerticalGridLinesBrush" Value="Gray"/>
             <Setter Property="Visibility" Value="Collapsed"/>
-            <!-- This does not work, for some reasons... -->
-            <!--<EventSetter Event="LoadingRow" Handler="Dtg_LoadingRow"/>-->
+        </Style>
+        <Style x:Key="Dtg_IFilesRowHeader" TargetType="{x:Type DataGridRowHeader}">
+            <Setter Property="FontSize" Value="11"/>
+            <Setter Property="Padding" Value="2"/>
         </Style>
 
         <Style x:Key="Brd_SideControls" TargetType="{x:Type Border}">
@@ -176,8 +178,8 @@
                                     
                                     <Label x:Name="Lbl_RdA" Style="{StaticResource Lbl_DropInputFiles}"/>
 
-                                    
-                                    <DataGrid x:Name="Dtg_RdA" Style="{StaticResource Dtg_InputFiles}" LoadingRow="Dtg_LoadingRow">
+
+                                    <DataGrid x:Name="Dtg_RdA" RowHeaderStyle="{StaticResource Dtg_IFilesRowHeader}" Style="{StaticResource Dtg_InputFiles}" LoadingRow="Dtg_LoadingRow">
                                         <DataGrid.Columns>
                                             <DataGridTextColumn Binding="{Binding NameExt}" Header="Filename"/>
                                             <DataGridTextColumn Binding="{Binding VersionSm}" Header="Type"/>
@@ -314,8 +316,8 @@
                                     
                                     <Label x:Name="Lbl_CmpA" Style="{StaticResource Lbl_DropInputFiles}"/>
 
-                                    
-                                    <DataGrid x:Name="Dtg_CmpA" Style="{StaticResource Dtg_InputFiles}" LoadingRow="Dtg_LoadingRow">
+
+                                    <DataGrid x:Name="Dtg_CmpA" RowHeaderStyle="{StaticResource Dtg_IFilesRowHeader}" Style="{StaticResource Dtg_InputFiles}" LoadingRow="Dtg_LoadingRow">
                                         <DataGrid.Columns>
                                             <DataGridTextColumn Binding="{Binding NameExt}" Header="Filename"/>
                                             <DataGridTextColumn Binding="{Binding VersionSm}" Header="Type"/>
@@ -361,7 +363,7 @@
                                     <Label x:Name="Lbl_CmpB" Style="{StaticResource Lbl_DropInputFiles}"/>
 
 
-                                    <DataGrid x:Name="Dtg_CmpB" Style="{StaticResource Dtg_InputFiles}" LoadingRow="Dtg_LoadingRow">
+                                    <DataGrid x:Name="Dtg_CmpB" RowHeaderStyle="{StaticResource Dtg_IFilesRowHeader}" Style="{StaticResource Dtg_InputFiles}" LoadingRow="Dtg_LoadingRow">
                                         <DataGrid.Columns>
                                             <DataGridTextColumn Binding="{Binding NameExt}" Header="Filename"/>
                                             <DataGridTextColumn Binding="{Binding VersionSm}" Header="Type"/>
@@ -533,7 +535,7 @@
                                     <Label x:Name="Lbl_PrpA" Style="{StaticResource Lbl_DropInputFiles}"/>
 
 
-                                    <DataGrid x:Name="Dtg_PrpA" Style="{StaticResource Dtg_InputFiles}" LoadingRow="Dtg_LoadingRow">
+                                    <DataGrid x:Name="Dtg_PrpA" RowHeaderStyle="{StaticResource Dtg_IFilesRowHeader}" Style="{StaticResource Dtg_InputFiles}" LoadingRow="Dtg_LoadingRow">
                                         <DataGrid.Columns>
                                             <DataGridTextColumn Binding="{Binding NameExt}" Header="Filename"/>
                                             <DataGridTextColumn Binding="{Binding VersionSm}" Header="Type"/>
@@ -579,7 +581,7 @@
                                     <Label x:Name="Lbl_PrpB" Style="{StaticResource Lbl_DropInputFiles}"/>
 
 
-                                    <DataGrid x:Name="Dtg_PrpB" Style="{StaticResource Dtg_InputFiles}" LoadingRow="Dtg_LoadingRow">
+                                    <DataGrid x:Name="Dtg_PrpB" RowHeaderStyle="{StaticResource Dtg_IFilesRowHeader}" Style="{StaticResource Dtg_InputFiles}" LoadingRow="Dtg_LoadingRow">
                                         <DataGrid.Columns>
                                             <DataGridTextColumn Binding="{Binding NameExt}" Header="Filename"/>
                                             <DataGridTextColumn Binding="{Binding VersionSm}" Header="Type"/>
@@ -625,7 +627,7 @@
                                     <Label x:Name="Lbl_PrpC" Style="{StaticResource Lbl_DropInputFiles}"/>
 
 
-                                    <DataGrid x:Name="Dtg_PrpC" Style="{StaticResource Dtg_InputFiles}" LoadingRow="Dtg_LoadingRow">
+                                    <DataGrid x:Name="Dtg_PrpC" RowHeaderStyle="{StaticResource Dtg_IFilesRowHeader}" Style="{StaticResource Dtg_InputFiles}" LoadingRow="Dtg_LoadingRow">
                                         <DataGrid.Columns>
                                             <DataGridTextColumn Binding="{Binding NameExt}" Header="Filename"/>
                                             <DataGridTextColumn Binding="{Binding VersionSm}" Header="Type"/>

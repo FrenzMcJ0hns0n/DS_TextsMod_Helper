@@ -5,21 +5,22 @@ using SoulsFormats;
 
 namespace DS_TextsMod_Helper
 {
-    public class CompareMode : IProcessingModes
+    public class CompareMode
     {
+        public string Title { get; set; }
         public List<string> InputFiles { get; set; }
         public bool OneLinedValues { get; set; }
         public string OutputFilename { get; set; }
         public string OutputHeader1 { get; set; }
         public string OutputHeader2 { get; set; }
         public char Sep { get; set; }
-        public List<Entry> Entries { get; set; }
+        public List<CompareEntry> Entries { get; set; }
 
 
         public CompareMode(string iFile1, string iFile2)
         {
             InputFiles = new List<string>() { iFile1, iFile2 };
-            Entries = new List<Entry>();
+            Entries = new List<CompareEntry>();
         }
 
 
@@ -77,7 +78,7 @@ namespace DS_TextsMod_Helper
                 string val2 = cmp.Value[1];
                 bool isSame = cmp.Value[0] == cmp.Value[1];
 
-                Entries.Add(new Entry(index, textId, val1, val2, isSame.ToString()));
+                Entries.Add(new CompareEntry(index, textId, val1, val2, isSame.ToString()));
 
                 if (preview && index == 50) // TODO? v1.4: Give choice about max results
                     break;
@@ -96,7 +97,7 @@ namespace DS_TextsMod_Helper
             {
                 writer.WriteLine($"Text ID{Sep}{OutputHeader1}{Sep}{OutputHeader2}{Sep}Same?");
 
-                foreach (Entry ce in Entries)
+                foreach (CompareEntry ce in Entries)
                 {
                     ce.Value1 = ce.Value1.Replace("\"", "\"\"");
                     ce.Value2 = ce.Value2.Replace("\"", "\"\"");
@@ -106,25 +107,24 @@ namespace DS_TextsMod_Helper
                 }
             }
         }
-
-
-        public class Entry
-        {
-            public int Index { get; set; }
-            public int TextId { get; set; }
-            public string Value1 { get; set; }
-            public string Value2 { get; set; }
-            public string Same { get; set; }
-
-            public Entry(int index, int textId, string value1, string value2, string same)
-            {
-                Index = index;
-                TextId = textId;
-                Value1 = value1;
-                Value2 = value2;
-                Same = same;
-            }
-        }
-
     }
+
+    public class CompareEntry
+    {
+        public int Index { get; set; }
+        public int TextId { get; set; }
+        public string Value1 { get; set; }
+        public string Value2 { get; set; }
+        public string Same { get; set; }
+
+        public CompareEntry(int index, int textId, string value1, string value2, string same)
+        {
+            Index = index;
+            TextId = textId;
+            Value1 = value1;
+            Value2 = value2;
+            Same = same;
+        }
+    }
+
 }
