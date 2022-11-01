@@ -352,6 +352,9 @@
                                                 <Border BorderBrush="DarkGray" BorderThickness="1" Margin="0 2" CornerRadius="2">
                                                     <Button Style="{StaticResource Btn_MoveInputFileUp}" Tag="CmpA"/>
                                                 </Border>
+                                                <Border BorderBrush="DarkGray" BorderThickness="1" Margin="0 1" CornerRadius="2">
+                                                    <Button Style="{StaticResource Btn_RemoveFiles}" Tag="CmpA"/>
+                                                </Border>
                                                 <Border BorderBrush="DarkGray" BorderThickness="1" Margin="0 2" CornerRadius="2">
                                                     <Button Style="{StaticResource Btn_MoveInputFileDown}" Tag="CmpA"/>
                                                 </Border>
@@ -397,6 +400,9 @@
                                             <StackPanel VerticalAlignment="Center">
                                                 <Border BorderBrush="DarkGray" BorderThickness="1" Margin="0 2" CornerRadius="2">
                                                     <Button Style="{StaticResource Btn_MoveInputFileUp}" Tag="CmpB"/>
+                                                </Border>
+                                                <Border BorderBrush="DarkGray" BorderThickness="1" Margin="0 1" CornerRadius="2">
+                                                    <Button Style="{StaticResource Btn_RemoveFiles}" Tag="CmpB"/>
                                                 </Border>
                                                 <Border BorderBrush="DarkGray" BorderThickness="1" Margin="0 2" CornerRadius="2">
                                                     <Button Style="{StaticResource Btn_MoveInputFileDown}" Tag="CmpB"/>
@@ -570,6 +576,9 @@
                                                 <Border BorderBrush="DarkGray" BorderThickness="1" Margin="0 2" CornerRadius="2">
                                                     <Button Style="{StaticResource Btn_MoveInputFileUp}" Tag="PrpA"/>
                                                 </Border>
+                                                <Border BorderBrush="DarkGray" BorderThickness="1" Margin="0 1" CornerRadius="2">
+                                                    <Button Style="{StaticResource Btn_RemoveFiles}" Tag="PrpA"/>
+                                                </Border>
                                                 <Border BorderBrush="DarkGray" BorderThickness="1" Margin="0 2" CornerRadius="2">
                                                     <Button Style="{StaticResource Btn_MoveInputFileDown}" Tag="PrpA"/>
                                                 </Border>
@@ -616,6 +625,9 @@
                                                 <Border BorderBrush="DarkGray" BorderThickness="1" Margin="0 2" CornerRadius="2">
                                                     <Button Style="{StaticResource Btn_MoveInputFileUp}" Tag="PrpB"/>
                                                 </Border>
+                                                <Border BorderBrush="DarkGray" BorderThickness="1" Margin="0 1" CornerRadius="2">
+                                                    <Button Style="{StaticResource Btn_RemoveFiles}" Tag="PrpB"/>
+                                                </Border>
                                                 <Border BorderBrush="DarkGray" BorderThickness="1" Margin="0 2" CornerRadius="2">
                                                     <Button Style="{StaticResource Btn_MoveInputFileDown}" Tag="PrpB"/>
                                                 </Border>
@@ -661,6 +673,10 @@
                                             <StackPanel VerticalAlignment="Center">
                                                 <Border BorderBrush="DarkGray" BorderThickness="1" Margin="0 2" CornerRadius="2">
                                                     <Button Style="{StaticResource Btn_MoveInputFileUp}" Tag="PrpC"/>
+                                                </Border>
+
+                                                <Border BorderBrush="DarkGray" BorderThickness="1" Margin="0 1" CornerRadius="2">
+                                                    <Button Style="{StaticResource Btn_RemoveFiles}" Tag="PrpC"/>
                                                 </Border>
                                                 <Border BorderBrush="DarkGray" BorderThickness="1" Margin="0 2" CornerRadius="2">
                                                     <Button Style="{StaticResource Btn_MoveInputFileDown}" Tag="PrpC"/>
