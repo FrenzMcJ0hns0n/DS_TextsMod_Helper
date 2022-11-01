@@ -180,7 +180,7 @@ namespace DS_TextsMod_Helper
             int selectedCount = dtg.SelectedItems.Count;
             if (selectedCount == 0)
             {
-                MessageBox.Show("No selection to reorder", "Information", MessageBoxButton.OK, MessageBoxImage.Information);
+                MessageBox.Show("No file selected", "Information", MessageBoxButton.OK, MessageBoxImage.Information);
                 return;
             }
 
@@ -208,8 +208,10 @@ namespace DS_TextsMod_Helper
                 }
             }
 
+            dtg.ItemsSource = null;
             dtg.ItemsSource = iFiles;
             dtg.SelectedIndex = positionsToMove.First() - 1; // Prevent losing the selected elements from altering elements order
+            dtg.Focus();
         }
 
         private void Btn_RemoveFiles_Click(object sender, RoutedEventArgs e)
@@ -220,7 +222,7 @@ namespace DS_TextsMod_Helper
             int selectedCount = dtg.SelectedItems.Count;
             if (selectedCount == 0)
             {
-                MessageBox.Show("No selection to remove", "Information", MessageBoxButton.OK, MessageBoxImage.Information);
+                MessageBox.Show("No file selected", "Information", MessageBoxButton.OK, MessageBoxImage.Information);
                 return;
             }
 
@@ -241,6 +243,7 @@ namespace DS_TextsMod_Helper
             dtg.ItemsSource = null;
             dtg.ItemsSource = iFiles;
             dtg.SelectedIndex = positionsToRemove.Contains(iFilesCount) ? -1 : positionsToRemove.Max();
+            dtg.Focus();
         }
 
         private void Btn_MoveInputFileDown_Click(object sender, RoutedEventArgs e)
@@ -251,7 +254,7 @@ namespace DS_TextsMod_Helper
             int selectedCount = dtg.SelectedItems.Count;
             if (selectedCount == 0)
             {
-                MessageBox.Show("No selection to reorder", "Information", MessageBoxButton.OK, MessageBoxImage.Information);
+                MessageBox.Show("No file selected", "Information", MessageBoxButton.OK, MessageBoxImage.Information);
                 return;
             }
 
@@ -281,6 +284,7 @@ namespace DS_TextsMod_Helper
 
             dtg.ItemsSource = iFiles;
             dtg.SelectedIndex = positionsToMove.First() + 1; // Prevent losing the selected elements from altering elements order
+            dtg.Focus();
         }
 
         private void Dtg_LoadingRow(object sender, DataGridRowEventArgs e)
