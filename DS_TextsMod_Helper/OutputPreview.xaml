@@ -53,9 +53,9 @@
         </Style>
                
     </Window.Resources>
-    
-    
-    <Grid>
+
+
+    <Grid Background="WhiteSmoke">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="16"/>
             <ColumnDefinition Width="1*"/>
@@ -240,8 +240,8 @@
         
         <!-- TODO? -->
         <StackPanel Orientation="Horizontal" Grid.Column="1" Grid.Row="3">
-            <CheckBox x:Name="Cbx_ShowAllDetails" Content="Show all details?" Margin="0 0 32 0"/>
-            <CheckBox x:Name="Cbx_DisplayLinesNo" Content="Display lines no?" Margin="0 0 32 0" IsChecked="True"/>
+            <CheckBox x:Name="Cbx_DisplayLinesNo" Content="Display lines numbers" Margin="0 0 32 0" IsChecked="True"/>
+            <CheckBox x:Name="Cbx_ShowAllDetails" Content="Show all details" Margin="0 0 32 0"/>
             <CheckBox x:Name="Cbx_PlaceholderNb3" Content="Extra setting 3" Margin="0 0 32 0"/>
         </StackPanel>
         

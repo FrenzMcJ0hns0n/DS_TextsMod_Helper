@@ -745,27 +745,20 @@
         <Grid Grid.Column="1" Grid.Row="3">
 
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="33*"/>
+                <ColumnDefinition Width="36*"/>
                 <ColumnDefinition Width="16"/>
-                <ColumnDefinition Width="33*"/>
+                <ColumnDefinition Width="28*"/>
                 <ColumnDefinition Width="16"/>
-                <ColumnDefinition Width="33*"/>
+                <ColumnDefinition Width="36*"/>
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
                 <RowDefinition Height="1*"/>
             </Grid.RowDefinitions>
 
-            <!--
-            TODO? Update section : 
-            1. Open program directory (directory icon)
-            2. Show output preview (eye icon)
-            3. Generate output files (play icon)
-            -->
-
-            <Button x:Name="Btn_ShowOutputPreview" Grid.Column="0" Grid.Row="1" Click="Btn_ShowOutputPreview_Click">
+            <Button x:Name="Btn_ShowOutputPreview" Background="#d6e0f5" Grid.Column="0" Grid.Row="1" Click="Btn_ShowOutputPreview_Click">
                 <StackPanel Orientation="Horizontal">
-                    <TextBlock Padding="6,4,3,2" FontSize="13">Load/Reload preview(s)</TextBlock>
-                    <TextBlock Padding="3,1,6,2" FontSize="16">&#x21bb;</TextBlock>
+                    <TextBlock Padding="6,4,3,2" FontSize="13">Show output preview</TextBlock>
+                    <TextBlock Padding="3,2,6,2" FontSize="16">(eye icon)</TextBlock>
                 </StackPanel>
             </Button>
 
@@ -778,8 +771,8 @@
 
             <Button x:Name="Btn_GenerateOutput" Background="#c6ecc6" Click="Btn_GenerateOutput_Click" Grid.Column="4" Grid.Row="1">
                 <StackPanel Orientation="Horizontal">
-                    <TextBlock Padding="6,4,3,2" FontSize="13">Generate output file(s)</TextBlock>
-                    <TextBlock Padding="3,2,6,2" FontSize="16">&#128462;</TextBlock>
+                    <TextBlock Padding="6,4,3,2" FontSize="13">Generate output files</TextBlock>
+                    <TextBlock Padding="3,2,6,2" FontSize="16">(play icon)</TextBlock>
                 </StackPanel>
             </Button>
             
