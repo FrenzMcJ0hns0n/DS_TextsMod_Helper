@@ -98,6 +98,16 @@
             <EventSetter Event="Click" Handler="Btn_MoveInputFileUp_Click"/>
         </Style>
 
+        <Style x:Key="Btn_RemoveFiles" TargetType="{x:Type Button}">
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Content" Value="&#10005;"/>
+            <Setter Property="FontSize" Value="11"/>
+            <Setter Property="ToolTip" Value="Remove file"/>
+            <Setter Property="ToolTipService.InitialShowDelay" Value="50"/>
+            <Setter Property="ToolTipService.ShowDuration" Value="15000"/>
+            <EventSetter Event="Click" Handler="Btn_RemoveFiles_Click"/>
+        </Style>
+        
         <Style x:Key="Btn_MoveInputFileDown" TargetType="{x:Type Button}">
             <Setter Property="BorderThickness" Value="0"/>
             <Setter Property="Content" Value="⮟"/>
@@ -198,10 +208,13 @@
                                                 </Border>
                                             </StackPanel>
                                             <StackPanel VerticalAlignment="Center">
-                                                <Border BorderBrush="DarkGray" BorderThickness="1" Margin="0 2" CornerRadius="2">
+                                                <Border BorderBrush="DarkGray" BorderThickness="1" Margin="0 1" CornerRadius="2">
                                                     <Button Style="{StaticResource Btn_MoveInputFileUp}" Tag="RdA"/>
                                                 </Border>
-                                                <Border BorderBrush="DarkGray" BorderThickness="1" Margin="0 2" CornerRadius="2">
+                                                <Border BorderBrush="DarkGray" BorderThickness="1" Margin="0 1" CornerRadius="2">
+                                                    <Button Style="{StaticResource Btn_RemoveFiles}" Tag="RdA"/>
+                                                </Border>
+                                                <Border BorderBrush="DarkGray" BorderThickness="1" Margin="0 1" CornerRadius="2">
                                                     <Button Style="{StaticResource Btn_MoveInputFileDown}" Tag="RdA"/>
                                                 </Border>
                                             </StackPanel>

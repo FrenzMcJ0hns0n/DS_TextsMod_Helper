@@ -212,6 +212,37 @@ namespace DS_TextsMod_Helper
             dtg.SelectedIndex = positionsToMove.First() - 1; // Prevent losing the selected elements from altering elements order
         }
 
+        private void Btn_RemoveFiles_Click(object sender, RoutedEventArgs e)
+        {
+            Button btn = sender as Button;
+            DataGrid dtg = (DataGrid)FindName("Dtg_" + btn.Tag);
+
+            int selectedCount = dtg.SelectedItems.Count;
+            if (selectedCount == 0)
+            {
+                MessageBox.Show("No selection to remove", "Information", MessageBoxButton.OK, MessageBoxImage.Information);
+                return;
+            }
+
+            List<int> positionsToRemove = new List<int>();
+            for (int i = 0; i < selectedCount; i++)
+            {
+                // $"Filename '{((InputFile)dtg.SelectedItems[i]).NameExt}' as selected item # {i + 1} is at index # {position} in the DataGrid\n";
+                int position = dtg.Items.IndexOf(dtg.SelectedItems[i]);
+                positionsToRemove.Add(position);
+            }
+
+            ObservableCollection<InputFile> iFiles = (ObservableCollection<InputFile>)dtg.ItemsSource;
+            int iFilesCount = iFiles.Count;
+            for (int i = 0; i < iFilesCount; i++)
+                if (positionsToRemove.Contains(i))
+                    iFiles.RemoveAt(i);
+
+            dtg.ItemsSource = null;
+            dtg.ItemsSource = iFiles;
+            dtg.SelectedIndex = positionsToRemove.Contains(iFilesCount) ? -1 : positionsToRemove.Max();
+        }
+
         private void Btn_MoveInputFileDown_Click(object sender, RoutedEventArgs e)
         {
             Button btn = sender as Button;
