@@ -390,13 +390,24 @@ namespace DS_TextsMod_Helper
             //SyncFilenames(sender);
         }
 
-        private ObservableCollection<InputFile> RegisterInputFiles(string[] droppedFiles)
+        private ObservableCollection<InputFile> RegisterInputFiles(string[] droppedItems)
         {
             ObservableCollection<InputFile> iFiles = new ObservableCollection<InputFile>();
-
-            foreach (string filepath in droppedFiles)
-                iFiles.Add(new InputFile(filepath));
-
+            foreach (string path in droppedItems)
+            {
+                if (Directory.Exists(path))
+                {
+                    DirectoryInfo di = new DirectoryInfo(path);
+                    foreach (FileInfo fi in di.GetFiles())
+                    {
+                        iFiles.Add(new InputFile(fi.FullName));
+                    }
+                }
+                else
+                {
+                    iFiles.Add(new InputFile(path));
+                }
+            }
             return iFiles;
         }
 
