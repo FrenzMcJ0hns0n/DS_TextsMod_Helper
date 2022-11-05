@@ -134,6 +134,38 @@
                                         <TextBlock Text="{Binding TextId}"/>
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
+                                <!-- Bindings are broken : should I finally embrace MVVM? -->
+                                <!--<DataGridTemplateColumn.CellStyle>
+                                    <Style TargetType="{x:Type DataGridCell}">
+                                        <Style.Triggers>
+                                            <MultiDataTrigger>
+                                                <MultiDataTrigger.Conditions>
+                                                    <Condition Binding="{Binding IsChecked, ElementName=Cbx_HighlightDiffs}" Value="True"/>
+                                                    <Condition Binding="{Binding Same}" Value="True"/>
+                                                </MultiDataTrigger.Conditions>
+                                                <MultiDataTrigger.Setters>
+                                                    <Setter Property="Background" Value="LightGreen"/>
+                                                </MultiDataTrigger.Setters>
+                                            </MultiDataTrigger>
+                                            <MultiDataTrigger>
+                                                <MultiDataTrigger.Conditions>
+                                                    <Condition Binding="{Binding IsChecked, ElementName=Cbx_HighlightDiffs}" Value="True"/>
+                                                    <Condition Binding="{Binding Same}" Value="False"/>
+                                                </MultiDataTrigger.Conditions>
+                                                <MultiDataTrigger.Setters>
+                                                    <Setter Property="Background" Value="LightSalmon"/>
+                                                </MultiDataTrigger.Setters>
+                                            </MultiDataTrigger>
+                                
+                                            <DataTrigger Binding="{Binding Same}" Value="True">
+                                                <Setter Property="Background" Value="LightGreen"/>
+                                            </DataTrigger>
+                                            <DataTrigger Binding="{Binding Same}" Value="False">
+                                                <Setter Property="Background" Value="LightSalmon"/>
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </DataGridTemplateColumn.CellStyle>-->
                             </DataGridTemplateColumn>
 
                             <!-- TODO: Manage to get OutputHeaderA -->
@@ -143,6 +175,18 @@
                                         <TextBlock Text="{Binding ValueA}"/>
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
+                                <!--<DataGridTemplateColumn.CellStyle>
+                                    <Style TargetType="{x:Type DataGridCell}">
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding Same}" Value="True">
+                                                <Setter Property="Background" Value="LightGreen"/>
+                                            </DataTrigger>
+                                            <DataTrigger Binding="{Binding Same}" Value="False">
+                                                <Setter Property="Background" Value="LightSalmon"/>
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </DataGridTemplateColumn.CellStyle>-->
                             </DataGridTemplateColumn>
 
                             <!-- TODO: Manage to get OutputHeaderB -->
@@ -244,7 +288,7 @@
             <CheckBox x:Name="Cbx_DisplayLinesNo" Content="Display lines numbers" Margin="0 0 32 0" IsChecked="True"/>
             <!--
             <CheckBox x:Name="Cbx_ShowAllDetails" Content="Show all details" Margin="0 0 32 0" IsChecked="True"/>
-            <CheckBox x:Name="Cbx_PlaceholderNb3" Content="Extra setting 3" Margin="0 0 32 0"/>
+            <CheckBox x:Name="Cbx_HighlightDiffs" Content="Highlight differences" Margin="0 0 32 0" IsChecked="False"/>
             -->
         </StackPanel>
         
