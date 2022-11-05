@@ -366,7 +366,7 @@ namespace DS_TextsMod_Helper
 
         #region Preview
 
-        private void Btn_ShowOutputPreview_Click(object sender, RoutedEventArgs e)
+        private void Btn_ShowOutputPreview_Click(object sender, RoutedEventArgs e) // TODO: Factorize with Output common elements
         {
             int processedFilesCount = 0;
             string parentDirPathA;
@@ -378,6 +378,7 @@ namespace DS_TextsMod_Helper
             string filePathA;
             string filePathB;
             string filePathC;
+            List<int> linesWithDistinctFilenames;
             ProcessingMode processingMode;
             OutputPreview outputPreview;
 
@@ -438,6 +439,16 @@ namespace DS_TextsMod_Helper
                         MessageBox.Show(MSG_INCONS_FMG_VER, HDR_INCONS_FMG_VER, MessageBoxButton.OK, MessageBoxImage.Error);
                         return;
                     }
+                    linesWithDistinctFilenames = CompareInputFiles();
+                    if (linesWithDistinctFilenames.Count != 0)
+                    {   // Warning if filenames are not the same in all input areas
+                        string lines = string.Join(", ", linesWithDistinctFilenames);
+                        MessageBoxResult mbr = MessageBox.Show(
+                            MSG_INCONS_IFNAMES1 + $"\r\n{lines}\r\n\r\n" + MSG_INCONS_IFNAMES2, HDR_INCONS_IFNAMES, MessageBoxButton.OKCancel, MessageBoxImage.Information
+                        );
+                        if (mbr == MessageBoxResult.Cancel)
+                            return;
+                    }
 
                     List<CompareMode> cmpSuperlist = new List<CompareMode>();
                     for (int i = 0; i < iFilesCmpA.Count; i++)
@@ -491,6 +502,16 @@ namespace DS_TextsMod_Helper
                         MessageBox.Show(MSG_INCONS_FMG_VER, HDR_INCONS_FMG_VER, MessageBoxButton.OK, MessageBoxImage.Error);
                         return;
                     }
+                    linesWithDistinctFilenames = CompareInputFiles();
+                    if (linesWithDistinctFilenames.Count != 0)
+                    {   // Warning if filenames are not the same in all input areas
+                        string lines = string.Join(", ", linesWithDistinctFilenames);
+                        MessageBoxResult mbr = MessageBox.Show(
+                            MSG_INCONS_IFNAMES1 + $"\r\n{lines}\r\n\r\n" + MSG_INCONS_IFNAMES2, HDR_INCONS_IFNAMES, MessageBoxButton.OKCancel, MessageBoxImage.Information
+                        );
+                        if (mbr == MessageBoxResult.Cancel)
+                            return;
+                    }
 
                     List<PrepareMode> prpSuperlist = new List<PrepareMode>();
                     for (int i = 0; i < iFilesPrpA.Count; i++)
@@ -518,11 +539,12 @@ namespace DS_TextsMod_Helper
 
         #region Output
 
-        private void Btn_GenerateOutput_Click(object sender, RoutedEventArgs e)
+        private void Btn_GenerateOutput_Click(object sender, RoutedEventArgs e) // TODO: Factorize with Preview common elements
         {
             int processedFilesCount = 0;
             List<string> iFilenames;
             List<string> alreadyExisting;
+            List<int> linesWithDistinctFilenames;
             string parentDirPathA;
             string parentDirPathB;
             string parentDirPathC;
@@ -595,6 +617,16 @@ namespace DS_TextsMod_Helper
                         MessageBox.Show(MSG_INCONS_FMG_VER, HDR_INCONS_FMG_VER, MessageBoxButton.OK, MessageBoxImage.Error);
                         return;
                     }
+                    linesWithDistinctFilenames = CompareInputFiles();
+                    if (linesWithDistinctFilenames.Count != 0)
+                    {   // Warning if filenames are not the same in all input areas
+                        string lines = string.Join(", ", linesWithDistinctFilenames);
+                        MessageBoxResult mbr = MessageBox.Show(
+                            MSG_INCONS_IFNAMES1 + $"\r\n{lines}\r\n\r\n" + MSG_INCONS_IFNAMES2, HDR_INCONS_IFNAMES, MessageBoxButton.OKCancel, MessageBoxImage.Information
+                        );
+                        if (mbr == MessageBoxResult.Cancel)
+                            return;
+                    }
 
                     iFilenames = iFilesCmpA.Select(iFile => iFile.Name + ".csv").ToList();
                     alreadyExisting = Tools.GetAlreadyExistingFilenames(iFilenames);
@@ -650,6 +682,16 @@ namespace DS_TextsMod_Helper
                         MessageBox.Show(MSG_INCONS_FMG_VER, HDR_INCONS_FMG_VER, MessageBoxButton.OK, MessageBoxImage.Error);
                         return;
                     }
+                    linesWithDistinctFilenames = CompareInputFiles();
+                    if (linesWithDistinctFilenames.Count != 0)
+                    {   // Warning if filenames are not the same in all input areas
+                        string lines = string.Join(", ", linesWithDistinctFilenames);
+                        MessageBoxResult mbr = MessageBox.Show(
+                            MSG_INCONS_IFNAMES1 + $"\r\n{lines}\r\n\r\n" + MSG_INCONS_IFNAMES2, HDR_INCONS_IFNAMES, MessageBoxButton.OKCancel, MessageBoxImage.Information
+                        );
+                        if (mbr == MessageBoxResult.Cancel)
+                            return;
+                    }
 
                     iFilenames = iFilesPrpA.Select(iFile => iFile.NameExt).ToList();
                     alreadyExisting = Tools.GetAlreadyExistingFilenames(iFilenames);
@@ -686,101 +728,6 @@ namespace DS_TextsMod_Helper
                     MessageBox.Show($"[Prepare mode] Done: {processedFilesCount} output files have been created{special}");
                     break;
             }
-
-
-            // Commented as building 1.5
-            //switch (SelectedMode())
-            //{
-            //    case PROCESS_MODE.Read:
-
-            //        if (!ValidateReadInputs())
-            //            return;
-
-            //        string rd_iFile1 = Tbk_Rd_iFile1.Text;
-            //        string rd_oFilename = Tbx_Rd_oFilename.Text + ".csv";
-            //        string rd_csvSepChar = Tbx_Rd_CsvSeparator.Text;
-
-            //        if (File.Exists(Tools.GetOutputFilepath(rd_oFilename)))
-            //        {
-            //            MessageBoxResult result = MessageBox.Show(MSG_EXISTING_OFNAME, HDR_EXISTING_OFNAME, MessageBoxButton.OKCancel, MessageBoxImage.Information);
-            //            if (result == MessageBoxResult.Cancel)
-            //                return;
-            //        }
-
-            //        ReadMode r = new ReadMode(rd_iFile1) { OneLinedValues = Cbx_Rd_OneLinedValues.IsChecked ?? false };
-            //        r.ProcessFiles(false);
-            //        r.ProduceOutput(rd_oFilename, rd_csvSepChar);
-
-            //        MessageBox.Show($"[Read mode] File \"{r.OutputFilename}\" created");
-            //        break;
-
-            //    case PROCESS_MODE.Compare:
-
-            //        if (!ValidateCompareInputs())
-            //            return;
-
-            //        string cmp_iFile1 = Tbk_Cmp_iFile1.Text;
-            //        string cmp_iFile2 = Tbk_Cmp_iFile2.Text;
-            //        string cmp_oFilename = Tbx_Cmp_oFilename.Text + ".csv";
-            //        string oHdr1 = Tbx_Cmp_oHeader1.Text;
-            //        string oHdr2 = Tbx_Cmp_oHeader2.Text;
-            //        string cmp_csvSepChar = Tbx_Cmp_CsvSeparator.Text;
-
-            //        if (File.Exists(Tools.GetOutputFilepath(cmp_oFilename)))
-            //        {
-            //            MessageBoxResult result = MessageBox.Show(MSG_EXISTING_OFNAME, HDR_EXISTING_OFNAME, MessageBoxButton.OKCancel, MessageBoxImage.Information);
-            //            if (result == MessageBoxResult.Cancel)
-            //                return;
-            //        }
-
-            //        CompareMode c = new CompareMode(cmp_iFile1, cmp_iFile2) { OneLinedValues = Cbx_Cmp_OneLinedValues.IsChecked ?? false };
-            //        c.ProcessFiles(false);
-            //        c.ProduceOutput(cmp_oFilename, oHdr1, oHdr2, cmp_csvSepChar);
-
-            //        MessageBox.Show($"[Compare mode] File \"{c.OutputFilename}\" created");
-            //        break;
-
-            //    case PROCESS_MODE.Prepare:
-
-            //        if (!ValidatePrepareInputs())
-            //            return;
-
-            //        string prp_iFile1 = Tbk_Prp_iFile1.Text;
-            //        string prp_iFile2 = Tbk_Prp_iFile2.Text;
-            //        string prp_iFile3 = Tbk_Prp_iFile3.Text;
-            //        string prp_oFilename = Tbx_Prp_oFilename.Text + ".fmg";
-            //        string textToReplace = Tbx_Prp_TextToReplace.Text;
-            //        string replacingText = Tbx_Prp_ReplacingText.Text;
-
-            //        string outputVersion = GetOutputFmgVersion();
-            //        if (string.IsNullOrEmpty(outputVersion))
-            //            return;
-
-            //        if (File.Exists(Tools.GetOutputFilepath(prp_oFilename)))
-            //        {
-            //            MessageBoxResult result = MessageBox.Show(MSG_EXISTING_OFNAME, HDR_EXISTING_OFNAME, MessageBoxButton.OKCancel, MessageBoxImage.Information);
-            //            if (result == MessageBoxResult.Cancel)
-            //                return;
-            //        }
-
-            //        PrepareMode p = new PrepareMode(prp_iFile1, prp_iFile2, prp_iFile3, textToReplace, replacingText);
-            //        p.ProcessFiles(false);
-            //        p.SetOutputVersion(outputVersion);
-            //        p.ProduceOutput(prp_oFilename);
-
-            //        if (Cbx_Prp_WarnOnSpecialCases.IsChecked ?? false)
-            //        {
-            //            List<string> specialCases = p.GetSpecialCases();
-            //            if (specialCases.Count > 0)
-            //            {
-            //                Tools.LogSpecialCases(prp_iFile1, prp_iFile2, prp_iFile3, prp_oFilename, specialCases);
-            //                MessageBox.Show(WRN_SPECIAL_CASES);
-            //            }
-            //        }
-
-            //        MessageBox.Show($"[Prepare mode] File \"{p.OutputFilename}\" created for \"{outputVersion}\"");
-            //        break;
-            //}
         }
 
         #endregion
