@@ -117,6 +117,31 @@
             <EventSetter Event="Click" Handler="Btn_MoveInputFileDown_Click"/>
         </Style>
         
+        <!-- Generic CheckBox -->
+
+        <Style x:Key="Cbx_Generic" TargetType="{x:Type CheckBox}">
+            <Setter Property="HorizontalAlignment" Value="Center"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="ToolTipService.InitialShowDelay" Value="50"/>
+            <Setter Property="ToolTipService.ShowDuration" Value="15000"/>
+        </Style>
+
+        <!-- Generic Label -->
+
+        <Style x:Key="Lbl_Generic" TargetType="{x:Type Label}">
+            <Setter Property="ToolTipService.InitialShowDelay" Value="50"/>
+            <Setter Property="ToolTipService.ShowDuration" Value="15000"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+        </Style>
+
+        <!-- Generic TextBox -->
+
+        <Style x:Key="Tbx_Generic" TargetType="{x:Type TextBox}">
+            <Setter Property="ToolTipService.InitialShowDelay" Value="50"/>
+            <Setter Property="ToolTipService.ShowDuration" Value="15000"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+        </Style>
+
     </Window.Resources>
 
     <Grid x:Name="Grid_Main" Background="WhiteSmoke">
@@ -251,32 +276,28 @@
                             <StackPanel Grid.Column="1" Grid.Row="1" Grid.RowSpan="3"
                                         HorizontalAlignment="Center" Orientation="Horizontal" VerticalAlignment="Center"
                                         >
-                                <Label HorizontalAlignment="Right" VerticalAlignment="Center"
-                                       Content="CSV separator character :"
+                                <Label Content="CSV separator character :"
+                                       HorizontalAlignment="Right"
+                                       Style="{StaticResource Lbl_Generic}"
                                        ToolTip="Symbol used to separate values as CSV data"
-                                       ToolTipService.InitialShowDelay="50"
-                                       ToolTipService.ShowDuration="15000"
                                        />
                                 <TextBox x:Name="Tbx_Rd_CsvSeparator"
-                                         Width="22"
-                                         VerticalAlignment="Center" VerticalContentAlignment="Center" Padding="0,2,0,4"
-                                         TextAlignment="Center" Text="|"
                                          MaxLength="1"
-                                         ToolTip="Choose the symbol to separate values as CSV data"
-                                         ToolTipService.InitialShowDelay="50"
-                                         ToolTipService.ShowDuration="15000"
+                                         Padding="0 2 0 4"
+                                         Style="{StaticResource Tbx_Generic}"
+                                         Text="|"
+                                         TextAlignment="Center"
+                                         ToolTip="Symbol used to separate values as CSV data"
+                                         Width="22"
                                          />
                             </StackPanel>
 
                             <!-- Read mode : One lined values -->
-                            <CheckBox x:Name="Cbx_Rd_OneLinedValues" 
-                                      Grid.Column="3" Grid.Row="1" Grid.RowSpan="3"
-                                      HorizontalAlignment="Center"
-                                      VerticalAlignment="Center"
+                            <CheckBox x:Name="Cbx_Rd_OneLinedValues"
                                       Content="Disable multi line format"
+                                      Grid.Column="3" Grid.Row="1" Grid.RowSpan="3"
+                                      Style="{StaticResource Cbx_Generic}"
                                       ToolTip="Replace every line breaks by /n/"
-                                      ToolTipService.InitialShowDelay="50"
-                                      ToolTipService.ShowDuration="15000"
                                       />
                         </Grid>
                     </GroupBox>
@@ -438,65 +459,59 @@
 
                             <!-- Compare mode : Output headers -->
                             <StackPanel Grid.Column="1" Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center">
-                                <Label VerticalAlignment="Center"
-                                       Content="Header A :" Width="70"
-                                       ToolTip="Output column header for File A"
-                                       ToolTipService.InitialShowDelay="50"
-                                       ToolTipService.ShowDuration="15000"
+                                <Label Content="Files A header :"
+                                       Style="{StaticResource Lbl_Generic}"
+                                       ToolTip="Output column header for Files A"
+                                       Width="110"
                                        />
                                 <TextBox x:Name="Tbx_Cmp_oHeader1"
-                                        HorizontalAlignment="Right" Width="230"
-                                        VerticalAlignment="Center"
-                                        TextAlignment="Right"
-                                        Text="File A"
-                                        ToolTip="Output column header for File A"
-                                        ToolTipService.InitialShowDelay="50"
-                                        ToolTipService.ShowDuration="15000"
-                                        />
+                                         HorizontalAlignment="Right"
+                                         Style="{StaticResource Tbx_Generic}"
+                                         Text="File A"
+                                         TextAlignment="Right"
+                                         ToolTip="Output column header for Files A"
+                                         Width="190"
+                                         />
                             </StackPanel>
                             <StackPanel Grid.Column="1" Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center">
-                                <Label VerticalAlignment="Center" 
-                                       Content="Header B :" Width="70"
-                                       ToolTip="Output column header for File B"
-                                       ToolTipService.InitialShowDelay="50"
-                                       ToolTipService.ShowDuration="15000"
+                                <Label Content="Files B header :"
+                                       Style="{StaticResource Lbl_Generic}"
+                                       ToolTip="Output column header for Files B"
+                                       Width="110"
                                        />
                                 <TextBox x:Name="Tbx_Cmp_oHeader2"
-                                         HorizontalAlignment="Right" Width="230"
-                                         VerticalAlignment="Center"
-                                         TextAlignment="Right"
+                                         HorizontalAlignment="Right"
+                                         Style="{StaticResource Tbx_Generic}"
                                          Text="File B"
-                                         ToolTip="Output column header for File B"
-                                         ToolTipService.InitialShowDelay="50"
-                                         ToolTipService.ShowDuration="15000"
+                                         TextAlignment="Right"
+                                         ToolTip="Output column header for Files B"
+                                         Width="190"
                                          />
                             </StackPanel>
 
                             <!-- Compare mode : One lined values -->
-                            <CheckBox x:Name="Cbx_Cmp_OneLinedValues" 
-                                      Grid.Column="3" Grid.Row="1" Grid.RowSpan="2"
-                                      HorizontalAlignment="Center"
-                                      VerticalAlignment="Center"
+                            <CheckBox x:Name="Cbx_Cmp_OneLinedValues"
                                       Content="Disable multi line format"
+                                      Grid.Column="3" Grid.Row="1" Grid.RowSpan="2"
+                                      Style="{StaticResource Cbx_Generic}"
                                       ToolTip="Replace every line breaks by /n/"
                                       />
 
                             <!-- Compare mode : CSV output separator -->
                             <StackPanel Grid.Column="5" Grid.Row="1" Grid.RowSpan="2" Orientation="Horizontal" HorizontalAlignment="Center">
-                                <Label HorizontalAlignment="Right" VerticalAlignment="Center"
-                                       Content="CSV separator character :"
+                                <Label Content="CSV separator character :"
+                                       HorizontalAlignment="Right"
+                                       Style="{StaticResource Lbl_Generic}"
                                        ToolTip="Symbol used to separate values as CSV data"
-                                       ToolTipService.InitialShowDelay="50"
-                                       ToolTipService.ShowDuration="15000"
                                        />
                                 <TextBox x:Name="Tbx_Cmp_CsvSeparator"
-                                         Width="22"
-                                         VerticalAlignment="Center" VerticalContentAlignment="Center" Padding="0,2,0,4"
-                                         TextAlignment="Center" Text="|"
                                          MaxLength="1"
-                                         ToolTip="Choose the symbol to separate values as CSV data"
-                                         ToolTipService.InitialShowDelay="50"
-                                         ToolTipService.ShowDuration="15000"
+                                         Padding="0 2 0 4"
+                                         Style="{StaticResource Tbx_Generic}"
+                                         Text="|"
+                                         TextAlignment="Center"
+                                         ToolTip="Symbol used to separate values as CSV data"
+                                         Width="22"
                                          />
                             </StackPanel>
 
@@ -712,43 +727,39 @@
 
                             <!-- Prepare mode : Replace values -->
                             <StackPanel Grid.Column="1" Grid.Row="1" HorizontalAlignment="Center" Orientation="Horizontal">
-                                <Label Content="String to replace :" VerticalAlignment="Center" Width="110"
+                                <Label Content="String to replace :"
+                                       Style="{StaticResource Lbl_Generic}"
+                                       Width="110"
                                        ToolTip="Text to be replaced in entries"
-                                       ToolTipService.InitialShowDelay="50"
-                                       ToolTipService.ShowDuration="15000"
                                        />
                                 <TextBox x:Name="Tbx_Prp_TextToReplace"
-                                         VerticalAlignment="Center"
-                                         Width="190"
+                                         Style="{StaticResource Tbx_Generic}"
                                          TextAlignment="Right"
                                          ToolTip="Text to be replaced in entries"
-                                         ToolTipService.InitialShowDelay="50"
-                                         ToolTipService.ShowDuration="15000"
+                                         Width="190"
                                          />
                             </StackPanel>
                             <StackPanel Grid.Column="1" Grid.Row="2" HorizontalAlignment="Center" Orientation="Horizontal">
-                                <Label Content="Remplacing text :" VerticalAlignment="Center" Width="110"
+                                <Label Content="Remplacing text :"
+                                       Style="{StaticResource Lbl_Generic}"
+                                       Width="110"
                                        ToolTip="Replacing text in entries"
-                                       ToolTipService.InitialShowDelay="50"
-                                       ToolTipService.ShowDuration="15000"
                                        />
                                 <TextBox x:Name="Tbx_Prp_ReplacingText"
-                                         VerticalAlignment="Center"
-                                         Width="190"
+                                         Style="{StaticResource Tbx_Generic}"
                                          TextAlignment="Right"
                                          ToolTip="Replacing text in entries"
-                                         ToolTipService.InitialShowDelay="50"
-                                         ToolTipService.ShowDuration="15000"
+                                         Width="190"
                                          />
                             </StackPanel>
 
                             <!-- Prepare mode : Warn on special cases -->
-                            <CheckBox x:Name="Cbx_Prp_WarnOnSpecialCases" Content="Warn on special cases" 
-                                      Grid.Column="3" Grid.Row="1" Grid.RowSpan="2" 
-                                      HorizontalAlignment="Center" IsChecked="True" VerticalAlignment="Center"
+                            <CheckBox x:Name="Cbx_Prp_WarnOnSpecialCases"
+                                      Content="Warn on special cases"
+                                      Grid.Column="3" Grid.Row="1" Grid.RowSpan="2"
+                                      IsChecked="True"
+                                      Style="{StaticResource Cbx_Generic}"
                                       ToolTip="Warn on entries where File #3 value is unexpectedly empty"
-                                      ToolTipService.InitialShowDelay="50"
-                                      ToolTipService.ShowDuration="15000"
                                       />
 
                         </Grid>

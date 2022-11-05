@@ -9,31 +9,9 @@
         Height="600" MinHeight="200" Width="1200" MinWidth="600">
 
     <Window.Resources>
-        <!-- Custom style for extra headers displayed with option "Show all details"
-        <Style x:Key="Dtg_HeaderOff" TargetType="{x:Type DataGridColumnHeader}">
-            <Setter Property="Foreground" Value="DarkGray"/>
-            <Style.Triggers>
-                <DataTrigger Binding="{Binding IsChecked,ElementName=Cbx_AllDetails}" Value="True">
-                    <Setter Property="Visibility" Value="Visible"/>
-                    <Setter Property="Width" Value="0"/>
-                </DataTrigger>
-            </Style.Triggers>
-        </Style>
-        <Style x:Key="Dtg_CellOff" TargetType="{x:Type DataGridCell}">
-            <Setter Property="Foreground" Value="DarkGray"/>
-        </Style>
-
-        <Style x:Key="Tbk_Try" TargetType="{x:Type TextBlock}">
-
-            <Setter Property="Visibility" Value="Collapsed"/>
-            <Style.Triggers>
-                <DataTrigger Binding="{Binding IsChecked,ElementName=Cbx_AllDetails}" Value="True">
-                    <Setter Property="Visibility" Value="Visible"/>
-                    <Setter Property="Width" Value="0"/>
-                </DataTrigger>
-            </Style.Triggers>
-
-        </Style>-->
+        <!-- TODO? -->
+        <!-- * Implement option "Show all details" with custom style on the extra columns -->
+        <!-- * Bind column header from MainWindow tbx -->
 
         <Style x:Key="Dtg_Common" TargetType="{x:Type DataGrid}">
             <Setter Property="AutoGenerateColumns" Value="False"/>
@@ -51,7 +29,32 @@
             <Setter Property="FontSize" Value="11"/>
             <Setter Property="Padding" Value="2"/>
         </Style>
-               
+
+        <Style x:Key="Dtg_ExtraHeader" TargetType="{x:Type DataGridColumnHeader}">
+            <Setter Property="Foreground" Value="DarkGray"/>
+            <!--
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding IsChecked,ElementName=Cbx_ShowAllDetails}" Value="False">
+                    
+                    <Setter Property="Width" Value="0"/>
+                    <Setter Property="Visibility" Value="Collapsed"/>
+                    
+                </DataTrigger>
+            </Style.Triggers>
+            -->
+        </Style>
+
+        <Style x:Key="Dtg_ExtraCell" TargetType="{x:Type DataGridCell}">
+            <Setter Property="Foreground" Value="DarkGray"/>
+            <!--
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding IsChecked,ElementName=Cbx_ShowAllDetails}" Value="False">
+                    <Setter Property="Foreground" Value="DarkGray"/>
+                </DataTrigger>
+            </Style.Triggers>
+            -->
+        </Style>
+
     </Window.Resources>
 
 
@@ -198,7 +201,7 @@
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
 
-                            <DataGridTemplateColumn Header="Value 1" MaxWidth="500">
+                            <DataGridTemplateColumn Header="File A" MaxWidth="500" HeaderStyle="{StaticResource Dtg_ExtraHeader}" CellStyle="{StaticResource Dtg_ExtraCell}">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate DataType="{x:Type local:PrepareEntry}">
                                         <TextBlock Text="{Binding Value1}"/>
@@ -206,7 +209,7 @@
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
 
-                            <DataGridTemplateColumn Header="Value 2" MaxWidth="500">
+                            <DataGridTemplateColumn Header="File B" MaxWidth="500" HeaderStyle="{StaticResource Dtg_ExtraHeader}" CellStyle="{StaticResource Dtg_ExtraCell}">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate DataType="{x:Type local:PrepareEntry}">
                                         <TextBlock Text="{Binding Value2}"/>
@@ -214,7 +217,7 @@
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
 
-                            <DataGridTemplateColumn Header="Value 3" MaxWidth="500">
+                            <DataGridTemplateColumn Header="File C" MaxWidth="500" HeaderStyle="{StaticResource Dtg_ExtraHeader}" CellStyle="{StaticResource Dtg_ExtraCell}">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate DataType="{x:Type local:PrepareEntry}">
                                         <TextBlock Text="{Binding Value3}"/>
@@ -222,7 +225,7 @@
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
 
-                            <DataGridTemplateColumn Header="From?" MaxWidth="80">
+                            <DataGridTemplateColumn Header="From?" MaxWidth="80" HeaderStyle="{StaticResource Dtg_ExtraHeader}" CellStyle="{StaticResource Dtg_ExtraCell}">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate DataType="{x:Type local:PrepareEntry}">
                                         <TextBlock Text="{Binding Source}"/>
@@ -236,14 +239,15 @@
             </TabControl.ContentTemplate>
         </TabControl>
 
-        
-        
-        <!-- TODO? -->
+
         <StackPanel Orientation="Horizontal" Grid.Column="1" Grid.Row="3">
             <CheckBox x:Name="Cbx_DisplayLinesNo" Content="Display lines numbers" Margin="0 0 32 0" IsChecked="True"/>
-            <CheckBox x:Name="Cbx_ShowAllDetails" Content="Show all details" Margin="0 0 32 0"/>
+            <!--
+            <CheckBox x:Name="Cbx_ShowAllDetails" Content="Show all details" Margin="0 0 32 0" IsChecked="True"/>
             <CheckBox x:Name="Cbx_PlaceholderNb3" Content="Extra setting 3" Margin="0 0 32 0"/>
+            -->
         </StackPanel>
+        
         
     </Grid>
 </Window>

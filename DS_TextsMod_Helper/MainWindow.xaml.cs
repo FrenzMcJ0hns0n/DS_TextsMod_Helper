@@ -18,10 +18,8 @@ namespace DS_TextsMod_Helper
 
         #region CONSTANTS
 
-        private const string DROP_FMG = "Drop FMG file...";
-
         private const string HDR_MISSING_IFILES = "Missing input files";
-        private const string MSG_MISSING_IFILES = "Ensure that all the input areas are holding files to process";
+        private const string MSG_MISSING_IFILES = "Ensure that all the input areas contain files to process";
 
         private const string HDR_WRONG_IF_COUNT = "Wrong files count";
         private const string MSG_WRONG_IF_COUNT = "Input areas must share the same files count";
@@ -39,18 +37,8 @@ namespace DS_TextsMod_Helper
         private const string WRN_DISTINCTS_FNAMES = "Warning : inconsistent filename(s).\r\n"
                                                   + "Make sure to use the right input files\r\n\r\n";
 
-        private const string WRN_SPECIAL_CASES = "Warning : Found special cases while processing files."
-                                               + "\r\nSee details in file \"special cases.txt\"";
-
-        private const string ERR_INVALID_FNAME = "Filenames cannot contain the following characters:\r\n"
-                                               + "\\ / : * ? \" < > |\r\n\r\n"
-                                               + "Please try again";
-
-        private const string ERR_MISSING_IFILES = "Error : Missing input file(s)";
-        private const string ERR_MISSING_OFNAME = "Error : Missing output filename";
-        private const string ERR_MISSING_OHDRS = "Error : Missing output header(s)";
-        private const string ERR_MISSING_CSVSEP = "Error : Missing CSV separator";
-        private const string ERR_SAME_IFILE = "Error : Same file submitted several times";
+        private const string WRN_SPECIAL_CASES = "Warning : Found special cases while processing files.\r\n"
+                                               + "See details in file \"special cases.txt\"";
 
         private const string ERR_MISSING_SFDLL = "Fatal error : file 'SoulsFormats.dll' not found";
 
