@@ -1,15 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
 
 namespace DS_TextsMod_Helper
 {
@@ -21,8 +18,8 @@ namespace DS_TextsMod_Helper
         private const string HDR_MISSING_IFILES = "Missing input files";
         private const string MSG_MISSING_IFILES = "Ensure that all the input areas contain files to process";
 
-        private const string HDR_WRONG_IF_COUNT = "Wrong files count";
-        private const string MSG_WRONG_IF_COUNT = "Input areas must share the same files count";
+        private const string HDR_WRONG_IFCOUNT = "Wrong files count";
+        private const string MSG_WRONG_IFCOUNT = "Input areas must share the same files count";
 
         private const string HDR_SAME_DIRECTORY = "Same directory";
         private const string MSG_SAME_DIRECTORY = "Files from distinct input areas cannot have the same directory";
@@ -34,13 +31,15 @@ namespace DS_TextsMod_Helper
         private const string MSG_OVERW_EXIST_OF = "The following output files already exist.\r\n"
                                                 + "Continue to overwrite?";
 
-        private const string WRN_DISTINCTS_FNAMES = "Warning : inconsistent filename(s).\r\n"
-                                                  + "Make sure to use the right input files\r\n\r\n";
+        private const string HDR_INCONS_IFNAMES = "Inconsistent input filenames";
+        private const string MSG_INCONS_IFNAMES1 = "Filenames are different on the following lines :";
+        private const string MSG_INCONS_IFNAMES2 = "Click OK to continue anyway, or Cancel to abort";
 
         private const string WRN_SPECIAL_CASES = "Warning : Found special cases while processing files.\r\n"
                                                + "See details in file \"special cases.txt\"";
 
-        private const string ERR_MISSING_SFDLL = "Fatal error : file 'SoulsFormats.dll' not found";
+        private const string ERR_MISSING_SFDLL = "Fatal error : file 'SoulsFormats.dll' not found.\r\n"
+                                               + "The program will exit...";
 
         #endregion
 
@@ -69,25 +68,6 @@ namespace DS_TextsMod_Helper
             }
         }
 
-        /// <summary>
-        /// Return PROCESS MODE currently loaded in Preview DataGrid
-        /// </summary>
-        private PROCESS_MODE LoadedMode()
-        {
-            // Commented as building 1.5
-            //if (Dtg_Preview.ItemsSource is List<ReadMode.Entry>)
-            //    return PROCESS_MODE.Read;
-
-            //if (Dtg_Preview.ItemsSource is List<CompareMode.Entry>)
-            //    return PROCESS_MODE.Compare;
-
-            //if (Dtg_Preview.ItemsSource is List<PrepareMode.Entry>)
-            //    return PROCESS_MODE.Prepare;
-
-            return PROCESS_MODE.None;
-        }
-
-
         #endregion
 
 
@@ -95,16 +75,18 @@ namespace DS_TextsMod_Helper
         {
             InitializeComponent();
 
-            Title = Tools.GetFormattedAppVersion();
-
-            Directory.CreateDirectory(Tools.GetOutputDirPath());
-
             if (!File.Exists(Tools.GetSoulsFormatsDllPath()))
+            {
                 MessageBox.Show(ERR_MISSING_SFDLL);
+                Environment.Exit(0);
+            }
+
+            Title = Tools.GetFormattedAppVersion();
+            Directory.CreateDirectory(Tools.GetOutputDirPath());
         }
 
 
-        #region GUI Common
+        #region Input files management
 
         private void Window_MouseDown(object sender, MouseButtonEventArgs e)
         {
@@ -280,54 +262,40 @@ namespace DS_TextsMod_Helper
             e.Row.Header = (e.Row.GetIndex() + 1).ToString();
         }
 
-        private void CompareInputFiles()
+        private List<int> CompareInputFiles()
         {
+            List<int> lineNumbers = new List<int>();
             switch (SelectedMode())
             {
-
-
                 case PROCESS_MODE.Compare:
-                    if (Dtg_CmpA.ItemsSource is null || Dtg_CmpB.ItemsSource is null) return;
-
                     ObservableCollection<InputFile> iFilesCmpA = (ObservableCollection<InputFile>)Dtg_CmpA.ItemsSource;
                     ObservableCollection<InputFile> iFilesCmpB = (ObservableCollection<InputFile>)Dtg_CmpB.ItemsSource;
                     for (int i = 0; i < iFilesCmpA.Count; i++)
                     {
-                        if (iFilesCmpA[i].NameExt == iFilesCmpB[i].NameExt)
+                        if (iFilesCmpA[i].NameExt != iFilesCmpB[i].NameExt)
                         {
-                            // all good
-                        }
-                        else
-                        {
-                            // warning : filenames are different
+                            // Filenames are different : report faulty line
+                            lineNumbers.Add(i + 1);
                         }
                     }
                     break;
 
 
                 case PROCESS_MODE.Prepare:
-                    if (Dtg_PrpA.ItemsSource is null || Dtg_PrpB.ItemsSource is null || Dtg_PrpC.ItemsSource is null) return;
-
                     ObservableCollection<InputFile> iFilesPrpA = (ObservableCollection<InputFile>)Dtg_PrpA.ItemsSource;
                     ObservableCollection<InputFile> iFilesPrpB = (ObservableCollection<InputFile>)Dtg_PrpB.ItemsSource;
                     ObservableCollection<InputFile> iFilesPrpC = (ObservableCollection<InputFile>)Dtg_PrpC.ItemsSource;
                     for (int i = 0; i < iFilesPrpA.Count; i++)
                     {
-                        if ((iFilesPrpA[i].NameExt == iFilesPrpB[i].NameExt) && (iFilesPrpB[i].NameExt == iFilesPrpC[i].NameExt))
+                        if (iFilesPrpA[i].NameExt != iFilesPrpB[i].NameExt || iFilesPrpA[i].NameExt != iFilesPrpC[i].NameExt)
                         {
-                            // all good
-                        }
-                        else
-                        {
-                            // warning : filenames are different
+                            // Filenames are different : report faulty line
+                            lineNumbers.Add(i + 1);
                         }
                     }
                     break;
-
-
-                default:
-                    return;
             }
+            return lineNumbers;
         }
 
         private void HandleFilesDrop(DataGrid targetDtg, ObservableCollection<InputFile> newFiles)
@@ -346,55 +314,6 @@ namespace DS_TextsMod_Helper
             }
             else
                 targetDtg.ItemsSource = newFiles;
-        }
-
-
-
-        #endregion
-
-
-        #region GUI Read mode
-
-        // Something here ?
-
-        #endregion
-
-
-        #region GUI Compare mode
-
-        // Something here ?
-
-        #endregion
-
-
-        #region GUI Prepare mode
-
-        // Something here ?
-
-        #endregion
-
-
-        #region GUI Helpers : Manage tabs
-
-        private void FocusMe(PROCESS_MODE targetMode)
-        {
-            if (SelectedMode() != targetMode)
-                Tbc_Modes.SelectedIndex = (int)targetMode;
-        }
-        private void Tbi_Rd_DragOver(object sender, DragEventArgs e) { FocusMe(PROCESS_MODE.Read); }
-        private void Tbi_Cmp_DragOver(object sender, DragEventArgs e) { FocusMe(PROCESS_MODE.Compare); }
-        private void Tbi_Prp_DragOver(object sender, DragEventArgs e) { FocusMe(PROCESS_MODE.Prepare); }
-
-        #endregion
-
-
-        #region GUI Helpers : Process input files
-
-        private void Tbk_InputFmg_PreviewDragOver(object sender, DragEventArgs e)
-        {
-            Activate();
-            Focus();
-            e.Handled = true;
         }
 
         private ObservableCollection<InputFile> RegisterInputFiles(string[] droppedItems)
@@ -418,31 +337,24 @@ namespace DS_TextsMod_Helper
             return iFiles;
         }
 
-        private void ShowSameFilenames(TextBlock tbk)
+        #endregion
+
+
+        #region TabItem controls management
+
+        private void FocusMe(PROCESS_MODE targetMode)
         {
-            SolidColorBrush softGreen = (SolidColorBrush)new BrushConverter().ConvertFrom("#c8eac8");
-            tbk.Background = softGreen;
-
-            // Rely on ToolTip's text, quite hacky
-            int warningLength = WRN_DISTINCTS_FNAMES.Length;
-            if (tbk.ToolTip.ToString().Substring(0, warningLength) == WRN_DISTINCTS_FNAMES)
-                tbk.ToolTip = tbk.ToolTip.ToString().Remove(0, warningLength);
+            if (SelectedMode() != targetMode)
+                Tbc_Modes.SelectedIndex = (int)targetMode;
         }
-
-        private void ShowDistinctFilenames(TextBlock tbk)
-        {
-            tbk.Background = Brushes.PaleGoldenrod;
-
-            // Rely on ToolTip's text, quite hacky
-            int warningLength = WRN_DISTINCTS_FNAMES.Length;
-            if (tbk.ToolTip.ToString().Substring(0, warningLength) != WRN_DISTINCTS_FNAMES)
-                tbk.ToolTip = WRN_DISTINCTS_FNAMES + tbk.ToolTip.ToString();
-        }
+        private void Tbi_Rd_DragOver(object sender, DragEventArgs e) { FocusMe(PROCESS_MODE.Read); }
+        private void Tbi_Cmp_DragOver(object sender, DragEventArgs e) { FocusMe(PROCESS_MODE.Compare); }
+        private void Tbi_Prp_DragOver(object sender, DragEventArgs e) { FocusMe(PROCESS_MODE.Prepare); }
 
         #endregion
 
 
-        #region GUI Helpers : Misc.
+        #region GUI helpers : Misc.
 
         private void Btn_OpenProgramDir_Click(object sender, RoutedEventArgs e)
         {
@@ -509,7 +421,7 @@ namespace DS_TextsMod_Helper
                     ObservableCollection<InputFile> iFilesCmpB = (ObservableCollection<InputFile>)Dtg_CmpB.ItemsSource;
                     if (iFilesCmpA.Count != iFilesCmpB.Count)
                     {   // Early return on error "Wrong input files count"
-                        MessageBox.Show(MSG_WRONG_IF_COUNT, HDR_WRONG_IF_COUNT, MessageBoxButton.OK, MessageBoxImage.Error);
+                        MessageBox.Show(MSG_WRONG_IFCOUNT, HDR_WRONG_IFCOUNT, MessageBoxButton.OK, MessageBoxImage.Error);
                         return;
                     }
                     parentDirPathA = iFilesCmpA.First().Directory;
@@ -560,7 +472,7 @@ namespace DS_TextsMod_Helper
                     ObservableCollection<InputFile> iFilesPrpC = (ObservableCollection<InputFile>)Dtg_PrpC.ItemsSource;
                     if (iFilesPrpA.Count != iFilesPrpB.Count || iFilesPrpA.Count != iFilesPrpC.Count)
                     {   // Early return on error "Wrong input files count"
-                        MessageBox.Show(MSG_WRONG_IF_COUNT, HDR_WRONG_IF_COUNT, MessageBoxButton.OK, MessageBoxImage.Error);
+                        MessageBox.Show(MSG_WRONG_IFCOUNT, HDR_WRONG_IFCOUNT, MessageBoxButton.OK, MessageBoxImage.Error);
                         return;
                     }
                     parentDirPathA = iFilesPrpA.First().Directory;
@@ -601,220 +513,6 @@ namespace DS_TextsMod_Helper
             }
         }
 
-            // Commented as building 1.5
-            //private void Btn_RefreshPreview_Click(object sender, RoutedEventArgs e)
-            //{
-            //    switch (SelectedMode())
-            //    {
-            //        case PROCESS_MODE.Read: PreviewRead(); break;
-            //        case PROCESS_MODE.Compare: PreviewCompare(); break;
-            //        case PROCESS_MODE.Prepare: PreviewPrepare(); break;
-            //    }
-            //}
-
-            // Commented as building 1.5
-            //private void Cbx_PreviewAllDetails_Checked(object sender, RoutedEventArgs e)
-            //{
-            //    switch (LoadedMode())
-            //    {
-            //        case PROCESS_MODE.None: return;
-            //        case PROCESS_MODE.Read: PreviewRead((List<ReadMode.Entry>)Dtg_Preview.ItemsSource); break;
-            //        case PROCESS_MODE.Compare: PreviewCompare((List<CompareMode.Entry>)Dtg_Preview.ItemsSource); break;
-            //        case PROCESS_MODE.Prepare: PreviewPrepare((List<PrepareMode.Entry>)Dtg_Preview.ItemsSource); break;
-            //    }
-            //}
-
-            // Commented as building 1.5
-            //private void Cbx_PreviewAllDetails_Unchecked(object sender, RoutedEventArgs e)
-            //{
-            //    switch (LoadedMode())
-            //    {
-            //        case PROCESS_MODE.None: return;
-            //        case PROCESS_MODE.Read: PreviewRead((List<ReadMode.Entry>)Dtg_Preview.ItemsSource); break;
-            //        case PROCESS_MODE.Compare: PreviewCompare((List<CompareMode.Entry>)Dtg_Preview.ItemsSource); break;
-            //        case PROCESS_MODE.Prepare: PreviewPrepare((List<PrepareMode.Entry>)Dtg_Preview.ItemsSource); break;
-            //    }
-            //}
-
-            // Commented as building 1.5
-            //private void PreviewRead(List<ReadMode.Entry> r_entries = null)
-            //{
-            //    if (r_entries is null)
-            //    {
-            //        string iFile1 = Tbk_Rd_iFile1.Text;
-
-            //        if (iFile1 == DROP_FMG)
-            //        {
-            //            MessageBox.Show("[Read mode] " + ERR_MISSING_IFILES);
-            //            return;
-            //        }
-
-            //        ReadMode r = new ReadMode(iFile1) { OneLinedValues = Cbx_Rd_OneLinedValues.IsChecked ?? false };
-            //        r.ProcessFiles(true);
-            //        r_entries = r.Entries;
-            //    }
-
-            //    Dtg_Preview.Visibility = Visibility.Visible;
-            //    Dtg_Preview.Columns.Clear();
-
-            //    bool allDetails = Cbx_PreviewAllDetails.IsChecked ?? false;
-            //    bool detached = false;
-
-            //    List<DataGridTextColumn> columns = GetReadColumns(allDetails, detached);
-            //    foreach (DataGridTextColumn col in columns)
-            //        Dtg_Preview.Columns.Add(col);
-
-            //    Dtg_Preview.ItemsSource = r_entries;
-
-            //}
-
-            // Commented as building 1.5
-            //private void PreviewCompare(List<CompareMode.Entry> c_entries = null)
-            //{
-            //    if (c_entries is null)
-            //    {
-            //        string iFile1 = Tbk_Cmp_iFile1.Text;
-            //        string iFile2 = Tbk_Cmp_iFile2.Text;
-
-            //        if (iFile1 == DROP_FMG || iFile2 == DROP_FMG)
-            //        {
-            //            MessageBox.Show("[Compare mode] " + ERR_MISSING_IFILES);
-            //            return;
-            //        }
-
-            //        CompareMode c = new CompareMode(iFile1, iFile2) { OneLinedValues = Cbx_Cmp_OneLinedValues.IsChecked ?? false };
-            //        c.ProcessFiles(true);
-            //        c_entries = c.Entries;
-            //    }
-
-            //    Dtg_Preview.Visibility = Visibility.Visible;
-            //    Dtg_Preview.Columns.Clear();
-
-            //    bool allDetails = Cbx_PreviewAllDetails.IsChecked ?? false;
-            //    bool detached = false;
-
-            //    List<DataGridTextColumn> columns = GetCompareColumns(allDetails, detached);
-            //    foreach (DataGridTextColumn col in columns)
-            //        Dtg_Preview.Columns.Add(col);
-
-            //    Dtg_Preview.ItemsSource = c_entries;
-            //}
-
-            // Commented as building 1.5
-            //private void PreviewPrepare(List<PrepareMode.Entry> p_entries = null)
-            //{
-            //    if (p_entries is null)
-            //    {
-            //        string iFile1 = Tbk_Prp_iFile1.Text;
-            //        string iFile2 = Tbk_Prp_iFile2.Text;
-            //        string iFile3 = Tbk_Prp_iFile3.Text;
-            //        string textToReplace = Tbx_Prp_TextToReplace.Text;
-            //        string replacingText = Tbx_Prp_ReplacingText.Text;
-
-            //        if (iFile1 == DROP_FMG || iFile2 == DROP_FMG || iFile3 == DROP_FMG)
-            //        {
-            //            MessageBox.Show("[Prepare mode] " + ERR_MISSING_IFILES);
-            //            Cbx_PreviewAllDetails.IsChecked = false;
-            //            return;
-            //        }
-
-            //        PrepareMode p = new PrepareMode(iFile1, iFile2, iFile3, textToReplace, replacingText);
-            //        p.ProcessFiles(true);
-            //        p_entries = p.Entries;
-            //    }
-
-            //    Dtg_Preview.Visibility = Visibility.Visible;
-            //    Dtg_Preview.Columns.Clear();
-
-            //    bool allDetails = Cbx_PreviewAllDetails.IsChecked ?? false;
-            //    bool detached = false;
-
-            //    List<DataGridTextColumn> columns = GetPrepareColumns(allDetails, detached);
-            //    foreach (DataGridTextColumn col in columns)
-            //        Dtg_Preview.Columns.Add(col);
-
-            //    Dtg_Preview.ItemsSource = p_entries;
-            //}
-
-            private List<DataGridTextColumn> GetReadColumns(bool allDetails, bool detached)
-        {
-            List<DataGridTextColumn> columns = new List<DataGridTextColumn>();
-
-            double COL_MAXWIDTH = Tools.GetColumnMaxWidth() * 4; // 2160 or 1440 depending of user's screen resolution
-
-            double maxWidth_RowNum = detached ? 80 : 40;
-            double maxWidth_TextId = detached ? 120 : 80;
-            double maxWidth_Value = detached ? COL_MAXWIDTH : 1000;
-
-            columns.Add(new DataGridTextColumn() { Header = "Text ID", Binding = new Binding("TextId"), MaxWidth = maxWidth_TextId });
-            columns.Add(new DataGridTextColumn() { Header = "Value", Binding = new Binding("Value"), MaxWidth = maxWidth_Value });
-
-            if (allDetails)
-            {
-                Style hdrOff = (Style)Grid_Main.Resources["HeaderOff"]; //Style style = new Style() // TODO? See how to do this from code behind
-                columns.Insert(0, new DataGridTextColumn() { Header = "#", HeaderStyle = hdrOff, Foreground = Brushes.Gray, Binding = new Binding("Index"), MaxWidth = maxWidth_RowNum });
-            }
-
-            return columns;
-        }
-
-        private List<DataGridTextColumn> GetCompareColumns(bool allDetails, bool detached) // TODO! Something easier
-        {
-            List<DataGridTextColumn> columns = new List<DataGridTextColumn>();
-
-            double COL_MAXWIDTH = Tools.GetColumnMaxWidth() * 2; // 1080 or 720 depending of user's screen resolution
-
-            double maxWidth_RowNum = detached ? 80 : 40;
-            double maxWidth_TextId = detached ? 120 : 80;
-            double maxWidth_Value1 = detached ? COL_MAXWIDTH : 480;
-            double maxWidth_Value2 = detached ? COL_MAXWIDTH : 480;
-
-            string oHeader1 = Tbx_Cmp_oHeader1.Text != "" ? Tbx_Cmp_oHeader1.Text : "Header #1";
-            string oHeader2 = Tbx_Cmp_oHeader2.Text != "" ? Tbx_Cmp_oHeader2.Text : "Header #2";
-
-            columns.Add(new DataGridTextColumn() { Header = "Text ID", Binding = new Binding("TextId"), MaxWidth = maxWidth_TextId });
-            columns.Add(new DataGridTextColumn() { Header = oHeader1, Binding = new Binding("Value1"), MaxWidth = maxWidth_Value1 });
-            columns.Add(new DataGridTextColumn() { Header = oHeader2, Binding = new Binding("Value2"), MaxWidth = maxWidth_Value2 });
-            columns.Add(new DataGridTextColumn() { Header = "Same?", Binding = new Binding("Same"), MaxWidth = 80 });
-
-            if (allDetails)
-            {
-                Style hdrOff = (Style)Grid_Main.Resources["HeaderOff"]; //Style style = new Style() // TODO? See how to do this from code behind
-                columns.Insert(0, new DataGridTextColumn() { Header = "#", HeaderStyle = hdrOff, Foreground = Brushes.Gray, Binding = new Binding("Index"), MaxWidth = maxWidth_RowNum });
-            }
-
-            return columns;
-        }
-
-        private List<DataGridTextColumn> GetPrepareColumns(bool allDetails, bool detached) // TODO! Something easier
-        {
-            List<DataGridTextColumn> columns = new List<DataGridTextColumn>();
-
-            double COL_MAXWIDTH = Tools.GetColumnMaxWidth(); // 540 or 360 depending of user's screen resolution
-
-            double maxWidth_RowNum = detached ? 80 : 40;
-            double maxWidth_TextId = detached ? 120 : allDetails ? 80 : 120;
-            double maxWidth_Output = detached ? COL_MAXWIDTH : allDetails ? 240 : 360;
-            double maxWidth_Value1 = detached ? COL_MAXWIDTH : 240;
-            double maxWidth_Value2 = detached ? COL_MAXWIDTH : 240;
-            double maxWidth_Value3 = detached ? COL_MAXWIDTH : 240;
-
-            columns.Add(new DataGridTextColumn() { Header = "Text ID", Binding = new Binding("TextId"), MaxWidth = maxWidth_TextId });
-            columns.Add(new DataGridTextColumn() { Header = "Output value", Binding = new Binding("Output"), MaxWidth = maxWidth_Output });
-
-            if (allDetails)
-            {
-                Style hdrOff = (Style)Grid_Main.Resources["HeaderOff"];
-                columns.Insert(0, new DataGridTextColumn() { Header = "#", HeaderStyle = hdrOff, Foreground = Brushes.Gray, Binding = new Binding("Index"), MaxWidth = maxWidth_RowNum });
-                columns.Insert(2, new DataGridTextColumn() { Header = "File #1 value", HeaderStyle = hdrOff, Foreground = Brushes.Gray, Binding = new Binding("Value1"), MaxWidth = maxWidth_Value1 });
-                columns.Insert(3, new DataGridTextColumn() { Header = "File #2 value", HeaderStyle = hdrOff, Foreground = Brushes.Gray, Binding = new Binding("Value2"), MaxWidth = maxWidth_Value2 });
-                columns.Insert(4, new DataGridTextColumn() { Header = "File #3 value", HeaderStyle = hdrOff, Foreground = Brushes.Gray, Binding = new Binding("Value3"), MaxWidth = maxWidth_Value3 });
-                columns.Insert(6, new DataGridTextColumn() { Header = "From?", HeaderStyle = hdrOff, Foreground = Brushes.Gray, Binding = new Binding("Source"), MaxWidth = 80 });
-            }
-
-            return columns;
-        }
-
         #endregion
 
 
@@ -852,7 +550,7 @@ namespace DS_TextsMod_Helper
                     if (alreadyExisting.Count > 0)
                     {
                         string fnames = string.Join("\r\n - ", alreadyExisting);
-                        MessageBoxResult mbr = MessageBox.Show(MSG_OVERW_EXIST_OF + $"\r\n\r\n{fnames}", HDR_OVERW_EXIST_OF, MessageBoxButton.OKCancel, MessageBoxImage.Information);
+                        MessageBoxResult mbr = MessageBox.Show(MSG_OVERW_EXIST_OF + $"\r\n\r\n - {fnames}", HDR_OVERW_EXIST_OF, MessageBoxButton.OKCancel, MessageBoxImage.Information);
                         if (mbr == MessageBoxResult.Cancel)
                             return;
                     }
@@ -880,7 +578,7 @@ namespace DS_TextsMod_Helper
                     ObservableCollection<InputFile> iFilesCmpB = (ObservableCollection<InputFile>)Dtg_CmpB.ItemsSource;
                     if (iFilesCmpA.Count != iFilesCmpB.Count)
                     {   // Early return on error "Wrong input files count"
-                        MessageBox.Show(MSG_WRONG_IF_COUNT, HDR_WRONG_IF_COUNT, MessageBoxButton.OK, MessageBoxImage.Error);
+                        MessageBox.Show(MSG_WRONG_IFCOUNT, HDR_WRONG_IFCOUNT, MessageBoxButton.OK, MessageBoxImage.Error);
                         return;
                     }
                     parentDirPathA = iFilesCmpA.First().Directory;
@@ -933,7 +631,7 @@ namespace DS_TextsMod_Helper
                     ObservableCollection<InputFile> iFilesPrpC = (ObservableCollection<InputFile>)Dtg_PrpC.ItemsSource;
                     if (iFilesPrpA.Count != iFilesPrpB.Count || iFilesPrpA.Count != iFilesPrpC.Count)
                     {   // Early return on error "Wrong input files count"
-                        MessageBox.Show(MSG_WRONG_IF_COUNT, HDR_WRONG_IF_COUNT, MessageBoxButton.OK, MessageBoxImage.Error);
+                        MessageBox.Show(MSG_WRONG_IFCOUNT, HDR_WRONG_IFCOUNT, MessageBoxButton.OK, MessageBoxImage.Error);
                         return;
                     }
                     parentDirPathA = iFilesPrpA.First().Directory;
@@ -1084,100 +782,6 @@ namespace DS_TextsMod_Helper
             //        break;
             //}
         }
-
-
-        // Commented as building 1.5
-        //private bool ValidateReadInputs()
-        //{
-        //    string mode = "[Read mode] ";
-        //    List<string> errors = new List<string>();
-
-        //    string input_filepath1 = Tbk_Rd_iFile1.Text;
-        //    string output_filename = Tbx_Rd_oFilename.Text;
-        //    string sepa_csv_char_o = Tbx_Rd_CsvSeparator.Text;
-
-        //    if (!File.Exists(input_filepath1))
-        //        errors.Add(mode + ERR_MISSING_IFILES);
-
-        //    if (output_filename == "")
-        //        errors.Add(mode + ERR_MISSING_OFNAME);
-
-        //    if (sepa_csv_char_o == "")
-        //        errors.Add(mode + ERR_MISSING_CSVSEP);
-
-        //    if (errors.Count > 0)
-        //    {
-        //        MessageBox.Show(string.Join("\n\n", errors));
-        //        return false;
-        //    }
-        //    return true;
-        //}
-
-        // Commented as building 1.5
-        //private bool ValidateCompareInputs()
-        //{
-        //    string mode = "[Compare mode] ";
-        //    List<string> errors = new List<string>();
-
-        //    string input_filepath1 = Tbk_Cmp_iFile1.Text;
-        //    string input_filepath2 = Tbk_Cmp_iFile2.Text;
-        //    string output_header_1 = Tbx_Cmp_oHeader1.Text;
-        //    string output_header_2 = Tbx_Cmp_oHeader2.Text;
-        //    string output_filename = Tbx_Cmp_oFilename.Text;
-        //    string sepa_csv_char_o = Tbx_Cmp_CsvSeparator.Text;
-
-        //    if (!File.Exists(input_filepath1) || !File.Exists(input_filepath2))
-        //        errors.Add(mode + ERR_MISSING_IFILES);
-
-        //    if (input_filepath1 != DROP_FMG && input_filepath1 == input_filepath2)
-        //        errors.Add(mode + ERR_SAME_IFILE);
-
-        //    if (output_header_1 == "" || output_header_2 == "")
-        //        errors.Add(mode + ERR_MISSING_OHDRS);
-
-        //    if (output_filename == "")
-        //        errors.Add(mode + ERR_MISSING_OFNAME);
-
-        //    if (sepa_csv_char_o == "")
-        //        errors.Add(mode + ERR_MISSING_CSVSEP);
-
-        //    if (errors.Count > 0)
-        //    {
-        //        MessageBox.Show(string.Join("\n\n", errors));
-        //        return false;
-        //    }
-        //    return true;
-        //}
-
-        // Commented as building 1.5
-        //private bool ValidatePrepareInputs()
-        //{
-        //    string mode = "[Prepare mode] ";
-        //    List<string> errors = new List<string>();
-
-        //    string input_filepath1 = Tbk_Prp_iFile1.Text;
-        //    string input_filepath2 = Tbk_Prp_iFile2.Text;
-        //    string input_filepath3 = Tbk_Prp_iFile3.Text;
-        //    string output_filename = Tbx_Prp_oFilename.Text;
-
-        //    if (!File.Exists(input_filepath1) || !File.Exists(input_filepath2) || !File.Exists(input_filepath3))
-        //        errors.Add(mode + ERR_MISSING_IFILES);
-
-        //    if ((input_filepath1 != DROP_FMG && input_filepath1 == input_filepath2) ||
-        //        (input_filepath2 != DROP_FMG && input_filepath2 == input_filepath3) ||
-        //        (input_filepath3 != DROP_FMG && input_filepath3 == input_filepath1))
-        //        errors.Add(mode + ERR_SAME_IFILE);
-
-        //    if (output_filename == "")
-        //        errors.Add(mode + ERR_MISSING_OFNAME);
-
-        //    if (errors.Count > 0)
-        //    {
-        //        MessageBox.Show(string.Join("\n\n", errors));
-        //        return false;
-        //    }
-        //    return true;
-        //}
 
         #endregion
 
