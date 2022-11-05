@@ -16,24 +16,24 @@ namespace DS_TextsMod_Helper
         #region CONSTANTS
 
         private const string HDR_MISSING_IFILES = "Missing input files";
-        private const string MSG_MISSING_IFILES = "Ensure that all the input areas contain files to process";
+        private const string MSG_MISSING_IFILES = "All input areas must contain files to process";
 
         private const string HDR_WRONG_IFCOUNT = "Wrong files count";
         private const string MSG_WRONG_IFCOUNT = "Input areas must share the same files count";
 
-        private const string HDR_SAME_DIRECTORY = "Same directory";
-        private const string MSG_SAME_DIRECTORY = "Files from distinct input areas cannot have the same directory";
+        private const string HDR_SAME_DIRECTORY = "Same parent directory";
+        private const string MSG_SAME_DIRECTORY = "Files from distinct input areas cannot have the same parent directory";
 
         private const string HDR_INCONS_FMG_VER = "Inconsistent FMG versions";
-        private const string MSG_INCONS_FMG_VER = "Ensure that the input files are compatible with each other";
+        private const string MSG_INCONS_FMG_VER = "Input files must be compatible with each other (\"Type\" must match)";
 
         private const string HDR_OVERW_EXIST_OF = "Overwrite existing files";
         private const string MSG_OVERW_EXIST_OF = "The following output files already exist.\r\n"
-                                                + "Continue to overwrite?";
+                                                + "Continue and overwrite them?";
 
         private const string HDR_INCONS_IFNAMES = "Inconsistent input filenames";
         private const string MSG_INCONS_IFNAMES1 = "Filenames are different on the following lines :";
-        private const string MSG_INCONS_IFNAMES2 = "Click OK to continue anyway, or Cancel to abort";
+        private const string MSG_INCONS_IFNAMES2 = "Continue anyway?";
 
         private const string WRN_SPECIAL_CASES = "Warning : Found special cases while processing files.\r\n"
                                                + "See details in file \"special cases.txt\"";
@@ -262,35 +262,27 @@ namespace DS_TextsMod_Helper
             e.Row.Header = (e.Row.GetIndex() + 1).ToString();
         }
 
-        private List<int> CompareInputFiles()
+        private List<int> CompareFilenames(ObservableCollection<InputFile> ifA, ObservableCollection<InputFile> ifB, ObservableCollection<InputFile> ifC = null)
         {
             List<int> lineNumbers = new List<int>();
             switch (SelectedMode())
             {
                 case PROCESS_MODE.Compare:
-                    ObservableCollection<InputFile> iFilesCmpA = (ObservableCollection<InputFile>)Dtg_CmpA.ItemsSource;
-                    ObservableCollection<InputFile> iFilesCmpB = (ObservableCollection<InputFile>)Dtg_CmpB.ItemsSource;
-                    for (int i = 0; i < iFilesCmpA.Count; i++)
+                    for (int i = 0; i < ifA.Count; i++)
                     {
-                        if (iFilesCmpA[i].NameExt != iFilesCmpB[i].NameExt)
+                        if (ifA[i].NameExt != ifB[i].NameExt)
                         {
-                            // Filenames are different : report faulty line
-                            lineNumbers.Add(i + 1);
+                            lineNumbers.Add(i + 1); // Filenames are different : add faulty line
                         }
                     }
                     break;
 
-
                 case PROCESS_MODE.Prepare:
-                    ObservableCollection<InputFile> iFilesPrpA = (ObservableCollection<InputFile>)Dtg_PrpA.ItemsSource;
-                    ObservableCollection<InputFile> iFilesPrpB = (ObservableCollection<InputFile>)Dtg_PrpB.ItemsSource;
-                    ObservableCollection<InputFile> iFilesPrpC = (ObservableCollection<InputFile>)Dtg_PrpC.ItemsSource;
-                    for (int i = 0; i < iFilesPrpA.Count; i++)
+                    for (int i = 0; i < ifA.Count; i++)
                     {
-                        if (iFilesPrpA[i].NameExt != iFilesPrpB[i].NameExt || iFilesPrpA[i].NameExt != iFilesPrpC[i].NameExt)
+                        if (ifA[i].NameExt != ifB[i].NameExt || ifA[i].NameExt != ifC[i].NameExt)
                         {
-                            // Filenames are different : report faulty line
-                            lineNumbers.Add(i + 1);
+                            lineNumbers.Add(i + 1); // Filenames are different : add faulty line
                         }
                     }
                     break;
@@ -439,7 +431,7 @@ namespace DS_TextsMod_Helper
                         MessageBox.Show(MSG_INCONS_FMG_VER, HDR_INCONS_FMG_VER, MessageBoxButton.OK, MessageBoxImage.Error);
                         return;
                     }
-                    linesWithDistinctFilenames = CompareInputFiles();
+                    linesWithDistinctFilenames = CompareFilenames(iFilesCmpA, iFilesCmpB);
                     if (linesWithDistinctFilenames.Count != 0)
                     {   // Warning if filenames are not the same in all input areas
                         string lines = string.Join(", ", linesWithDistinctFilenames);
@@ -459,8 +451,8 @@ namespace DS_TextsMod_Helper
                         {
                             Title = $"{processedFilesCount + 1}) {iFilesCmpA[i].Name}",
                             OneLinedValues = Cbx_Cmp_OneLinedValues.IsChecked ?? false,
-                            OutputHeader1 = Tbx_Cmp_oHeader1.Text,
-                            OutputHeader2 = Tbx_Cmp_oHeader2.Text
+                            OutputHeaderA = Tbx_Cmp_oHeader1.Text,
+                            OutputHeaderB = Tbx_Cmp_oHeader2.Text
                         };
                         c.ProcessFiles(true);
                         cmpSuperlist.Add(c);
@@ -502,7 +494,7 @@ namespace DS_TextsMod_Helper
                         MessageBox.Show(MSG_INCONS_FMG_VER, HDR_INCONS_FMG_VER, MessageBoxButton.OK, MessageBoxImage.Error);
                         return;
                     }
-                    linesWithDistinctFilenames = CompareInputFiles();
+                    linesWithDistinctFilenames = CompareFilenames(iFilesPrpA, iFilesPrpB, iFilesPrpC);
                     if (linesWithDistinctFilenames.Count != 0)
                     {   // Warning if filenames are not the same in all input areas
                         string lines = string.Join(", ", linesWithDistinctFilenames);
@@ -554,7 +546,6 @@ namespace DS_TextsMod_Helper
             string filePathA;
             string filePathB;
             string filePathC;
-            string csvSepChar;
 
             switch (SelectedMode())
             {
@@ -572,7 +563,9 @@ namespace DS_TextsMod_Helper
                     if (alreadyExisting.Count > 0)
                     {
                         string fnames = string.Join("\r\n - ", alreadyExisting);
-                        MessageBoxResult mbr = MessageBox.Show(MSG_OVERW_EXIST_OF + $"\r\n\r\n - {fnames}", HDR_OVERW_EXIST_OF, MessageBoxButton.OKCancel, MessageBoxImage.Information);
+                        MessageBoxResult mbr = MessageBox.Show(
+                            MSG_OVERW_EXIST_OF + $"\r\n\r\n - {fnames}", HDR_OVERW_EXIST_OF, MessageBoxButton.OKCancel, MessageBoxImage.Information
+                        );
                         if (mbr == MessageBoxResult.Cancel)
                             return;
                     }
@@ -580,10 +573,9 @@ namespace DS_TextsMod_Helper
                     foreach (InputFile iFile in iFilesRd)
                     {
                         filePathA = Path.Combine(parentDirPathA, iFile.NameExt);
-                        csvSepChar = Tbx_Rd_CsvSeparator.Text;
                         ReadMode r = new ReadMode(filePathA) { OneLinedValues = Cbx_Rd_OneLinedValues.IsChecked ?? false };
                         r.ProcessFiles(false);
-                        r.ProduceOutput(iFile.Name + ".csv", csvSepChar);
+                        r.ProduceOutput(iFile.Name + ".csv", Tbx_Rd_CsvSeparator.Text);
                         processedFilesCount += 1;
                     }
                     MessageBox.Show($"[Read mode] Done: {processedFilesCount} output files have been created");
@@ -617,7 +609,7 @@ namespace DS_TextsMod_Helper
                         MessageBox.Show(MSG_INCONS_FMG_VER, HDR_INCONS_FMG_VER, MessageBoxButton.OK, MessageBoxImage.Error);
                         return;
                     }
-                    linesWithDistinctFilenames = CompareInputFiles();
+                    linesWithDistinctFilenames = CompareFilenames(iFilesCmpA, iFilesCmpB);
                     if (linesWithDistinctFilenames.Count != 0)
                     {   // Warning if filenames are not the same in all input areas
                         string lines = string.Join(", ", linesWithDistinctFilenames);
@@ -633,7 +625,9 @@ namespace DS_TextsMod_Helper
                     if (alreadyExisting.Count > 0)
                     {
                         string fnames = string.Join("\r\n - ", alreadyExisting);
-                        MessageBoxResult mbr = MessageBox.Show(MSG_OVERW_EXIST_OF + $"\r\n\r\n{fnames}", HDR_OVERW_EXIST_OF, MessageBoxButton.OKCancel, MessageBoxImage.Information);
+                        MessageBoxResult mbr = MessageBox.Show(
+                            MSG_OVERW_EXIST_OF + $"\r\n\r\n - {fnames}", HDR_OVERW_EXIST_OF, MessageBoxButton.OKCancel, MessageBoxImage.Information
+                        );
                         if (mbr == MessageBoxResult.Cancel)
                             return;
                     }
@@ -642,10 +636,9 @@ namespace DS_TextsMod_Helper
                     {
                         filePathA = Path.Combine(parentDirPathA, iFilesCmpA[i].NameExt);
                         filePathB = Path.Combine(parentDirPathB, iFilesCmpB[i].NameExt);
-                        csvSepChar = Tbx_Cmp_CsvSeparator.Text;
                         CompareMode c = new CompareMode(filePathA, filePathB) { OneLinedValues = Cbx_Cmp_OneLinedValues.IsChecked ?? false };
                         c.ProcessFiles(false);
-                        c.ProduceOutput(iFilesCmpA[i].Name + ".csv", Tbx_Cmp_oHeader1.Text, Tbx_Cmp_oHeader2.Text, csvSepChar);
+                        c.ProduceOutput(iFilesCmpA[i].Name + ".csv", Tbx_Cmp_oHeader1.Text, Tbx_Cmp_oHeader2.Text, Tbx_Cmp_CsvSeparator.Text);
                         processedFilesCount += 1;
                     }
                     MessageBox.Show($"[Compare mode] Done: {processedFilesCount} output files have been created");
@@ -682,7 +675,7 @@ namespace DS_TextsMod_Helper
                         MessageBox.Show(MSG_INCONS_FMG_VER, HDR_INCONS_FMG_VER, MessageBoxButton.OK, MessageBoxImage.Error);
                         return;
                     }
-                    linesWithDistinctFilenames = CompareInputFiles();
+                    linesWithDistinctFilenames = CompareFilenames(iFilesPrpA, iFilesPrpB, iFilesPrpC);
                     if (linesWithDistinctFilenames.Count != 0)
                     {   // Warning if filenames are not the same in all input areas
                         string lines = string.Join(", ", linesWithDistinctFilenames);
@@ -697,8 +690,10 @@ namespace DS_TextsMod_Helper
                     alreadyExisting = Tools.GetAlreadyExistingFilenames(iFilenames);
                     if (alreadyExisting.Count > 0)
                     {
-                        string fnames = string.Join("\r\n", alreadyExisting);
-                        MessageBoxResult mbr = MessageBox.Show(MSG_OVERW_EXIST_OF + $"\r\n\r\n{fnames}", HDR_OVERW_EXIST_OF, MessageBoxButton.OKCancel, MessageBoxImage.Information);
+                        string fnames = string.Join("\r\n - ", alreadyExisting);
+                        MessageBoxResult mbr = MessageBox.Show(
+                            MSG_OVERW_EXIST_OF + $"\r\n\r\n - {fnames}", HDR_OVERW_EXIST_OF, MessageBoxButton.OKCancel, MessageBoxImage.Information
+                        );
                         if (mbr == MessageBoxResult.Cancel)
                             return;
                     }

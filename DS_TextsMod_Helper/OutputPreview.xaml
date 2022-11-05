@@ -140,7 +140,7 @@
                             <DataGridTemplateColumn Header="File A" MaxWidth="800">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate DataType="{x:Type local:CompareEntry}">
-                                        <TextBlock Text="{Binding Value1}"/>
+                                        <TextBlock Text="{Binding ValueA}"/>
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
@@ -149,7 +149,7 @@
                             <DataGridTemplateColumn Header="File B" MaxWidth="800">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate DataType="{x:Type local:CompareEntry}">
-                                        <TextBlock Text="{Binding Value2}"/>
+                                        <TextBlock Text="{Binding ValueB}"/>
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
@@ -204,7 +204,7 @@
                             <DataGridTemplateColumn Header="File A" MaxWidth="500" HeaderStyle="{StaticResource Dtg_ExtraHeader}" CellStyle="{StaticResource Dtg_ExtraCell}">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate DataType="{x:Type local:PrepareEntry}">
-                                        <TextBlock Text="{Binding Value1}"/>
+                                        <TextBlock Text="{Binding ValueA}"/>
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
@@ -212,7 +212,7 @@
                             <DataGridTemplateColumn Header="File B" MaxWidth="500" HeaderStyle="{StaticResource Dtg_ExtraHeader}" CellStyle="{StaticResource Dtg_ExtraCell}">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate DataType="{x:Type local:PrepareEntry}">
-                                        <TextBlock Text="{Binding Value2}"/>
+                                        <TextBlock Text="{Binding ValueB}"/>
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
@@ -220,7 +220,7 @@
                             <DataGridTemplateColumn Header="File C" MaxWidth="500" HeaderStyle="{StaticResource Dtg_ExtraHeader}" CellStyle="{StaticResource Dtg_ExtraCell}">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate DataType="{x:Type local:PrepareEntry}">
-                                        <TextBlock Text="{Binding Value3}"/>
+                                        <TextBlock Text="{Binding ValueC}"/>
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>

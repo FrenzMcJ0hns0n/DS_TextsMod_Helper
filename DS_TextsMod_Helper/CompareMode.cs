@@ -11,8 +11,8 @@ namespace DS_TextsMod_Helper
         public List<string> InputFiles { get; set; }
         public bool OneLinedValues { get; set; }
         public string OutputFilename { get; set; }
-        public string OutputHeader1 { get; set; }
-        public string OutputHeader2 { get; set; }
+        public string OutputHeaderA { get; set; }
+        public string OutputHeaderB { get; set; }
         public char Sep { get; set; }
         public List<CompareEntry> Entries { get; set; }
 
@@ -39,48 +39,47 @@ namespace DS_TextsMod_Helper
 
         public void ProcessFiles(bool preview)
         {
+            SortedDictionary<int, List<string>> cmpDictionary = new SortedDictionary<int, List<string>>();
+
             // 0. Get input data
-            FMG file_1 = new FMG { Entries = FMG.Read(InputFiles[0]).Entries };
-            FMG file_2 = new FMG { Entries = FMG.Read(InputFiles[1]).Entries };
-
-            SortedDictionary<int, List<string>> cmp_dictionary = new SortedDictionary<int, List<string>>();
-            // 1. Insert value from File1
-            foreach (FMG.Entry entry in file_1.Entries)
+            FMG fileA = new FMG { Entries = FMG.Read(InputFiles[0]).Entries };
+            FMG fileB = new FMG { Entries = FMG.Read(InputFiles[1]).Entries };
+            
+            // 1. Insert value from FileA
+            foreach (FMG.Entry entry in fileA.Entries)
             {
                 if (entry.Text == null)
-                    continue; // Exclude lines without value (TODO? v1.4: Give choice about that)
+                    continue; // Exclude lines without value (IDEA? Give choice about that)
 
                 entry.Text = FormatValue(entry.Text);
 
-                cmp_dictionary.Add(entry.ID, new List<string>() { entry.Text, "" });
+                cmpDictionary.Add(entry.ID, new List<string>() { entry.Text, "" });
             }
-            // 2. Insert value from File2
-            foreach (FMG.Entry entry in file_2.Entries)
+            // 2. Insert value from FileB
+            foreach (FMG.Entry entry in fileB.Entries)
             {
                 if (entry.Text == null)
-                    continue; // Exclude lines without value (TODO? v1.4: Give choice about that)
+                    continue; // Exclude lines without value (IDEA? Give choice about that)
 
                 entry.Text = FormatValue(entry.Text);
 
-                if (cmp_dictionary.ContainsKey(entry.ID))
-                    cmp_dictionary[entry.ID][1] = entry.Text;
+                if (cmpDictionary.ContainsKey(entry.ID))
+                    cmpDictionary[entry.ID][1] = entry.Text;
                 else
-                    cmp_dictionary.Add(entry.ID, new List<string>() { "", entry.Text });
+                    cmpDictionary.Add(entry.ID, new List<string>() { "", entry.Text });
             }
-
             // 3. Compare values and build Entry
             int index = 0;
-            foreach (KeyValuePair<int, List<string>> cmp in cmp_dictionary)
+            foreach (KeyValuePair<int, List<string>> cmp in cmpDictionary)
             {
                 index += 1;
-                int textId = cmp.Key;
-                string val1 = cmp.Value[0];
-                string val2 = cmp.Value[1];
-                bool isSame = cmp.Value[0] == cmp.Value[1];
-
-                Entries.Add(new CompareEntry(index, textId, val1, val2, isSame.ToString()));
-
-                if (preview && index == 50) // TODO? v1.4: Give choice about max results
+                Entries.Add(new CompareEntry(
+                    cmp.Key,
+                    cmp.Value[0],
+                    cmp.Value[1],
+                    (cmp.Value[0] == cmp.Value[1]).ToString()
+                ));
+                if (preview && index == 50) // TODO? v1.6: Give choice about max results in Preview
                     break;
             }
         }
@@ -89,21 +88,21 @@ namespace DS_TextsMod_Helper
         public void ProduceOutput(string oFilename, string oHdr1, string oHdr2, string csvSepChar)
         {
             OutputFilename = Tools.GetOutputFilepath(oFilename);
-            OutputHeader1 = oHdr1;
-            OutputHeader2 = oHdr2;
+            OutputHeaderA = oHdr1;
+            OutputHeaderB = oHdr2;
             Sep = csvSepChar[0];
 
             using (StreamWriter writer = new StreamWriter(OutputFilename, false))
             {
-                writer.WriteLine($"Text ID{Sep}{OutputHeader1}{Sep}{OutputHeader2}{Sep}Same?");
+                writer.WriteLine($"Text ID{Sep}{OutputHeaderA}{Sep}{OutputHeaderB}{Sep}Same?");
 
                 foreach (CompareEntry ce in Entries)
                 {
-                    ce.Value1 = ce.Value1.Replace("\"", "\"\"");
-                    ce.Value2 = ce.Value2.Replace("\"", "\"\"");
+                    ce.ValueA = ce.ValueA.Replace("\"", "\"\"");
+                    ce.ValueB = ce.ValueB.Replace("\"", "\"\"");
 
-                    writer.WriteLine($"{ce.TextId}{Sep}\"{ce.Value1}\"{Sep}\"{ce.Value2}\"{Sep}{ce.Same}");
-                    // Generalized usage of double quotes, as it is Excel friendly (TODO? v1.4: Give choice about that)
+                    writer.WriteLine($"{ce.TextId}{Sep}\"{ce.ValueA}\"{Sep}\"{ce.ValueB}\"{Sep}{ce.Same}");
+                    // Generalized usage of double quotes, as it is Excel friendly (IDEA? Give choice about that)
                 }
             }
         }
@@ -111,18 +110,16 @@ namespace DS_TextsMod_Helper
 
     public class CompareEntry
     {
-        public int Index { get; set; }
         public int TextId { get; set; }
-        public string Value1 { get; set; }
-        public string Value2 { get; set; }
+        public string ValueA { get; set; }
+        public string ValueB { get; set; }
         public string Same { get; set; }
 
-        public CompareEntry(int index, int textId, string value1, string value2, string same)
+        public CompareEntry(int textId, string valueA, string valueB, string same)
         {
-            Index = index;
             TextId = textId;
-            Value1 = value1;
-            Value2 = value2;
+            ValueA = valueA;
+            ValueB = valueB;
             Same = same;
         }
     }

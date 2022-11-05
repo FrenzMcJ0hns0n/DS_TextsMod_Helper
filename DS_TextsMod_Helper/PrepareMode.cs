@@ -37,11 +37,12 @@ namespace DS_TextsMod_Helper
             if (TextToReplace == "")
                 return value.Trim();
 
-            if(value.Contains(TextToReplace))
+            if (value.Contains(TextToReplace))
                 return value.Replace(TextToReplace, ReplacingText).Trim();
 
             return value.Trim();
         }
+
 
         public List<string> GetSpecialCases()
         {
@@ -58,64 +59,65 @@ namespace DS_TextsMod_Helper
             return result;
         }
 
+
         public void ProcessFiles(bool preview)
         {
+            Dictionary<int, List<string>> prpDictionary = new Dictionary<int, List<string>>();
+
             // 0. Get input data
-            FMG file_1 = new FMG { Entries = FMG.Read(InputFiles[0]).Entries };
-            FMG file_2 = new FMG { Entries = FMG.Read(InputFiles[1]).Entries };
-            FMG file_3 = new FMG { Entries = FMG.Read(InputFiles[2]).Entries };
+            FMG fileA = new FMG { Entries = FMG.Read(InputFiles[0]).Entries };
+            FMG fileB = new FMG { Entries = FMG.Read(InputFiles[1]).Entries };
+            FMG fileC = new FMG { Entries = FMG.Read(InputFiles[2]).Entries };
 
-            Dictionary<int, List<string>> prp_dictionary = new Dictionary<int, List<string>>();
-            // 1. Take all values from File1
+            // 1. Take all values from FileA
             int counter = 0;
-            foreach (FMG.Entry entry in file_1.Entries)
+            foreach (FMG.Entry entry in fileA.Entries)
             {
-                entry.Text = FormatValue(entry.Text);
-                prp_dictionary.Add(entry.ID, new List<string>() { entry.Text, "", "" });
-
                 counter += 1;
-                if (preview && counter == 50) // TODO? v1.4: Give choice about max results
+
+                entry.Text = FormatValue(entry.Text);
+                prpDictionary.Add(entry.ID, new List<string>() { entry.Text, "", "" });
+
+                if (preview && counter == 50) // TODO? v1.6: Give choice about max results in Preview
                     break;
             }
-            // 2. Insert value from File2 if entry.ID in File1
-            foreach (FMG.Entry entry in file_2.Entries)
+            // 2. Insert entry.value from FileB if entry.ID in FileA
+            foreach (FMG.Entry entry in fileB.Entries)
             {
                 if (entry.Text == null)
                     continue;
 
                 entry.Text = FormatValue(entry.Text);
 
-                if (prp_dictionary.ContainsKey(entry.ID))
-                    prp_dictionary[entry.ID][1] = entry.Text;
+                if (prpDictionary.ContainsKey(entry.ID))
+                    prpDictionary[entry.ID][1] = entry.Text;
             }
-            // 3. Insert value from File3 if entry.ID in File1
-            foreach (FMG.Entry entry in file_3.Entries)
+            // 3. Insert entry.value from FileC if entry.ID in FileA
+            foreach (FMG.Entry entry in fileC.Entries)
             {
                 if (entry.Text == null)
                     continue;
 
                 entry.Text = FormatValue(entry.Text);
 
-                if (prp_dictionary.ContainsKey(entry.ID))
-                    prp_dictionary[entry.ID][2] = entry.Text; 
+                if (prpDictionary.ContainsKey(entry.ID))
+                    prpDictionary[entry.ID][2] = entry.Text;
             }
-
             // 4. Compare values and build Entry
-            int index = 0;
-            foreach (KeyValuePair<int, List<string>> prp in prp_dictionary)
+            foreach (KeyValuePair<int, List<string>> prp in prpDictionary)
             {
-                index += 1;
-                int textId = prp.Key;
-                string val1 = prp.Value[0];
-                string val2 = prp.Value[1];
-                string val3 = prp.Value[2];
-                string output = val1 == val2 ? val3 : val1;
-                string source = val1 == val2 ? "File #3" : "File #1";
-                bool specialCase = val1 != "" && val1 == val2 && val3 == "";
-
-                Entries.Add(new PrepareEntry(index, textId, val1, val2, val3, output, source, specialCase));
+                Entries.Add(new PrepareEntry(
+                    prp.Key,
+                    prp.Value[0],
+                    prp.Value[1],
+                    prp.Value[2],
+                    prp.Value[0] == prp.Value[1] ? prp.Value[2] : prp.Value[0],
+                    prp.Value[0] == prp.Value[1] ? "File C" : "File A",
+                    (prp.Value[0] != "") && (prp.Value[0] == prp.Value[1]) && (prp.Value[2] == "") // (val1 != "") && (val1 == val2) && (val3 == "");
+                ));
             }
         }
+
 
         public void ProduceOutput(string oFilename)
         {
@@ -128,6 +130,7 @@ namespace DS_TextsMod_Helper
             output.Write(OutputFilename);
         }
 
+
         /// <summary>
         /// Translate back FMG version from String to FMG.FMGVersion
         /// </summary>
@@ -137,10 +140,6 @@ namespace DS_TextsMod_Helper
             {
                 case "Demon's Souls":
                     OutputVersion = FMG.FMGVersion.DemonsSouls;
-                    break;
-
-                case "Dark Souls 1 / Dark Souls 2":
-                    OutputVersion = FMG.FMGVersion.DarkSouls1;
                     break;
 
                 case "Dark Souls 3 / Bloodborne":
@@ -154,24 +153,23 @@ namespace DS_TextsMod_Helper
         }
     }
 
+
     public class PrepareEntry
     {
-        public int Index { get; set; }
         public int TextId { get; set; }
-        public string Value1 { get; set; }
-        public string Value2 { get; set; }
-        public string Value3 { get; set; }
+        public string ValueA { get; set; }
+        public string ValueB { get; set; }
+        public string ValueC { get; set; }
         public string Output { get; set; }
         public string Source { get; set; }
         public bool SpecialCase { get; set; }
 
-        public PrepareEntry(int index, int textId, string value1, string value2, string value3, string output, string source, bool specialCase)
+        public PrepareEntry(int textId, string valueA, string valueB, string valueC, string output, string source, bool specialCase)
         {
-            Index = index;
             TextId = textId;
-            Value1 = value1;
-            Value2 = value2;
-            Value3 = value3;
+            ValueA = valueA;
+            ValueB = valueB;
+            ValueC = valueC;
             Output = output;
             Source = source;
             SpecialCase = specialCase;

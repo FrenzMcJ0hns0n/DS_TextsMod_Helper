@@ -64,7 +64,7 @@ namespace DS_TextsMod_Helper
         }
 
 
-        public string GetToolTipText(bool fileIsValid)
+        public string GetToolTipText(bool fileIsValid) // TODO? v1.6 Reimplement on DataGrid cells ?
         {
             StringBuilder sb = new StringBuilder();
 
@@ -97,10 +97,14 @@ namespace DS_TextsMod_Helper
         {
             switch (version)
             {
-                case FMG.FMGVersion.DemonsSouls: return shortened ? "DeS" : "Demon's Souls";
-                case FMG.FMGVersion.DarkSouls1: return shortened ? "DS1 / DS2" : "Dark Souls 1 / Dark Souls 2";
-                case FMG.FMGVersion.DarkSouls3: return shortened ? "DS3 / BB" : "Dark Souls 3 / Bloodborne";
-                default: return shortened ? "DS1 / DS2" : "Dark Souls 1 / Dark Souls 2";
+                case FMG.FMGVersion.DemonsSouls:
+                    return shortened ? "DeS" : "Demon's Souls";
+
+                case FMG.FMGVersion.DarkSouls3:
+                    return shortened ? "DS3/BB" : "Dark Souls 3 / Bloodborne";
+
+                default:
+                    return shortened ? "DS1/DS2" : "Dark Souls 1 / Dark Souls 2";
             }
         }
     }
