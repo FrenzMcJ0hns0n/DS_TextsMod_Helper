@@ -391,7 +391,7 @@ namespace DS_TextsMod_Helper
                         filePathA = Path.Combine(parentDirPathA, iFile.NameExt);
                         ReadMode r = new ReadMode(filePathA)
                         {
-                            Title = $"{processedFilesCount + 1}) {iFile.Name}",
+                            Title = $"{processedFilesCount + 1}: {iFile.Name}",
                             OneLinedValues = Cbx_Rd_OneLinedValues.IsChecked ?? false
                         };
                         r.ProcessFiles(true);
@@ -449,7 +449,7 @@ namespace DS_TextsMod_Helper
                         filePathB = Path.Combine(parentDirPathB, iFilesCmpB[i].NameExt);
                         CompareMode c = new CompareMode(filePathA, filePathB)
                         {
-                            Title = $"{processedFilesCount + 1}) {iFilesCmpA[i].Name}",
+                            Title = $"{processedFilesCount + 1}: {iFilesCmpA[i].Name}",
                             OneLinedValues = Cbx_Cmp_OneLinedValues.IsChecked ?? false,
                             OutputHeaderA = Tbx_Cmp_oHeader1.Text,
                             OutputHeaderB = Tbx_Cmp_oHeader2.Text
@@ -513,7 +513,7 @@ namespace DS_TextsMod_Helper
                         filePathC = Path.Combine(parentDirPathC, iFilesPrpC[i].NameExt);
                         PrepareMode p = new PrepareMode(filePathA, filePathB, filePathC, Tbx_Prp_TextToReplace.Text, Tbx_Prp_ReplacingText.Text)
                         {
-                            Title = $"{processedFilesCount + 1}) {iFilesPrpA[i].Name}"
+                            Title = $"{processedFilesCount + 1}: {iFilesPrpA[i].Name}"
                         };
                         p.ProcessFiles(true);
                         prpSuperlist.Add(p);

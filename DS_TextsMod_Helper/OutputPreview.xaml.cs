@@ -11,16 +11,19 @@ namespace DS_TextsMod_Helper
 
             if (!(processingMode.AllReadModeEntries is null))
             {
+                Title = "Output preview : Read mode";
                 Tbc_Preview_Read.Visibility = Visibility.Visible;
                 Tbc_Preview_Read.ItemsSource = processingMode.AllReadModeEntries;
             }
             if (!(processingMode.AllCompareModeEntries is null))
             {
+                Title = "Output preview : Compare mode";
                 Tbc_Preview_Compare.Visibility = Visibility.Visible;
                 Tbc_Preview_Compare.ItemsSource = processingMode.AllCompareModeEntries;
             }
             if (!(processingMode.AllPrepareModeEntries is null))
             {
+                Title = "Output preview : Prepare mode";
                 Tbc_Preview_Prepare.Visibility = Visibility.Visible;
                 Tbc_Preview_Prepare.ItemsSource = processingMode.AllPrepareModeEntries;
             }
