@@ -16,11 +16,9 @@ namespace DS_TextsMod_Helper
         public List<PrepareEntry> Entries { get; set; }
 
 
-        public PrepareMode(string iFile1, string iFile2, string iFile3, string textToReplace, string replacingText)
+        public PrepareMode(string iFile1, string iFile2, string iFile3)
         {
             InputFiles = new List<string>() { iFile1, iFile2, iFile3 };
-            TextToReplace = textToReplace;
-            ReplacingText = replacingText;
             Entries = new List<PrepareEntry>();
         }
 

@@ -44,7 +44,7 @@ namespace DS_TextsMod_Helper
             // 0. Get input data
             FMG fileA = new FMG { Entries = FMG.Read(InputFiles[0]).Entries };
             FMG fileB = new FMG { Entries = FMG.Read(InputFiles[1]).Entries };
-            
+
             // 1. Insert value from FileA
             foreach (FMG.Entry entry in fileA.Entries)
             {
@@ -107,6 +107,7 @@ namespace DS_TextsMod_Helper
             }
         }
     }
+
 
     public class CompareEntry
     {

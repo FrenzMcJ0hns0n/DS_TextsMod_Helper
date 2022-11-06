@@ -2,7 +2,7 @@
 
 namespace DS_TextsMod_Helper
 {
-    public class ProcessingMode
+    public class ProcessingModeResult
     {
         public List<ReadMode> AllReadModeEntries { get; set; }
         public List<CompareMode> AllCompareModeEntries { get; set; }

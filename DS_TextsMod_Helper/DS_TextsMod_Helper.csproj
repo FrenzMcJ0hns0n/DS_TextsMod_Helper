@@ -84,7 +84,7 @@
     <Compile Include="OutputPreview.xaml.cs">
       <DependentUpon>OutputPreview.xaml</DependentUpon>
     </Compile>
-    <Compile Include="ProcessingMode.cs" />
+    <Compile Include="ProcessingModeResult.cs" />
     <Compile Include="ReadMode.cs" />
     <Compile Include="Tools.cs" />
     <Compile Include="MainWindow.xaml.cs">

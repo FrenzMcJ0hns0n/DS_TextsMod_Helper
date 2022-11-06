@@ -5,7 +5,7 @@ namespace DS_TextsMod_Helper
 {
     public partial class OutputPreview : Window
     {
-        public OutputPreview(ProcessingMode processingMode)
+        public OutputPreview(ProcessingModeResult processingMode)
         {
             InitializeComponent();
 

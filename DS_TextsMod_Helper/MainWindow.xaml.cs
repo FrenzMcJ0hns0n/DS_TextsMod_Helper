@@ -88,11 +88,6 @@ namespace DS_TextsMod_Helper
 
         #region Input files management
 
-        private void Window_MouseDown(object sender, MouseButtonEventArgs e)
-        {
-            Keyboard.ClearFocus();
-        }
-
         private void Brd_Drop(object sender, DragEventArgs e)
         {
             // Only files are accepted
@@ -140,6 +135,47 @@ namespace DS_TextsMod_Helper
             ObservableCollection<InputFile> iFiles = (ObservableCollection<InputFile>)dtg.ItemsSource;
 
             Process.Start(iFiles.First().Directory);
+        }
+
+        private void Btn_MoveInputFileDown_Click(object sender, RoutedEventArgs e)
+        {
+            Button btn = sender as Button;
+            DataGrid dtg = (DataGrid)FindName("Dtg_" + btn.Tag);
+
+            int selectedCount = dtg.SelectedItems.Count;
+            if (selectedCount == 0)
+            {
+                MessageBox.Show("No file selected", "Information", MessageBoxButton.OK, MessageBoxImage.Information);
+                return;
+            }
+
+            List<int> positionsToMove = new List<int>();
+            for (int i = 0; i < selectedCount; i++)
+            {
+                // $"Filename '{((InputFile)dtg.SelectedItems[i]).NameExt}' as selected item # {i + 1} is at index # {position} in the DataGrid\n";
+                int position = dtg.Items.IndexOf(dtg.SelectedItems[i]);
+                if (position == dtg.Items.Count - 1)
+                    return;
+                else
+                    positionsToMove.Add(position);
+            }
+
+            ObservableCollection<InputFile> iFiles = (ObservableCollection<InputFile>)dtg.ItemsSource;
+            for (int i = 0; i < iFiles.Count; i++)
+            {
+                if (positionsToMove.Contains(i)) // TODO(Multiple reordering): gather all necessary elements before using Insert/RemoveAt (or Build matching table as Dictionary or smthg?)
+                {
+                    InputFile toBeMovedDown = iFiles[i];
+                    iFiles.Insert(i, iFiles[i + 1]);
+                    iFiles.RemoveAt(i + 1);
+                    iFiles.Insert(i + 1, toBeMovedDown);
+                    iFiles.RemoveAt(i + 2);
+                }
+            }
+
+            dtg.ItemsSource = iFiles;
+            dtg.SelectedIndex = positionsToMove.First() + 1; // Prevent losing the selected elements from altering elements order
+            dtg.Focus();
         }
 
         private void Btn_MoveInputFileUp_Click(object sender, RoutedEventArgs e)
@@ -213,47 +249,6 @@ namespace DS_TextsMod_Helper
             dtg.ItemsSource = null;
             dtg.ItemsSource = iFiles;
             dtg.SelectedIndex = positionsToRemove.Contains(iFilesCount) ? -1 : positionsToRemove.Max();
-            dtg.Focus();
-        }
-
-        private void Btn_MoveInputFileDown_Click(object sender, RoutedEventArgs e)
-        {
-            Button btn = sender as Button;
-            DataGrid dtg = (DataGrid)FindName("Dtg_" + btn.Tag);
-
-            int selectedCount = dtg.SelectedItems.Count;
-            if (selectedCount == 0)
-            {
-                MessageBox.Show("No file selected", "Information", MessageBoxButton.OK, MessageBoxImage.Information);
-                return;
-            }
-
-            List<int> positionsToMove = new List<int>();
-            for (int i = 0; i < selectedCount; i++)
-            {
-                // $"Filename '{((InputFile)dtg.SelectedItems[i]).NameExt}' as selected item # {i + 1} is at index # {position} in the DataGrid\n";
-                int position = dtg.Items.IndexOf(dtg.SelectedItems[i]);
-                if (position == dtg.Items.Count - 1)
-                    return;
-                else
-                    positionsToMove.Add(position);
-            }
-
-            ObservableCollection<InputFile> iFiles = (ObservableCollection<InputFile>)dtg.ItemsSource;
-            for (int i = 0; i < iFiles.Count; i++)
-            {
-                if (positionsToMove.Contains(i)) // TODO(Multiple reordering): gather all necessary elements before using Insert/RemoveAt (or Build matching table as Dictionary or smthg?)
-                {
-                    InputFile toBeMovedDown = iFiles[i];
-                    iFiles.Insert(i, iFiles[i + 1]);
-                    iFiles.RemoveAt(i + 1);
-                    iFiles.Insert(i + 1, toBeMovedDown);
-                    iFiles.RemoveAt(i + 2);
-                }
-            }
-
-            dtg.ItemsSource = iFiles;
-            dtg.SelectedIndex = positionsToMove.First() + 1; // Prevent losing the selected elements from altering elements order
             dtg.Focus();
         }
 
@@ -332,7 +327,7 @@ namespace DS_TextsMod_Helper
         #endregion
 
 
-        #region TabItem controls management
+        #region Main TabControl management
 
         private void FocusMe(PROCESS_MODE targetMode)
         {
@@ -353,175 +348,30 @@ namespace DS_TextsMod_Helper
             Process.Start(Tools.GetRootDirPath());
         }
 
+        private void Window_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            Keyboard.ClearFocus();
+        }
+
         #endregion
 
 
         #region Preview
 
-        private void Btn_ShowOutputPreview_Click(object sender, RoutedEventArgs e) // TODO: Factorize with Output common elements
+        private void Btn_ShowOutputPreview_Click(object sender, RoutedEventArgs e)
         {
-            int processedFilesCount = 0;
-            string parentDirPathA;
-            string parentDirPathB;
-            string parentDirPathC;
-            string fileFmgVersionA;
-            string fileFmgVersionB;
-            string fileFmgVersionC;
-            string filePathA;
-            string filePathB;
-            string filePathC;
-            List<int> linesWithDistinctFilenames;
-            ProcessingMode processingMode;
-            OutputPreview outputPreview;
-
             switch (SelectedMode())
             {
                 case PROCESS_MODE.Read:
-                    if (Dtg_RdA.ItemsSource is null)
-                    {   // Early return on error "Missing input files"
-                        MessageBox.Show(MSG_MISSING_IFILES, HDR_MISSING_IFILES, MessageBoxButton.OK, MessageBoxImage.Error);
-                        return;
-                    }
-                    ObservableCollection<InputFile> iFilesRd = (ObservableCollection<InputFile>)Dtg_RdA.ItemsSource;
-                    parentDirPathA = iFilesRd.First().Directory;
-
-                    List<ReadMode> rdSuperlist = new List<ReadMode>();
-                    foreach (InputFile iFile in iFilesRd)
-                    {
-                        filePathA = Path.Combine(parentDirPathA, iFile.NameExt);
-                        ReadMode r = new ReadMode(filePathA)
-                        {
-                            Title = $"{processedFilesCount + 1}: {iFile.Name}",
-                            OneLinedValues = Cbx_Rd_OneLinedValues.IsChecked ?? false
-                        };
-                        r.ProcessFiles(true);
-                        rdSuperlist.Add(r);
-                        processedFilesCount += 1;
-                    }
-                    processingMode = new ProcessingMode() { AllReadModeEntries = rdSuperlist };
-                    outputPreview = new OutputPreview(processingMode);
-                    outputPreview.ShowDialog();
+                    DoRead(true);
                     break;
-
 
                 case PROCESS_MODE.Compare:
-                    if (Dtg_CmpA.ItemsSource is null || Dtg_CmpB.ItemsSource is null)
-                    {   // Early return on error "Missing input files"
-                        MessageBox.Show(MSG_MISSING_IFILES, HDR_MISSING_IFILES, MessageBoxButton.OK, MessageBoxImage.Error);
-                        return;
-                    }
-                    ObservableCollection<InputFile> iFilesCmpA = (ObservableCollection<InputFile>)Dtg_CmpA.ItemsSource;
-                    ObservableCollection<InputFile> iFilesCmpB = (ObservableCollection<InputFile>)Dtg_CmpB.ItemsSource;
-                    if (iFilesCmpA.Count != iFilesCmpB.Count)
-                    {   // Early return on error "Wrong input files count"
-                        MessageBox.Show(MSG_WRONG_IFCOUNT, HDR_WRONG_IFCOUNT, MessageBoxButton.OK, MessageBoxImage.Error);
-                        return;
-                    }
-                    parentDirPathA = iFilesCmpA.First().Directory;
-                    parentDirPathB = iFilesCmpB.First().Directory;
-                    if (parentDirPathA == parentDirPathB)
-                    {   // Early return on error "Same directory"
-                        MessageBox.Show(MSG_SAME_DIRECTORY, HDR_SAME_DIRECTORY, MessageBoxButton.OK, MessageBoxImage.Error);
-                        return;
-                    }
-                    fileFmgVersionA = iFilesCmpA.First().VersionLg;
-                    fileFmgVersionB = iFilesCmpB.First().VersionLg;
-                    if (fileFmgVersionA != fileFmgVersionB)
-                    {   // Early return on error "Inconsistent FMG versions"
-                        MessageBox.Show(MSG_INCONS_FMG_VER, HDR_INCONS_FMG_VER, MessageBoxButton.OK, MessageBoxImage.Error);
-                        return;
-                    }
-                    linesWithDistinctFilenames = CompareFilenames(iFilesCmpA, iFilesCmpB);
-                    if (linesWithDistinctFilenames.Count != 0)
-                    {   // Warning if filenames are not the same in all input areas
-                        string lines = string.Join(", ", linesWithDistinctFilenames);
-                        MessageBoxResult mbr = MessageBox.Show(
-                            MSG_INCONS_IFNAMES1 + $"\r\n{lines}\r\n\r\n" + MSG_INCONS_IFNAMES2, HDR_INCONS_IFNAMES, MessageBoxButton.OKCancel, MessageBoxImage.Information
-                        );
-                        if (mbr == MessageBoxResult.Cancel)
-                            return;
-                    }
-
-                    List<CompareMode> cmpSuperlist = new List<CompareMode>();
-                    for (int i = 0; i < iFilesCmpA.Count; i++)
-                    {
-                        filePathA = Path.Combine(parentDirPathA, iFilesCmpA[i].NameExt);
-                        filePathB = Path.Combine(parentDirPathB, iFilesCmpB[i].NameExt);
-                        CompareMode c = new CompareMode(filePathA, filePathB)
-                        {
-                            Title = $"{processedFilesCount + 1}: {iFilesCmpA[i].Name}",
-                            OneLinedValues = Cbx_Cmp_OneLinedValues.IsChecked ?? false,
-                            OutputHeaderA = Tbx_Cmp_oHeader1.Text,
-                            OutputHeaderB = Tbx_Cmp_oHeader2.Text
-                        };
-                        c.ProcessFiles(true);
-                        cmpSuperlist.Add(c);
-                        processedFilesCount += 1;
-                    }
-                    processingMode = new ProcessingMode() { AllCompareModeEntries = cmpSuperlist };
-                    outputPreview = new OutputPreview(processingMode);
-                    outputPreview.ShowDialog();
+                    DoCompare(true);
                     break;
 
-
                 case PROCESS_MODE.Prepare:
-                    if (Dtg_PrpA.ItemsSource is null || Dtg_PrpB.ItemsSource is null || Dtg_PrpC.ItemsSource is null)
-                    {   // Early return on error "Missing input files"
-                        MessageBox.Show(MSG_MISSING_IFILES, HDR_MISSING_IFILES, MessageBoxButton.OK, MessageBoxImage.Error);
-                        return;
-                    }
-                    ObservableCollection<InputFile> iFilesPrpA = (ObservableCollection<InputFile>)Dtg_PrpA.ItemsSource;
-                    ObservableCollection<InputFile> iFilesPrpB = (ObservableCollection<InputFile>)Dtg_PrpB.ItemsSource;
-                    ObservableCollection<InputFile> iFilesPrpC = (ObservableCollection<InputFile>)Dtg_PrpC.ItemsSource;
-                    if (iFilesPrpA.Count != iFilesPrpB.Count || iFilesPrpA.Count != iFilesPrpC.Count)
-                    {   // Early return on error "Wrong input files count"
-                        MessageBox.Show(MSG_WRONG_IFCOUNT, HDR_WRONG_IFCOUNT, MessageBoxButton.OK, MessageBoxImage.Error);
-                        return;
-                    }
-                    parentDirPathA = iFilesPrpA.First().Directory;
-                    parentDirPathB = iFilesPrpB.First().Directory;
-                    parentDirPathC = iFilesPrpC.First().Directory;
-                    if (parentDirPathA == parentDirPathB || parentDirPathA == parentDirPathC)
-                    {   // Early return on error "Same directory"
-                        MessageBox.Show(MSG_SAME_DIRECTORY, HDR_SAME_DIRECTORY, MessageBoxButton.OK, MessageBoxImage.Error);
-                        return;
-                    }
-                    fileFmgVersionA = iFilesPrpA.First().VersionLg;
-                    fileFmgVersionB = iFilesPrpB.First().VersionLg;
-                    fileFmgVersionC = iFilesPrpC.First().VersionLg;
-                    if (fileFmgVersionA != fileFmgVersionB || fileFmgVersionA != fileFmgVersionC)
-                    {   // Early return on error "Inconsistent FMG versions"
-                        MessageBox.Show(MSG_INCONS_FMG_VER, HDR_INCONS_FMG_VER, MessageBoxButton.OK, MessageBoxImage.Error);
-                        return;
-                    }
-                    linesWithDistinctFilenames = CompareFilenames(iFilesPrpA, iFilesPrpB, iFilesPrpC);
-                    if (linesWithDistinctFilenames.Count != 0)
-                    {   // Warning if filenames are not the same in all input areas
-                        string lines = string.Join(", ", linesWithDistinctFilenames);
-                        MessageBoxResult mbr = MessageBox.Show(
-                            MSG_INCONS_IFNAMES1 + $"\r\n{lines}\r\n\r\n" + MSG_INCONS_IFNAMES2, HDR_INCONS_IFNAMES, MessageBoxButton.OKCancel, MessageBoxImage.Information
-                        );
-                        if (mbr == MessageBoxResult.Cancel)
-                            return;
-                    }
-
-                    List<PrepareMode> prpSuperlist = new List<PrepareMode>();
-                    for (int i = 0; i < iFilesPrpA.Count; i++)
-                    {
-                        filePathA = Path.Combine(parentDirPathA, iFilesPrpA[i].NameExt);
-                        filePathB = Path.Combine(parentDirPathB, iFilesPrpB[i].NameExt);
-                        filePathC = Path.Combine(parentDirPathC, iFilesPrpC[i].NameExt);
-                        PrepareMode p = new PrepareMode(filePathA, filePathB, filePathC, Tbx_Prp_TextToReplace.Text, Tbx_Prp_ReplacingText.Text)
-                        {
-                            Title = $"{processedFilesCount + 1}: {iFilesPrpA[i].Name}"
-                        };
-                        p.ProcessFiles(true);
-                        prpSuperlist.Add(p);
-                        processedFilesCount += 1;
-                    }
-                    processingMode = new ProcessingMode() { AllPrepareModeEntries = prpSuperlist };
-                    outputPreview = new OutputPreview(processingMode);
-                    outputPreview.ShowDialog();
+                    DoPrepare(true);
                     break;
             }
         }
@@ -531,197 +381,297 @@ namespace DS_TextsMod_Helper
 
         #region Output
 
-        private void Btn_GenerateOutput_Click(object sender, RoutedEventArgs e) // TODO: Factorize with Preview common elements
+        private void Btn_GenerateOutput_Click(object sender, RoutedEventArgs e)
         {
-            int processedFilesCount = 0;
-            List<string> iFilenames;
-            List<string> alreadyExisting;
-            List<int> linesWithDistinctFilenames;
-            string parentDirPathA;
-            string parentDirPathB;
-            string parentDirPathC;
-            string fileFmgVersionA;
-            string fileFmgVersionB;
-            string fileFmgVersionC;
-            string filePathA;
-            string filePathB;
-            string filePathC;
-
             switch (SelectedMode())
             {
                 case PROCESS_MODE.Read:
-                    if (Dtg_RdA.ItemsSource is null)
-                    {   // Early return on error "Missing input files"
-                        MessageBox.Show(MSG_MISSING_IFILES, HDR_MISSING_IFILES, MessageBoxButton.OK, MessageBoxImage.Error);
-                        return;
-                    }
-                    ObservableCollection<InputFile> iFilesRd = (ObservableCollection<InputFile>)Dtg_RdA.ItemsSource;
-                    parentDirPathA = iFilesRd.First().Directory;
-
-                    iFilenames = iFilesRd.Select(iFile => iFile.Name + ".csv").ToList();
-                    alreadyExisting = Tools.GetAlreadyExistingFilenames(iFilenames);
-                    if (alreadyExisting.Count > 0)
-                    {
-                        string fnames = string.Join("\r\n - ", alreadyExisting);
-                        MessageBoxResult mbr = MessageBox.Show(
-                            MSG_OVERW_EXIST_OF + $"\r\n\r\n - {fnames}", HDR_OVERW_EXIST_OF, MessageBoxButton.OKCancel, MessageBoxImage.Information
-                        );
-                        if (mbr == MessageBoxResult.Cancel)
-                            return;
-                    }
-
-                    foreach (InputFile iFile in iFilesRd)
-                    {
-                        filePathA = Path.Combine(parentDirPathA, iFile.NameExt);
-                        ReadMode r = new ReadMode(filePathA) { OneLinedValues = Cbx_Rd_OneLinedValues.IsChecked ?? false };
-                        r.ProcessFiles(false);
-                        r.ProduceOutput(iFile.Name + ".csv", Tbx_Rd_CsvSeparator.Text);
-                        processedFilesCount += 1;
-                    }
-                    MessageBox.Show($"[Read mode] Done: {processedFilesCount} output files have been created");
+                    DoRead(false);
                     break;
-
 
                 case PROCESS_MODE.Compare:
-                    if (Dtg_CmpA.ItemsSource is null || Dtg_CmpB.ItemsSource is null)
-                    {   // Early return on error "Missing input files"
-                        MessageBox.Show(MSG_MISSING_IFILES, HDR_MISSING_IFILES, MessageBoxButton.OK, MessageBoxImage.Error);
-                        return;
-                    }
-                    ObservableCollection<InputFile> iFilesCmpA = (ObservableCollection<InputFile>)Dtg_CmpA.ItemsSource;
-                    ObservableCollection<InputFile> iFilesCmpB = (ObservableCollection<InputFile>)Dtg_CmpB.ItemsSource;
-                    if (iFilesCmpA.Count != iFilesCmpB.Count)
-                    {   // Early return on error "Wrong input files count"
-                        MessageBox.Show(MSG_WRONG_IFCOUNT, HDR_WRONG_IFCOUNT, MessageBoxButton.OK, MessageBoxImage.Error);
-                        return;
-                    }
-                    parentDirPathA = iFilesCmpA.First().Directory;
-                    parentDirPathB = iFilesCmpB.First().Directory;
-                    if (parentDirPathA == parentDirPathB)
-                    {   // Early return on error "Same directory"
-                        MessageBox.Show(MSG_SAME_DIRECTORY, HDR_SAME_DIRECTORY, MessageBoxButton.OK, MessageBoxImage.Error);
-                        return;
-                    }
-                    fileFmgVersionA = iFilesCmpA.First().VersionLg;
-                    fileFmgVersionB = iFilesCmpB.First().VersionLg;
-                    if (fileFmgVersionA != fileFmgVersionB)
-                    {   // Early return on error "Inconsistent FMG versions"
-                        MessageBox.Show(MSG_INCONS_FMG_VER, HDR_INCONS_FMG_VER, MessageBoxButton.OK, MessageBoxImage.Error);
-                        return;
-                    }
-                    linesWithDistinctFilenames = CompareFilenames(iFilesCmpA, iFilesCmpB);
-                    if (linesWithDistinctFilenames.Count != 0)
-                    {   // Warning if filenames are not the same in all input areas
-                        string lines = string.Join(", ", linesWithDistinctFilenames);
-                        MessageBoxResult mbr = MessageBox.Show(
-                            MSG_INCONS_IFNAMES1 + $"\r\n{lines}\r\n\r\n" + MSG_INCONS_IFNAMES2, HDR_INCONS_IFNAMES, MessageBoxButton.OKCancel, MessageBoxImage.Information
-                        );
-                        if (mbr == MessageBoxResult.Cancel)
-                            return;
-                    }
-
-                    iFilenames = iFilesCmpA.Select(iFile => iFile.Name + ".csv").ToList();
-                    alreadyExisting = Tools.GetAlreadyExistingFilenames(iFilenames);
-                    if (alreadyExisting.Count > 0)
-                    {
-                        string fnames = string.Join("\r\n - ", alreadyExisting);
-                        MessageBoxResult mbr = MessageBox.Show(
-                            MSG_OVERW_EXIST_OF + $"\r\n\r\n - {fnames}", HDR_OVERW_EXIST_OF, MessageBoxButton.OKCancel, MessageBoxImage.Information
-                        );
-                        if (mbr == MessageBoxResult.Cancel)
-                            return;
-                    }
-
-                    for (int i = 0; i < iFilesCmpA.Count; i++)
-                    {
-                        filePathA = Path.Combine(parentDirPathA, iFilesCmpA[i].NameExt);
-                        filePathB = Path.Combine(parentDirPathB, iFilesCmpB[i].NameExt);
-                        CompareMode c = new CompareMode(filePathA, filePathB) { OneLinedValues = Cbx_Cmp_OneLinedValues.IsChecked ?? false };
-                        c.ProcessFiles(false);
-                        c.ProduceOutput(iFilesCmpA[i].Name + ".csv", Tbx_Cmp_oHeader1.Text, Tbx_Cmp_oHeader2.Text, Tbx_Cmp_CsvSeparator.Text);
-                        processedFilesCount += 1;
-                    }
-                    MessageBox.Show($"[Compare mode] Done: {processedFilesCount} output files have been created");
+                    DoCompare(false);
                     break;
-
 
                 case PROCESS_MODE.Prepare:
-                    if (Dtg_PrpA.ItemsSource is null || Dtg_PrpB.ItemsSource is null || Dtg_PrpC.ItemsSource is null)
-                    {   // Early return on error "Missing input files"
-                        MessageBox.Show(MSG_MISSING_IFILES, HDR_MISSING_IFILES, MessageBoxButton.OK, MessageBoxImage.Error);
-                        return;
-                    }
-                    ObservableCollection<InputFile> iFilesPrpA = (ObservableCollection<InputFile>)Dtg_PrpA.ItemsSource;
-                    ObservableCollection<InputFile> iFilesPrpB = (ObservableCollection<InputFile>)Dtg_PrpB.ItemsSource;
-                    ObservableCollection<InputFile> iFilesPrpC = (ObservableCollection<InputFile>)Dtg_PrpC.ItemsSource;
-                    if (iFilesPrpA.Count != iFilesPrpB.Count || iFilesPrpA.Count != iFilesPrpC.Count)
-                    {   // Early return on error "Wrong input files count"
-                        MessageBox.Show(MSG_WRONG_IFCOUNT, HDR_WRONG_IFCOUNT, MessageBoxButton.OK, MessageBoxImage.Error);
-                        return;
-                    }
-                    parentDirPathA = iFilesPrpA.First().Directory;
-                    parentDirPathB = iFilesPrpB.First().Directory;
-                    parentDirPathC = iFilesPrpC.First().Directory;
-                    if (parentDirPathA == parentDirPathB || parentDirPathA == parentDirPathC)
-                    {   // Early return on error "Same directory"
-                        MessageBox.Show(MSG_SAME_DIRECTORY, HDR_SAME_DIRECTORY, MessageBoxButton.OK, MessageBoxImage.Error);
-                        return;
-                    }
-                    fileFmgVersionA = iFilesPrpA.First().VersionLg;
-                    fileFmgVersionB = iFilesPrpB.First().VersionLg;
-                    fileFmgVersionC = iFilesPrpC.First().VersionLg;
-                    if (fileFmgVersionA != fileFmgVersionB || fileFmgVersionA != fileFmgVersionC)
-                    {   // Early return on error "Inconsistent FMG versions"
-                        MessageBox.Show(MSG_INCONS_FMG_VER, HDR_INCONS_FMG_VER, MessageBoxButton.OK, MessageBoxImage.Error);
-                        return;
-                    }
-                    linesWithDistinctFilenames = CompareFilenames(iFilesPrpA, iFilesPrpB, iFilesPrpC);
-                    if (linesWithDistinctFilenames.Count != 0)
-                    {   // Warning if filenames are not the same in all input areas
-                        string lines = string.Join(", ", linesWithDistinctFilenames);
-                        MessageBoxResult mbr = MessageBox.Show(
-                            MSG_INCONS_IFNAMES1 + $"\r\n{lines}\r\n\r\n" + MSG_INCONS_IFNAMES2, HDR_INCONS_IFNAMES, MessageBoxButton.OKCancel, MessageBoxImage.Information
-                        );
-                        if (mbr == MessageBoxResult.Cancel)
-                            return;
-                    }
-
-                    iFilenames = iFilesPrpA.Select(iFile => iFile.NameExt).ToList();
-                    alreadyExisting = Tools.GetAlreadyExistingFilenames(iFilenames);
-                    if (alreadyExisting.Count > 0)
-                    {
-                        string fnames = string.Join("\r\n - ", alreadyExisting);
-                        MessageBoxResult mbr = MessageBox.Show(
-                            MSG_OVERW_EXIST_OF + $"\r\n\r\n - {fnames}", HDR_OVERW_EXIST_OF, MessageBoxButton.OKCancel, MessageBoxImage.Information
-                        );
-                        if (mbr == MessageBoxResult.Cancel)
-                            return;
-                    }
-
-                    bool haveSpecialCases = false;
-                    for (int i = 0; i < iFilesPrpA.Count; i++)
-                    {
-                        filePathA = Path.Combine(parentDirPathA, iFilesPrpA[i].NameExt);
-                        filePathB = Path.Combine(parentDirPathB, iFilesPrpB[i].NameExt);
-                        filePathC = Path.Combine(parentDirPathC, iFilesPrpC[i].NameExt);
-                        PrepareMode p = new PrepareMode(filePathA, filePathB, filePathC, Tbx_Prp_TextToReplace.Text, Tbx_Prp_ReplacingText.Text);
-                        p.ProcessFiles(false);
-                        p.SetOutputVersion(fileFmgVersionA);
-                        p.ProduceOutput(iFilesPrpA[i].NameExt);
-                        if (Cbx_Prp_WarnOnSpecialCases.IsChecked ?? false)
-                        {
-                            List<string> specialCases = p.GetSpecialCases();
-                            if (specialCases.Count > 0)
-                            {
-                                Tools.LogSpecialCases(filePathA, filePathB, filePathC, iFilesPrpA[i].NameExt, specialCases);
-                                haveSpecialCases = true;
-                            }
-                        }
-                        processedFilesCount += 1;
-                    }
-                    string special = haveSpecialCases ? $"\n\n{WRN_SPECIAL_CASES}" : string.Empty;
-                    MessageBox.Show($"[Prepare mode] Done: {processedFilesCount} output files have been created{special}");
+                    DoPrepare(false);
                     break;
+            }
+        }
+
+        #endregion
+
+
+        #region Processing modes
+
+        private void DoRead(bool isPreview)
+        {
+            if (Dtg_RdA.ItemsSource is null)
+            {   // Early return on error "Missing input files"
+                MessageBox.Show(MSG_MISSING_IFILES, HDR_MISSING_IFILES, MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
+
+            ObservableCollection<InputFile> iFilesRd = (ObservableCollection<InputFile>)Dtg_RdA.ItemsSource;
+            string parentDirPathA = iFilesRd.First().Directory;
+
+            int processedFilesCount = 0;
+            string filePathA;
+            ReadMode rd;
+
+            if (isPreview) // SHOW OUTPUT PREVIEW
+            {
+                List<ReadMode> readModes = new List<ReadMode>();
+                foreach (InputFile iFile in iFilesRd)
+                {
+                    filePathA = Path.Combine(parentDirPathA, iFile.NameExt);
+                    rd = new ReadMode(filePathA)
+                    {
+                        Title = $"{processedFilesCount + 1}: {iFile.Name}",
+                        OneLinedValues = Cbx_Rd_OneLinedValues.IsChecked ?? false
+                    };
+                    rd.ProcessFiles(true);
+                    readModes.Add(rd);
+                    processedFilesCount += 1;
+                }
+                ProcessingModeResult processingMode = new ProcessingModeResult() { AllReadModeEntries = readModes };
+                OutputPreview outputPreview = new OutputPreview(processingMode);
+                outputPreview.ShowDialog();
+            }
+            else // GENERATE OUTPUT FILES
+            {
+                List<string> iFilenames = iFilesRd.Select(iFile => iFile.Name + ".csv").ToList();
+                List<string> alreadyExisting = Tools.GetAlreadyExistingFilenames(iFilenames);
+                if (alreadyExisting.Count > 0)
+                {
+                    string fnames = string.Join("\r\n - ", alreadyExisting);
+                    MessageBoxResult mbr = MessageBox.Show(
+                        MSG_OVERW_EXIST_OF + $"\r\n\r\n - {fnames}", HDR_OVERW_EXIST_OF, MessageBoxButton.OKCancel, MessageBoxImage.Information
+                    );
+                    if (mbr == MessageBoxResult.Cancel)
+                        return;
+                }
+
+                foreach (InputFile iFile in iFilesRd)
+                {
+                    filePathA = Path.Combine(parentDirPathA, iFile.NameExt);
+                    rd = new ReadMode(filePathA)
+                    {
+                        OneLinedValues = Cbx_Rd_OneLinedValues.IsChecked ?? false
+                    };
+                    rd.ProcessFiles(false);
+                    rd.ProduceOutput(iFile.Name + ".csv", Tbx_Rd_CsvSeparator.Text);
+                    processedFilesCount += 1;
+                }
+                MessageBox.Show($"[Read mode] Done: {processedFilesCount} output files have been created");
+            }
+        }
+
+        private void DoCompare(bool isPreview)
+        {
+            if (Dtg_CmpA.ItemsSource is null || Dtg_CmpB.ItemsSource is null)
+            {   // Early return on error "Missing input files"
+                MessageBox.Show(MSG_MISSING_IFILES, HDR_MISSING_IFILES, MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
+            ObservableCollection<InputFile> iFilesCmpA = (ObservableCollection<InputFile>)Dtg_CmpA.ItemsSource;
+            ObservableCollection<InputFile> iFilesCmpB = (ObservableCollection<InputFile>)Dtg_CmpB.ItemsSource;
+            if (iFilesCmpA.Count != iFilesCmpB.Count)
+            {   // Early return on error "Wrong input files count"
+                MessageBox.Show(MSG_WRONG_IFCOUNT, HDR_WRONG_IFCOUNT, MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
+            string parentDirPathA = iFilesCmpA.First().Directory;
+            string parentDirPathB = iFilesCmpB.First().Directory;
+            if (parentDirPathA == parentDirPathB)
+            {   // Early return on error "Same directory"
+                MessageBox.Show(MSG_SAME_DIRECTORY, HDR_SAME_DIRECTORY, MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
+            string fileFmgVersionA = iFilesCmpA.First().VersionLg;
+            string fileFmgVersionB = iFilesCmpB.First().VersionLg;
+            if (fileFmgVersionA != fileFmgVersionB)
+            {   // Early return on error "Inconsistent FMG versions"
+                MessageBox.Show(MSG_INCONS_FMG_VER, HDR_INCONS_FMG_VER, MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
+            List<int> linesWithDistinctFilenames = CompareFilenames(iFilesCmpA, iFilesCmpB);
+            if (linesWithDistinctFilenames.Count > 0)
+            {   // Warning if filenames are different at the same lines of input areas
+                string lines = string.Join(", ", linesWithDistinctFilenames);
+                MessageBoxResult mbr = MessageBox.Show(
+                    MSG_INCONS_IFNAMES1 + $"\r\n{lines}\r\n\r\n" + MSG_INCONS_IFNAMES2, HDR_INCONS_IFNAMES, MessageBoxButton.OKCancel, MessageBoxImage.Information
+                );
+                if (mbr == MessageBoxResult.Cancel)
+                    return;
+            }
+
+            int processedFilesCount = 0;
+            string filePathA;
+            string filePathB;
+            CompareMode cmp;
+
+            if (isPreview) // SHOW OUTPUT PREVIEW
+            {
+                List<CompareMode> compareModes = new List<CompareMode>();
+                for (int i = 0; i < iFilesCmpA.Count; i++)
+                {
+                    filePathA = Path.Combine(parentDirPathA, iFilesCmpA[i].NameExt);
+                    filePathB = Path.Combine(parentDirPathB, iFilesCmpB[i].NameExt);
+                    cmp = new CompareMode(filePathA, filePathB)
+                    {
+                        Title = $"{processedFilesCount + 1}: {iFilesCmpA[i].Name}",
+                        OneLinedValues = Cbx_Cmp_OneLinedValues.IsChecked ?? false
+                    };
+                    cmp.ProcessFiles(true);
+                    compareModes.Add(cmp);
+                    processedFilesCount += 1;
+                }
+                ProcessingModeResult processingMode = new ProcessingModeResult() { AllCompareModeEntries = compareModes };
+                OutputPreview outputPreview = new OutputPreview(processingMode);
+                outputPreview.ShowDialog();
+            }
+            else // GENERATE OUTPUT FILES
+            {
+                List<string> iFilenames = iFilesCmpA.Select(iFile => iFile.Name + ".csv").ToList();
+                List<string> alreadyExisting = Tools.GetAlreadyExistingFilenames(iFilenames);
+                if (alreadyExisting.Count > 0)
+                {
+                    string fnames = string.Join("\r\n - ", alreadyExisting);
+                    MessageBoxResult mbr = MessageBox.Show(
+                        MSG_OVERW_EXIST_OF + $"\r\n\r\n - {fnames}", HDR_OVERW_EXIST_OF, MessageBoxButton.OKCancel, MessageBoxImage.Information
+                    );
+                    if (mbr == MessageBoxResult.Cancel)
+                        return;
+                }
+
+                for (int i = 0; i < iFilesCmpA.Count; i++)
+                {
+                    filePathA = Path.Combine(parentDirPathA, iFilesCmpA[i].NameExt);
+                    filePathB = Path.Combine(parentDirPathB, iFilesCmpB[i].NameExt);
+                    cmp = new CompareMode(filePathA, filePathB)
+                    {
+                        OneLinedValues = Cbx_Cmp_OneLinedValues.IsChecked ?? false
+                    };
+                    cmp.ProcessFiles(false);
+                    cmp.ProduceOutput(iFilesCmpA[i].Name + ".csv", Tbx_Cmp_oHeader1.Text, Tbx_Cmp_oHeader2.Text, Tbx_Cmp_CsvSeparator.Text);
+                    processedFilesCount += 1;
+                }
+                MessageBox.Show($"[Compare mode] Done: {processedFilesCount} output files have been created");
+            }
+        }
+
+        private void DoPrepare(bool isPreview)
+        {
+            if (Dtg_PrpA.ItemsSource is null || Dtg_PrpB.ItemsSource is null || Dtg_PrpC.ItemsSource is null)
+            {   // Early return on error "Missing input files"
+                MessageBox.Show(MSG_MISSING_IFILES, HDR_MISSING_IFILES, MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
+            ObservableCollection<InputFile> iFilesPrpA = (ObservableCollection<InputFile>)Dtg_PrpA.ItemsSource;
+            ObservableCollection<InputFile> iFilesPrpB = (ObservableCollection<InputFile>)Dtg_PrpB.ItemsSource;
+            ObservableCollection<InputFile> iFilesPrpC = (ObservableCollection<InputFile>)Dtg_PrpC.ItemsSource;
+            if (iFilesPrpA.Count != iFilesPrpB.Count || iFilesPrpA.Count != iFilesPrpC.Count)
+            {   // Early return on error "Wrong input files count"
+                MessageBox.Show(MSG_WRONG_IFCOUNT, HDR_WRONG_IFCOUNT, MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
+            string parentDirPathA = iFilesPrpA.First().Directory;
+            string parentDirPathB = iFilesPrpB.First().Directory;
+            string parentDirPathC = iFilesPrpC.First().Directory;
+            if (parentDirPathA == parentDirPathB || parentDirPathA == parentDirPathC)
+            {   // Early return on error "Same directory"
+                MessageBox.Show(MSG_SAME_DIRECTORY, HDR_SAME_DIRECTORY, MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
+            string fileFmgVersionA = iFilesPrpA.First().VersionLg;
+            string fileFmgVersionB = iFilesPrpB.First().VersionLg;
+            string fileFmgVersionC = iFilesPrpC.First().VersionLg;
+            if (fileFmgVersionA != fileFmgVersionB || fileFmgVersionA != fileFmgVersionC)
+            {   // Early return on error "Inconsistent FMG versions"
+                MessageBox.Show(MSG_INCONS_FMG_VER, HDR_INCONS_FMG_VER, MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
+            List<int> linesWithDistinctFilenames = CompareFilenames(iFilesPrpA, iFilesPrpB, iFilesPrpC);
+            if (linesWithDistinctFilenames.Count > 0)
+            {   // Warning if filenames are different at the same lines of input areas
+                string lines = string.Join(", ", linesWithDistinctFilenames);
+                MessageBoxResult mbr = MessageBox.Show(
+                    MSG_INCONS_IFNAMES1 + $"\r\n{lines}\r\n\r\n" + MSG_INCONS_IFNAMES2, HDR_INCONS_IFNAMES, MessageBoxButton.OKCancel, MessageBoxImage.Information
+                );
+                if (mbr == MessageBoxResult.Cancel)
+                    return;
+            }
+
+            int processedFilesCount = 0;
+            string filePathA;
+            string filePathB;
+            string filePathC;
+            PrepareMode prp;
+
+            if (isPreview) // SHOW OUTPUT PREVIEW
+            {
+                List<PrepareMode> prepareModes = new List<PrepareMode>();
+                for (int i = 0; i < iFilesPrpA.Count; i++)
+                {
+                    filePathA = Path.Combine(parentDirPathA, iFilesPrpA[i].NameExt);
+                    filePathB = Path.Combine(parentDirPathB, iFilesPrpB[i].NameExt);
+                    filePathC = Path.Combine(parentDirPathC, iFilesPrpC[i].NameExt);
+                    prp = new PrepareMode(filePathA, filePathB, filePathC)
+                    {
+                        ReplacingText = Tbx_Prp_ReplacingText.Text,
+                        TextToReplace = Tbx_Prp_TextToReplace.Text,
+                        Title = $"{processedFilesCount + 1}: {iFilesPrpA[i].Name}"
+                    };
+                    prp.ProcessFiles(true);
+                    prepareModes.Add(prp);
+                    processedFilesCount += 1;
+                }
+                ProcessingModeResult processingMode = new ProcessingModeResult() { AllPrepareModeEntries = prepareModes };
+                OutputPreview outputPreview = new OutputPreview(processingMode);
+                outputPreview.ShowDialog();
+            }
+            else // GENERATE OUTPUT FILES
+            {
+                List<string> iFilenames = iFilesPrpA.Select(iFile => iFile.NameExt).ToList();
+                List<string> alreadyExisting = Tools.GetAlreadyExistingFilenames(iFilenames);
+                if (alreadyExisting.Count > 0)
+                {
+                    string fnames = string.Join("\r\n - ", alreadyExisting);
+                    MessageBoxResult mbr = MessageBox.Show(
+                        MSG_OVERW_EXIST_OF + $"\r\n\r\n - {fnames}", HDR_OVERW_EXIST_OF, MessageBoxButton.OKCancel, MessageBoxImage.Information
+                    );
+                    if (mbr == MessageBoxResult.Cancel)
+                        return;
+                }
+
+                bool haveSpecialCases = false;
+                for (int i = 0; i < iFilesPrpA.Count; i++)
+                {
+                    filePathA = Path.Combine(parentDirPathA, iFilesPrpA[i].NameExt);
+                    filePathB = Path.Combine(parentDirPathB, iFilesPrpB[i].NameExt);
+                    filePathC = Path.Combine(parentDirPathC, iFilesPrpC[i].NameExt);
+                    prp = new PrepareMode(filePathA, filePathB, filePathC)
+                    {
+                        ReplacingText = Tbx_Prp_ReplacingText.Text,
+                        TextToReplace = Tbx_Prp_TextToReplace.Text
+                    };
+                    prp.ProcessFiles(false);
+                    prp.SetOutputVersion(fileFmgVersionA);
+                    prp.ProduceOutput(iFilesPrpA[i].NameExt);
+                    if (Cbx_Prp_WarnOnSpecialCases.IsChecked ?? false)
+                    {
+                        List<string> specialCases = prp.GetSpecialCases();
+                        if (specialCases.Count > 0)
+                        {
+                            Tools.LogSpecialCases(filePathA, filePathB, filePathC, iFilesPrpA[i].NameExt, specialCases);
+                            haveSpecialCases = true;
+                        }
+                    }
+                    processedFilesCount += 1;
+                }
+                string special = haveSpecialCases ? $"\n\n{WRN_SPECIAL_CASES}" : string.Empty;
+                MessageBox.Show($"[Prepare mode] Done: {processedFilesCount} output files have been created{special}");
             }
         }
 
