@@ -10,11 +10,12 @@
 
     <Window.Resources>
         <!-- TODO? -->
-        <!-- * Implement option "Show all details" with custom style on the extra columns -->
-        <!-- * Bind column header from MainWindow tbx -->
+        <!-- * Bind column header from MainWindow tbx (Compare mode) -->
 
         <Style x:Key="Dtg_Common" TargetType="{x:Type DataGrid}">
             <Setter Property="AutoGenerateColumns" Value="False"/>
+            <Setter Property="Grid.Column" Value="1"/>
+            <Setter Property="Grid.Row" Value="1"/>
             <Setter Property="HorizontalGridLinesBrush" Value="LightGray"/>
             <Setter Property="IsReadOnly" Value="True"/>
             <Setter Property="VerticalGridLinesBrush" Value="LightGray"/>
@@ -30,29 +31,59 @@
             <Setter Property="Padding" Value="2"/>
         </Style>
 
-        <Style x:Key="Dtg_ExtraHeader" TargetType="{x:Type DataGridColumnHeader}">
-            <Setter Property="Foreground" Value="DarkGray"/>
-            <!--
+        <Style x:Key="Dtg_DiffsCmp" TargetType="{x:Type DataGridCell}">
             <Style.Triggers>
-                <DataTrigger Binding="{Binding IsChecked,ElementName=Cbx_ShowAllDetails}" Value="False">
-                    
-                    <Setter Property="Width" Value="0"/>
-                    <Setter Property="Visibility" Value="Collapsed"/>
-                    
-                </DataTrigger>
+                <MultiDataTrigger>
+                    <MultiDataTrigger.Conditions>
+                        <Condition Binding="{Binding IsChecked, ElementName=Cbx_HighlightItems}" Value="True"/>
+                        <Condition Binding="{Binding Same}" Value="True"/>
+                    </MultiDataTrigger.Conditions>
+                    <MultiDataTrigger.Setters>
+                        <Setter Property="Background" Value="#ccffcc"/>
+                    </MultiDataTrigger.Setters>
+                </MultiDataTrigger>
+                <MultiDataTrigger>
+                    <MultiDataTrigger.Conditions>
+                        <Condition Binding="{Binding IsChecked, ElementName=Cbx_HighlightItems}" Value="True"/>
+                        <Condition Binding="{Binding Same}" Value="False"/>
+                    </MultiDataTrigger.Conditions>
+                    <MultiDataTrigger.Setters>
+                        <Setter Property="Background" Value="#ffcccc"/>
+                    </MultiDataTrigger.Setters>
+                </MultiDataTrigger>
             </Style.Triggers>
-            -->
         </Style>
 
-        <Style x:Key="Dtg_ExtraCell" TargetType="{x:Type DataGridCell}">
-            <Setter Property="Foreground" Value="DarkGray"/>
-            <!--
+        <Style x:Key="Dtg_DiffsPrp" TargetType="{x:Type DataGridCell}">
             <Style.Triggers>
-                <DataTrigger Binding="{Binding IsChecked,ElementName=Cbx_ShowAllDetails}" Value="False">
-                    <Setter Property="Foreground" Value="DarkGray"/>
-                </DataTrigger>
+                <MultiDataTrigger>
+                    <MultiDataTrigger.Conditions>
+                        <Condition Binding="{Binding IsChecked, ElementName=Cbx_HighlightItems}" Value="True"/>
+                        <Condition Binding="{Binding Source}" Value="File C"/>
+                    </MultiDataTrigger.Conditions>
+                    <MultiDataTrigger.Setters>
+                        <Setter Property="Background" Value="#ccffcc"/>
+                    </MultiDataTrigger.Setters>
+                </MultiDataTrigger>
+                <MultiDataTrigger>
+                    <MultiDataTrigger.Conditions>
+                        <Condition Binding="{Binding IsChecked, ElementName=Cbx_HighlightItems}" Value="True"/>
+                        <Condition Binding="{Binding Source}" Value="File A"/>
+                    </MultiDataTrigger.Conditions>
+                    <MultiDataTrigger.Setters>
+                        <Setter Property="Background" Value="#ffcccc"/>
+                    </MultiDataTrigger.Setters>
+                </MultiDataTrigger>
+                <MultiDataTrigger>
+                    <MultiDataTrigger.Conditions>
+                        <Condition Binding="{Binding IsChecked, ElementName=Cbx_HighlightItems}" Value="True"/>
+                        <Condition Binding="{Binding ValueA}" Value="{x:Null}"/>
+                    </MultiDataTrigger.Conditions>
+                    <MultiDataTrigger.Setters>
+                        <Setter Property="Background" Value="Transparent"/>
+                    </MultiDataTrigger.Setters>
+                </MultiDataTrigger>
             </Style.Triggers>
-            -->
         </Style>
 
     </Window.Resources>
@@ -74,7 +105,7 @@
 
         
         <!-- READ MODE -->
-        
+
         <TabControl x:Name="Tbc_Preview_Read" Grid.Column="1" Grid.Row="1" ItemsSource="{Binding}" Visibility="Collapsed">
             <!-- TabItem head -->
             <TabControl.ItemTemplate>
@@ -86,7 +117,7 @@
             <!-- TabItem body -->
             <TabControl.ContentTemplate>
                 <DataTemplate DataType="{x:Type local:ReadMode}">
-                    <DataGrid Grid.Column="1" Grid.Row="1" ItemsSource="{Binding Entries}" RowHeaderStyle="{StaticResource Dtg_RowHeader}" Style="{StaticResource Dtg_Common}" LoadingRow="Dtg_LoadingRow">
+                    <DataGrid ItemsSource="{Binding Entries}" RowHeaderStyle="{StaticResource Dtg_RowHeader}" Style="{StaticResource Dtg_Common}" LoadingRow="Dtg_LoadingRow">
                         <DataGrid.Columns>
 
                             <DataGridTemplateColumn Header="Text ID" MinWidth="50" MaxWidth="100">
@@ -113,7 +144,7 @@
 
 
         <!-- COMPARE MODE -->
-        
+
         <TabControl x:Name="Tbc_Preview_Compare" Grid.Column="1" Grid.Row="1" ItemsSource="{Binding}" Visibility="Collapsed">
             <!-- TabItem head -->
             <TabControl.ItemTemplate>
@@ -124,8 +155,8 @@
 
             <!-- TabItem body -->
             <TabControl.ContentTemplate>
-                <DataTemplate x:Name="Dtt_CompareMode" DataType="{x:Type local:CompareMode}">
-                    <DataGrid Grid.Column="1" Grid.Row="1" ItemsSource="{Binding Entries}" RowHeaderStyle="{StaticResource Dtg_RowHeader}" Style="{StaticResource Dtg_Common}" LoadingRow="Dtg_LoadingRow">
+                <DataTemplate DataType="{x:Type local:CompareMode}">
+                    <DataGrid ItemsSource="{Binding Entries}" CellStyle="{StaticResource Dtg_DiffsCmp}" RowHeaderStyle="{StaticResource Dtg_RowHeader}" Style="{StaticResource Dtg_Common}" LoadingRow="Dtg_LoadingRow">
                         <DataGrid.Columns>
 
                             <DataGridTemplateColumn Header="Text ID" MinWidth="50" MaxWidth="100">
@@ -134,38 +165,6 @@
                                         <TextBlock Text="{Binding TextId}"/>
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
-                                <!-- Bindings are broken : should I finally embrace MVVM? -->
-                                <!--<DataGridTemplateColumn.CellStyle>
-                                    <Style TargetType="{x:Type DataGridCell}">
-                                        <Style.Triggers>
-                                            <MultiDataTrigger>
-                                                <MultiDataTrigger.Conditions>
-                                                    <Condition Binding="{Binding IsChecked, ElementName=Cbx_HighlightDiffs}" Value="True"/>
-                                                    <Condition Binding="{Binding Same}" Value="True"/>
-                                                </MultiDataTrigger.Conditions>
-                                                <MultiDataTrigger.Setters>
-                                                    <Setter Property="Background" Value="LightGreen"/>
-                                                </MultiDataTrigger.Setters>
-                                            </MultiDataTrigger>
-                                            <MultiDataTrigger>
-                                                <MultiDataTrigger.Conditions>
-                                                    <Condition Binding="{Binding IsChecked, ElementName=Cbx_HighlightDiffs}" Value="True"/>
-                                                    <Condition Binding="{Binding Same}" Value="False"/>
-                                                </MultiDataTrigger.Conditions>
-                                                <MultiDataTrigger.Setters>
-                                                    <Setter Property="Background" Value="LightSalmon"/>
-                                                </MultiDataTrigger.Setters>
-                                            </MultiDataTrigger>
-                                
-                                            <DataTrigger Binding="{Binding Same}" Value="True">
-                                                <Setter Property="Background" Value="LightGreen"/>
-                                            </DataTrigger>
-                                            <DataTrigger Binding="{Binding Same}" Value="False">
-                                                <Setter Property="Background" Value="LightSalmon"/>
-                                            </DataTrigger>
-                                        </Style.Triggers>
-                                    </Style>
-                                </DataGridTemplateColumn.CellStyle>-->
                             </DataGridTemplateColumn>
 
                             <!-- TODO: Manage to get OutputHeaderA -->
@@ -175,18 +174,6 @@
                                         <TextBlock Text="{Binding ValueA}"/>
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
-                                <!--<DataGridTemplateColumn.CellStyle>
-                                    <Style TargetType="{x:Type DataGridCell}">
-                                        <Style.Triggers>
-                                            <DataTrigger Binding="{Binding Same}" Value="True">
-                                                <Setter Property="Background" Value="LightGreen"/>
-                                            </DataTrigger>
-                                            <DataTrigger Binding="{Binding Same}" Value="False">
-                                                <Setter Property="Background" Value="LightSalmon"/>
-                                            </DataTrigger>
-                                        </Style.Triggers>
-                                    </Style>
-                                </DataGridTemplateColumn.CellStyle>-->
                             </DataGridTemplateColumn>
 
                             <!-- TODO: Manage to get OutputHeaderB -->
@@ -226,7 +213,7 @@
             <!-- TabItem body -->
             <TabControl.ContentTemplate>
                 <DataTemplate DataType="{x:Type local:PrepareMode}">
-                    <DataGrid Grid.Column="1" Grid.Row="1" ItemsSource="{Binding Entries}" RowHeaderStyle="{StaticResource Dtg_RowHeader}" Style="{StaticResource Dtg_Common}" LoadingRow="Dtg_LoadingRow">
+                    <DataGrid ItemsSource="{Binding Entries}" CellStyle="{StaticResource Dtg_DiffsPrp}" RowHeaderStyle="{StaticResource Dtg_RowHeader}" Style="{StaticResource Dtg_Common}" LoadingRow="Dtg_LoadingRow">
                         <DataGrid.Columns>
 
                             <DataGridTemplateColumn Header="Text ID" MinWidth="50" MaxWidth="100">
@@ -245,36 +232,56 @@
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
 
-                            <DataGridTemplateColumn Header="File A" MaxWidth="500" HeaderStyle="{StaticResource Dtg_ExtraHeader}" CellStyle="{StaticResource Dtg_ExtraCell}">
+                            <DataGridTemplateColumn Header="File A" MaxWidth="500">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate DataType="{x:Type local:PrepareEntry}">
                                         <TextBlock Text="{Binding ValueA}"/>
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
+                                <DataGridTemplateColumn.CellStyle>
+                                    <Style TargetType="{x:Type DataGridCell}">
+                                        <Setter Property="Foreground" Value="DarkGray"/>
+                                    </Style>
+                                </DataGridTemplateColumn.CellStyle>
                             </DataGridTemplateColumn>
 
-                            <DataGridTemplateColumn Header="File B" MaxWidth="500" HeaderStyle="{StaticResource Dtg_ExtraHeader}" CellStyle="{StaticResource Dtg_ExtraCell}">
+                            <DataGridTemplateColumn Header="File B" MaxWidth="500">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate DataType="{x:Type local:PrepareEntry}">
                                         <TextBlock Text="{Binding ValueB}"/>
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
+                                <DataGridTemplateColumn.CellStyle>
+                                    <Style TargetType="{x:Type DataGridCell}">
+                                        <Setter Property="Foreground" Value="DarkGray"/>
+                                    </Style>
+                                </DataGridTemplateColumn.CellStyle>
                             </DataGridTemplateColumn>
 
-                            <DataGridTemplateColumn Header="File C" MaxWidth="500" HeaderStyle="{StaticResource Dtg_ExtraHeader}" CellStyle="{StaticResource Dtg_ExtraCell}">
+                            <DataGridTemplateColumn Header="File C" MaxWidth="500">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate DataType="{x:Type local:PrepareEntry}">
                                         <TextBlock Text="{Binding ValueC}"/>
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
+                                <DataGridTemplateColumn.CellStyle>
+                                    <Style TargetType="{x:Type DataGridCell}">
+                                        <Setter Property="Foreground" Value="DarkGray"/>
+                                    </Style>
+                                </DataGridTemplateColumn.CellStyle>
                             </DataGridTemplateColumn>
 
-                            <DataGridTemplateColumn Header="From?" MaxWidth="80" HeaderStyle="{StaticResource Dtg_ExtraHeader}" CellStyle="{StaticResource Dtg_ExtraCell}">
+                            <DataGridTemplateColumn Header="Source" MaxWidth="80">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate DataType="{x:Type local:PrepareEntry}">
                                         <TextBlock Text="{Binding Source}"/>
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
+                                <DataGridTemplateColumn.CellStyle>
+                                    <Style TargetType="{x:Type DataGridCell}">
+                                        <Setter Property="Foreground" Value="DarkGray"/>
+                                    </Style>
+                                </DataGridTemplateColumn.CellStyle>
                             </DataGridTemplateColumn>
 
                         </DataGrid.Columns>
@@ -286,10 +293,7 @@
 
         <StackPanel Orientation="Horizontal" Grid.Column="1" Grid.Row="3">
             <CheckBox x:Name="Cbx_DisplayLinesNo" Content="Display lines numbers" Margin="0 0 32 0" IsChecked="True"/>
-            <!--
-            <CheckBox x:Name="Cbx_ShowAllDetails" Content="Show all details" Margin="0 0 32 0" IsChecked="True"/>
-            <CheckBox x:Name="Cbx_HighlightDiffs" Content="Highlight differences" Margin="0 0 32 0" IsChecked="False"/>
-            -->
+            <CheckBox x:Name="Cbx_HighlightItems" Content="(Highlight contents)" Margin="0 0 32 0" IsChecked="False"/>
         </StackPanel>
         
         
