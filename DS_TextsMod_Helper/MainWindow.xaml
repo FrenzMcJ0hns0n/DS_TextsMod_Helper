@@ -7,8 +7,7 @@
         mc:Ignorable="d"
         
         Height="600" Width="1200" ResizeMode="CanMinimize"
-        MouseDown="Window_MouseDown"
-        >
+        MouseDown="Window_MouseDown">
 
     <Window.Resources>
 
@@ -142,13 +141,6 @@
     </Window.Resources>
 
     <Grid x:Name="Grid_Main" Background="WhiteSmoke">
-        <Grid.Resources>
-            <!-- Custom style for extra headers displayed with option "Show all details" -->
-            <Style x:Key="HeaderOff" TargetType="{x:Type DataGridColumnHeader}">
-                <Setter Property="Foreground" Value="Gray"/>
-            </Style>
-        </Grid.Resources>
-
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="16"/>
             <ColumnDefinition Width="1*"/>

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -23,7 +22,6 @@ namespace DS_TextsMod_Helper
         public int NonNullEntries { get; set; }
         public string VersionSm { get; set; }
         public string VersionLg { get; set; }
-
 
 
         public InputFile(string filepath)
