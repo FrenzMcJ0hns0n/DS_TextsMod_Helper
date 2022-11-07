@@ -98,7 +98,7 @@ namespace DS_TextsMod_Helper
             ObservableCollection<InputFile> iFiles = RegisterInputFiles(droppedFiles);
             int validFilesCount = iFiles.Where(f => string.IsNullOrEmpty(f.Error)).ToList().Count();
 
-            // Valid files are required
+            // At least 1 valid files is required
             if (validFilesCount == 0)
                 return;
 
@@ -306,6 +306,7 @@ namespace DS_TextsMod_Helper
         private ObservableCollection<InputFile> RegisterInputFiles(string[] droppedItems)
         {
             ObservableCollection<InputFile> iFiles = new ObservableCollection<InputFile>();
+            InputFile iFile;
             foreach (string path in droppedItems)
             {
                 if (Directory.Exists(path))
@@ -313,12 +314,20 @@ namespace DS_TextsMod_Helper
                     DirectoryInfo di = new DirectoryInfo(path);
                     foreach (FileInfo fi in di.GetFiles())
                     {
-                        iFiles.Add(new InputFile(fi.FullName));
+                        iFile = new InputFile(fi.FullName);
+                        if (string.IsNullOrEmpty(iFile.Error))
+                        {
+                            iFiles.Add(iFile);
+                        }
                     }
                 }
                 else
                 {
-                    iFiles.Add(new InputFile(path));
+                    iFile = new InputFile(path);
+                    if (string.IsNullOrEmpty(iFile.Error))
+                    {
+                        iFiles.Add(iFile);
+                    }
                 }
             }
             return iFiles;
