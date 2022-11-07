@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using System.Windows;
 
@@ -8,6 +9,9 @@ namespace DS_TextsMod_Helper
 {
     public class Tools
     {
+
+        #region System
+
         public static string GetFormattedAppVersion()
         {
             AssemblyName assemblyName = Assembly.GetExecutingAssembly().GetName();
@@ -24,8 +28,10 @@ namespace DS_TextsMod_Helper
             return $"DS Texts Mod Helper - v{major}{minor}{build}{revis}";
         }
 
+        #endregion
 
 
+        #region IO shortcuts
 
         public static string GetRootDirPath()
         {
@@ -47,16 +53,17 @@ namespace DS_TextsMod_Helper
             return Path.Combine(GetRootDirPath(), "SoulsFormats.dll");
         }
 
+        #endregion
 
 
+        #region Input files properties
 
-        public static string GetFileName(string path)
+        public static string GetFileName(string path, bool keepExtension)
         {
             FileInfo info = new FileInfo(path);
             string fileName = info.Name;
-            string fileExt = info.Extension;
 
-            return fileName.Replace(fileExt, "");
+            return keepExtension ? fileName : fileName.Replace(info.Extension, "");
         }
 
         public static long GetFileSize(string path)
@@ -72,8 +79,13 @@ namespace DS_TextsMod_Helper
             return parentFolder;
         }
 
+        private static int GetSecondsSinceLastEdit(string path)
+        {
+            DateTime lastWriteTime = new FileInfo(path).LastWriteTime;
+            DateTime loadedNow = DateTime.Now;
 
-
+            return (int)(loadedNow - lastWriteTime).TotalSeconds;
+        }
 
         public static string GetTimeSinceLastEdit(string path)
         {
@@ -88,38 +100,44 @@ namespace DS_TextsMod_Helper
             else return $"{seconds / 60} minute(s)";
         }
 
-        private static int GetSecondsSinceLastEdit(string path)
-        {
-            DateTime lastWriteTime = new FileInfo(path).LastWriteTime;
-            DateTime loadedNow = DateTime.Now;
-
-            return (int)(loadedNow - lastWriteTime).TotalSeconds;
-        }
+        #endregion
 
 
-
+        #region Output preview style
 
         public static double GetColumnMaxWidth()
         {
             return SystemParameters.FullPrimaryScreenWidth >= 2500 ? 540 : 360;
         }
 
+        #endregion
 
 
+        #region Misc. generate output operations
 
-        public static void LogSpecialCases(string iFile1, string iFile2, string iFile3, string preparedFile, List<string> specialCases)
+        public static List<string> GetAlreadyExistingFilenames(List<string> iFilenames)
+        {
+            DirectoryInfo di = new DirectoryInfo(GetOutputDirPath());
+            List<string> oFilenames = di.GetFiles().Select(fi => fi.Name).ToList();
+
+            return iFilenames.Where(iFile => oFilenames.Contains(iFile)).ToList();
+        }
+
+        public static void LogSpecialCases(string iFileA, string iFileB, string iFileC, string preparedFile, List<string> specialCases)
         {
             string specialCasesLogFile = Path.Combine(GetOutputDirPath(), "special cases.txt");
             using (StreamWriter writer = new StreamWriter(specialCasesLogFile, true))
             {
                 writer.WriteLine($"{DateTime.Now} - Special cases found while generating file \"{preparedFile}\" :");
-                writer.WriteLine($"File #1 = \"{iFile1}\"");
-                writer.WriteLine($"File #2 = \"{iFile2}\"");
-                writer.WriteLine($"File #3 = \"{iFile3}\"");
+                writer.WriteLine($"File A = \"{iFileA}\"");
+                writer.WriteLine($"File B = \"{iFileB}\"");
+                writer.WriteLine($"File C = \"{iFileC}\"");
                 foreach (string sc in specialCases)
                     writer.WriteLine($"\t{sc}");
             }
         }
+
+        #endregion
 
     }
 }

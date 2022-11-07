@@ -6,19 +6,20 @@ using SoulsFormats;
 
 namespace DS_TextsMod_Helper
 {
-    class ReadMode : IProcessingModes
+    public class ReadMode
     {
+        public string Title { get; set; }
         public string InputFile { get; set; }
         public bool OneLinedValues { get; set; }
         public string OutputFilename { get; set; }
         public char Sep { get; set; }
-        public List<Entry> Entries { get; set; }
+        public List<ReadEntry> Entries { get; set; }
 
 
-        public ReadMode(string iFile1)
+        public ReadMode(string iFileA)
         {
-            InputFile = iFile1;
-            Entries = new List<Entry>();
+            InputFile = iFileA;
+            Entries = new List<ReadEntry>();
         }
 
 
@@ -40,26 +41,25 @@ namespace DS_TextsMod_Helper
 
         public void ProcessFiles(bool preview)
         {
-            // 0. Get input data
-            FMG file_1 = new FMG { Entries = FMG.Read(InputFile).Entries };
+            Dictionary<int, string> rdDictionary = new Dictionary<int, string>();
 
-            Dictionary<int, string> rd_dictionary = new Dictionary<int, string>();
+            // 0. Get input data
+            FMG fileA = new FMG { Entries = FMG.Read(InputFile).Entries };
 
             // 1. Read file
-            foreach (FMG.Entry entry in file_1.Entries)
-                rd_dictionary.Add(entry.ID, FormatValue(entry.Text));
+            foreach (FMG.Entry entry in fileA.Entries)
+                rdDictionary.Add(entry.ID, FormatValue(entry.Text));
 
             // 2. Build Entry
             int index = 0;
-            foreach (KeyValuePair<int, string> rd in rd_dictionary)
+            foreach (KeyValuePair<int, string> rd in rdDictionary)
             {
                 index += 1;
-                int textId = rd.Key;
-                string val = rd.Value;
-
-                Entries.Add(new Entry(index, textId, val));
-
-                if (preview && index == 50) // TODO? v1.4: Give choice about max results
+                Entries.Add(new ReadEntry(
+                    rd.Key,
+                    rd.Value
+                ));
+                if (preview && index == 50) // TODO? v1.6: Give choice about max results in Preview
                     break;
             }
         }
@@ -74,31 +74,29 @@ namespace DS_TextsMod_Helper
             {
                 writer.WriteLine($"Text ID{Sep}Value");
 
-                foreach (Entry re in Entries)
+                foreach (ReadEntry re in Entries)
                 {
                     if (re.Value != null)
                         re.Value = re.Value.Replace("\"", "\"\"");
 
                     writer.WriteLine($"{re.TextId}{Sep}\"{re.Value}\"");
-                    // Generalized usage of double quotes, as it is Excel friendly (TODO? v1.4: Give choice about that)
+                    // Generalized usage of double quotes, as it is Excel friendly (IDEA? Give choice about that)
                 }
             }
         }
-
-
-        public class Entry
-        {
-            public int Index { get; set; }
-            public int TextId { get; set; }
-            public string Value { get; set; }
-
-            public Entry(int index, int textId, string value)
-            {
-                Index = index;
-                TextId = textId;
-                Value = value;
-            }
-        }
-
     }
+
+
+    public class ReadEntry
+    {
+        public int TextId { get; set; }
+        public string Value { get; set; }
+
+        public ReadEntry(int textId, string value)
+        {
+            TextId = textId;
+            Value = value;
+        }
+    }
+
 }
