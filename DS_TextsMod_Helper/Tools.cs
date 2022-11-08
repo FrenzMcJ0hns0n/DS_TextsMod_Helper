@@ -31,6 +31,20 @@ namespace DS_TextsMod_Helper
         #endregion
 
 
+        #region Logging
+
+        public static void LogProcessingError(string iFile, string errMsg)
+        {
+            string errorsLogFile = Path.Combine(GetOutputDirPath(), "Errors.txt");
+            using (StreamWriter writer = new StreamWriter(errorsLogFile, true))
+            {
+                writer.WriteLine($"{DateTime.Now} - Error while processing file {iFile} : {errMsg}");
+            }
+        }
+
+        #endregion
+
+
         #region IO shortcuts
 
         public static string GetRootDirPath()

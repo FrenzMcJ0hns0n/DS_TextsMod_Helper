@@ -424,6 +424,7 @@ namespace DS_TextsMod_Helper
             ObservableCollection<InputFile> iFilesRd = (ObservableCollection<InputFile>)Dtg_RdA.ItemsSource;
             string parentDirPathA = iFilesRd.First().Directory;
 
+            bool processingErrors = false;
             int processedFilesCount = 0;
             string filePathA;
             ReadMode rd;
@@ -439,7 +440,10 @@ namespace DS_TextsMod_Helper
                         Title = $"{processedFilesCount + 1}: {iFile.Name}",
                         OneLinedValues = Cbx_Rd_OneLinedValues.IsChecked ?? false
                     };
-                    rd.ProcessFiles(true);
+                    if (rd.ProcessFiles(true))
+                    {
+                        processingErrors = true;
+                    }
                     readModes.Add(rd);
                     processedFilesCount += 1;
                 }
@@ -468,11 +472,18 @@ namespace DS_TextsMod_Helper
                     {
                         OneLinedValues = Cbx_Rd_OneLinedValues.IsChecked ?? false
                     };
-                    rd.ProcessFiles(false);
+                    if (rd.ProcessFiles(false))
+                    {
+                        processingErrors = true;
+                    }
                     rd.ProduceOutput(iFile.Name + ".csv", Tbx_Rd_CsvSeparator.Text);
                     processedFilesCount += 1;
                 }
                 MessageBox.Show($"[Read mode] Done: {processedFilesCount} output files have been created");
+            }
+            if (processingErrors)
+            {
+                MessageBox.Show("Processing errors have been registered.\r\nCheck \"Output\\Errors.txt\" for details.", "Processing errors", MessageBoxButton.OK, MessageBoxImage.Exclamation);
             }
         }
 

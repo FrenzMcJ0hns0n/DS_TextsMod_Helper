@@ -39,8 +39,9 @@ namespace DS_TextsMod_Helper
         }
 
 
-        public void ProcessFiles(bool preview)
+        public bool ProcessFiles(bool preview)
         {
+            bool hasErrors = false;
             Dictionary<int, string> rdDictionary = new Dictionary<int, string>();
 
             // 0. Get input data
@@ -48,7 +49,15 @@ namespace DS_TextsMod_Helper
 
             // 1. Read file
             foreach (FMG.Entry entry in fileA.Entries)
+            {
+                if (rdDictionary.ContainsKey(entry.ID))
+                {
+                    Tools.LogProcessingError(InputFile, $"Text ID \"{entry.ID}\" is registered more than once"); // Weak, TODO: Improve
+                    hasErrors = true;
+                    continue;
+                }
                 rdDictionary.Add(entry.ID, FormatValue(entry.Text));
+            }
 
             // 2. Build Entry
             int index = 0;
@@ -62,6 +71,8 @@ namespace DS_TextsMod_Helper
                 if (preview && index == 50) // TODO? v1.6: Give choice about max results in Preview
                     break;
             }
+
+            return hasErrors;
         }
 
 
