@@ -48,8 +48,10 @@ namespace DS_TextsMod_Helper
             FMG fileA = new FMG { Entries = FMG.Read(InputFile).Entries };
 
             // 1. Read file
+            int count = 0;
             foreach (FMG.Entry entry in fileA.Entries)
             {
+                count += 1;
                 if (rdDictionary.ContainsKey(entry.ID))
                 {
                     Tools.LogProcessingError(InputFile, $"Text ID \"{entry.ID}\" is registered more than once"); // Weak, TODO: Improve
@@ -57,19 +59,18 @@ namespace DS_TextsMod_Helper
                     continue;
                 }
                 rdDictionary.Add(entry.ID, FormatValue(entry.Text));
+
+                if (preview && count == 50) // TODO? v1.6: Give choice about max results in Preview
+                    break;
             }
 
             // 2. Build Entry
-            int index = 0;
             foreach (KeyValuePair<int, string> rd in rdDictionary)
             {
-                index += 1;
                 Entries.Add(new ReadEntry(
                     rd.Key,
                     rd.Value
                 ));
-                if (preview && index == 50) // TODO? v1.6: Give choice about max results in Preview
-                    break;
             }
 
             return hasErrors;
