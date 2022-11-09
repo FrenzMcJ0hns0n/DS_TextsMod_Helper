@@ -8,11 +8,12 @@ namespace DS_TextsMod_Helper
 {
     public class ReadMode
     {
-        public string Title { get; set; }
+        public List<string> Errors { get; set; }
         public string InputFile { get; set; }
         public bool OneLinedValues { get; set; }
         public string OutputFilename { get; set; }
         public char Sep { get; set; }
+        public string Title { get; set; }
         public List<ReadEntry> Entries { get; set; }
 
 
@@ -39,9 +40,9 @@ namespace DS_TextsMod_Helper
         }
 
 
-        public bool ProcessFiles(bool preview)
+        public void ProcessFiles(bool preview)
         {
-            bool hasErrors = false;
+            Errors = new List<string>();
             Dictionary<int, string> rdDictionary = new Dictionary<int, string>();
 
             // 0. Get input data
@@ -54,8 +55,10 @@ namespace DS_TextsMod_Helper
                 count += 1;
                 if (rdDictionary.ContainsKey(entry.ID))
                 {
-                    Tools.LogProcessingError(InputFile, $"Text ID \"{entry.ID}\" is registered more than once"); // Weak, TODO: Improve
-                    hasErrors = true;
+                    Errors.Add(
+                        $"Unicity constraint error. Skipped entry ID {entry.ID} since already registered from input file. Associated Text = \r\n" +
+                        $"    {entry.Text}"
+                    );
                     continue;
                 }
                 rdDictionary.Add(entry.ID, FormatValue(entry.Text));
@@ -72,8 +75,6 @@ namespace DS_TextsMod_Helper
                     rd.Value
                 ));
             }
-
-            return hasErrors;
         }
 
 

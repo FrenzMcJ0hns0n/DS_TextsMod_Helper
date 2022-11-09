@@ -33,12 +33,16 @@ namespace DS_TextsMod_Helper
 
         #region Logging
 
-        public static void LogProcessingError(string iFile, string errMsg)
+        public static void LogProcessingError(string procMode, List<string> errors, string iFileA, string iFileB = "", string iFileC = "")
         {
             string errorsLogFile = Path.Combine(GetOutputDirPath(), "Errors.txt");
             using (StreamWriter writer = new StreamWriter(errorsLogFile, true))
             {
-                writer.WriteLine($"{DateTime.Now} - Error while processing file {iFile} : {errMsg}");
+                writer.WriteLine($"{DateTime.Now} - Error while processing files in {procMode} mode :");
+                writer.WriteLine($"  File A = {iFileA}");
+                writer.WriteLine($"  File B = {iFileB}");
+                writer.WriteLine($"  File C = {iFileC}");
+                writer.WriteLine($"  Errors :\r\n  - {string.Join("\r\n  - ", errors)}\r\n");
             }
         }
 

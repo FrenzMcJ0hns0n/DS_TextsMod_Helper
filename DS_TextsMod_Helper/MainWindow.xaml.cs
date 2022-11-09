@@ -35,6 +35,10 @@ namespace DS_TextsMod_Helper
         private const string MSG_INCONS_IFNAMES1 = "Filenames are different on the following lines :";
         private const string MSG_INCONS_IFNAMES2 = "Continue anyway?";
 
+        private const string HDR_PROCESS_ERRORS = "Processing errors";
+        private const string MSG_PROCESS_ERRORS = "Processing errors occurred.\r\n"
+                                                + "Check \"Output\\Errors.txt\" for details.";
+
         private const string WRN_SPECIAL_CASES = "Warning : Found special cases while processing files.\r\n"
                                                + "See details in file \"special cases.txt\"";
 
@@ -440,12 +444,18 @@ namespace DS_TextsMod_Helper
                         Title = $"{processedFilesCount + 1}: {iFile.Name}",
                         OneLinedValues = Cbx_Rd_OneLinedValues.IsChecked ?? false
                     };
-                    if (rd.ProcessFiles(true))
+                    rd.ProcessFiles(true);
+                    if (rd.Errors.Count > 0)
                     {
+                        Tools.LogProcessingError("Read", rd.Errors, filePathA);
                         processingErrors = true;
                     }
                     readModes.Add(rd);
                     processedFilesCount += 1;
+                }
+                if (processingErrors)
+                {
+                    MessageBox.Show(MSG_PROCESS_ERRORS, HDR_PROCESS_ERRORS, MessageBoxButton.OK, MessageBoxImage.Exclamation);
                 }
                 ProcessingModeResult processingMode = new ProcessingModeResult() { AllReadModeEntries = readModes };
                 OutputPreview outputPreview = new OutputPreview(processingMode);
@@ -472,18 +482,20 @@ namespace DS_TextsMod_Helper
                     {
                         OneLinedValues = Cbx_Rd_OneLinedValues.IsChecked ?? false
                     };
-                    if (rd.ProcessFiles(false))
+                    rd.ProcessFiles(false);
+                    if (rd.Errors.Count > 0)
                     {
+                        Tools.LogProcessingError("Read", rd.Errors, filePathA);
                         processingErrors = true;
                     }
                     rd.ProduceOutput(iFile.Name + ".csv", Tbx_Rd_CsvSeparator.Text);
                     processedFilesCount += 1;
                 }
+                if (processingErrors)
+                {
+                    MessageBox.Show(MSG_PROCESS_ERRORS, HDR_PROCESS_ERRORS, MessageBoxButton.OK, MessageBoxImage.Exclamation);
+                }
                 MessageBox.Show($"[Read mode] Done: {processedFilesCount} output files have been created");
-            }
-            if (processingErrors)
-            {
-                MessageBox.Show("Processing errors have been registered.\r\nCheck \"Output\\Errors.txt\" for details.", "Processing errors", MessageBoxButton.OK, MessageBoxImage.Exclamation);
             }
         }
 
