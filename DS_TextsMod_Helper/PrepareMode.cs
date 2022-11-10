@@ -60,8 +60,9 @@ namespace DS_TextsMod_Helper
             {
                 if (prpDictionary.ContainsKey(entry.ID))
                 {
-                    Errors.Add( // This error only affects file A (the mod file), as this is the file that could be incorrect
-                        $"  Unicity constraint error. Skipped entry ID {entry.ID} since already registered from input file A. Entry Text =\r\n" +
+                    Errors.Add( // The error is on file A (the mod file) as it is supposed to be the only one that could be incorrect
+                        $"  Unicity constraint error. Skipped entry ID {entry.ID} from input file A as it has already been registered.\r\n" +
+                        $"  Entry Text =\r\n" +
                         $"\"{entry.Text}\""
                     );
                     continue;
@@ -114,7 +115,7 @@ namespace DS_TextsMod_Helper
                 {
                     Errors.Add(
                         $"Data warning. Removed value on entry ID {prp.Key} from File A in the following context :\r\n" +
-                        "  The values in A & B are identical and not empty, but the reference value from file C is empty.\r\n" +
+                        "  Values from A & B are identical and not empty, but the reference value from C is empty.\r\n" +
                         "  This behavior is consistent with the logic of Prepare mode, but may cause a data loss.\r\n" +
                         "  File A value =\r\n" +
                         $"\"{prp.Value[0]}\""

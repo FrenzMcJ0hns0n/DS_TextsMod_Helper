@@ -57,8 +57,9 @@ namespace DS_TextsMod_Helper
 
                 if (cmpDictionary.ContainsKey(entry.ID))
                 {
-                    Errors.Add( // This error only affects file A (the mod file), as this is the file that could be incorrect
-                        $"  Unicity constraint error. Skipped entry ID {entry.ID} since already registered from input file A. Entry Text =\r\n" +
+                    Errors.Add( // The error is on file A (the mod file) as it is supposed to be the only one that could be incorrect
+                        $"  Unicity constraint error. Skipped entry ID {entry.ID} from input file A as it has already been registered.\r\n" +
+                        $"  Entry Text =\r\n" +
                         $"\"{entry.Text}\""
                     );
                     continue;
@@ -88,7 +89,7 @@ namespace DS_TextsMod_Helper
                 }
             }
 
-            // 3. Compare values and build the final Entries
+            // 3. Compare values and build Entry
             foreach (KeyValuePair<int, List<string>> cmp in cmpDictionary)
             {
                 Entries.Add(new CompareEntry(
