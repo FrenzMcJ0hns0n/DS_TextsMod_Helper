@@ -132,7 +132,7 @@ namespace DS_TextsMod_Helper
         #endregion
 
 
-        #region Misc. generate output operations
+        #region Misc. output operations
 
         public static List<string> GetAlreadyExistingFilenames(List<string> iFilenames)
         {
