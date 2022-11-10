@@ -36,7 +36,7 @@ namespace DS_TextsMod_Helper
         private const string MSG_INCONS_IFNAMES2 = "Continue anyway?";
 
         private const string HDR_PROC_COMPLETED = "Files processing complete";
-        private const string MSG_PROC_COMPLETED = "Files processing complete";
+        private const string MSG_PROC_COMPLETED = "TODO?";
 
         private const string HDR_PROCESS_ERRORS = "Processing errors";
         private const string MSG_PROCESS_ERRORS = "Processing errors occurred.\r\n" +
