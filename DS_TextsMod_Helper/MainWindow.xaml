@@ -746,16 +746,7 @@
                                          Width="190"
                                          />
                             </StackPanel>
-
-                            <!-- Prepare mode : Warn on special cases -->
-                            <CheckBox x:Name="Cbx_Prp_WarnOnSpecialCases"
-                                      Content="Warn on special cases"
-                                      Grid.Column="3" Grid.Row="1" Grid.RowSpan="2"
-                                      IsChecked="True"
-                                      Style="{StaticResource Cbx_Generic}"
-                                      ToolTip="Warn on entries where File #3 value is unexpectedly empty"
-                                      />
-
+                            
                         </Grid>
                     </GroupBox>
                 </Grid>

@@ -8,13 +8,14 @@ namespace DS_TextsMod_Helper
 {
     public class ReadMode
     {
+        public List<ReadEntry> Entries { get; set; }
         public List<string> Errors { get; set; }
         public string InputFile { get; set; }
         public bool OneLinedValues { get; set; }
         public string OutputFilename { get; set; }
         public char Sep { get; set; }
         public string Title { get; set; }
-        public List<ReadEntry> Entries { get; set; }
+
 
 
         public ReadMode(string iFileA)
@@ -52,19 +53,18 @@ namespace DS_TextsMod_Helper
             int count = 0;
             foreach (FMG.Entry entry in fileA.Entries)
             {
-                count += 1;
                 if (rdDictionary.ContainsKey(entry.ID))
                 {
                     Errors.Add(
-                        $"Unicity constraint error. Skipped entry ID {entry.ID} since already registered from input file. Associated Text = \r\n" +
-                        $"    {entry.Text}"
+                        $"  Unicity constraint error. Skipped entry ID {entry.ID} since already registered from input file A. Entry Text =\r\n" +
+                        $"\"{entry.Text}\""
                     );
                     continue;
                 }
+                count += 1;
                 rdDictionary.Add(entry.ID, FormatValue(entry.Text));
 
-                if (preview && count == 50) // TODO? v1.6: Give choice about max results in Preview
-                    break;
+                if (preview && count == 50) break;
             }
 
             // 2. Build Entry
@@ -86,14 +86,13 @@ namespace DS_TextsMod_Helper
             using (StreamWriter writer = new StreamWriter(OutputFilename, false))
             {
                 writer.WriteLine($"Text ID{Sep}Value");
-
                 foreach (ReadEntry re in Entries)
                 {
                     if (re.Value != null)
+                    {
                         re.Value = re.Value.Replace("\"", "\"\"");
-
+                    }
                     writer.WriteLine($"{re.TextId}{Sep}\"{re.Value}\"");
-                    // Generalized usage of double quotes, as it is Excel friendly (IDEA? Give choice about that)
                 }
             }
         }

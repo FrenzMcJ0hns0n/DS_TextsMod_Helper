@@ -28,22 +28,22 @@ namespace DS_TextsMod_Helper
         private const string MSG_INCONS_FMG_VER = "Input files must be compatible with each other (\"Type\" must match)";
 
         private const string HDR_OVERW_EXIST_OF = "Overwrite existing files";
-        private const string MSG_OVERW_EXIST_OF = "The following output files already exist.\r\n"
-                                                + "Continue and overwrite them?";
+        private const string MSG_OVERW_EXIST_OF = "The following output files already exist.\r\n" +
+                                                  "Continue and overwrite them?";
 
         private const string HDR_INCONS_IFNAMES = "Inconsistent input filenames";
         private const string MSG_INCONS_IFNAMES1 = "Filenames are different on the following lines :";
         private const string MSG_INCONS_IFNAMES2 = "Continue anyway?";
 
+        private const string HDR_PROC_COMPLETED = "Files processing complete";
+        private const string MSG_PROC_COMPLETED = "Files processing complete";
+
         private const string HDR_PROCESS_ERRORS = "Processing errors";
-        private const string MSG_PROCESS_ERRORS = "Processing errors occurred.\r\n"
-                                                + "Check \"Output\\Errors.txt\" for details.";
+        private const string MSG_PROCESS_ERRORS = "Processing errors occurred.\r\n" +
+                                                  "Check the \"Output\\*_error.txt\" files for details.";
 
-        private const string WRN_SPECIAL_CASES = "Warning : Found special cases while processing files.\r\n"
-                                               + "See details in file \"special cases.txt\"";
-
-        private const string ERR_MISSING_SFDLL = "Fatal error : file 'SoulsFormats.dll' not found.\r\n"
-                                               + "The program will exit...";
+        private const string ERR_MISSING_SFDLL = "Fatal error : file 'SoulsFormats.dll' not found.\r\n" +
+                                                 "The program will exit...";
 
         #endregion
 
@@ -467,9 +467,9 @@ namespace DS_TextsMod_Helper
                 List<string> alreadyExisting = Tools.GetAlreadyExistingFilenames(iFilenames);
                 if (alreadyExisting.Count > 0)
                 {
-                    string fnames = string.Join("\r\n - ", alreadyExisting);
+                    string fnames = string.Join("\r\n- ", alreadyExisting);
                     MessageBoxResult mbr = MessageBox.Show(
-                        MSG_OVERW_EXIST_OF + $"\r\n\r\n - {fnames}", HDR_OVERW_EXIST_OF, MessageBoxButton.OKCancel, MessageBoxImage.Information
+                        MSG_OVERW_EXIST_OF + $"\r\n\r\n- {fnames}", HDR_OVERW_EXIST_OF, MessageBoxButton.OKCancel, MessageBoxImage.Information
                     );
                     if (mbr == MessageBoxResult.Cancel)
                         return;
@@ -493,9 +493,16 @@ namespace DS_TextsMod_Helper
                 }
                 if (processingErrors)
                 {
-                    MessageBox.Show(MSG_PROCESS_ERRORS, HDR_PROCESS_ERRORS, MessageBoxButton.OK, MessageBoxImage.Exclamation);
+                    MessageBox.Show($"[Read mode] Done: {processedFilesCount} output files have been created\r\n\r\n" + MSG_PROCESS_ERRORS,
+                        HDR_PROC_COMPLETED, MessageBoxButton.OK, MessageBoxImage.Exclamation
+                    );
                 }
-                MessageBox.Show($"[Read mode] Done: {processedFilesCount} output files have been created");
+                else
+                {
+                    MessageBox.Show($"[Read mode] Done: {processedFilesCount} output files have been created",
+                        HDR_PROC_COMPLETED, MessageBoxButton.OK, MessageBoxImage.Information
+                    );
+                }
             }
         }
 
@@ -538,6 +545,7 @@ namespace DS_TextsMod_Helper
                     return;
             }
 
+            bool processingErrors = false;
             int processedFilesCount = 0;
             string filePathA;
             string filePathB;
@@ -556,8 +564,17 @@ namespace DS_TextsMod_Helper
                         OneLinedValues = Cbx_Cmp_OneLinedValues.IsChecked ?? false
                     };
                     cmp.ProcessFiles(true);
+                    if (cmp.Errors.Count > 0)
+                    {
+                        Tools.LogProcessingError("Compare", cmp.Errors, filePathA, filePathB);
+                        processingErrors = true;
+                    }
                     compareModes.Add(cmp);
                     processedFilesCount += 1;
+                }
+                if (processingErrors)
+                {
+                    MessageBox.Show(MSG_PROCESS_ERRORS, HDR_PROCESS_ERRORS, MessageBoxButton.OK, MessageBoxImage.Exclamation);
                 }
                 ProcessingModeResult processingMode = new ProcessingModeResult() { AllCompareModeEntries = compareModes };
                 OutputPreview outputPreview = new OutputPreview(processingMode);
@@ -569,9 +586,9 @@ namespace DS_TextsMod_Helper
                 List<string> alreadyExisting = Tools.GetAlreadyExistingFilenames(iFilenames);
                 if (alreadyExisting.Count > 0)
                 {
-                    string fnames = string.Join("\r\n - ", alreadyExisting);
+                    string fnames = string.Join("\r\n- ", alreadyExisting);
                     MessageBoxResult mbr = MessageBox.Show(
-                        MSG_OVERW_EXIST_OF + $"\r\n\r\n - {fnames}", HDR_OVERW_EXIST_OF, MessageBoxButton.OKCancel, MessageBoxImage.Information
+                        MSG_OVERW_EXIST_OF + $"\r\n\r\n- {fnames}", HDR_OVERW_EXIST_OF, MessageBoxButton.OKCancel, MessageBoxImage.Information
                     );
                     if (mbr == MessageBoxResult.Cancel)
                         return;
@@ -586,10 +603,26 @@ namespace DS_TextsMod_Helper
                         OneLinedValues = Cbx_Cmp_OneLinedValues.IsChecked ?? false
                     };
                     cmp.ProcessFiles(false);
+                    if (cmp.Errors.Count > 0)
+                    {
+                        Tools.LogProcessingError("Compare", cmp.Errors, filePathA, filePathB);
+                        processingErrors = true;
+                    }
                     cmp.ProduceOutput(iFilesCmpA[i].Name + ".csv", Tbx_Cmp_oHeader1.Text, Tbx_Cmp_oHeader2.Text, Tbx_Cmp_CsvSeparator.Text);
                     processedFilesCount += 1;
                 }
-                MessageBox.Show($"[Compare mode] Done: {processedFilesCount} output files have been created");
+                if (processingErrors)
+                {
+                    MessageBox.Show($"[Compare mode] Done: {processedFilesCount} output files have been created\r\n\r\n" + MSG_PROCESS_ERRORS,
+                        HDR_PROC_COMPLETED, MessageBoxButton.OK, MessageBoxImage.Exclamation
+                    );
+                }
+                else
+                {
+                    MessageBox.Show($"[Compare mode] Done: {processedFilesCount} output files have been created",
+                        HDR_PROC_COMPLETED, MessageBoxButton.OK, MessageBoxImage.Information
+                    );
+                }
             }
         }
 
@@ -635,6 +668,7 @@ namespace DS_TextsMod_Helper
                     return;
             }
 
+            bool processingErrors = false;
             int processedFilesCount = 0;
             string filePathA;
             string filePathB;
@@ -656,8 +690,17 @@ namespace DS_TextsMod_Helper
                         Title = $"{processedFilesCount + 1}: {iFilesPrpA[i].Name}"
                     };
                     prp.ProcessFiles(true);
+                    if (prp.Errors.Count > 0)
+                    {
+                        Tools.LogProcessingError("Prepare", prp.Errors, filePathA, filePathB, filePathC);
+                        processingErrors = true;
+                    }
                     prepareModes.Add(prp);
                     processedFilesCount += 1;
+                }
+                if (processingErrors)
+                {
+                    MessageBox.Show(MSG_PROCESS_ERRORS, HDR_PROCESS_ERRORS, MessageBoxButton.OK, MessageBoxImage.Exclamation);
                 }
                 ProcessingModeResult processingMode = new ProcessingModeResult() { AllPrepareModeEntries = prepareModes };
                 OutputPreview outputPreview = new OutputPreview(processingMode);
@@ -669,15 +712,14 @@ namespace DS_TextsMod_Helper
                 List<string> alreadyExisting = Tools.GetAlreadyExistingFilenames(iFilenames);
                 if (alreadyExisting.Count > 0)
                 {
-                    string fnames = string.Join("\r\n - ", alreadyExisting);
+                    string fnames = string.Join("\r\n- ", alreadyExisting);
                     MessageBoxResult mbr = MessageBox.Show(
-                        MSG_OVERW_EXIST_OF + $"\r\n\r\n - {fnames}", HDR_OVERW_EXIST_OF, MessageBoxButton.OKCancel, MessageBoxImage.Information
+                        MSG_OVERW_EXIST_OF + $"\r\n\r\n- {fnames}", HDR_OVERW_EXIST_OF, MessageBoxButton.OKCancel, MessageBoxImage.Information
                     );
                     if (mbr == MessageBoxResult.Cancel)
                         return;
                 }
 
-                bool haveSpecialCases = false;
                 for (int i = 0; i < iFilesPrpA.Count; i++)
                 {
                     filePathA = Path.Combine(parentDirPathA, iFilesPrpA[i].NameExt);
@@ -689,21 +731,27 @@ namespace DS_TextsMod_Helper
                         TextToReplace = Tbx_Prp_TextToReplace.Text
                     };
                     prp.ProcessFiles(false);
+                    if (prp.Errors.Count > 0)
+                    {
+                        Tools.LogProcessingError("Prepare", prp.Errors, filePathA, filePathB, filePathC);
+                        processingErrors = true;
+                    }
                     prp.SetOutputVersion(fileFmgVersionA);
                     prp.ProduceOutput(iFilesPrpA[i].NameExt);
-                    if (Cbx_Prp_WarnOnSpecialCases.IsChecked ?? false)
-                    {
-                        List<string> specialCases = prp.GetSpecialCases();
-                        if (specialCases.Count > 0)
-                        {
-                            Tools.LogSpecialCases(filePathA, filePathB, filePathC, iFilesPrpA[i].NameExt, specialCases);
-                            haveSpecialCases = true;
-                        }
-                    }
                     processedFilesCount += 1;
                 }
-                string special = haveSpecialCases ? $"\n\n{WRN_SPECIAL_CASES}" : string.Empty;
-                MessageBox.Show($"[Prepare mode] Done: {processedFilesCount} output files have been created{special}");
+                if (processingErrors)
+                {
+                    MessageBox.Show($"[Prepare mode] Done: {processedFilesCount} output files have been created\r\n\r\n" + MSG_PROCESS_ERRORS,
+                        HDR_PROC_COMPLETED, MessageBoxButton.OK, MessageBoxImage.Exclamation
+                    );
+                }
+                else
+                {
+                    MessageBox.Show($"[Prepare mode] Done: {processedFilesCount} output files have been created",
+                        HDR_PROC_COMPLETED, MessageBoxButton.OK, MessageBoxImage.Information
+                    );
+                }
             }
         }
 

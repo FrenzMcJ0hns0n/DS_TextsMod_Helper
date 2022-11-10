@@ -35,14 +35,15 @@ namespace DS_TextsMod_Helper
 
         public static void LogProcessingError(string procMode, List<string> errors, string iFileA, string iFileB = "", string iFileC = "")
         {
-            string errorsLogFile = Path.Combine(GetOutputDirPath(), "Errors.txt");
-            using (StreamWriter writer = new StreamWriter(errorsLogFile, true))
+            string errLogFile = Path.Combine(GetOutputDirPath(), GetFileName(iFileA, false) + "_error.txt");
+            using (StreamWriter writer = new StreamWriter(errLogFile, true))
             {
-                writer.WriteLine($"{DateTime.Now} - Error while processing files in {procMode} mode :");
-                writer.WriteLine($"  File A = {iFileA}");
-                writer.WriteLine($"  File B = {iFileB}");
-                writer.WriteLine($"  File C = {iFileC}");
-                writer.WriteLine($"  Errors :\r\n  - {string.Join("\r\n  - ", errors)}\r\n");
+                writer.WriteLine($"{DateTime.Now} - Error while processing files in {procMode} mode. Details :");
+                foreach (string err in errors)
+                {
+                    writer.WriteLine($"- {err}");
+                }
+                writer.WriteLine();
             }
         }
 
@@ -139,20 +140,6 @@ namespace DS_TextsMod_Helper
             List<string> oFilenames = di.GetFiles().Select(fi => fi.Name).ToList();
 
             return iFilenames.Where(iFile => oFilenames.Contains(iFile)).ToList();
-        }
-
-        public static void LogSpecialCases(string iFileA, string iFileB, string iFileC, string preparedFile, List<string> specialCases)
-        {
-            string specialCasesLogFile = Path.Combine(GetOutputDirPath(), "special cases.txt");
-            using (StreamWriter writer = new StreamWriter(specialCasesLogFile, true))
-            {
-                writer.WriteLine($"{DateTime.Now} - Special cases found while generating file \"{preparedFile}\" :");
-                writer.WriteLine($"File A = \"{iFileA}\"");
-                writer.WriteLine($"File B = \"{iFileB}\"");
-                writer.WriteLine($"File C = \"{iFileC}\"");
-                foreach (string sc in specialCases)
-                    writer.WriteLine($"\t{sc}");
-            }
         }
 
         #endregion

@@ -7,13 +7,15 @@ namespace DS_TextsMod_Helper
 {
     public class PrepareMode
     {
-        public string Title { get; set; }
+        public List<PrepareEntry> Entries { get; set; }
+        public List<string> Errors { get; set; }
         public List<string> InputFiles { get; set; }
-        public string TextToReplace { get; set; }
-        public string ReplacingText { get; set; }
         public string OutputFilename { get; set; }
         public FMG.FMGVersion OutputVersion { get; set; }
-        public List<PrepareEntry> Entries { get; set; }
+        public string ReplacingText { get; set; }
+        public string TextToReplace { get; set; }
+        public string Title { get; set; }
+
 
 
         public PrepareMode(string iFile1, string iFile2, string iFile3)
@@ -42,24 +44,9 @@ namespace DS_TextsMod_Helper
         }
 
 
-        public List<string> GetSpecialCases()
-        {
-            List<string> result = new List<string>();
-
-            List<PrepareEntry> involvedEntries = Entries
-                                         .Select(x => x)
-                                         .Where(x => x.SpecialCase)
-                                         .ToList();
-
-            foreach (PrepareEntry e in involvedEntries)
-                result.Add($"Entry Id {e.TextId} : Values of files A and B are identical and not empty, but value of file C was empty");
-
-            return result;
-        }
-
-
         public void ProcessFiles(bool preview)
         {
+            Errors = new List<string>();
             Dictionary<int, List<string>> prpDictionary = new Dictionary<int, List<string>>();
 
             // 0. Get input data
@@ -68,39 +55,48 @@ namespace DS_TextsMod_Helper
             FMG fileC = new FMG { Entries = FMG.Read(InputFiles[2]).Entries };
 
             // 1. Take all values from FileA
-            int counter = 0;
+            int count = 0;
             foreach (FMG.Entry entry in fileA.Entries)
             {
-                counter += 1;
-
+                if (prpDictionary.ContainsKey(entry.ID))
+                {
+                    Errors.Add( // This error only affects file A (the mod file), as this is the file that could be incorrect
+                        $"  Unicity constraint error. Skipped entry ID {entry.ID} since already registered from input file A. Entry Text =\r\n" +
+                        $"\"{entry.Text}\""
+                    );
+                    continue;
+                }
+                count += 1;
                 entry.Text = FormatValue(entry.Text);
                 prpDictionary.Add(entry.ID, new List<string>() { entry.Text, "", "" });
 
-                if (preview && counter == 50) // TODO? v1.6: Give choice about max results in Preview
-                    break;
+                if (preview && count == 50) break;
             }
+
             // 2. Insert entry.value from FileB if entry.ID in FileA
             foreach (FMG.Entry entry in fileB.Entries)
             {
-                if (entry.Text == null)
-                    continue;
+                if (entry.Text == null) continue;
 
                 entry.Text = FormatValue(entry.Text);
-
                 if (prpDictionary.ContainsKey(entry.ID))
+                {
                     prpDictionary[entry.ID][1] = entry.Text;
+                }
             }
+
             // 3. Insert entry.value from FileC if entry.ID in FileA
             foreach (FMG.Entry entry in fileC.Entries)
             {
-                if (entry.Text == null)
-                    continue;
+                if (entry.Text == null) continue;
 
                 entry.Text = FormatValue(entry.Text);
-
                 if (prpDictionary.ContainsKey(entry.ID))
+                {
                     prpDictionary[entry.ID][2] = entry.Text;
+                }
             }
+
             // 4. Compare values and build Entry
             foreach (KeyValuePair<int, List<string>> prp in prpDictionary)
             {
@@ -110,9 +106,20 @@ namespace DS_TextsMod_Helper
                     prp.Value[1],
                     prp.Value[2],
                     prp.Value[0] == prp.Value[1] ? prp.Value[2] : prp.Value[0],
-                    prp.Value[0] == prp.Value[1] ? "File C" : "File A",
-                    (prp.Value[0] != "") && (prp.Value[0] == prp.Value[1]) && (prp.Value[2] == "") // (val1 != "") && (val1 == val2) && (val3 == "");
+                    prp.Value[0] == prp.Value[1] ? "File C" : "File A"
                 ));
+
+                // (valA != "") && (valA == valB) && (valC == "");
+                if ((prp.Value[0] != "") && (prp.Value[0] == prp.Value[1]) && (prp.Value[2] == ""))
+                {
+                    Errors.Add(
+                        $"Data warning. Removed value on entry ID {prp.Key} from File A in the following context :\r\n" +
+                        "  The values in A & B are identical and not empty, but the reference value from file C is empty.\r\n" +
+                        "  This behavior is consistent with the logic of Prepare mode, but may cause a data loss.\r\n" +
+                        "  File A value =\r\n" +
+                        $"\"{prp.Value[0]}\""
+                    );
+                }
             }
         }
 
@@ -123,8 +130,9 @@ namespace DS_TextsMod_Helper
 
             FMG output = new FMG { Version = OutputVersion };
             foreach (PrepareEntry pe in Entries)
+            {
                 output.Entries.Add(new FMG.Entry(pe.TextId, pe.Output));
-
+            }
             output.Write(OutputFilename);
         }
 
@@ -160,9 +168,8 @@ namespace DS_TextsMod_Helper
         public string ValueC { get; set; }
         public string Output { get; set; }
         public string Source { get; set; }
-        public bool SpecialCase { get; set; }
 
-        public PrepareEntry(int textId, string valueA, string valueB, string valueC, string output, string source, bool specialCase)
+        public PrepareEntry(int textId, string valueA, string valueB, string valueC, string output, string source)
         {
             TextId = textId;
             ValueA = valueA;
@@ -170,7 +177,6 @@ namespace DS_TextsMod_Helper
             ValueC = valueC;
             Output = output;
             Source = source;
-            SpecialCase = specialCase;
         }
     }
 

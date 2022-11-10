@@ -1,20 +1,23 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+
 using SoulsFormats;
 
 namespace DS_TextsMod_Helper
 {
     public class CompareMode
     {
-        public string Title { get; set; }
+        public List<CompareEntry> Entries { get; set; }
+        public List<string> Errors { get; set; }
         public List<string> InputFiles { get; set; }
         public bool OneLinedValues { get; set; }
         public string OutputFilename { get; set; }
         public string OutputHeaderA { get; set; }
         public string OutputHeaderB { get; set; }
         public char Sep { get; set; }
-        public List<CompareEntry> Entries { get; set; }
+        public string Title { get; set; }
+
 
 
         public CompareMode(string iFile1, string iFile2)
@@ -39,6 +42,7 @@ namespace DS_TextsMod_Helper
 
         public void ProcessFiles(bool preview)
         {
+            Errors = new List<string>();
             SortedDictionary<int, List<string>> cmpDictionary = new SortedDictionary<int, List<string>>();
 
             // 0. Get input data
@@ -51,6 +55,14 @@ namespace DS_TextsMod_Helper
             {
                 if (entry.Text == null) continue; // Exclude lines without value
 
+                if (cmpDictionary.ContainsKey(entry.ID))
+                {
+                    Errors.Add( // This error only affects file A (the mod file), as this is the file that could be incorrect
+                        $"  Unicity constraint error. Skipped entry ID {entry.ID} since already registered from input file A. Entry Text =\r\n" +
+                        $"\"{entry.Text}\""
+                    );
+                    continue;
+                }
                 count += 1;
                 entry.Text = FormatValue(entry.Text);
                 cmpDictionary.Add(entry.ID, new List<string>() { entry.Text, "" });
@@ -103,14 +115,12 @@ namespace DS_TextsMod_Helper
             using (StreamWriter writer = new StreamWriter(OutputFilename, false))
             {
                 writer.WriteLine($"Text ID{Sep}{OutputHeaderA}{Sep}{OutputHeaderB}{Sep}Same?");
-
                 foreach (CompareEntry ce in Entries)
                 {
                     ce.ValueA = ce.ValueA.Replace("\"", "\"\"");
                     ce.ValueB = ce.ValueB.Replace("\"", "\"\"");
 
                     writer.WriteLine($"{ce.TextId}{Sep}\"{ce.ValueA}\"{Sep}\"{ce.ValueB}\"{Sep}{ce.Same}");
-                    // Generalized usage of double quotes, as it is Excel friendly (IDEA? Give choice about that)
                 }
             }
         }
