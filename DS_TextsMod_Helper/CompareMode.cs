@@ -45,42 +45,50 @@ namespace DS_TextsMod_Helper
             FMG fileA = new FMG { Entries = FMG.Read(InputFiles[0]).Entries };
             FMG fileB = new FMG { Entries = FMG.Read(InputFiles[1]).Entries };
 
-            // 1. Insert value from FileA
+            // 1. Insert values from FileA
+            int count = 0;
             foreach (FMG.Entry entry in fileA.Entries)
             {
-                if (entry.Text == null)
-                    continue; // Exclude lines without value (IDEA? Give choice about that)
+                if (entry.Text == null) continue; // Exclude lines without value
 
+                count += 1;
                 entry.Text = FormatValue(entry.Text);
-
                 cmpDictionary.Add(entry.ID, new List<string>() { entry.Text, "" });
+
+                if (preview && count == 50) break;
             }
-            // 2. Insert value from FileB
+
+            // 2. Insert values from FileB
             foreach (FMG.Entry entry in fileB.Entries)
             {
-                if (entry.Text == null)
-                    continue; // Exclude lines without value (IDEA? Give choice about that)
+                if (preview && entry.ID > cmpDictionary.Keys.Max()) break; // Don't go higher than FileA IDs
+
+                if (entry.Text == null) continue; // Exclude lines without value
 
                 entry.Text = FormatValue(entry.Text);
-
                 if (cmpDictionary.ContainsKey(entry.ID))
+                {
                     cmpDictionary[entry.ID][1] = entry.Text;
+                }
                 else
+                {
                     cmpDictionary.Add(entry.ID, new List<string>() { "", entry.Text });
+                }
             }
-            // 3. Compare values and build Entry
-            int index = 0;
+
+            // 3. Compare values and build the final Entries
             foreach (KeyValuePair<int, List<string>> cmp in cmpDictionary)
             {
-                index += 1;
                 Entries.Add(new CompareEntry(
                     cmp.Key,
                     cmp.Value[0],
                     cmp.Value[1],
                     (cmp.Value[0] == cmp.Value[1]).ToString()
                 ));
-                if (preview && index == 50) // TODO? v1.6: Give choice about max results in Preview
-                    break;
+            }
+            if (preview)
+            {
+                Entries = Entries.Take(50).ToList(); // Enforce 50 as strict maximum
             }
         }
 
