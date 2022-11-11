@@ -58,6 +58,10 @@
             <Setter Property="Padding" Value="2"/>
         </Style>
 
+        <Style x:Key="Dtg_FilenameCell" TargetType="{x:Type DataGridCell}">
+            <Setter Property="ToolTip" Value="{Binding Information}"/>
+        </Style>
+
         <Style x:Key="Brd_SideControls" TargetType="{x:Type Border}">
             <Setter Property="BorderBrush" Value="LightGray"/>
             <Setter Property="BorderThickness" Value="1"/>
@@ -203,28 +207,10 @@
 
 
                                     <DataGrid x:Name="Dtg_RdA" RowHeaderStyle="{StaticResource Dtg_IFilesRowHeader}" Style="{StaticResource Dtg_InputFiles}" LoadingRow="Dtg_LoadingRow">
-                                        <!-- IDEA for v1.6
-                                        <DataGrid.ContextMenu>
-                                            <ContextMenu>
-                                                <MenuItem Header="2nd column">
-                                                    --><!-- TODO: Handle Dtg refresh --><!--
-                                                    <MenuItem Header="File size" IsCheckable="True"/>
-                                                    <MenuItem Header="FMG entries" IsCheckable="True"/>
-                                                    <MenuItem Header="FMG version" IsCheckable="True" IsChecked="True"/>
-                                                </MenuItem>
-                                            </ContextMenu>
-                                        </DataGrid.ContextMenu>-->
                                         <DataGrid.Columns>
-                                            <DataGridTextColumn Binding="{Binding NameExt}" Header="Filename">
-                                                <DataGridTextColumn.CellStyle>
-                                                    <Style TargetType="DataGridCell">
-                                                        <Setter Property="ToolTip" Value="{Binding Information}" />
-                                                    </Style>
-                                                </DataGridTextColumn.CellStyle>
-                                            </DataGridTextColumn>
+                                            <DataGridTextColumn Binding="{Binding NameExt}" CellStyle="{StaticResource Dtg_FilenameCell}" Header="Filename"/>
                                             <DataGridTextColumn Binding="{Binding VersionSm}" Header="Version"/>
                                             <DataGridTextColumn Binding="{Binding TotalEntries}" Header="Entries"/>
-                                            <!--<DataGridTextColumn Binding="{Binding Size}" Header="Size"/>-->
                                         </DataGrid.Columns>
                                     </DataGrid>
                                     
@@ -360,16 +346,9 @@
 
                                     <DataGrid x:Name="Dtg_CmpA" RowHeaderStyle="{StaticResource Dtg_IFilesRowHeader}" Style="{StaticResource Dtg_InputFiles}" LoadingRow="Dtg_LoadingRow">
                                         <DataGrid.Columns>
-                                            <DataGridTextColumn Binding="{Binding NameExt}" Header="Filename">
-                                                <DataGridTextColumn.CellStyle>
-                                                    <Style TargetType="DataGridCell">
-                                                        <Setter Property="ToolTip" Value="{Binding Information}" />
-                                                    </Style>
-                                                </DataGridTextColumn.CellStyle>
-                                            </DataGridTextColumn>
+                                            <DataGridTextColumn Binding="{Binding NameExt}" CellStyle="{StaticResource Dtg_FilenameCell}" Header="Filename"/>
                                             <DataGridTextColumn Binding="{Binding VersionSm}" Header="Version"/>
                                             <DataGridTextColumn Binding="{Binding TotalEntries}" Header="Entries"/>
-                                            <!--<DataGridTextColumn Binding="{Binding Size}" Header="File size"/>-->
                                         </DataGrid.Columns>
                                     </DataGrid>
                                     
@@ -417,16 +396,9 @@
 
                                     <DataGrid x:Name="Dtg_CmpB" RowHeaderStyle="{StaticResource Dtg_IFilesRowHeader}" Style="{StaticResource Dtg_InputFiles}" LoadingRow="Dtg_LoadingRow">
                                         <DataGrid.Columns>
-                                            <DataGridTextColumn Binding="{Binding NameExt}" Header="Filename">
-                                                <DataGridTextColumn.CellStyle>
-                                                    <Style TargetType="DataGridCell">
-                                                        <Setter Property="ToolTip" Value="{Binding Information}" />
-                                                    </Style>
-                                                </DataGridTextColumn.CellStyle>
-                                            </DataGridTextColumn>
+                                            <DataGridTextColumn Binding="{Binding NameExt}" CellStyle="{StaticResource Dtg_FilenameCell}" Header="Filename"/>
                                             <DataGridTextColumn Binding="{Binding VersionSm}" Header="Version"/>
                                             <DataGridTextColumn Binding="{Binding TotalEntries}" Header="Entries"/>
-                                            <!--<DataGridTextColumn Binding="{Binding Size}" Header="File size"/>-->
                                         </DataGrid.Columns>
                                     </DataGrid>
 
@@ -594,16 +566,9 @@
 
                                     <DataGrid x:Name="Dtg_PrpA" RowHeaderStyle="{StaticResource Dtg_IFilesRowHeader}" Style="{StaticResource Dtg_InputFiles}" LoadingRow="Dtg_LoadingRow">
                                         <DataGrid.Columns>
-                                            <DataGridTextColumn Binding="{Binding NameExt}" Header="Filename">
-                                                <DataGridTextColumn.CellStyle>
-                                                    <Style TargetType="DataGridCell">
-                                                        <Setter Property="ToolTip" Value="{Binding Information}" />
-                                                    </Style>
-                                                </DataGridTextColumn.CellStyle>
-                                            </DataGridTextColumn>
+                                            <DataGridTextColumn Binding="{Binding NameExt}" CellStyle="{StaticResource Dtg_FilenameCell}" Header="Filename"/>
                                             <DataGridTextColumn Binding="{Binding VersionSm}" Header="Version"/>
                                             <DataGridTextColumn Binding="{Binding TotalEntries}" Header="Entries"/>
-                                            <!--<DataGridTextColumn Binding="{Binding Size}" Header="File size"/>-->
                                         </DataGrid.Columns>
                                     </DataGrid>
 
@@ -651,16 +616,9 @@
 
                                     <DataGrid x:Name="Dtg_PrpB" RowHeaderStyle="{StaticResource Dtg_IFilesRowHeader}" Style="{StaticResource Dtg_InputFiles}" LoadingRow="Dtg_LoadingRow">
                                         <DataGrid.Columns>
-                                            <DataGridTextColumn Binding="{Binding NameExt}" Header="Filename">
-                                                <DataGridTextColumn.CellStyle>
-                                                    <Style TargetType="DataGridCell">
-                                                        <Setter Property="ToolTip" Value="{Binding Information}" />
-                                                    </Style>
-                                                </DataGridTextColumn.CellStyle>
-                                            </DataGridTextColumn>
+                                            <DataGridTextColumn Binding="{Binding NameExt}" CellStyle="{StaticResource Dtg_FilenameCell}" Header="Filename"/>
                                             <DataGridTextColumn Binding="{Binding VersionSm}" Header="Version"/>
                                             <DataGridTextColumn Binding="{Binding TotalEntries}" Header="Entries"/>
-                                            <!--<DataGridTextColumn Binding="{Binding Size}" Header="File size"/>-->
                                         </DataGrid.Columns>
                                     </DataGrid>
 
@@ -708,16 +666,9 @@
 
                                     <DataGrid x:Name="Dtg_PrpC" RowHeaderStyle="{StaticResource Dtg_IFilesRowHeader}" Style="{StaticResource Dtg_InputFiles}" LoadingRow="Dtg_LoadingRow">
                                         <DataGrid.Columns>
-                                            <DataGridTextColumn Binding="{Binding NameExt}" Header="Filename">
-                                                <DataGridTextColumn.CellStyle>
-                                                    <Style TargetType="DataGridCell">
-                                                        <Setter Property="ToolTip" Value="{Binding Information}" />
-                                                    </Style>
-                                                </DataGridTextColumn.CellStyle>
-                                            </DataGridTextColumn>
+                                            <DataGridTextColumn Binding="{Binding NameExt}" CellStyle="{StaticResource Dtg_FilenameCell}" Header="Filename"/>
                                             <DataGridTextColumn Binding="{Binding VersionSm}" Header="Version"/>
                                             <DataGridTextColumn Binding="{Binding TotalEntries}" Header="Entries"/>
-                                            <!--<DataGridTextColumn Binding="{Binding Size}" Header="File size"/>-->
                                         </DataGrid.Columns>
                                     </DataGrid>
 
