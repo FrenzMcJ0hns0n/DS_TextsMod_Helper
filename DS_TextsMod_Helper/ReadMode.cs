@@ -8,12 +8,14 @@ namespace DS_TextsMod_Helper
 {
     public class ReadMode
     {
-        public string Title { get; set; }
+        public List<ReadEntry> Entries { get; set; }
+        public List<string> Errors { get; set; }
         public string InputFile { get; set; }
         public bool OneLinedValues { get; set; }
         public string OutputFilename { get; set; }
         public char Sep { get; set; }
-        public List<ReadEntry> Entries { get; set; }
+        public string Title { get; set; }
+
 
 
         public ReadMode(string iFileA)
@@ -41,26 +43,38 @@ namespace DS_TextsMod_Helper
 
         public void ProcessFiles(bool preview)
         {
+            Errors = new List<string>();
             Dictionary<int, string> rdDictionary = new Dictionary<int, string>();
 
             // 0. Get input data
             FMG fileA = new FMG { Entries = FMG.Read(InputFile).Entries };
 
             // 1. Read file
+            int count = 0;
             foreach (FMG.Entry entry in fileA.Entries)
+            {
+                if (rdDictionary.ContainsKey(entry.ID))
+                {
+                    Errors.Add(
+                        $"  Unicity constraint error. Skipped entry ID {entry.ID} as it has already been registered.\r\n" +
+                        $"  Entry Text =\r\n" +
+                        $"\"{entry.Text}\""
+                    );
+                    continue;
+                }
+                count += 1;
                 rdDictionary.Add(entry.ID, FormatValue(entry.Text));
 
+                if (preview && count == 50) break;
+            }
+
             // 2. Build Entry
-            int index = 0;
             foreach (KeyValuePair<int, string> rd in rdDictionary)
             {
-                index += 1;
                 Entries.Add(new ReadEntry(
                     rd.Key,
                     rd.Value
                 ));
-                if (preview && index == 50) // TODO? v1.6: Give choice about max results in Preview
-                    break;
             }
         }
 
@@ -73,14 +87,13 @@ namespace DS_TextsMod_Helper
             using (StreamWriter writer = new StreamWriter(OutputFilename, false))
             {
                 writer.WriteLine($"Text ID{Sep}Value");
-
                 foreach (ReadEntry re in Entries)
                 {
                     if (re.Value != null)
+                    {
                         re.Value = re.Value.Replace("\"", "\"\"");
-
+                    }
                     writer.WriteLine($"{re.TextId}{Sep}\"{re.Value}\"");
-                    // Generalized usage of double quotes, as it is Excel friendly (IDEA? Give choice about that)
                 }
             }
         }

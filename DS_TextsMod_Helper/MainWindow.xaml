@@ -58,6 +58,10 @@
             <Setter Property="Padding" Value="2"/>
         </Style>
 
+        <Style x:Key="Dtg_FilenameCell" TargetType="{x:Type DataGridCell}">
+            <Setter Property="ToolTip" Value="{Binding Information}"/>
+        </Style>
+
         <Style x:Key="Brd_SideControls" TargetType="{x:Type Border}">
             <Setter Property="BorderBrush" Value="LightGray"/>
             <Setter Property="BorderThickness" Value="1"/>
@@ -154,7 +158,7 @@
             <RowDefinition Height="16" />
         </Grid.RowDefinitions>
 
-        <TabControl x:Name="Tbc_Modes" AllowDrop="True" Grid.Column="1" Grid.Row="1">
+        <TabControl x:Name="Tbc_ProcessingModes" AllowDrop="True" Grid.Column="1" Grid.Row="1">
             <TabItem x:Name ="Tbi_Rd" Header="Read mode" DragOver="Tbi_Rd_DragOver">
                 <Grid Background="WhiteSmoke">
                     <Grid.ColumnDefinitions>
@@ -204,9 +208,9 @@
 
                                     <DataGrid x:Name="Dtg_RdA" RowHeaderStyle="{StaticResource Dtg_IFilesRowHeader}" Style="{StaticResource Dtg_InputFiles}" LoadingRow="Dtg_LoadingRow">
                                         <DataGrid.Columns>
-                                            <DataGridTextColumn Binding="{Binding NameExt}" Header="Filename"/>
-                                            <DataGridTextColumn Binding="{Binding VersionSm}" Header="Type"/>
-                                            <!--<DataGridTextColumn Binding="{Binding Size}" Header="File size"/>-->
+                                            <DataGridTextColumn Binding="{Binding NameExt}" CellStyle="{StaticResource Dtg_FilenameCell}" Header="Filename"/>
+                                            <DataGridTextColumn Binding="{Binding VersionSm}" Header="Version"/>
+                                            <DataGridTextColumn Binding="{Binding TotalEntries}" Header="Entries"/>
                                         </DataGrid.Columns>
                                     </DataGrid>
                                     
@@ -342,9 +346,9 @@
 
                                     <DataGrid x:Name="Dtg_CmpA" RowHeaderStyle="{StaticResource Dtg_IFilesRowHeader}" Style="{StaticResource Dtg_InputFiles}" LoadingRow="Dtg_LoadingRow">
                                         <DataGrid.Columns>
-                                            <DataGridTextColumn Binding="{Binding NameExt}" Header="Filename"/>
-                                            <DataGridTextColumn Binding="{Binding VersionSm}" Header="Type"/>
-                                            <!--<DataGridTextColumn Binding="{Binding Size}" Header="File size"/>-->
+                                            <DataGridTextColumn Binding="{Binding NameExt}" CellStyle="{StaticResource Dtg_FilenameCell}" Header="Filename"/>
+                                            <DataGridTextColumn Binding="{Binding VersionSm}" Header="Version"/>
+                                            <DataGridTextColumn Binding="{Binding TotalEntries}" Header="Entries"/>
                                         </DataGrid.Columns>
                                     </DataGrid>
                                     
@@ -392,9 +396,9 @@
 
                                     <DataGrid x:Name="Dtg_CmpB" RowHeaderStyle="{StaticResource Dtg_IFilesRowHeader}" Style="{StaticResource Dtg_InputFiles}" LoadingRow="Dtg_LoadingRow">
                                         <DataGrid.Columns>
-                                            <DataGridTextColumn Binding="{Binding NameExt}" Header="Filename"/>
-                                            <DataGridTextColumn Binding="{Binding VersionSm}" Header="Type"/>
-                                            <!--<DataGridTextColumn Binding="{Binding Size}" Header="File size"/>-->
+                                            <DataGridTextColumn Binding="{Binding NameExt}" CellStyle="{StaticResource Dtg_FilenameCell}" Header="Filename"/>
+                                            <DataGridTextColumn Binding="{Binding VersionSm}" Header="Version"/>
+                                            <DataGridTextColumn Binding="{Binding TotalEntries}" Header="Entries"/>
                                         </DataGrid.Columns>
                                     </DataGrid>
 
@@ -562,9 +566,9 @@
 
                                     <DataGrid x:Name="Dtg_PrpA" RowHeaderStyle="{StaticResource Dtg_IFilesRowHeader}" Style="{StaticResource Dtg_InputFiles}" LoadingRow="Dtg_LoadingRow">
                                         <DataGrid.Columns>
-                                            <DataGridTextColumn Binding="{Binding NameExt}" Header="Filename"/>
-                                            <DataGridTextColumn Binding="{Binding VersionSm}" Header="Type"/>
-                                            <!--<DataGridTextColumn Binding="{Binding Size}" Header="File size"/>-->
+                                            <DataGridTextColumn Binding="{Binding NameExt}" CellStyle="{StaticResource Dtg_FilenameCell}" Header="Filename"/>
+                                            <DataGridTextColumn Binding="{Binding VersionSm}" Header="Version"/>
+                                            <DataGridTextColumn Binding="{Binding TotalEntries}" Header="Entries"/>
                                         </DataGrid.Columns>
                                     </DataGrid>
 
@@ -612,9 +616,9 @@
 
                                     <DataGrid x:Name="Dtg_PrpB" RowHeaderStyle="{StaticResource Dtg_IFilesRowHeader}" Style="{StaticResource Dtg_InputFiles}" LoadingRow="Dtg_LoadingRow">
                                         <DataGrid.Columns>
-                                            <DataGridTextColumn Binding="{Binding NameExt}" Header="Filename"/>
-                                            <DataGridTextColumn Binding="{Binding VersionSm}" Header="Type"/>
-                                            <!--<DataGridTextColumn Binding="{Binding Size}" Header="File size"/>-->
+                                            <DataGridTextColumn Binding="{Binding NameExt}" CellStyle="{StaticResource Dtg_FilenameCell}" Header="Filename"/>
+                                            <DataGridTextColumn Binding="{Binding VersionSm}" Header="Version"/>
+                                            <DataGridTextColumn Binding="{Binding TotalEntries}" Header="Entries"/>
                                         </DataGrid.Columns>
                                     </DataGrid>
 
@@ -662,9 +666,9 @@
 
                                     <DataGrid x:Name="Dtg_PrpC" RowHeaderStyle="{StaticResource Dtg_IFilesRowHeader}" Style="{StaticResource Dtg_InputFiles}" LoadingRow="Dtg_LoadingRow">
                                         <DataGrid.Columns>
-                                            <DataGridTextColumn Binding="{Binding NameExt}" Header="Filename"/>
-                                            <DataGridTextColumn Binding="{Binding VersionSm}" Header="Type"/>
-                                            <!--<DataGridTextColumn Binding="{Binding Size}" Header="File size"/>-->
+                                            <DataGridTextColumn Binding="{Binding NameExt}" CellStyle="{StaticResource Dtg_FilenameCell}" Header="Filename"/>
+                                            <DataGridTextColumn Binding="{Binding VersionSm}" Header="Version"/>
+                                            <DataGridTextColumn Binding="{Binding TotalEntries}" Header="Entries"/>
                                         </DataGrid.Columns>
                                     </DataGrid>
 
@@ -746,16 +750,7 @@
                                          Width="190"
                                          />
                             </StackPanel>
-
-                            <!-- Prepare mode : Warn on special cases -->
-                            <CheckBox x:Name="Cbx_Prp_WarnOnSpecialCases"
-                                      Content="Warn on special cases"
-                                      Grid.Column="3" Grid.Row="1" Grid.RowSpan="2"
-                                      IsChecked="True"
-                                      Style="{StaticResource Cbx_Generic}"
-                                      ToolTip="Warn on entries where File #3 value is unexpectedly empty"
-                                      />
-
+                            
                         </Grid>
                     </GroupBox>
                 </Grid>

@@ -15,9 +15,10 @@ namespace DS_TextsMod_Helper
         public string NameExt { get; set; }
         public long Size { get; set; }
         public string Edit { get; set; }
-
         public string Error { get; set; }
+        public string Information { get; set; }
 
+        // FMG properties
         public int TotalEntries { get; set; }
         public int NonNullEntries { get; set; }
         public string VersionSm { get; set; }
@@ -57,25 +58,27 @@ namespace DS_TextsMod_Helper
             }
             catch (Exception exception)
             {
-                Error = $"Error while registering file :\n{exception}";
+                Error = $"Error while registering file :\r\n{exception}";
             }
+
+            Information = GetToolTipText();
         }
 
 
-        public string GetToolTipText(bool fileIsValid) // TODO? v1.6 Reimplement on DataGrid cells ?
+        public string GetToolTipText()
         {
             StringBuilder sb = new StringBuilder();
 
-            if (fileIsValid)
+            if (string.IsNullOrEmpty(Error))
             {
-                sb.AppendLine("[File info]");
-                sb.AppendLine($"Name = \"{Name}.fmg\"");
-                sb.AppendLine($"Modified = {Edit} ago");
-                sb.AppendLine($"Size = {Size} bytes");
+                sb.AppendLine("[System properties]");
+                sb.AppendLine($"File name = \"{Name}.fmg\"");
+                sb.AppendLine($"File size = {Size} bytes");
+                sb.AppendLine($"Last edit = {Edit} ago");
                 sb.AppendLine();
-                sb.AppendLine("[FMG info]");
+                sb.AppendLine("[FMG properties]");
                 sb.AppendLine($"Version = {VersionLg}");
-                sb.Append($"Total entries = {TotalEntries} ({NonNullEntries} non null)");
+                sb.Append($"Entries = {TotalEntries} ({NonNullEntries} non-null)");
             }
             else
             {

@@ -31,6 +31,25 @@ namespace DS_TextsMod_Helper
         #endregion
 
 
+        #region Logging
+
+        public static void LogProcessingError(string procMode, List<string> errors, string iFileA, string iFileB = "", string iFileC = "")
+        {
+            string errLogFile = Path.Combine(GetOutputDirPath(), GetFileName(iFileA, false) + ".txt");
+            using (StreamWriter writer = new StreamWriter(errLogFile, false))
+            {
+                writer.WriteLine($"{DateTime.Now} - Error while processing files in {procMode} mode. Details :");
+                foreach (string err in errors)
+                {
+                    writer.WriteLine($"- {err}");
+                    writer.WriteLine();
+                }
+            }
+        }
+
+        #endregion
+
+
         #region IO shortcuts
 
         public static string GetRootDirPath()
@@ -113,28 +132,26 @@ namespace DS_TextsMod_Helper
         #endregion
 
 
-        #region Misc. generate output operations
+        #region Misc. output operations
 
-        public static List<string> GetAlreadyExistingFilenames(List<string> iFilenames)
+        public static List<string> GetAlreadyExistingFilenames(List<string> iFilenames, List<string> extensions)
         {
+            List<string> existingFilenames = new List<string>();
+
             DirectoryInfo di = new DirectoryInfo(GetOutputDirPath());
             List<string> oFilenames = di.GetFiles().Select(fi => fi.Name).ToList();
-
-            return iFilenames.Where(iFile => oFilenames.Contains(iFile)).ToList();
-        }
-
-        public static void LogSpecialCases(string iFileA, string iFileB, string iFileC, string preparedFile, List<string> specialCases)
-        {
-            string specialCasesLogFile = Path.Combine(GetOutputDirPath(), "special cases.txt");
-            using (StreamWriter writer = new StreamWriter(specialCasesLogFile, true))
+            foreach (string ifname in iFilenames)
             {
-                writer.WriteLine($"{DateTime.Now} - Special cases found while generating file \"{preparedFile}\" :");
-                writer.WriteLine($"File A = \"{iFileA}\"");
-                writer.WriteLine($"File B = \"{iFileB}\"");
-                writer.WriteLine($"File C = \"{iFileC}\"");
-                foreach (string sc in specialCases)
-                    writer.WriteLine($"\t{sc}");
+                foreach (string ext in extensions)
+                {
+                    if (oFilenames.Contains(ifname + ext))
+                    {
+                        existingFilenames.Add(ifname + ext);
+                    }
+                }
             }
+
+            return existingFilenames;
         }
 
         #endregion

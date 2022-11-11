@@ -15,6 +15,11 @@ namespace DS_TextsMod_Helper
 
         #region CONSTANTS
 
+        // System
+        private const string ERR_MISSING_SFDLL = "Fatal error : file 'SoulsFormats.dll' not found.\r\n" +
+                                                 "The program will exit...";
+
+        // Input / Output
         private const string HDR_MISSING_IFILES = "Missing input files";
         private const string MSG_MISSING_IFILES = "All input areas must contain files to process";
 
@@ -25,26 +30,26 @@ namespace DS_TextsMod_Helper
         private const string MSG_SAME_DIRECTORY = "Files from distinct input areas cannot have the same parent directory";
 
         private const string HDR_INCONS_FMG_VER = "Inconsistent FMG versions";
-        private const string MSG_INCONS_FMG_VER = "Input files must be compatible with each other (\"Type\" must match)";
-
-        private const string HDR_OVERW_EXIST_OF = "Overwrite existing files";
-        private const string MSG_OVERW_EXIST_OF = "The following output files already exist.\r\n"
-                                                + "Continue and overwrite them?";
+        private const string MSG_INCONS_FMG_VER = "Input files must be compatible with each other (\"Version\" must match)";
 
         private const string HDR_INCONS_IFNAMES = "Inconsistent input filenames";
-        private const string MSG_INCONS_IFNAMES1 = "Filenames are different on the following lines :";
-        private const string MSG_INCONS_IFNAMES2 = "Continue anyway?";
+        private const string MSG_INCONS_IFNAMES = "Filenames are different on the following lines :";
 
-        private const string WRN_SPECIAL_CASES = "Warning : Found special cases while processing files.\r\n"
-                                               + "See details in file \"special cases.txt\"";
+        private const string HDR_OVERW_EXIST_OF = "Overwrite existing files";
+        private const string MSG_OVERW_EXIST_OF = "The following files already exist in the Output directory.\r\n" +
+                                                  "They most likely will be overwritten in the process.";
 
-        private const string ERR_MISSING_SFDLL = "Fatal error : file 'SoulsFormats.dll' not found.\r\n"
-                                               + "The program will exit...";
+        // Processing
+        private const string HDR_PROC_COMPLETED = "Files processing completed";
+
+        private const string HDR_PROCESS_ERRORS = "Processing errors";
+        private const string MSG_PROCESS_ERRORS = "Processing errors occurred.\r\n" +
+                                                  "Check *.txt files in the Output directory for details.";
 
         #endregion
 
 
-        #region ENUM
+        #region ENUMS
 
         private enum PROCESS_MODE : int
         {
@@ -59,7 +64,7 @@ namespace DS_TextsMod_Helper
         /// </summary>
         private PROCESS_MODE SelectedMode()
         {
-            switch (Tbc_Modes.SelectedIndex)
+            switch (Tbc_ProcessingModes.SelectedIndex)
             {
                 case 0: return PROCESS_MODE.Read;
                 case 1: return PROCESS_MODE.Compare;
@@ -117,15 +122,8 @@ namespace DS_TextsMod_Helper
         private void Btn_ClearFiles_Click(object sender, RoutedEventArgs e)
         {
             Button btn = sender as Button;
-            Border brd = (Border)FindName("Brd_" + btn.Tag);
-            DataGrid dtg = (DataGrid)FindName("Dtg_" + btn.Tag);
-            Label lbl = (Label)FindName("Lbl_" + btn.Tag);
-
-            dtg.ItemsSource = null;
-
-            brd.Visibility = Visibility.Collapsed;
-            dtg.Visibility = Visibility.Collapsed;
-            lbl.Visibility = Visibility.Visible;
+            ResetInputAreaVisibility(btn.Tag.ToString());
+            //ResetInputAreaVisibility((sender as Button).Tag.ToString()); // Alt syntax
         }
 
         private void Btn_OpenParentDir_Click(object sender, RoutedEventArgs e)
@@ -152,7 +150,7 @@ namespace DS_TextsMod_Helper
             List<int> positionsToMove = new List<int>();
             for (int i = 0; i < selectedCount; i++)
             {
-                // $"Filename '{((InputFile)dtg.SelectedItems[i]).NameExt}' as selected item # {i + 1} is at index # {position} in the DataGrid\n";
+                // $"Filename '{((InputFile)dtg.SelectedItems[i]).NameExt}' as selected item # {i + 1} is at index # {position} in the DataGrid";
                 int position = dtg.Items.IndexOf(dtg.SelectedItems[i]);
                 if (position == dtg.Items.Count - 1)
                     return;
@@ -163,7 +161,8 @@ namespace DS_TextsMod_Helper
             ObservableCollection<InputFile> iFiles = (ObservableCollection<InputFile>)dtg.ItemsSource;
             for (int i = 0; i < iFiles.Count; i++)
             {
-                if (positionsToMove.Contains(i)) // TODO(Multiple reordering): gather all necessary elements before using Insert/RemoveAt (or Build matching table as Dictionary or smthg?)
+                // TODO(Multiple selection): gather all necessary elements before using Insert/RemoveAt (or Build matching table as Dictionary or smthg?)
+                if (positionsToMove.Contains(i))
                 {
                     InputFile toBeMovedDown = iFiles[i];
                     iFiles.Insert(i, iFiles[i + 1]);
@@ -193,7 +192,7 @@ namespace DS_TextsMod_Helper
             List<int> positionsToMove = new List<int>();
             for (int i = 0; i < selectedCount; i++)
             {
-                // $"Filename '{((InputFile)dtg.SelectedItems[i]).NameExt}' as selected item # {i + 1} is at index # {position} in the DataGrid\n";
+                // $"Filename '{((InputFile)dtg.SelectedItems[i]).NameExt}' as selected item # {i + 1} is at index # {position} in the DataGrid";
                 int position = dtg.Items.IndexOf(dtg.SelectedItems[i]);
                 if (position == 0)
                     return;
@@ -204,7 +203,8 @@ namespace DS_TextsMod_Helper
             ObservableCollection<InputFile> iFiles = (ObservableCollection<InputFile>)dtg.ItemsSource;
             for (int i = 0; i < iFiles.Count; i++)
             {
-                if (positionsToMove.Contains(i)) // TODO(Multiple reordering): gather all necessary elements before using Insert/RemoveAt (or Build matching table as Dictionary or smthg?)
+                // TODO(Multiple selection): gather all necessary elements before using Insert/RemoveAt (or Build matching table as Dictionary or smthg?)
+                if (positionsToMove.Contains(i))
                 {
                     InputFile toBeMovedDown = iFiles[i - 1];
                     iFiles.Insert(i - 1, iFiles[i]);
@@ -235,7 +235,7 @@ namespace DS_TextsMod_Helper
             List<int> positionsToRemove = new List<int>();
             for (int i = 0; i < selectedCount; i++)
             {
-                // $"Filename '{((InputFile)dtg.SelectedItems[i]).NameExt}' as selected item # {i + 1} is at index # {position} in the DataGrid\n";
+                // $"Filename '{((InputFile)dtg.SelectedItems[i]).NameExt}' as selected item # {i + 1} is at index # {position} in the DataGrid";
                 int position = dtg.Items.IndexOf(dtg.SelectedItems[i]);
                 positionsToRemove.Add(position);
             }
@@ -246,10 +246,19 @@ namespace DS_TextsMod_Helper
                 if (positionsToRemove.Contains(i))
                     iFiles.RemoveAt(i);
 
-            dtg.ItemsSource = null;
-            dtg.ItemsSource = iFiles;
-            dtg.SelectedIndex = positionsToRemove.Contains(iFilesCount) ? -1 : positionsToRemove.Max();
-            dtg.Focus();
+            // TODO(Multiple selection): to be upgraded to => if (iFilesCount == removedCount)
+            if (iFilesCount == 1)
+            {
+                ResetInputAreaVisibility(btn.Tag.ToString());
+            }
+            else
+            {
+                dtg.ItemsSource = null;
+                dtg.ItemsSource = iFiles;
+                // Depending on the position of the max index removed : if at last position, focus on previous one, else on the next one
+                dtg.SelectedIndex = positionsToRemove.Max() == iFilesCount - 1 ? positionsToRemove.Max() - 1 : positionsToRemove.Max();
+                dtg.Focus();
+            }
         }
 
         private void Dtg_LoadingRow(object sender, DataGridRowEventArgs e)
@@ -333,6 +342,19 @@ namespace DS_TextsMod_Helper
             return iFiles;
         }
 
+        private void ResetInputAreaVisibility(string tag)
+        {
+            Border brd = (Border)FindName("Brd_" + tag);
+            DataGrid dtg = (DataGrid)FindName("Dtg_" + tag);
+            Label lbl = (Label)FindName("Lbl_" + tag);
+
+            dtg.ItemsSource = null;
+
+            brd.Visibility = Visibility.Collapsed;
+            dtg.Visibility = Visibility.Collapsed;
+            lbl.Visibility = Visibility.Visible;
+        }
+
         #endregion
 
 
@@ -341,7 +363,7 @@ namespace DS_TextsMod_Helper
         private void FocusMe(PROCESS_MODE targetMode)
         {
             if (SelectedMode() != targetMode)
-                Tbc_Modes.SelectedIndex = (int)targetMode;
+                Tbc_ProcessingModes.SelectedIndex = (int)targetMode;
         }
         private void Tbi_Rd_DragOver(object sender, DragEventArgs e) { FocusMe(PROCESS_MODE.Read); }
         private void Tbi_Cmp_DragOver(object sender, DragEventArgs e) { FocusMe(PROCESS_MODE.Compare); }
@@ -424,6 +446,7 @@ namespace DS_TextsMod_Helper
             ObservableCollection<InputFile> iFilesRd = (ObservableCollection<InputFile>)Dtg_RdA.ItemsSource;
             string parentDirPathA = iFilesRd.First().Directory;
 
+            bool processingErrors = false;
             int processedFilesCount = 0;
             string filePathA;
             ReadMode rd;
@@ -440,8 +463,17 @@ namespace DS_TextsMod_Helper
                         OneLinedValues = Cbx_Rd_OneLinedValues.IsChecked ?? false
                     };
                     rd.ProcessFiles(true);
+                    if (rd.Errors.Count > 0)
+                    {
+                        Tools.LogProcessingError("Read", rd.Errors, filePathA);
+                        processingErrors = true;
+                    }
                     readModes.Add(rd);
                     processedFilesCount += 1;
+                }
+                if (processingErrors)
+                {
+                    MessageBox.Show(MSG_PROCESS_ERRORS, HDR_PROCESS_ERRORS, MessageBoxButton.OK, MessageBoxImage.Exclamation);
                 }
                 ProcessingModeResult processingMode = new ProcessingModeResult() { AllReadModeEntries = readModes };
                 OutputPreview outputPreview = new OutputPreview(processingMode);
@@ -449,13 +481,13 @@ namespace DS_TextsMod_Helper
             }
             else // GENERATE OUTPUT FILES
             {
-                List<string> iFilenames = iFilesRd.Select(iFile => iFile.Name + ".csv").ToList();
-                List<string> alreadyExisting = Tools.GetAlreadyExistingFilenames(iFilenames);
+                List<string> iFilenames = iFilesRd.Select(iFile => iFile.Name).ToList();
+                List<string> alreadyExisting = Tools.GetAlreadyExistingFilenames(iFilenames, new List<string>() { ".csv", ".txt" });
                 if (alreadyExisting.Count > 0)
                 {
-                    string fnames = string.Join("\r\n - ", alreadyExisting);
-                    MessageBoxResult mbr = MessageBox.Show(
-                        MSG_OVERW_EXIST_OF + $"\r\n\r\n - {fnames}", HDR_OVERW_EXIST_OF, MessageBoxButton.OKCancel, MessageBoxImage.Information
+                    string fnames = string.Join("\r\n- ", alreadyExisting);
+                    MessageBoxResult mbr = MessageBox.Show(MSG_OVERW_EXIST_OF + $"\r\n\r\n- {fnames}\r\n\r\nContinue anyway?",
+                        HDR_OVERW_EXIST_OF, MessageBoxButton.OKCancel, MessageBoxImage.Information
                     );
                     if (mbr == MessageBoxResult.Cancel)
                         return;
@@ -469,10 +501,26 @@ namespace DS_TextsMod_Helper
                         OneLinedValues = Cbx_Rd_OneLinedValues.IsChecked ?? false
                     };
                     rd.ProcessFiles(false);
+                    if (rd.Errors.Count > 0)
+                    {
+                        Tools.LogProcessingError("Read", rd.Errors, filePathA);
+                        processingErrors = true;
+                    }
                     rd.ProduceOutput(iFile.Name + ".csv", Tbx_Rd_CsvSeparator.Text);
                     processedFilesCount += 1;
                 }
-                MessageBox.Show($"[Read mode] Done: {processedFilesCount} output files have been created");
+                if (processingErrors)
+                {
+                    MessageBox.Show($"[Read mode] Done: {processedFilesCount} output files have been created\r\n\r\n" + MSG_PROCESS_ERRORS,
+                        HDR_PROC_COMPLETED, MessageBoxButton.OK, MessageBoxImage.Exclamation
+                    );
+                }
+                else
+                {
+                    MessageBox.Show($"[Read mode] Done: {processedFilesCount} output files have been created",
+                        HDR_PROC_COMPLETED, MessageBoxButton.OK, MessageBoxImage.Information
+                    );
+                }
             }
         }
 
@@ -508,13 +556,14 @@ namespace DS_TextsMod_Helper
             if (linesWithDistinctFilenames.Count > 0)
             {   // Warning if filenames are different at the same lines of input areas
                 string lines = string.Join(", ", linesWithDistinctFilenames);
-                MessageBoxResult mbr = MessageBox.Show(
-                    MSG_INCONS_IFNAMES1 + $"\r\n{lines}\r\n\r\n" + MSG_INCONS_IFNAMES2, HDR_INCONS_IFNAMES, MessageBoxButton.OKCancel, MessageBoxImage.Information
+                MessageBoxResult mbr = MessageBox.Show(MSG_INCONS_IFNAMES + $"\r\n{lines}\r\n\r\nContinue anyway?",
+                    HDR_INCONS_IFNAMES, MessageBoxButton.OKCancel, MessageBoxImage.Information
                 );
                 if (mbr == MessageBoxResult.Cancel)
                     return;
             }
 
+            bool processingErrors = false;
             int processedFilesCount = 0;
             string filePathA;
             string filePathB;
@@ -533,8 +582,17 @@ namespace DS_TextsMod_Helper
                         OneLinedValues = Cbx_Cmp_OneLinedValues.IsChecked ?? false
                     };
                     cmp.ProcessFiles(true);
+                    if (cmp.Errors.Count > 0)
+                    {
+                        Tools.LogProcessingError("Compare", cmp.Errors, filePathA, filePathB);
+                        processingErrors = true;
+                    }
                     compareModes.Add(cmp);
                     processedFilesCount += 1;
+                }
+                if (processingErrors)
+                {
+                    MessageBox.Show(MSG_PROCESS_ERRORS, HDR_PROCESS_ERRORS, MessageBoxButton.OK, MessageBoxImage.Exclamation);
                 }
                 ProcessingModeResult processingMode = new ProcessingModeResult() { AllCompareModeEntries = compareModes };
                 OutputPreview outputPreview = new OutputPreview(processingMode);
@@ -542,13 +600,14 @@ namespace DS_TextsMod_Helper
             }
             else // GENERATE OUTPUT FILES
             {
-                List<string> iFilenames = iFilesCmpA.Select(iFile => iFile.Name + ".csv").ToList();
-                List<string> alreadyExisting = Tools.GetAlreadyExistingFilenames(iFilenames);
+                List<string> iFilenames = iFilesCmpA.Select(iFile => iFile.Name).ToList();
+                //List<string> iFilenames = iFilesCmpA.Select(iFile => iFile.Name + ".csv").ToList();
+                List<string> alreadyExisting = Tools.GetAlreadyExistingFilenames(iFilenames, new List<string>() { ".csv", ".txt" });
                 if (alreadyExisting.Count > 0)
                 {
-                    string fnames = string.Join("\r\n - ", alreadyExisting);
-                    MessageBoxResult mbr = MessageBox.Show(
-                        MSG_OVERW_EXIST_OF + $"\r\n\r\n - {fnames}", HDR_OVERW_EXIST_OF, MessageBoxButton.OKCancel, MessageBoxImage.Information
+                    string fnames = string.Join("\r\n- ", alreadyExisting);
+                    MessageBoxResult mbr = MessageBox.Show(MSG_OVERW_EXIST_OF + $"\r\n\r\n- {fnames}\r\n\r\nContinue anyway?",
+                        HDR_OVERW_EXIST_OF, MessageBoxButton.OKCancel, MessageBoxImage.Information
                     );
                     if (mbr == MessageBoxResult.Cancel)
                         return;
@@ -563,10 +622,26 @@ namespace DS_TextsMod_Helper
                         OneLinedValues = Cbx_Cmp_OneLinedValues.IsChecked ?? false
                     };
                     cmp.ProcessFiles(false);
+                    if (cmp.Errors.Count > 0)
+                    {
+                        Tools.LogProcessingError("Compare", cmp.Errors, filePathA, filePathB);
+                        processingErrors = true;
+                    }
                     cmp.ProduceOutput(iFilesCmpA[i].Name + ".csv", Tbx_Cmp_oHeader1.Text, Tbx_Cmp_oHeader2.Text, Tbx_Cmp_CsvSeparator.Text);
                     processedFilesCount += 1;
                 }
-                MessageBox.Show($"[Compare mode] Done: {processedFilesCount} output files have been created");
+                if (processingErrors)
+                {
+                    MessageBox.Show($"[Compare mode] Done: {processedFilesCount} output files have been created\r\n\r\n" + MSG_PROCESS_ERRORS,
+                        HDR_PROC_COMPLETED, MessageBoxButton.OK, MessageBoxImage.Exclamation
+                    );
+                }
+                else
+                {
+                    MessageBox.Show($"[Compare mode] Done: {processedFilesCount} output files have been created",
+                        HDR_PROC_COMPLETED, MessageBoxButton.OK, MessageBoxImage.Information
+                    );
+                }
             }
         }
 
@@ -605,13 +680,14 @@ namespace DS_TextsMod_Helper
             if (linesWithDistinctFilenames.Count > 0)
             {   // Warning if filenames are different at the same lines of input areas
                 string lines = string.Join(", ", linesWithDistinctFilenames);
-                MessageBoxResult mbr = MessageBox.Show(
-                    MSG_INCONS_IFNAMES1 + $"\r\n{lines}\r\n\r\n" + MSG_INCONS_IFNAMES2, HDR_INCONS_IFNAMES, MessageBoxButton.OKCancel, MessageBoxImage.Information
+                MessageBoxResult mbr = MessageBox.Show(MSG_INCONS_IFNAMES + $"\r\n{lines}\r\n\r\nContinue anyway?",
+                    HDR_INCONS_IFNAMES, MessageBoxButton.OKCancel, MessageBoxImage.Information
                 );
                 if (mbr == MessageBoxResult.Cancel)
                     return;
             }
 
+            bool processingErrors = false;
             int processedFilesCount = 0;
             string filePathA;
             string filePathB;
@@ -633,8 +709,17 @@ namespace DS_TextsMod_Helper
                         Title = $"{processedFilesCount + 1}: {iFilesPrpA[i].Name}"
                     };
                     prp.ProcessFiles(true);
+                    if (prp.Errors.Count > 0)
+                    {
+                        Tools.LogProcessingError("Prepare", prp.Errors, filePathA, filePathB, filePathC);
+                        processingErrors = true;
+                    }
                     prepareModes.Add(prp);
                     processedFilesCount += 1;
+                }
+                if (processingErrors)
+                {
+                    MessageBox.Show(MSG_PROCESS_ERRORS, HDR_PROCESS_ERRORS, MessageBoxButton.OK, MessageBoxImage.Exclamation);
                 }
                 ProcessingModeResult processingMode = new ProcessingModeResult() { AllPrepareModeEntries = prepareModes };
                 OutputPreview outputPreview = new OutputPreview(processingMode);
@@ -642,19 +727,18 @@ namespace DS_TextsMod_Helper
             }
             else // GENERATE OUTPUT FILES
             {
-                List<string> iFilenames = iFilesPrpA.Select(iFile => iFile.NameExt).ToList();
-                List<string> alreadyExisting = Tools.GetAlreadyExistingFilenames(iFilenames);
+                List<string> iFilenames = iFilesPrpA.Select(iFile => iFile.Name).ToList();
+                List<string> alreadyExisting = Tools.GetAlreadyExistingFilenames(iFilenames, new List<string>() { ".fmg", ".txt" });
                 if (alreadyExisting.Count > 0)
                 {
-                    string fnames = string.Join("\r\n - ", alreadyExisting);
-                    MessageBoxResult mbr = MessageBox.Show(
-                        MSG_OVERW_EXIST_OF + $"\r\n\r\n - {fnames}", HDR_OVERW_EXIST_OF, MessageBoxButton.OKCancel, MessageBoxImage.Information
+                    string fnames = string.Join("\r\n- ", alreadyExisting);
+                    MessageBoxResult mbr = MessageBox.Show(MSG_OVERW_EXIST_OF + $"\r\n\r\n- {fnames}\r\n\r\nContinue anyway?",
+                        HDR_OVERW_EXIST_OF, MessageBoxButton.OKCancel, MessageBoxImage.Information
                     );
                     if (mbr == MessageBoxResult.Cancel)
                         return;
                 }
 
-                bool haveSpecialCases = false;
                 for (int i = 0; i < iFilesPrpA.Count; i++)
                 {
                     filePathA = Path.Combine(parentDirPathA, iFilesPrpA[i].NameExt);
@@ -666,21 +750,27 @@ namespace DS_TextsMod_Helper
                         TextToReplace = Tbx_Prp_TextToReplace.Text
                     };
                     prp.ProcessFiles(false);
+                    if (prp.Errors.Count > 0)
+                    {
+                        Tools.LogProcessingError("Prepare", prp.Errors, filePathA, filePathB, filePathC);
+                        processingErrors = true;
+                    }
                     prp.SetOutputVersion(fileFmgVersionA);
                     prp.ProduceOutput(iFilesPrpA[i].NameExt);
-                    if (Cbx_Prp_WarnOnSpecialCases.IsChecked ?? false)
-                    {
-                        List<string> specialCases = prp.GetSpecialCases();
-                        if (specialCases.Count > 0)
-                        {
-                            Tools.LogSpecialCases(filePathA, filePathB, filePathC, iFilesPrpA[i].NameExt, specialCases);
-                            haveSpecialCases = true;
-                        }
-                    }
                     processedFilesCount += 1;
                 }
-                string special = haveSpecialCases ? $"\n\n{WRN_SPECIAL_CASES}" : string.Empty;
-                MessageBox.Show($"[Prepare mode] Done: {processedFilesCount} output files have been created{special}");
+                if (processingErrors)
+                {
+                    MessageBox.Show($"[Prepare mode] Done: {processedFilesCount} output files have been created\r\n\r\n" + MSG_PROCESS_ERRORS,
+                        HDR_PROC_COMPLETED, MessageBoxButton.OK, MessageBoxImage.Exclamation
+                    );
+                }
+                else
+                {
+                    MessageBox.Show($"[Prepare mode] Done: {processedFilesCount} output files have been created",
+                        HDR_PROC_COMPLETED, MessageBoxButton.OK, MessageBoxImage.Information
+                    );
+                }
             }
         }
 
