@@ -28,19 +28,17 @@ namespace DS_TextsMod_Helper
         private const string MSG_INCONS_FMG_VER = "Input files must be compatible with each other (\"Type\" must match)";
 
         private const string HDR_OVERW_EXIST_OF = "Overwrite existing files";
-        private const string MSG_OVERW_EXIST_OF = "The following output files already exist.\r\n" +
-                                                  "Continue and overwrite them?";
+        private const string MSG_OVERW_EXIST_OF = "The following files already exist in the Output directory.\r\n" +
+                                                  "They most likely will be overwritten in the process.";
 
         private const string HDR_INCONS_IFNAMES = "Inconsistent input filenames";
-        private const string MSG_INCONS_IFNAMES1 = "Filenames are different on the following lines :";
-        private const string MSG_INCONS_IFNAMES2 = "Continue anyway?";
+        private const string MSG_INCONS_IFNAMES = "Filenames are different on the following lines :";
 
-        private const string HDR_PROC_COMPLETED = "Files processing complete";
-        private const string MSG_PROC_COMPLETED = "TODO?";
+        private const string HDR_PROC_COMPLETED = "Files processing completed";
 
         private const string HDR_PROCESS_ERRORS = "Processing errors";
         private const string MSG_PROCESS_ERRORS = "Processing errors occurred.\r\n" +
-                                                  "Check the \"Output\\*_error.txt\" files for details.";
+                                                  "Check *.txt files in the Output directory for details.";
 
         private const string ERR_MISSING_SFDLL = "Fatal error : file 'SoulsFormats.dll' not found.\r\n" +
                                                  "The program will exit...";
@@ -156,7 +154,7 @@ namespace DS_TextsMod_Helper
             List<int> positionsToMove = new List<int>();
             for (int i = 0; i < selectedCount; i++)
             {
-                // $"Filename '{((InputFile)dtg.SelectedItems[i]).NameExt}' as selected item # {i + 1} is at index # {position} in the DataGrid\n";
+                // $"Filename '{((InputFile)dtg.SelectedItems[i]).NameExt}' as selected item # {i + 1} is at index # {position} in the DataGrid";
                 int position = dtg.Items.IndexOf(dtg.SelectedItems[i]);
                 if (position == dtg.Items.Count - 1)
                     return;
@@ -197,7 +195,7 @@ namespace DS_TextsMod_Helper
             List<int> positionsToMove = new List<int>();
             for (int i = 0; i < selectedCount; i++)
             {
-                // $"Filename '{((InputFile)dtg.SelectedItems[i]).NameExt}' as selected item # {i + 1} is at index # {position} in the DataGrid\n";
+                // $"Filename '{((InputFile)dtg.SelectedItems[i]).NameExt}' as selected item # {i + 1} is at index # {position} in the DataGrid";
                 int position = dtg.Items.IndexOf(dtg.SelectedItems[i]);
                 if (position == 0)
                     return;
@@ -239,7 +237,7 @@ namespace DS_TextsMod_Helper
             List<int> positionsToRemove = new List<int>();
             for (int i = 0; i < selectedCount; i++)
             {
-                // $"Filename '{((InputFile)dtg.SelectedItems[i]).NameExt}' as selected item # {i + 1} is at index # {position} in the DataGrid\n";
+                // $"Filename '{((InputFile)dtg.SelectedItems[i]).NameExt}' as selected item # {i + 1} is at index # {position} in the DataGrid";
                 int position = dtg.Items.IndexOf(dtg.SelectedItems[i]);
                 positionsToRemove.Add(position);
             }
@@ -463,13 +461,13 @@ namespace DS_TextsMod_Helper
             }
             else // GENERATE OUTPUT FILES
             {
-                List<string> iFilenames = iFilesRd.Select(iFile => iFile.Name + ".csv").ToList();
-                List<string> alreadyExisting = Tools.GetAlreadyExistingFilenames(iFilenames);
+                List<string> iFilenames = iFilesRd.Select(iFile => iFile.Name).ToList();
+                List<string> alreadyExisting = Tools.GetAlreadyExistingFilenames(iFilenames, new List<string>() { ".csv", ".txt" });
                 if (alreadyExisting.Count > 0)
                 {
                     string fnames = string.Join("\r\n- ", alreadyExisting);
                     MessageBoxResult mbr = MessageBox.Show(
-                        MSG_OVERW_EXIST_OF + $"\r\n\r\n- {fnames}", HDR_OVERW_EXIST_OF, MessageBoxButton.OKCancel, MessageBoxImage.Information
+                        MSG_OVERW_EXIST_OF + $"\r\n\r\n- {fnames}\r\n\r\nContinue anyway?", HDR_OVERW_EXIST_OF, MessageBoxButton.OKCancel, MessageBoxImage.Information
                     );
                     if (mbr == MessageBoxResult.Cancel)
                         return;
@@ -539,7 +537,7 @@ namespace DS_TextsMod_Helper
             {   // Warning if filenames are different at the same lines of input areas
                 string lines = string.Join(", ", linesWithDistinctFilenames);
                 MessageBoxResult mbr = MessageBox.Show(
-                    MSG_INCONS_IFNAMES1 + $"\r\n{lines}\r\n\r\n" + MSG_INCONS_IFNAMES2, HDR_INCONS_IFNAMES, MessageBoxButton.OKCancel, MessageBoxImage.Information
+                    MSG_INCONS_IFNAMES + $"\r\n{lines}\r\n\r\nContinue anyway?", HDR_INCONS_IFNAMES, MessageBoxButton.OKCancel, MessageBoxImage.Information
                 );
                 if (mbr == MessageBoxResult.Cancel)
                     return;
@@ -582,13 +580,14 @@ namespace DS_TextsMod_Helper
             }
             else // GENERATE OUTPUT FILES
             {
-                List<string> iFilenames = iFilesCmpA.Select(iFile => iFile.Name + ".csv").ToList();
-                List<string> alreadyExisting = Tools.GetAlreadyExistingFilenames(iFilenames);
+                List<string> iFilenames = iFilesCmpA.Select(iFile => iFile.Name).ToList();
+                //List<string> iFilenames = iFilesCmpA.Select(iFile => iFile.Name + ".csv").ToList();
+                List<string> alreadyExisting = Tools.GetAlreadyExistingFilenames(iFilenames, new List<string>() { ".csv", ".txt" });
                 if (alreadyExisting.Count > 0)
                 {
                     string fnames = string.Join("\r\n- ", alreadyExisting);
                     MessageBoxResult mbr = MessageBox.Show(
-                        MSG_OVERW_EXIST_OF + $"\r\n\r\n- {fnames}", HDR_OVERW_EXIST_OF, MessageBoxButton.OKCancel, MessageBoxImage.Information
+                        MSG_OVERW_EXIST_OF + $"\r\n\r\n- {fnames}\r\n\r\nContinue anyway?", HDR_OVERW_EXIST_OF, MessageBoxButton.OKCancel, MessageBoxImage.Information
                     );
                     if (mbr == MessageBoxResult.Cancel)
                         return;
@@ -662,7 +661,7 @@ namespace DS_TextsMod_Helper
             {   // Warning if filenames are different at the same lines of input areas
                 string lines = string.Join(", ", linesWithDistinctFilenames);
                 MessageBoxResult mbr = MessageBox.Show(
-                    MSG_INCONS_IFNAMES1 + $"\r\n{lines}\r\n\r\n" + MSG_INCONS_IFNAMES2, HDR_INCONS_IFNAMES, MessageBoxButton.OKCancel, MessageBoxImage.Information
+                    MSG_INCONS_IFNAMES + $"\r\n{lines}\r\n\r\nContinue anyway?", HDR_INCONS_IFNAMES, MessageBoxButton.OKCancel, MessageBoxImage.Information
                 );
                 if (mbr == MessageBoxResult.Cancel)
                     return;
@@ -708,13 +707,13 @@ namespace DS_TextsMod_Helper
             }
             else // GENERATE OUTPUT FILES
             {
-                List<string> iFilenames = iFilesPrpA.Select(iFile => iFile.NameExt).ToList();
-                List<string> alreadyExisting = Tools.GetAlreadyExistingFilenames(iFilenames);
+                List<string> iFilenames = iFilesPrpA.Select(iFile => iFile.Name).ToList();
+                List<string> alreadyExisting = Tools.GetAlreadyExistingFilenames(iFilenames, new List<string>() { ".fmg", ".txt" });
                 if (alreadyExisting.Count > 0)
                 {
                     string fnames = string.Join("\r\n- ", alreadyExisting);
                     MessageBoxResult mbr = MessageBox.Show(
-                        MSG_OVERW_EXIST_OF + $"\r\n\r\n- {fnames}", HDR_OVERW_EXIST_OF, MessageBoxButton.OKCancel, MessageBoxImage.Information
+                        MSG_OVERW_EXIST_OF + $"\r\n\r\n- {fnames}\r\n\r\nContinue anyway?", HDR_OVERW_EXIST_OF, MessageBoxButton.OKCancel, MessageBoxImage.Information
                     );
                     if (mbr == MessageBoxResult.Cancel)
                         return;

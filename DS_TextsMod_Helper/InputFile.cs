@@ -58,7 +58,7 @@ namespace DS_TextsMod_Helper
             }
             catch (Exception exception)
             {
-                Error = $"Error while registering file :\n{exception}";
+                Error = $"Error while registering file :\r\n{exception}";
             }
 
             Information = GetToolTipText();

@@ -35,15 +35,15 @@ namespace DS_TextsMod_Helper
 
         public static void LogProcessingError(string procMode, List<string> errors, string iFileA, string iFileB = "", string iFileC = "")
         {
-            string errLogFile = Path.Combine(GetOutputDirPath(), GetFileName(iFileA, false) + "_error.txt");
-            using (StreamWriter writer = new StreamWriter(errLogFile, true))
+            string errLogFile = Path.Combine(GetOutputDirPath(), GetFileName(iFileA, false) + ".txt");
+            using (StreamWriter writer = new StreamWriter(errLogFile, false))
             {
                 writer.WriteLine($"{DateTime.Now} - Error while processing files in {procMode} mode. Details :");
                 foreach (string err in errors)
                 {
                     writer.WriteLine($"- {err}");
+                    writer.WriteLine();
                 }
-                writer.WriteLine();
             }
         }
 
@@ -134,12 +134,24 @@ namespace DS_TextsMod_Helper
 
         #region Misc. output operations
 
-        public static List<string> GetAlreadyExistingFilenames(List<string> iFilenames)
+        public static List<string> GetAlreadyExistingFilenames(List<string> iFilenames, List<string> extensions)
         {
+            List<string> existingFilenames = new List<string>();
+
             DirectoryInfo di = new DirectoryInfo(GetOutputDirPath());
             List<string> oFilenames = di.GetFiles().Select(fi => fi.Name).ToList();
+            foreach (string ifname in iFilenames)
+            {
+                foreach (string ext in extensions)
+                {
+                    if (oFilenames.Contains(ifname + ext))
+                    {
+                        existingFilenames.Add(ifname + ext);
+                    }
+                }
+            }
 
-            return iFilenames.Where(iFile => oFilenames.Contains(iFile)).ToList();
+            return existingFilenames;
         }
 
         #endregion
