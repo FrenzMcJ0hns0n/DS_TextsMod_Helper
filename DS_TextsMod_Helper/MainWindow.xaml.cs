@@ -469,8 +469,8 @@ namespace DS_TextsMod_Helper
                 if (alreadyExisting.Count > 0)
                 {
                     string fnames = string.Join("\r\n- ", alreadyExisting);
-                    MessageBoxResult mbr = MessageBox.Show(
-                        MSG_OVERW_EXIST_OF + $"\r\n\r\n- {fnames}\r\n\r\nContinue anyway?", HDR_OVERW_EXIST_OF, MessageBoxButton.OKCancel, MessageBoxImage.Information
+                    MessageBoxResult mbr = MessageBox.Show(MSG_OVERW_EXIST_OF + $"\r\n\r\n- {fnames}\r\n\r\nContinue anyway?",
+                        HDR_OVERW_EXIST_OF, MessageBoxButton.OKCancel, MessageBoxImage.Information
                     );
                     if (mbr == MessageBoxResult.Cancel)
                         return;
@@ -539,8 +539,8 @@ namespace DS_TextsMod_Helper
             if (linesWithDistinctFilenames.Count > 0)
             {   // Warning if filenames are different at the same lines of input areas
                 string lines = string.Join(", ", linesWithDistinctFilenames);
-                MessageBoxResult mbr = MessageBox.Show(
-                    MSG_INCONS_IFNAMES + $"\r\n{lines}\r\n\r\nContinue anyway?", HDR_INCONS_IFNAMES, MessageBoxButton.OKCancel, MessageBoxImage.Information
+                MessageBoxResult mbr = MessageBox.Show(MSG_INCONS_IFNAMES + $"\r\n{lines}\r\n\r\nContinue anyway?",
+                    HDR_INCONS_IFNAMES, MessageBoxButton.OKCancel, MessageBoxImage.Information
                 );
                 if (mbr == MessageBoxResult.Cancel)
                     return;
@@ -589,8 +589,8 @@ namespace DS_TextsMod_Helper
                 if (alreadyExisting.Count > 0)
                 {
                     string fnames = string.Join("\r\n- ", alreadyExisting);
-                    MessageBoxResult mbr = MessageBox.Show(
-                        MSG_OVERW_EXIST_OF + $"\r\n\r\n- {fnames}\r\n\r\nContinue anyway?", HDR_OVERW_EXIST_OF, MessageBoxButton.OKCancel, MessageBoxImage.Information
+                    MessageBoxResult mbr = MessageBox.Show(MSG_OVERW_EXIST_OF + $"\r\n\r\n- {fnames}\r\n\r\nContinue anyway?",
+                        HDR_OVERW_EXIST_OF, MessageBoxButton.OKCancel, MessageBoxImage.Information
                     );
                     if (mbr == MessageBoxResult.Cancel)
                         return;
@@ -663,8 +663,8 @@ namespace DS_TextsMod_Helper
             if (linesWithDistinctFilenames.Count > 0)
             {   // Warning if filenames are different at the same lines of input areas
                 string lines = string.Join(", ", linesWithDistinctFilenames);
-                MessageBoxResult mbr = MessageBox.Show(
-                    MSG_INCONS_IFNAMES + $"\r\n{lines}\r\n\r\nContinue anyway?", HDR_INCONS_IFNAMES, MessageBoxButton.OKCancel, MessageBoxImage.Information
+                MessageBoxResult mbr = MessageBox.Show(MSG_INCONS_IFNAMES + $"\r\n{lines}\r\n\r\nContinue anyway?",
+                    HDR_INCONS_IFNAMES, MessageBoxButton.OKCancel, MessageBoxImage.Information
                 );
                 if (mbr == MessageBoxResult.Cancel)
                     return;
@@ -715,8 +715,8 @@ namespace DS_TextsMod_Helper
                 if (alreadyExisting.Count > 0)
                 {
                     string fnames = string.Join("\r\n- ", alreadyExisting);
-                    MessageBoxResult mbr = MessageBox.Show(
-                        MSG_OVERW_EXIST_OF + $"\r\n\r\n- {fnames}\r\n\r\nContinue anyway?", HDR_OVERW_EXIST_OF, MessageBoxButton.OKCancel, MessageBoxImage.Information
+                    MessageBoxResult mbr = MessageBox.Show(MSG_OVERW_EXIST_OF + $"\r\n\r\n- {fnames}\r\n\r\nContinue anyway?",
+                        HDR_OVERW_EXIST_OF, MessageBoxButton.OKCancel, MessageBoxImage.Information
                     );
                     if (mbr == MessageBoxResult.Cancel)
                         return;
