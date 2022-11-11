@@ -122,15 +122,8 @@ namespace DS_TextsMod_Helper
         private void Btn_ClearFiles_Click(object sender, RoutedEventArgs e)
         {
             Button btn = sender as Button;
-            Border brd = (Border)FindName("Brd_" + btn.Tag);
-            DataGrid dtg = (DataGrid)FindName("Dtg_" + btn.Tag);
-            Label lbl = (Label)FindName("Lbl_" + btn.Tag);
-
-            dtg.ItemsSource = null;
-
-            brd.Visibility = Visibility.Collapsed;
-            dtg.Visibility = Visibility.Collapsed;
-            lbl.Visibility = Visibility.Visible;
+            ResetInputAreaVisibility(btn.Tag.ToString());
+            //ResetInputAreaVisibility((sender as Button).Tag.ToString()); // Alt syntax
         }
 
         private void Btn_OpenParentDir_Click(object sender, RoutedEventArgs e)
@@ -168,7 +161,8 @@ namespace DS_TextsMod_Helper
             ObservableCollection<InputFile> iFiles = (ObservableCollection<InputFile>)dtg.ItemsSource;
             for (int i = 0; i < iFiles.Count; i++)
             {
-                if (positionsToMove.Contains(i)) // TODO(Multiple reordering): gather all necessary elements before using Insert/RemoveAt (or Build matching table as Dictionary or smthg?)
+                // TODO(Multiple selection): gather all necessary elements before using Insert/RemoveAt (or Build matching table as Dictionary or smthg?)
+                if (positionsToMove.Contains(i))
                 {
                     InputFile toBeMovedDown = iFiles[i];
                     iFiles.Insert(i, iFiles[i + 1]);
@@ -209,7 +203,8 @@ namespace DS_TextsMod_Helper
             ObservableCollection<InputFile> iFiles = (ObservableCollection<InputFile>)dtg.ItemsSource;
             for (int i = 0; i < iFiles.Count; i++)
             {
-                if (positionsToMove.Contains(i)) // TODO(Multiple reordering): gather all necessary elements before using Insert/RemoveAt (or Build matching table as Dictionary or smthg?)
+                // TODO(Multiple selection): gather all necessary elements before using Insert/RemoveAt (or Build matching table as Dictionary or smthg?)
+                if (positionsToMove.Contains(i))
                 {
                     InputFile toBeMovedDown = iFiles[i - 1];
                     iFiles.Insert(i - 1, iFiles[i]);
@@ -251,10 +246,19 @@ namespace DS_TextsMod_Helper
                 if (positionsToRemove.Contains(i))
                     iFiles.RemoveAt(i);
 
-            dtg.ItemsSource = null;
-            dtg.ItemsSource = iFiles;
-            dtg.SelectedIndex = positionsToRemove.Contains(iFilesCount) ? -1 : positionsToRemove.Max();
-            dtg.Focus();
+            // TODO(Multiple selection): to be upgraded to => if (iFilesCount == removedCount)
+            if (iFilesCount == 1)
+            {
+                ResetInputAreaVisibility(btn.Tag.ToString());
+            }
+            else
+            {
+                dtg.ItemsSource = null;
+                dtg.ItemsSource = iFiles;
+                // Depending on the position of the max index removed : if at last position, focus on previous one, else on the next one
+                dtg.SelectedIndex = positionsToRemove.Max() == iFilesCount - 1 ? positionsToRemove.Max() - 1 : positionsToRemove.Max();
+                dtg.Focus();
+            }
         }
 
         private void Dtg_LoadingRow(object sender, DataGridRowEventArgs e)
@@ -336,6 +340,19 @@ namespace DS_TextsMod_Helper
                 }
             }
             return iFiles;
+        }
+
+        private void ResetInputAreaVisibility(string tag)
+        {
+            Border brd = (Border)FindName("Brd_" + tag);
+            DataGrid dtg = (DataGrid)FindName("Dtg_" + tag);
+            Label lbl = (Label)FindName("Lbl_" + tag);
+
+            dtg.ItemsSource = null;
+
+            brd.Visibility = Visibility.Collapsed;
+            dtg.Visibility = Visibility.Collapsed;
+            lbl.Visibility = Visibility.Visible;
         }
 
         #endregion

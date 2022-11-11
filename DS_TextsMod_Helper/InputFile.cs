@@ -78,7 +78,7 @@ namespace DS_TextsMod_Helper
                 sb.AppendLine();
                 sb.AppendLine("[FMG properties]");
                 sb.AppendLine($"Version = {VersionLg}");
-                sb.Append($"Entries = {TotalEntries} ({NonNullEntries} non null)");
+                sb.Append($"Entries = {TotalEntries} ({NonNullEntries} non-null)");
             }
             else
             {
