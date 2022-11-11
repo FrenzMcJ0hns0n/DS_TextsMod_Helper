@@ -15,6 +15,11 @@ namespace DS_TextsMod_Helper
 
         #region CONSTANTS
 
+        // System
+        private const string ERR_MISSING_SFDLL = "Fatal error : file 'SoulsFormats.dll' not found.\r\n" +
+                                                 "The program will exit...";
+
+        // Input / Output
         private const string HDR_MISSING_IFILES = "Missing input files";
         private const string MSG_MISSING_IFILES = "All input areas must contain files to process";
 
@@ -25,28 +30,26 @@ namespace DS_TextsMod_Helper
         private const string MSG_SAME_DIRECTORY = "Files from distinct input areas cannot have the same parent directory";
 
         private const string HDR_INCONS_FMG_VER = "Inconsistent FMG versions";
-        private const string MSG_INCONS_FMG_VER = "Input files must be compatible with each other (\"Type\" must match)";
+        private const string MSG_INCONS_FMG_VER = "Input files must be compatible with each other (\"Version\" must match)";
+
+        private const string HDR_INCONS_IFNAMES = "Inconsistent input filenames";
+        private const string MSG_INCONS_IFNAMES = "Filenames are different on the following lines :";
 
         private const string HDR_OVERW_EXIST_OF = "Overwrite existing files";
         private const string MSG_OVERW_EXIST_OF = "The following files already exist in the Output directory.\r\n" +
                                                   "They most likely will be overwritten in the process.";
 
-        private const string HDR_INCONS_IFNAMES = "Inconsistent input filenames";
-        private const string MSG_INCONS_IFNAMES = "Filenames are different on the following lines :";
-
+        // Processing
         private const string HDR_PROC_COMPLETED = "Files processing completed";
 
         private const string HDR_PROCESS_ERRORS = "Processing errors";
         private const string MSG_PROCESS_ERRORS = "Processing errors occurred.\r\n" +
                                                   "Check *.txt files in the Output directory for details.";
 
-        private const string ERR_MISSING_SFDLL = "Fatal error : file 'SoulsFormats.dll' not found.\r\n" +
-                                                 "The program will exit...";
-
         #endregion
 
 
-        #region ENUM
+        #region ENUMS
 
         private enum PROCESS_MODE : int
         {
@@ -61,7 +64,7 @@ namespace DS_TextsMod_Helper
         /// </summary>
         private PROCESS_MODE SelectedMode()
         {
-            switch (Tbc_Modes.SelectedIndex)
+            switch (Tbc_ProcessingModes.SelectedIndex)
             {
                 case 0: return PROCESS_MODE.Read;
                 case 1: return PROCESS_MODE.Compare;
@@ -343,7 +346,7 @@ namespace DS_TextsMod_Helper
         private void FocusMe(PROCESS_MODE targetMode)
         {
             if (SelectedMode() != targetMode)
-                Tbc_Modes.SelectedIndex = (int)targetMode;
+                Tbc_ProcessingModes.SelectedIndex = (int)targetMode;
         }
         private void Tbi_Rd_DragOver(object sender, DragEventArgs e) { FocusMe(PROCESS_MODE.Read); }
         private void Tbi_Cmp_DragOver(object sender, DragEventArgs e) { FocusMe(PROCESS_MODE.Compare); }

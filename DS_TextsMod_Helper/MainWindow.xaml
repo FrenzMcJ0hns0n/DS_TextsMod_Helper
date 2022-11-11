@@ -154,7 +154,7 @@
             <RowDefinition Height="16" />
         </Grid.RowDefinitions>
 
-        <TabControl x:Name="Tbc_Modes" AllowDrop="True" Grid.Column="1" Grid.Row="1">
+        <TabControl x:Name="Tbc_ProcessingModes" AllowDrop="True" Grid.Column="1" Grid.Row="1">
             <TabItem x:Name ="Tbi_Rd" Header="Read mode" DragOver="Tbi_Rd_DragOver">
                 <Grid Background="WhiteSmoke">
                     <Grid.ColumnDefinitions>
