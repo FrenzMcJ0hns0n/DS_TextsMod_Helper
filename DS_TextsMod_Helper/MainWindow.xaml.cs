@@ -407,6 +407,12 @@ namespace DS_TextsMod_Helper
             }
         }
 
+        // TODO(v1.5.2 or v1.6): Bypass for unlimited number of entries displayed in Preview
+        //private void Mitm_ShowPreviewNoLimit_Click(object sender, RoutedEventArgs e)
+        //{
+        //    // TODO...
+        //}
+
         #endregion
 
 
