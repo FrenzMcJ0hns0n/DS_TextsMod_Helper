@@ -56,7 +56,7 @@ namespace DS_TextsMod_Helper
                 if (rdDictionary.ContainsKey(entry.ID))
                 {
                     Errors.Add(
-                        $"  Unicity constraint error. Skipped entry ID {entry.ID} as it has already been registered.\r\n" +
+                        $"Unicity constraint error. Skipped entry ID {entry.ID} as it has already been registered.\r\n" +
                         $"  Entry Text =\r\n" +
                         $"\"{entry.Text}\""
                     );

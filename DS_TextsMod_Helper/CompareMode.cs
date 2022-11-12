@@ -58,7 +58,7 @@ namespace DS_TextsMod_Helper
                 if (cmpDictionary.ContainsKey(entry.ID))
                 {
                     Errors.Add( // The error is on file A (the mod file) as it is supposed to be the only one that could be incorrect
-                        $"  Unicity constraint error. Skipped entry ID {entry.ID} from input file A as it has already been registered.\r\n" +
+                        $"Unicity constraint error. Skipped entry ID {entry.ID} from input file A as it has already been registered.\r\n" +
                         $"  Entry Text =\r\n" +
                         $"\"{entry.Text}\""
                     );
