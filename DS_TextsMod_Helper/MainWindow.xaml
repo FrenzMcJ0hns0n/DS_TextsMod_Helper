@@ -769,7 +769,7 @@
             </Grid.ColumnDefinitions>
 
             <Button x:Name="Btn_ShowOutputPreview" Background="#d6e0f5" Grid.Column="0" Click="Btn_ShowOutputPreview_Click">
-                <!-- TODO(v1.5.2): Bypass for unlimited number of entries displayed in Preview -->
+                <!-- OLD IDEA: Bypass for unlimited number of entries displayed in Preview -->
                 <!--<Button.ContextMenu>
                     <ContextMenu>
                         <MenuItem Header="Show with no max limit" Click="Mitm_ShowPreviewNoLimit_Click"/>
