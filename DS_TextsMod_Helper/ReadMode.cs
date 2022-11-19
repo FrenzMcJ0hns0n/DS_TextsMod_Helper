@@ -41,7 +41,7 @@ namespace DS_TextsMod_Helper
         }
 
 
-        public void ProcessFiles(bool preview)
+        public void ProcessFiles(int maximum = 0) // "maximum" = entries max limit (default = unlimited)
         {
             Errors = new List<string>();
             Dictionary<int, string> rdDictionary = new Dictionary<int, string>();
@@ -65,7 +65,7 @@ namespace DS_TextsMod_Helper
                 count += 1;
                 rdDictionary.Add(entry.ID, FormatValue(entry.Text));
 
-                if (preview && count == 50) break;
+                if (count == maximum) break;
             }
 
             // 2. Build Entry

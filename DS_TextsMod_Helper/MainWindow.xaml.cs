@@ -453,6 +453,7 @@ namespace DS_TextsMod_Helper
 
             if (isPreview) // SHOW OUTPUT PREVIEW
             {
+                int maxEntries = iFilesRd.Count == 1 ? 0 : 50;
                 List<ReadMode> readModes = new List<ReadMode>();
                 foreach (InputFile iFile in iFilesRd)
                 {
@@ -462,7 +463,7 @@ namespace DS_TextsMod_Helper
                         Title = $"{processedFilesCount + 1}: {iFile.Name}",
                         OneLinedValues = Cbx_Rd_OneLinedValues.IsChecked ?? false
                     };
-                    rd.ProcessFiles(true);
+                    rd.ProcessFiles(maxEntries);
                     if (rd.Errors.Count > 0)
                     {
                         Tools.LogProcessingError("Read", rd.Errors, filePathA);
@@ -500,7 +501,7 @@ namespace DS_TextsMod_Helper
                     {
                         OneLinedValues = Cbx_Rd_OneLinedValues.IsChecked ?? false
                     };
-                    rd.ProcessFiles(false);
+                    rd.ProcessFiles();
                     if (rd.Errors.Count > 0)
                     {
                         Tools.LogProcessingError("Read", rd.Errors, filePathA);
@@ -571,6 +572,7 @@ namespace DS_TextsMod_Helper
 
             if (isPreview) // SHOW OUTPUT PREVIEW
             {
+                int maxEntries = iFilesCmpA.Count == 1 ? 0 : 50;
                 List<CompareMode> compareModes = new List<CompareMode>();
                 for (int i = 0; i < iFilesCmpA.Count; i++)
                 {
@@ -581,7 +583,7 @@ namespace DS_TextsMod_Helper
                         Title = $"{processedFilesCount + 1}: {iFilesCmpA[i].Name}",
                         OneLinedValues = Cbx_Cmp_OneLinedValues.IsChecked ?? false
                     };
-                    cmp.ProcessFiles(true);
+                    cmp.ProcessFiles(maxEntries);
                     if (cmp.Errors.Count > 0)
                     {
                         Tools.LogProcessingError("Compare", cmp.Errors, filePathA, filePathB);
@@ -621,7 +623,7 @@ namespace DS_TextsMod_Helper
                     {
                         OneLinedValues = Cbx_Cmp_OneLinedValues.IsChecked ?? false
                     };
-                    cmp.ProcessFiles(false);
+                    cmp.ProcessFiles();
                     if (cmp.Errors.Count > 0)
                     {
                         Tools.LogProcessingError("Compare", cmp.Errors, filePathA, filePathB);
@@ -696,6 +698,7 @@ namespace DS_TextsMod_Helper
 
             if (isPreview) // SHOW OUTPUT PREVIEW
             {
+                int maxEntries = iFilesPrpA.Count == 1 ? 0 : 50;
                 List<PrepareMode> prepareModes = new List<PrepareMode>();
                 for (int i = 0; i < iFilesPrpA.Count; i++)
                 {
@@ -708,7 +711,7 @@ namespace DS_TextsMod_Helper
                         TextToReplace = Tbx_Prp_TextToReplace.Text,
                         Title = $"{processedFilesCount + 1}: {iFilesPrpA[i].Name}"
                     };
-                    prp.ProcessFiles(true);
+                    prp.ProcessFiles(maxEntries);
                     if (prp.Errors.Count > 0)
                     {
                         Tools.LogProcessingError("Prepare", prp.Errors, filePathA, filePathB, filePathC);
@@ -749,7 +752,7 @@ namespace DS_TextsMod_Helper
                         ReplacingText = Tbx_Prp_ReplacingText.Text,
                         TextToReplace = Tbx_Prp_TextToReplace.Text
                     };
-                    prp.ProcessFiles(false);
+                    prp.ProcessFiles();
                     if (prp.Errors.Count > 0)
                     {
                         Tools.LogProcessingError("Prepare", prp.Errors, filePathA, filePathB, filePathC);

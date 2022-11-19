@@ -44,7 +44,7 @@ namespace DS_TextsMod_Helper
         }
 
 
-        public void ProcessFiles(bool preview)
+        public void ProcessFiles(int maximum = 0) // "maximum" = entries max limit (default = unlimited)
         {
             Errors = new List<string>();
             Dictionary<int, List<string>> prpDictionary = new Dictionary<int, List<string>>();
@@ -71,7 +71,7 @@ namespace DS_TextsMod_Helper
                 entry.Text = FormatValue(entry.Text);
                 prpDictionary.Add(entry.ID, new List<string>() { entry.Text, "", "" });
 
-                if (preview && count == 50) break;
+                if (count == maximum) break;
             }
 
             // 2. Insert entry.value from FileB if entry.ID in FileA

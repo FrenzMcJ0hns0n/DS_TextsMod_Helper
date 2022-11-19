@@ -40,7 +40,7 @@ namespace DS_TextsMod_Helper
         }
 
 
-        public void ProcessFiles(bool preview)
+        public void ProcessFiles(int maximum = 0) // "maximum" = entries max limit (default = unlimited)
         {
             Errors = new List<string>();
             SortedDictionary<int, List<string>> cmpDictionary = new SortedDictionary<int, List<string>>();
@@ -68,13 +68,13 @@ namespace DS_TextsMod_Helper
                 entry.Text = FormatValue(entry.Text);
                 cmpDictionary.Add(entry.ID, new List<string>() { entry.Text, "" });
 
-                if (preview && count == 50) break;
+                if (count == maximum) break;
             }
 
             // 2. Insert values from FileB
             foreach (FMG.Entry entry in fileB.Entries)
             {
-                if (preview && entry.ID > cmpDictionary.Keys.Max()) break; // Don't go higher than FileA IDs
+                if (maximum > 0 && entry.ID > cmpDictionary.Keys.Max()) break; // Don't go higher than FileA IDs
 
                 if (entry.Text == null) continue; // Exclude lines without value
 
@@ -99,9 +99,9 @@ namespace DS_TextsMod_Helper
                     (cmp.Value[0] == cmp.Value[1]).ToString()
                 ));
             }
-            if (preview)
+            if (maximum > 0)
             {
-                Entries = Entries.Take(50).ToList(); // Enforce 50 as strict maximum
+                Entries = Entries.Take(maximum).ToList(); // Enforce "maximum" as strict max limit
             }
         }
 
